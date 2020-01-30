@@ -11,7 +11,8 @@ namespace VinylExchange.Services
     public interface IReleasesService
     {
         Task<IEnumerable<GetAllReleasesViewModel>> GetAllReleases();
-        
+
+        Task<IEnumerable<GetAllReleasesViewModel>> SearchReleases(string searchTerm);
         Release AddRelease(AddReleaseInputModel inputModel);
 
     }

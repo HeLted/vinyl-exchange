@@ -29,6 +29,15 @@ namespace VinylExchange.Controllers
             return Ok(releases);
         }
 
+        [HttpGet]
+        [Route("SearchReleases")]
+        public async Task<IActionResult> SearchReleases(string searchTerm)
+        {
+
+            var releases = await this.releasesService.SearchReleases(searchTerm);
+            return Ok(releases);
+        }
+
         public IActionResult AddRelease()
         {
             return View();

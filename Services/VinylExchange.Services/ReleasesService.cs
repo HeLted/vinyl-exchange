@@ -39,6 +39,21 @@ namespace VinylExchange.Services
             return releases;
         }
 
+        public async Task<IEnumerable<GetAllReleasesViewModel>> SearchReleases(string searchTerm)
+        {
+            var releases = await dbContext.Releases
+                .Where(x=> x.Artist.Contains(searchTerm) || x.Title.Contains(searchTerm))
+                .To<GetAllReleasesViewModel>()
+                .ToListAsync();
+
+            foreach (var release in releases)
+            {
+                release.CoverArtPath = this.GetReleaseImageFromServer(release.Id);
+            }
+
+            return releases;
+        }
+
         //public async Task<IEnumerable<QuickSearchReleaseViewModel>> GetReleasesForQuickSearch(string searchValue, int[] genreIds, int[] styleIds)
         //{
 

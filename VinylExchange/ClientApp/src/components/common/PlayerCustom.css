@@ -1,0 +1,31 @@
+.hidden {
+  height: 0px;
+  padding-top: 0em;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -ms-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+}
+
+.hidden.open {
+  height: 200px;
+  -webkit-transition: height 0.5s linear;
+  -moz-transition: height 0.5s linear;
+  -ms-transition: height 0.5s linear;
+  -o-transition: height 0.5s linear;
+  transition: height 0.5s linear;
+
+  padding: 0.5em 0.5em 0.5em 0.25em;
+}
+
+.custom-player-controls {
+  background-color: slategrey !important;
+}
+
+.custom-playlist-wrapper {
+
+ 
+  background-color: aliceblue !important;
+ 
+}

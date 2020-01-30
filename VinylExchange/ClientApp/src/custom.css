@@ -13,7 +13,13 @@ code {
   border-color: #1861ac;
 }
 
-.custom-container{
+/* .custom-container{
 
   background-color: silver;
+} */
+
+
+
+* {
+  border-radius: 0 !important;
 }
