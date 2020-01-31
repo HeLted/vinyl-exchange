@@ -22,7 +22,7 @@ export default class Player extends React.Component {
     const className = this.state.isHidden ? "hidden" : "hidden open";
 
     return (
-      <div className="container-fluid">
+      <div className="player-wrapper container-fluid">
         <div className="player-on-top sm2-bar-ui full-width fixed">
           <div className="custom-player-controls bd sm2-main-controls">
             <div className="sm2-inline-texture"></div>
@@ -30,7 +30,7 @@ export default class Player extends React.Component {
 
             <div className="sm2-inline-element sm2-button-element">
               <div className="sm2-button-bd">
-                <a
+                <a  
                   href="#play"
                   className="sm2-inline-button sm2-icon-play-pause"
                 >
@@ -170,8 +170,8 @@ export default class Player extends React.Component {
               </li>
 
               <li>
-                <a href="http://freshly-ground.com/data/audio/sm2/SonReal%20-%20Let%20Me%20%28Prod%202oolman%29.mp3">
-                  <b>SonReal</b> - Let Me{" "}
+                <a href="https://vocaroo.com/embed/gU8ZpJ3p7y4">
+                  <b>Aphex Twin</b> - Sam's Car{" "}
                   <span className="label">Explicit</span>
                 </a>
               </li>

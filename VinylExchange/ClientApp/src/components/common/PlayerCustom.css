@@ -33,3 +33,7 @@
 .custom-player-progressball{
    border-radius: 50% !important
 }
+
+.player-wrapper {
+  margin-top: 50px;
+}

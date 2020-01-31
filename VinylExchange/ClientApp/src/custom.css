@@ -23,3 +23,7 @@ code {
 * {
   border-radius: 0 !important;
 }
+
+nav{
+  background-color: lightgray;
+}
