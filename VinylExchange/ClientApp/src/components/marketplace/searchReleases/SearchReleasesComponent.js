@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faSync } from "@fortawesome/free-solid-svg-icons";
+import TextInput from "./../../common/inputComponents/TextInput";
 
 export default function SearchReleaseComponent(props) {
   const icon =
@@ -17,17 +18,12 @@ export default function SearchReleaseComponent(props) {
           {icon}
         </button>
       </span>
-      <input
+      <TextInput
         id="searchBarInput"
-        type="text"
+        placeholder="Search..."
         value={props.searchInputValue}
         onChange={props.inputOnChangeFunction}
-        className="form-control"
-        placeholder="Search..."
-        aria-label="Search"
-        aria-describedby="button-addon2"
       />
-     
     </div>
   );
 }
