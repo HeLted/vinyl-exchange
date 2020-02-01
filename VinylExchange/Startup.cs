@@ -14,6 +14,7 @@ using VinylExchange.Data.Models;
 using VinylExchange.Models;
 using VinylExchange.Services;
 using VinylExchange.Services.Mapping;
+using VinylExchange.Tools;
 
 namespace VinylExchange
 {
@@ -46,12 +47,15 @@ namespace VinylExchange
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddDistributedMemoryCache();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+
 
             //Enitity Services
                         
@@ -60,7 +64,7 @@ namespace VinylExchange
             services.AddTransient<IStylesService, StylesService>();
 
             //Tool Services
-
+            services.AddSingleton<MemoryCacheManager>();
             services.AddTransient<IReleaseImageService,ReleaseImageService>();
         }
 

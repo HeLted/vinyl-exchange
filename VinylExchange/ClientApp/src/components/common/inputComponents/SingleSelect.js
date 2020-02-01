@@ -19,7 +19,7 @@ export default function SingleSelect(props) {
 
   return (
     <select
-      class="form-control"
+      className="form-control"
       id={props.id}
       name={props.id}
       value={props.value}
