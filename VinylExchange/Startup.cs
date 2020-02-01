@@ -54,9 +54,10 @@ namespace VinylExchange
             });
 
             //Enitity Services
-
-            
+                        
             services.AddTransient<IReleasesService, ReleasesService>();
+            services.AddTransient<IGenresService, GenresService>();
+            services.AddTransient<IStylesService, StylesService>();
 
             //Tool Services
 
