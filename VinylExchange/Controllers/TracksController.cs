@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +10,11 @@ namespace VinylExchange.Controllers
 {
     [Route("file/[controller]")]
     [ApiController]
-    public class ImageController : Controller
+    public class TracksController : Controller
     {
         private readonly MemoryCacheManager cache;
 
-        public ImageController(MemoryCacheManager cache)
+        public TracksController(MemoryCacheManager cache)
         {
             this.cache = cache;
         }
@@ -23,17 +22,17 @@ namespace VinylExchange.Controllers
 
         [HttpPost]
         [Route("upload")]
-        public IActionResult UploadImage(IFormFile file, string formSessionId)
+        public IActionResult UploadTrack(IFormFile file, string formSessionId)
         {
 
             string cacheGuid = (Guid.NewGuid()).ToString();
 
-            cache.Set( cacheGuid + "-" + formSessionId, file, 1000);
+            cache.Set(cacheGuid + "-" + formSessionId + "-" + file.FileName, file, 1000);
 
-            
-            
 
-            return Ok($"{string.Join("   ", cache.GetKeys())}");
+
+
+            return Ok($"{string.Join(Environment.NewLine, cache.GetKeys())}");
         }
 
 

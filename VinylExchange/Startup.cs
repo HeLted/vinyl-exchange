@@ -64,7 +64,7 @@ namespace VinylExchange
             services.AddTransient<IStylesService, StylesService>();
 
             //Tool Services
-            services.AddSingleton<MemoryCacheManager>();
+            services.AddTransient<MemoryCacheManager>();
             services.AddTransient<IReleaseImageService,ReleaseImageService>();
         }
 
