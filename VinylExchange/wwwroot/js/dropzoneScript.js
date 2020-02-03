@@ -74,8 +74,6 @@ var myDropzone = new Dropzone("#imageDropzone", {
         .then(response => response.json())
         .then(data=> console.log(data));
 
-
-        
         _this.removeFile(file);
       });
 
