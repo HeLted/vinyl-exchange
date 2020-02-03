@@ -10,20 +10,20 @@ using VinylExchange.Tools;
 
 namespace VinylExchange.Controllers
 {
-    [Route("file/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class ImagesController : Controller
+    public class FileController : Controller
     {
         private readonly MemoryCacheManager cache;
 
-        public ImagesController(MemoryCacheManager cache)
+        public FileController(MemoryCacheManager cache)
         {
             this.cache = cache;
         }
 
         [HttpPost]
         [Route("delete")]
-        public IActionResult DeleteImage(string formSessionId, string fileGuid)
+        public IActionResult DeleteFile(string formSessionId, string fileGuid)
         {
 
 
@@ -53,7 +53,7 @@ namespace VinylExchange.Controllers
 
         [HttpPost]
         [Route("upload")]
-        public IActionResult UploadImage(IFormFile file, string formSessionId)
+        public IActionResult UploadFile(IFormFile file, string formSessionId)
         {
             var imageGuid = Guid.NewGuid();
 
@@ -68,6 +68,11 @@ namespace VinylExchange.Controllers
 
             formSessionStorage.Add(image);
 
+            //var returnObj = new
+            //{
+            //    added = image.File.FileName,
+            //    filesInStorage = string.Join(",", formSessionStorage.Select(x => x.File.FileName))
+            //};
 
             return Ok(imageGuid.ToString());
         }
