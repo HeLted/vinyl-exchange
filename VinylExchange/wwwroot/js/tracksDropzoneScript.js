@@ -64,11 +64,13 @@ var myDropzone = new Dropzone(`#${dropzoneId}`, {
         e.stopPropagation();
         console.log(file.serverGuid);
 
-        fetch(dropzoneDropPath + `&fileGuid=${file.serverGuid}`, {
-          method: "POST"
-        })
-          .then(response => response.json())
-          .then(data => console.log(data));
+        if (file.status === "success") {
+          fetch(dropzoneDropPath + `&fileGuid=${file.serverGuid}`, {
+            method: "POST"
+          })
+            .then(response => response.json())
+            .then(data => console.log(data));
+        }
 
         _this.removeFile(file);
       });
