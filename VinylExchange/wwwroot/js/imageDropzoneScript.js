@@ -53,9 +53,11 @@ var myDropzone = new Dropzone("#imageDropzone", {
       }
     });
 
-    this.on("success", function(file, guid) {
-      file.serverGuid = guid;
-      console.log(file);
+    this.on("success", function(file, jsonResponse) {
+      console.log(jsonResponse);
+    
+      file.serverGuid = jsonResponse.guid;
+      
     });
 
     this.on("addedfile", function(file) {

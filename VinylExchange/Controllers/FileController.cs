@@ -68,13 +68,14 @@ namespace VinylExchange.Controllers
 
             formSessionStorage.Add(image);
 
-            //var returnObj = new
-            //{
-            //    added = image.File.FileName,
-            //    filesInStorage = string.Join(",", formSessionStorage.Select(x => x.File.FileName))
-            //};
+            var returnObj = new
+            {
+                added = image.File.FileName,
+                guid = imageGuid,
+                filesInStorage = string.Join(",", formSessionStorage.Select(x => x.File.FileName))
+            };
 
-            return Ok(imageGuid.ToString());
+            return Json(returnObj);
         }
 
 
