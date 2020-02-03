@@ -15,7 +15,6 @@
     "jquery": "^3.4.1",
     "merge": "^1.2.1",
     "oidc-client": "^1.9.0",
-    "postscribe": "^2.0.8",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-dropzone": "^10.2.1",
