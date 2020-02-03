@@ -1,20 +1,21 @@
-Dropzone.autoDiscover = false;
+(() =>{Dropzone.autoDiscover = false;
 
-let dropzoneIntitiationScript = document.getElementById(
-  "imagesDropzoneInitiationScript"
-);
+var currentScript = document.currentScript;
+currentScript.id="imagesDropzoneScript"
 
-let formSessionId = dropzoneIntitiationScript.getAttribute("formSessionId");
+const dropzoneId = "imagesDropzone"
 
-let dropzoneId = dropzoneIntitiationScript.getAttribute("dropzoneId");
+const dropzoneElement = document.getElementById(dropzoneId)
 
-let acceptedFiles = dropzoneIntitiationScript.getAttribute("acceptedFiles");
+const formSessionId = dropzoneElement.attributes[1].value
 
-let dropzoneUploadPath =
-  dropzoneIntitiationScript.getAttribute("dropzoneUploadPath") + formSessionId;
+const dropzoneUploadPath =
+  dropzoneElement.attributes[2].value + formSessionId;
 
-let dropzoneDropPath =
-  dropzoneIntitiationScript.getAttribute("dropzoneDropPath") + formSessionId;
+const dropzoneDeletePath =
+ dropzoneElement.attributes[3].value + formSessionId;
+
+ const acceptedFiles = dropzoneElement.attributes[4].value
 
 // Dropzone class:
 var myDropzone = new Dropzone(`#${dropzoneId}`, {
@@ -64,7 +65,7 @@ var myDropzone = new Dropzone(`#${dropzoneId}`, {
         e.stopPropagation();
       
         if (file.status === "success") {
-          fetch(dropzoneDropPath + `&fileGuid=${file.serverGuid}`, {
+          fetch(dropzoneDeletePath + `&fileGuid=${file.serverGuid}`, {
             method: "POST"
           })
             .then(response => response.json())
@@ -81,3 +82,4 @@ var myDropzone = new Dropzone(`#${dropzoneId}`, {
 });
 
 document.getElementById(dropzoneId).className = "dropzone";
+})()

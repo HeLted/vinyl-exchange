@@ -35,9 +35,6 @@ export class Layout extends Component {
 
     return (
       <div>
-        <Helmet>
-          <script src="/js/dropzone.js"></script>
-        </Helmet>
         <NavMenu />
         <ServerNotification message={this.state.currentNotificationMessage} severity={this.state.severity}/>
         <Container globalstate={this} fluid={true}>

@@ -1,0 +1,16 @@
+.dropzone .dz-preview .dz-error-message {
+  top: -60px !important;
+}
+
+::after {
+  display: none;
+}
+
+.dz-remove {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+  width:120px;
+  height: 30px;
+  line-height: 2;
+}

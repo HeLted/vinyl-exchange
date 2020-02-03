@@ -1,21 +1,21 @@
-Dropzone.autoDiscover = false;
+(() =>{Dropzone.autoDiscover = false;
 
-let dropzoneIntitiationScript = document.getElementById(
-  "tracksDropzoneInitiationScript"
-);
-
-let formSessionId = dropzoneIntitiationScript.getAttribute("formSessionId");
-
-let dropzoneId = dropzoneIntitiationScript.getAttribute("dropzoneId");
-
-let acceptedFiles = dropzoneIntitiationScript.getAttribute("acceptedFiles");
-
-let dropzoneUploadPath =
-  dropzoneIntitiationScript.getAttribute("dropzoneUploadPath") + formSessionId;
-
-let dropzoneDropPath =
-  dropzoneIntitiationScript.getAttribute("dropzoneDropPath") + formSessionId;
-
+  var currentScript = document.currentScript;
+  currentScript.id="tracksDropzoneScript"
+  
+  const dropzoneId = "tracksDropzone"
+  
+  const dropzoneElement = document.getElementById(dropzoneId)
+  
+  const formSessionId = dropzoneElement.attributes[1].value
+  
+  const dropzoneUploadPath =
+    dropzoneElement.attributes[2].value + formSessionId;
+  
+  const dropzoneDeletePath =
+   dropzoneElement.attributes[3].value + formSessionId;
+  
+   const acceptedFiles = dropzoneElement.attributes[4].value
 // Dropzone class:
 var myDropzone = new Dropzone(`#${dropzoneId}`, {
   url: dropzoneUploadPath,
@@ -82,3 +82,4 @@ var myDropzone = new Dropzone(`#${dropzoneId}`, {
 });
 
 document.getElementById(dropzoneId).className = "dropzone";
+})()
