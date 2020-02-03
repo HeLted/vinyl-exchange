@@ -38,18 +38,15 @@ namespace VinylExchange.Controllers
             return Ok(releases);
         }
 
-        public IActionResult AddRelease()
+        [HttpPost]
+        [Route("addrelease")]
+        public IActionResult  AddRelease(AddReleaseInputModel inputModel)
         {
-            return View();
+            return Json(inputModel);
         }
 
 
-        public IActionResult AddRelease(AddReleaseInputModel inputModel)
-        {
-            this.releasesService.AddRelease(inputModel);
-
-            return Redirect("/Marketplace");
-        }
+      
 
     }
 }

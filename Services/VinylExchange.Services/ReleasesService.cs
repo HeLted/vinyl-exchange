@@ -107,7 +107,7 @@ namespace VinylExchange.Services
 
             this.AddStylesForRelease(release.Id, inputModel.StyleIds);
 
-            this.SaveReleaseImageToServer(release.Id, inputModel.CoverArt);
+            
 
             return release;
         }

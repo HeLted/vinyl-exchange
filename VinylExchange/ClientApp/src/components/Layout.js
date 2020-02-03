@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component ,ReactChild } from "react";
 import { Container } from "reactstrap";
 import { NavMenu } from "./NavMenu";
 import Player from "./common/Player";
@@ -28,6 +28,19 @@ export class Layout extends Component {
     });
   };
 
+  renderChildren(){
+   
+    return React.Children.map(this.props.children,child=>{
+      if(child.type === ReactChild ){
+        return React.cloneElement(child,{
+          globalState:this
+        })
+      }else{
+        return child
+      }
+    })
+  }
+
  
 
   render() {
@@ -38,7 +51,7 @@ export class Layout extends Component {
         <NavMenu />
         <ServerNotification message={this.state.currentNotificationMessage} severity={this.state.severity}/>
         <Container globalstate={this} fluid={true}>
-          {this.props.children}
+          {this.renderChildren()}
           <Player />
         </Container>
       </div>
