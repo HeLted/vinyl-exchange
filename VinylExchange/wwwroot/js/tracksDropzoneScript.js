@@ -1,27 +1,26 @@
 Dropzone.autoDiscover = false;
-var accept = ".png";
 
 let dropzoneIntitiationScript = document.getElementById(
-  "dropzoneInitiationScript"
+  "tracksDropzoneInitiationScript"
 );
 
 let formSessionId = dropzoneIntitiationScript.getAttribute("formSessionId");
 
-let dropzoneUploadPath = dropzoneIntitiationScript.getAttribute(
-  "dropzoneUploadPath"
-) + formSessionId;
+let dropzoneId = dropzoneIntitiationScript.getAttribute("dropzoneId");
 
+let acceptedFiles = dropzoneIntitiationScript.getAttribute("acceptedFiles");
 
+let dropzoneUploadPath =
+  dropzoneIntitiationScript.getAttribute("dropzoneUploadPath") + formSessionId;
 
-let dropzoneDropPath = dropzoneIntitiationScript.getAttribute(
-  "dropzoneDropPath"
-) + formSessionId;
+let dropzoneDropPath =
+  dropzoneIntitiationScript.getAttribute("dropzoneDropPath") + formSessionId;
 
 // Dropzone class:
-var myDropzone = new Dropzone("#imageDropzone", {
+var myDropzone = new Dropzone(`#${dropzoneId}`, {
   url: dropzoneUploadPath,
-  acceptedFiles: accept,
-  maxFilesize: 0.5,
+  acceptedFiles: acceptedFiles,
+  maxFilesize: 30,
   uploadMultiple: false,
   createImageThumbnails: true,
   maxFiles: 3,
@@ -40,24 +39,17 @@ var myDropzone = new Dropzone("#imageDropzone", {
     });
 
     this.on("complete", function(file) {
-      if (file.size > 3.5 * 1024 * 1024) {
+      if (file.size > 30 * 1024 * 1024) {
         this.removeFile(file);
-        alert("file too big");
-        return false;
-      }
-
-      if (!file.type.match("image.*")) {
-        this.removeFile(file);
-        alert("Not an image");
+        alert("File must be less than 30MB");
         return false;
       }
     });
 
     this.on("success", function(file, jsonResponse) {
       console.log(jsonResponse);
-    
+
       file.serverGuid = jsonResponse.guid;
-      
     });
 
     this.on("addedfile", function(file) {
@@ -72,9 +64,11 @@ var myDropzone = new Dropzone("#imageDropzone", {
         e.stopPropagation();
         console.log(file.serverGuid);
 
-        fetch(dropzoneDropPath + `&fileGuid=${file.serverGuid}`, {method:"POST"})
-        .then(response => response.json())
-        .then(data=> console.log(data));
+        fetch(dropzoneDropPath + `&fileGuid=${file.serverGuid}`, {
+          method: "POST"
+        })
+          .then(response => response.json())
+          .then(data => console.log(data));
 
         _this.removeFile(file);
       });
@@ -85,4 +79,4 @@ var myDropzone = new Dropzone("#imageDropzone", {
   }
 });
 
-document.getElementById("imageDropzone").className = "dropzone";
+document.getElementById(dropzoneId).className = "dropzone";

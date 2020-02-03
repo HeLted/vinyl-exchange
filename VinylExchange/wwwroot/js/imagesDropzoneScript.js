@@ -1,23 +1,16 @@
 Dropzone.autoDiscover = false;
+var accept = ".png";
 
 let dropzoneIntitiationScript = document.getElementById(
-  "dropzoneInitiationScript"
+  "imagesDropzoneInitiationScript"
 );
 
 let formSessionId = dropzoneIntitiationScript.getAttribute("formSessionId");
 
-let dropzoneId = dropzoneIntitiationScript.getAttribute(
-    "dropzoneId"
-  );
-  
-  let acceptedFiles = dropzoneIntitiationScript.getAttribute(
-    "acceptedFiles"
-  );
-  
-
 let dropzoneUploadPath = dropzoneIntitiationScript.getAttribute(
   "dropzoneUploadPath"
 ) + formSessionId;
+
 
 
 let dropzoneDropPath = dropzoneIntitiationScript.getAttribute(
@@ -25,9 +18,9 @@ let dropzoneDropPath = dropzoneIntitiationScript.getAttribute(
 ) + formSessionId;
 
 // Dropzone class:
-var myDropzone = new Dropzone(`#${dropzoneId}`, {
+var myDropzone = new Dropzone("#imageDropzone", {
   url: dropzoneUploadPath,
-  acceptedFiles: acceptedFiles,
+  acceptedFiles: accept,
   maxFilesize: 0.5,
   uploadMultiple: false,
   createImageThumbnails: true,
@@ -92,4 +85,4 @@ var myDropzone = new Dropzone(`#${dropzoneId}`, {
   }
 });
 
-document.getElementById(dropzoneId).className = "dropzone";
+document.getElementById("imageDropzone").className = "dropzone";
