@@ -1,8 +1,20 @@
 import React from "react";
 import "./ServerNotification.css";
 import { NotificationContext } from "./../contexts/NotificationContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export default class ServerNotification extends React.Component {
+  static contextType = NotificationContext;
+
+  constructor() {
+    super();
+    this.state = {
+      messages: [],
+      isUpdatedInternally:false
+    };
+  }
+
   static contextType = NotificationContext;
 
   render() {
@@ -20,14 +32,21 @@ export default class ServerNotification extends React.Component {
 
     return (
       <div className="server-notification-wrapper">
-        {this.context.messages.map((messageText, index) => {
+        {this.context.messages.map((messageObj, index) => {
           return (
+            <div className="d-flex">
             <div
               className={"server-notification alert " + alertTypeClass}
-              key={index}
+              key={messageObj.id}
               role="alert"
             >
-              {messageText}
+              {messageObj.messageText}
+
+              <FontAwesomeIcon
+                onClick={() => this.context.handleRemoveNotification(messageObj.id)}
+                icon={faTimes}
+              />
+            </div>
             </div>
           );
         })}
