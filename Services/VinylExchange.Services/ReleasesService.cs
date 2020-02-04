@@ -105,7 +105,7 @@ namespace VinylExchange.Services
 
             dbContext.SaveChangesAsync();
 
-            this.AddStylesForRelease(release.Id, inputModel.StyleIds);
+            //this.AddStylesForRelease(release.Id, inputModel.StyleIds);
 
             
 

@@ -15,14 +15,23 @@ import "./custom.css";
 export default class App extends Component {
   static displayName = App.name;
 
+
+  handleServerNotification = (notificationMessage ,severty) => {
+    console.log("in handleservernotification")
+    this.setState({
+      currentNotificationMessage: notificationMessage,
+      currentNotificationSeverity: severty
+    });
+  };
+
   render() {
+  
     return (
       <Layout>
         <Route exact path="/" component={Home} />
         <Route path="/marketplace" component={MarketplaceContainer} />
-        <Route path="/releases/addrelease" component={AddReleaseContainer} />
+        <AuthorizeRoute path="/releases/addrelease" component={AddReleaseContainer} globalState={this} />
         <Route path="/counter" component={Counter} />
-        <Route path="/fetch-data" component={FetchData} />
         <Route
           path={ApplicationPaths.ApiAuthorizationPrefix}
           component={ApiAuthorizationRoutes}
