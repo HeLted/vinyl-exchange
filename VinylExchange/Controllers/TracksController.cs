@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VinylExchange.Tools;
+using VinylExchange.Services.MemoryCache;
 
 namespace VinylExchange.Controllers
 {

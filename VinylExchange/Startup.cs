@@ -14,7 +14,7 @@ using VinylExchange.Data.Models;
 using VinylExchange.Models;
 using VinylExchange.Services;
 using VinylExchange.Services.Mapping;
-using VinylExchange.Tools;
+using VinylExchange.Services.MemoryCache;
 
 namespace VinylExchange
 {
