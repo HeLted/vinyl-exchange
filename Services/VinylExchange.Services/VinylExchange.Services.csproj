@@ -8,6 +8,7 @@
     <ProjectReference Include="..\..\Data\VinylExchange.Data.Models\VinylExchange.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\VinylExchange.Data\VinylExchange.Data.csproj" />
     <ProjectReference Include="..\..\VinylExchange.Models\VinylExchange.Models.csproj" />
+    <ProjectReference Include="..\..\VinylExchange.Services.MemoryCache\VinylExchange.Services.MemoryCache.csproj" />
     <ProjectReference Include="..\VinylEchange.Services.Files\VinylExchange.Services.Files.csproj" />
   </ItemGroup>
 

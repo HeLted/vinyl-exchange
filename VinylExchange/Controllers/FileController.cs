@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VinylExchange.Models.Utility;
-using VinylExchange.Tools;
+using VinylExchange.Services.MemoryCache;
 
 namespace VinylExchange.Controllers
 {
@@ -25,7 +25,6 @@ namespace VinylExchange.Controllers
         [Route("delete")]
         public IActionResult DeleteFile(string formSessionId, string fileGuid)
         {
-
 
             var key = cache.GetKeys().Where(x => x == formSessionId).SingleOrDefault();
 
@@ -61,7 +60,7 @@ namespace VinylExchange.Controllers
 
             if (!cache.IsSet(formSessionId))
             {
-                cache.Set(formSessionId, new List<UploadImageUtility>(), 1000);
+                cache.Set(formSessionId, new List<UploadImageUtility>(), 1800);
             }
 
             var formSessionStorage = cache.Get<List<UploadImageUtility>>(formSessionId, null);

@@ -18,14 +18,12 @@ namespace VinylExchange.Services
     public class ReleasesService : IReleasesService
     {
         private readonly VinylExchangeDbContext dbContext;
-      
-       
+        private readonly MemoryCacheManager cacheManager;
 
         public ReleasesService(VinylExchangeDbContext dbContext, MemoryCacheManager cacheManager)
         {
             this.dbContext = dbContext;
-            this.imageService = imageService;
-            
+            this.cacheManager = cacheManager;
         }
 
         public async Task<IEnumerable<GetAllReleasesViewModel>> GetAllReleases()
