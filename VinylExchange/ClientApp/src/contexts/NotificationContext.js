@@ -4,16 +4,36 @@ export const NotificationContext = createContext();
 
 export default class NotificationContextProvider extends React.Component {
   state = {
-    errors: [],
-    statusCode: 0
+    messages: [],
+    severity: 0
   };
 
-  handleServerNotification = error => {
+  handleServerNotification = (notificationObj) => {
 
-    this.setState({
-      errors:error.data.errors,
-      statusCode:error.status
-    });
+    if(notificationObj.status >=400){
+      const errorMessages = [];
+      const errors = notificationObj.data.errors;
+
+      Object.keys(errors).forEach(function(field) {
+        errorMessages.push(`${field} : ${errors[field].join()}`);
+      });
+      
+      console.log(errorMessages)
+      this.setState({
+        messages:errorMessages,
+        severity:1
+      });
+    }else{
+
+      const successMessages = [];
+      successMessages.push(notificationObj.data.message)
+      console.log(notificationObj)
+      this.setState({
+        messages:successMessages,
+        severity:3
+      });
+    }
+    
   };
 
   render() {

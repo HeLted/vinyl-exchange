@@ -33,20 +33,28 @@ namespace VinylExchange.Controllers
         [Route("SearchReleases")]
         public async Task<IActionResult> SearchReleases(string searchTerm)
         {
-
             var releases = await this.releasesService.SearchReleases(searchTerm);
             return Ok(releases);
         }
 
         [HttpPost]
-        [Route("addrelease")]
-        public IActionResult  AddRelease(AddReleaseInputModel inputModel)
+        [Route("AddRelease")]
+        public async Task<ActionResult> AddRelease(AddReleaseInputModel inputModel)
         {
-            return Json(inputModel);
+            var release = await releasesService.AddRelease(inputModel);
+
+            var returnObject = new
+            {
+                message = "Sucesfully Added Release",
+                id = release.Id
+
+            };
+
+            return Json(returnObject);
         }
 
 
-      
+
 
     }
 }

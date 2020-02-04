@@ -31,11 +31,6 @@ namespace VinylExchange.Services
         {
             var releases = await dbContext.Releases.To<GetAllReleasesViewModel>().ToListAsync();
 
-            foreach (var release in releases)
-            {
-                release.CoverArtPath = this.GetReleaseImageFromServer(release.Id);
-            }
-
             return releases;
         }
 
@@ -45,12 +40,7 @@ namespace VinylExchange.Services
                 .Where(x=> x.Artist.Contains(searchTerm) || x.Title.Contains(searchTerm))
                 .To<GetAllReleasesViewModel>()
                 .ToListAsync();
-
-            foreach (var release in releases)
-            {
-                release.CoverArtPath = this.GetReleaseImageFromServer(release.Id);
-            }
-
+            
             return releases;
         }
 
@@ -89,7 +79,7 @@ namespace VinylExchange.Services
 
         //}
 
-        public Release AddRelease(AddReleaseInputModel inputModel)
+        public async Task<Release> AddRelease(AddReleaseInputModel inputModel)
         {
             Release release = new Release()
             {
@@ -101,27 +91,14 @@ namespace VinylExchange.Services
 
             };
 
-            this.dbContext.Releases.AddAsync(release);
+            await this.dbContext.Releases.AddAsync(release);
 
-            dbContext.SaveChangesAsync();
+            await   dbContext.SaveChangesAsync();
 
-            //this.AddStylesForRelease(release.Id, inputModel.StyleIds);
-
-            
-
+            this.AddStylesForRelease(release.Id, inputModel.StyleIds);
+                                  
             return release;
         }
-
-        private void SaveReleaseImageToServer(Guid releaseId, IFormFile image)
-        {
-            imageService.SaveImage(releaseId, image);
-        }
-
-        private string GetReleaseImageFromServer(Guid releaseId)
-        {
-            return imageService.GetImagePath(releaseId);
-        }
-
 
         private void AddStylesForRelease(Guid releaseId, ICollection<int> styleIds)
         {
