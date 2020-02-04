@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Data.Models",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{5458B1B8-B097-42B1-91AD-F79F451EAFAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylExchange.Models", "VinylExchange.Models\VinylExchange.Models.csproj", "{C2E38905-96CE-418F-B211-C5BF7D2491A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Models", "VinylExchange.Models\VinylExchange.Models.csproj", "{C2E38905-96CE-418F-B211-C5BF7D2491A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylExchange.Services.MemoryCache", "VinylExchange.Services.MemoryCache\VinylExchange.Services.MemoryCache.csproj", "{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{C2E38905-96CE-418F-B211-C5BF7D2491A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2E38905-96CE-418F-B211-C5BF7D2491A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2E38905-96CE-418F-B211-C5BF7D2491A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{58CA0D20-B0FD-47B6-AF20-7158BEE24557} = {F179BE77-4DF4-435B-BCE5-C8DC2F39C236}
 		{06FF31B6-031E-48DD-8CF9-75C24355611B} = {F179BE77-4DF4-435B-BCE5-C8DC2F39C236}
 		{C2E38905-96CE-418F-B211-C5BF7D2491A6} = {5458B1B8-B097-42B1-91AD-F79F451EAFAC}
+		{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D615B1D1-B2B9-425C-B0C3-87C0763326B3}

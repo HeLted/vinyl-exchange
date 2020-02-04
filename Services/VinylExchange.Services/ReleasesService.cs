@@ -11,16 +11,17 @@ using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Releases;
 using VinylExchange.Models.ViewModels.Releases;
 using VinylExchange.Services.Mapping;
+using VinylExchange.Services.MemoryCache;
 
 namespace VinylExchange.Services
 {
     public class ReleasesService : IReleasesService
     {
         private readonly VinylExchangeDbContext dbContext;
-        private readonly IReleaseImageService imageService;
+      
        
 
-        public ReleasesService(VinylExchangeDbContext dbContext, IReleaseImageService imageService)
+        public ReleasesService(VinylExchangeDbContext dbContext, MemoryCacheManager cacheManager)
         {
             this.dbContext = dbContext;
             this.imageService = imageService;
@@ -44,41 +45,7 @@ namespace VinylExchange.Services
             return releases;
         }
 
-        //public async Task<IEnumerable<QuickSearchReleaseViewModel>> GetReleasesForQuickSearch(string searchValue, int[] genreIds, int[] styleIds)
-        //{
-
-        //    if (searchValue == null) {
-        //        searchValue = String.Empty;
-        //    }
-
-        //    if (styleIds.Length == 0 && genreIds.Length == 0) 
-        //    {
-        //        styleIds = await dbContext.Styles.Select(x=> x.Id).ToArrayAsync();
-
-        //    } else if (styleIds.Length == 0)
-        //    {
-        //        styleIds = await dbContext.Genres.Where(g => genreIds.Contains(g.Id)).SelectMany(g => g.Styles.Select(s => s.Id)).ToArrayAsync();
-        //    }
-
-
-        //    var releases = await dbContext.Releases
-        //       .Where(x => x.Styles.Any(x => styleIds.Contains(x.StyleId)))
-        //       .Where(x => x.Artist.Contains(searchValue) || x.Title.Contains(searchValue))
-        //       .To<QuickSearchReleaseViewModel>()
-        //       .ToListAsync();
-
-
-
-        //    foreach (var release in releases)
-        //    {
-        //        release.CoverArtPath = this.GetReleaseImageFromServer(release.Id);
-        //    }
-
-
-        //    return releases;
-
-        //}
-
+      
         public async Task<Release> AddRelease(AddReleaseInputModel inputModel)
         {
             Release release = new Release()
