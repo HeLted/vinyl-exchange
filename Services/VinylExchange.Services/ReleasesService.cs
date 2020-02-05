@@ -9,7 +9,10 @@ using VinylEchange.Services.Files;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Releases;
+using VinylExchange.Models.Utility;
 using VinylExchange.Models.ViewModels.Releases;
+using VinylExchange.Services.Files;
+using VinylExchange.Services.Files.SettingEnums;
 using VinylExchange.Services.Mapping;
 using VinylExchange.Services.MemoryCache;
 
@@ -19,11 +22,15 @@ namespace VinylExchange.Services
     {
         private readonly VinylExchangeDbContext dbContext;
         private readonly MemoryCacheManager cacheManager;
+        private readonly IFileManager fileManager;
 
-        public ReleasesService(VinylExchangeDbContext dbContext, MemoryCacheManager cacheManager)
+        public ReleasesService(VinylExchangeDbContext dbContext,
+            MemoryCacheManager cacheManager,
+            IFileManager fileManager)
         {
             this.dbContext = dbContext;
             this.cacheManager = cacheManager;
+            this.fileManager = fileManager;
         }
 
         public async Task<IEnumerable<GetAllReleasesViewModel>> GetAllReleases()
@@ -58,7 +65,14 @@ namespace VinylExchange.Services
 
             await this.dbContext.Releases.AddAsync(release);
 
-            await   dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
+
+
+            var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(inputModel.FormSessionId, null);
+
+            var files = formSessionStorage.OrderBy(x => x.DateTime);
+
+            await fileManager.SaveFiles(files, this.GetType().Name.Replace("Service",String.Empty));
 
             this.AddStylesForRelease(release.Id, inputModel.StyleIds);
                                   

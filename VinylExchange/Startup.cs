@@ -6,13 +6,16 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 using System.Reflection;
 using VinylEchange.Services.Files;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models;
 using VinylExchange.Services;
+using VinylExchange.Services.Files;
 using VinylExchange.Services.Mapping;
 using VinylExchange.Services.MemoryCache;
 
@@ -55,8 +58,6 @@ namespace VinylExchange
                 configuration.RootPath = "ClientApp/build";
             });
 
-
-
             //Enitity Services
                         
             services.AddTransient<IReleasesService, ReleasesService>();
@@ -66,6 +67,7 @@ namespace VinylExchange
             //Tool Services
             services.AddTransient<MemoryCacheManager>();
             services.AddTransient<IReleaseImageService,ReleaseImageService>();
+            services.AddTransient<IFileManager, FileManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,6 +90,14 @@ namespace VinylExchange
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseFileServer(new FileServerOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "MediaStorage")),
+                RequestPath = "/File/Media",
+                EnableDirectoryBrowsing = true
+            });
+
             app.UseSpaStaticFiles();
 
             app.UseRouting();

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VinylExchange.Models.Utility;
 using VinylExchange.Services.MemoryCache;
+using System.IO;
 
 namespace VinylExchange.Controllers
 {
@@ -14,11 +15,11 @@ namespace VinylExchange.Controllers
     [ApiController]
     public class FileController : Controller
     {
-        private readonly MemoryCacheManager cache;
+        private readonly MemoryCacheManager cacheManager;
 
-        public FileController(MemoryCacheManager cache)
+        public FileController(MemoryCacheManager cacheManager)
         {
-            this.cache = cache;
+            this.cacheManager = cacheManager;
         }
 
         [HttpPost]
@@ -26,9 +27,9 @@ namespace VinylExchange.Controllers
         public IActionResult DeleteFile(string formSessionId, string fileGuid)
         {
 
-            var key = cache.GetKeys().Where(x => x == formSessionId).SingleOrDefault();
+            var key = cacheManager.GetKeys().Where(x => x == formSessionId).SingleOrDefault();
 
-            var formSessionStorage = cache.Get<List<UploadImageUtility>>(key, null);
+            var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
             var image = formSessionStorage.SingleOrDefault(x => x.FileGuid.ToString() == fileGuid);
 
@@ -37,8 +38,8 @@ namespace VinylExchange.Controllers
 
                 var returnObj = new
                 {
-                    removed = image.File.FileName,
-                    filesStillInStorage = string.Join(",", formSessionStorage.Select(x => x.File.FileName))
+                    removed = image.FileName,
+                    filesStillInStorage = string.Join(",", formSessionStorage.Select(x => x.FileName))
                 };
 
                 return Json(returnObj);
@@ -55,23 +56,23 @@ namespace VinylExchange.Controllers
         public IActionResult UploadFile(IFormFile file, string formSessionId)
         {
             var imageGuid = Guid.NewGuid();
+                       
+            UploadFileUtilityModel image = new UploadFileUtilityModel(file, imageGuid);
 
-            UploadImageUtility image = new UploadImageUtility(file, imageGuid);
-
-            if (!cache.IsSet(formSessionId))
+            if (!cacheManager.IsSet(formSessionId))
             {
-                cache.Set(formSessionId, new List<UploadImageUtility>(), 1800);
+                cacheManager.Set(formSessionId, new List<UploadFileUtilityModel>(), 1800);
             }
 
-            var formSessionStorage = cache.Get<List<UploadImageUtility>>(formSessionId, null);
+            var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId, null);
 
             formSessionStorage.Add(image);
 
             var returnObj = new
             {
-                added = image.File.FileName,
+                added = image.FileName,
                 guid = imageGuid,
-                filesInStorage = string.Join(",", formSessionStorage.Select(x => x.File.FileName))
+                filesInStorage = string.Join(",", formSessionStorage.Select(x => x.FileName))
             };
 
             return Json(returnObj);
