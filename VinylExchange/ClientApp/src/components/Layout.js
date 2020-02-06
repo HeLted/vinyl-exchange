@@ -5,6 +5,7 @@ import Player from "./common/Player";
 import { Helmet } from "react-helmet";
 import ServerNotification from "./ServerNotification";
 import NotificationContextProvider from "./../contexts/NotificationContext";
+import PlayerContextProvider from "./../contexts/PlayerContext";
 
 export class Layout extends Component {
   static displayName = Layout.name;
@@ -14,11 +15,11 @@ export class Layout extends Component {
       <div>
         <NavMenu />
         <NotificationContextProvider>
-          <ServerNotification />
-          <Container fluid={true}>
-            {this.props.children}
+          <PlayerContextProvider>
+            <ServerNotification />
+            <Container fluid={true}>{this.props.children}</Container>
             <Player />
-          </Container>
+          </PlayerContextProvider>
         </NotificationContextProvider>
       </div>
     );

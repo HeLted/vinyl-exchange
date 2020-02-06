@@ -33,6 +33,10 @@ namespace VinylExchange.Services.MainServices
         {
             var releases = await dbContext.Releases.To<GetAllReleasesViewModel>().ToListAsync();
 
+            releases.ForEach( r => {
+                r.CoverArt =  releaseFilesService.GetReleaseCoverArt(r.Id).GetAwaiter().GetResult();            
+            });
+
             return releases;
         }
 
@@ -43,6 +47,10 @@ namespace VinylExchange.Services.MainServices
                 .To<GetAllReleasesViewModel>()
                 .ToListAsync();
 
+            releases.ForEach( r => {
+                r.CoverArt = releaseFilesService.GetReleaseCoverArt(r.Id).GetAwaiter().GetResult();
+            });
+                        
             return releases;
         }
 

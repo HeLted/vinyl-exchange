@@ -28,10 +28,7 @@ namespace VinylExchange.Controllers
             string cacheGuid = (Guid.NewGuid()).ToString();
 
             cache.Set(cacheGuid + "-" + formSessionId + "-" + file.FileName, file, 1000);
-
-
-
-
+                                 
             return Ok($"{string.Join(Environment.NewLine, cache.GetKeys())}");
         }
 

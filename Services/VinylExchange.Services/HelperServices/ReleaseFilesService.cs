@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.Utility;
+using VinylExchange.Models.ViewModels.ReleaseFiles;
 using VinylExchange.Services.Files;
 using VinylExchange.Services.MemoryCache;
+using VinylExchange.Services.Mapping;
+using Microsoft.EntityFrameworkCore;
+using VinylExchange.Common.Enumerations;
 
 namespace VinylExchange.Services.HelperServices
 {
@@ -45,6 +49,37 @@ namespace VinylExchange.Services.HelperServices
             return releaseFilesModels;
            
         }
-        
+
+        public async Task<IEnumerable<ReleaseFileViewModel>> GetReleaseTracks(Guid releaseId)
+        {
+           return await dbContext.ReleaseFiles
+                .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Audio)
+                .OrderBy(rf => rf.CreatedOn)
+                .To<ReleaseFileViewModel>()
+                .ToListAsync();
+        }
+
+
+        public async Task<IEnumerable<ReleaseFileViewModel>> GetReleaseImages(Guid releaseId)
+        {
+            return await dbContext.ReleaseFiles
+                 .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
+                 .OrderBy(rf => rf.CreatedOn)
+                 .To<ReleaseFileViewModel>()
+                 .ToListAsync();
+        }
+
+        public async Task<ReleaseFileViewModel> GetReleaseCoverArt(Guid releaseId)
+        {
+            return await dbContext.ReleaseFiles
+                 .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
+                 .OrderBy(rf => rf.CreatedOn)
+                 .To<ReleaseFileViewModel>()
+                 .FirstOrDefaultAsync();
+        }
+
+
+     
+
     }
 }

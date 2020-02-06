@@ -13,8 +13,9 @@ namespace VinylExchange.Models.Utility
 
         public UploadFileUtilityModel(IFormFile file,Guid fileGuid)
         {
-            this.FileName = file.FileName.Split(".")[0];
-            this.FileExtension = '.' + file.FileName.Substring(file.FileName.LastIndexOf("."));
+
+            this.FileExtension =  file.FileName.Substring(file.FileName.LastIndexOf("."));
+            this.FileName = file.FileName.Replace(this.FileExtension, String.Empty);
             this.FileType = this.FileExtension == ".mp3" ? FileType.Audio : FileType.Image;
             this.FileByteContent = this.ConvertIFormFileToByteArray(file);            
             this.CreatedOn = DateTime.UtcNow;
