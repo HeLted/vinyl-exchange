@@ -5,32 +5,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VinylEchange.Services.Files;
+
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Releases;
 using VinylExchange.Models.Utility;
 using VinylExchange.Models.ViewModels.Releases;
 using VinylExchange.Services.Files;
-using VinylExchange.Services.Files.SettingEnums;
+using VinylExchange.Services.HelperServices;
 using VinylExchange.Services.Mapping;
 using VinylExchange.Services.MemoryCache;
 
-namespace VinylExchange.Services
+namespace VinylExchange.Services.MainServices
 {
     public class ReleasesService : IReleasesService
     {
         private readonly VinylExchangeDbContext dbContext;
-        private readonly MemoryCacheManager cacheManager;
-        private readonly IFileManager fileManager;
+        private readonly IReleaseFilesService releaseFilesService;
 
-        public ReleasesService(VinylExchangeDbContext dbContext,
-            MemoryCacheManager cacheManager,
-            IFileManager fileManager)
+        public ReleasesService(VinylExchangeDbContext dbContext,IReleaseFilesService releaseFilesService)
         {
             this.dbContext = dbContext;
-            this.cacheManager = cacheManager;
-            this.fileManager = fileManager;
+            this.releaseFilesService = releaseFilesService;
         }
 
         public async Task<IEnumerable<GetAllReleasesViewModel>> GetAllReleases()
@@ -43,16 +39,18 @@ namespace VinylExchange.Services
         public async Task<IEnumerable<GetAllReleasesViewModel>> SearchReleases(string searchTerm)
         {
             var releases = await dbContext.Releases
-                .Where(x=> x.Artist.Contains(searchTerm) || x.Title.Contains(searchTerm))
+                .Where(x => x.Artist.Contains(searchTerm) || x.Title.Contains(searchTerm))
                 .To<GetAllReleasesViewModel>()
                 .ToListAsync();
-            
+
             return releases;
         }
 
-      
+
         public async Task<Release> AddRelease(AddReleaseInputModel inputModel)
         {
+            var formSessionId = inputModel.FormSessionId;
+
             Release release = new Release()
             {
                 Artist = inputModel.Artist,
@@ -67,15 +65,10 @@ namespace VinylExchange.Services
 
             await dbContext.SaveChangesAsync();
 
-
-            var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(inputModel.FormSessionId, null);
-
-            var files = formSessionStorage.OrderBy(x => x.DateTime);
-
-            await fileManager.SaveFiles(files, this.GetType().Name.Replace("Service",String.Empty));
+            await releaseFilesService.AddFilesForRelease(release.Id, formSessionId);
 
             this.AddStylesForRelease(release.Id, inputModel.StyleIds);
-                                  
+
             return release;
         }
 

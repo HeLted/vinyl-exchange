@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VinylExchange.Models.ViewModels.Genres;
 
-namespace VinylExchange.Services
+namespace VinylExchange.Services.MainServices
 {
     public interface IGenresService
     {

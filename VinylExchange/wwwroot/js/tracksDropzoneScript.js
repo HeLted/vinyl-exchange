@@ -23,7 +23,7 @@ var myDropzone = new Dropzone(`#${dropzoneId}`, {
   maxFilesize: 30,
   uploadMultiple: false,
   createImageThumbnails: true,
-  maxFiles: 3,
+  maxFiles: 20,
   maxfilesexceeded: function(file) {
     this.removeAllFiles();
     this.addFile(file);

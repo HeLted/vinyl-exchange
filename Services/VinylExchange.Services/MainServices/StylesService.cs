@@ -8,7 +8,7 @@ using VinylExchange.Data;
 using VinylExchange.Models.ViewModels.Styles;
 using VinylExchange.Services.Mapping;
 
-namespace VinylExchange.Services
+namespace VinylExchange.Services.MainServices
 {
    public class StylesService : IStylesService
     {

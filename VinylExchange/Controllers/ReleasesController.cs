@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VinylExchange.Models.InputModels.Releases;
 using VinylExchange.Services;
+using VinylExchange.Services.MainServices;
 
 namespace VinylExchange.Controllers
 {

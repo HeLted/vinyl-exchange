@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace VinylExchange.Services.Files.SettingEnums
+namespace VinylExchange.Common.Enumerations
 {
     public enum FileType
     {
-        Image=1,
-        Audio=2
+        Image = 1,
+        Audio = 2
 
     }
 }

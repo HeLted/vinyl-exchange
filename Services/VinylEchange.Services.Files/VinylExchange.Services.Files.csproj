@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\VinylExchange.Models\VinylExchange.Models.csproj" />
+    <ProjectReference Include="..\..\VinylExchange.Services.MemoryCache\VinylExchange.Services.MemoryCache.csproj" />
   </ItemGroup>
 
 </Project>

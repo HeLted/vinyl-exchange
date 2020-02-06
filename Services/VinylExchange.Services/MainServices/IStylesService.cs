@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using VinylExchange.Models.ViewModels.Styles;
 
-namespace VinylExchange.Services
+namespace VinylExchange.Services.MainServices
 {
     public interface IStylesService
     {

@@ -5,61 +5,117 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VinylExchange.Common.Enumerations;
+using VinylExchange.Data.Models;
 using VinylExchange.Models.Utility;
-using VinylExchange.Services.Files.SettingEnums;
-
+using VinylExchange.Services.MemoryCache;
 
 namespace VinylExchange.Services.Files
 {
     public class FileManager : IFileManager
     {
-        private const string storagePath = @"wwwroot\";
-        public async Task <IEnumerable<KeyValuePair<string, string>>> SaveFiles
-            (IEnumerable<UploadFileUtilityModel> files, string directoryName)
+        private const string storageFolderName = @"wwwroot\";
+
+        private readonly MemoryCacheManager cacheManager;
+
+        public FileManager(MemoryCacheManager cacheManager)
         {
-            
-            foreach (var uploadFileUtility in files)
+            this.cacheManager = cacheManager;
+        }
+
+        public IEnumerable<UploadFileUtilityModel> RetrieveFilesFromCache(string formSessionId)
+        {
+            return cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId, null);
+
+        }
+
+        public IEnumerable<byte[]> GetFilesByteContent(IEnumerable<UploadFileUtilityModel> uploadFileUtilityModels)
+        {
+            List<byte[]> filesContent = new List<byte[]>();
+            foreach (var fileUtilityModel in uploadFileUtilityModels)
             {
-
-                var fileNameSplitted = uploadFileUtility.FileName.Split(".");
-                if (fileNameSplitted.Length == 2)
-                {
-                    
-
-                    var fileName = fileNameSplitted[0];
-                    var extension = "." +fileNameSplitted[1];
-                    var fileNameBytes = System.Text.Encoding.UTF8.GetBytes(fileName);
-                    var base64Name = System.Convert.ToBase64String(fileNameBytes);
-
-                    var fileSystemName = uploadFileUtility.FileGuid.ToString() + "@---@" +base64Name + extension;
-
-                    string savePath = storagePath + directoryName;
-
-                    if (extension == ".jpg" || extension == ".png")
-                    {
-                        savePath += @"\Image\";
-                    }
-                    else if (extension == ".mp3")
-                    {
-                        savePath += @"\Audio\";
-                    }
-                                        
-
-                    using (var fileStream = File.OpenWrite(savePath + fileSystemName))
-                    {
-                        await fileStream.WriteAsync(uploadFileUtility.FileByteContent);
-                    }
-                       
-                   
-                }
-
+                filesContent.Add(fileUtilityModel.FileByteContent);
             }
-                        
 
-            return null;
+            return filesContent;
         }
 
 
+        public IEnumerable<TModel> MapFilesToDbObjects
+            <TModel>(IEnumerable<UploadFileUtilityModel> uploadFileUtilityModels,
+            Guid entityId,string entityIdPropertyName, string subFolderName)
+        {
+            List<TModel> modelList = new List<TModel>();
 
+            foreach (var fileUtilityModel in uploadFileUtilityModels)
+            {
+
+                var fileGuid = fileUtilityModel.FileGuid.ToString();
+                var encodedFileName = this.ConvertFileNameToBase64(fileUtilityModel.FileName);
+                var fileExtension = fileUtilityModel.FileExtension;
+                var fileType = fileUtilityModel.FileType;
+                var createdOn = fileUtilityModel.CreatedOn;
+
+                var contentFolderName = fileType == FileType.Audio ? @"\Audio" : @"\Image";
+                var path = "\\" + subFolderName + contentFolderName + "\\";
+
+                var modelInstance = (TModel)Activator.CreateInstance(typeof(TModel));
+
+                var modelType = typeof(TModel);
+
+                modelType.GetProperty("Path").SetValue(modelInstance, path);
+                modelType.GetProperty("FileName")
+                    .SetValue(modelInstance, fileGuid + "@---@" + encodedFileName + fileExtension);
+                modelType.GetProperty("FileType").SetValue(modelInstance, fileType);
+                modelType.GetProperty("CreatedOn").SetValue(modelInstance, createdOn);
+                modelType.GetProperty(entityIdPropertyName).SetValue(modelInstance, entityId);
+
+                modelList.Add(modelInstance);
+
+            }
+
+            return modelList;
+
+        }
+
+        public IEnumerable<TModel> SaveFilesToServer<TModel>
+            (IEnumerable<TModel> fileModels, IEnumerable<byte[]> filesContent)
+        {
+            var modelType = typeof(TModel);
+            var fileModelsList = fileModels.ToList();
+            var filesContentArray = filesContent.ToArray();
+
+            for (int i = 0; i < fileModelsList.Count; i++)
+            {
+                var fileModel = fileModelsList[i];
+                var fileContent = filesContentArray[i];
+
+                var path = modelType.GetProperty("Path").GetValue(fileModel);
+                var fileName = modelType.GetProperty("FileName").GetValue(fileModel);
+
+                try
+                {
+                    using (var fileStream = File.OpenWrite(storageFolderName + path + fileName))
+                    {
+                        fileStream.Write(fileContent);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    fileModelsList.Remove(fileModel);
+                }
+               
+            }
+
+            return fileModelsList;
+
+        }            
+
+        private string ConvertFileNameToBase64(string fileName)
+        {
+            var fileNameBytes = System.Text.Encoding.UTF8.GetBytes(fileName);
+            return System.Convert.ToBase64String(fileNameBytes);
+        }
+        
     }
 }

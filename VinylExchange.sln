@@ -23,7 +23,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{5458B1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Models", "VinylExchange.Models\VinylExchange.Models.csproj", "{C2E38905-96CE-418F-B211-C5BF7D2491A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylExchange.Services.MemoryCache", "VinylExchange.Services.MemoryCache\VinylExchange.Services.MemoryCache.csproj", "{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.MemoryCache", "VinylExchange.Services.MemoryCache\VinylExchange.Services.MemoryCache.csproj", "{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylExchange.Common", "VinylExchange.Common\VinylExchange.Common.csproj", "{F72BBE57-C5BC-4E78-B351-1AE7DEF0EF7C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C9C6D95-DFCD-430E-B7F4-5B5CD01ADE4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F72BBE57-C5BC-4E78-B351-1AE7DEF0EF7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F72BBE57-C5BC-4E78-B351-1AE7DEF0EF7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F72BBE57-C5BC-4E78-B351-1AE7DEF0EF7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F72BBE57-C5BC-4E78-B351-1AE7DEF0EF7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

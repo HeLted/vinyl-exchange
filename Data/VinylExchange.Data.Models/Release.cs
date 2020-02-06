@@ -21,5 +21,7 @@ namespace VinylExchange.Data.Models
         public string Label { get; set; }
         public ICollection<StyleRelease> Styles { get; set; } = new HashSet<StyleRelease>();
 
+        public ICollection<ReleaseFile> ReleaseFiles { get; set; } = new HashSet<ReleaseFile>();
+
     }
 }

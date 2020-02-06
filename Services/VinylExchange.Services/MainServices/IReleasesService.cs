@@ -5,7 +5,7 @@ using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Releases;
 using VinylExchange.Models.ViewModels.Releases;
 
-namespace VinylExchange.Services
+namespace VinylExchange.Services.MainServices
 {
     public interface IReleasesService
     {

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.UI.V3.Pages.Internal;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,12 +9,12 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using System.Reflection;
-using VinylEchange.Services.Files;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models;
-using VinylExchange.Services;
 using VinylExchange.Services.Files;
+using VinylExchange.Services.HelperServices;
+using VinylExchange.Services.MainServices;
 using VinylExchange.Services.Mapping;
 using VinylExchange.Services.MemoryCache;
 
@@ -63,10 +62,10 @@ namespace VinylExchange
             services.AddTransient<IReleasesService, ReleasesService>();
             services.AddTransient<IGenresService, GenresService>();
             services.AddTransient<IStylesService, StylesService>();
+            services.AddTransient<IReleaseFilesService, ReleaseFilesService>();
 
             //Tool Services
-            services.AddTransient<MemoryCacheManager>();
-            services.AddTransient<IReleaseImageService,ReleaseImageService>();
+            services.AddTransient<MemoryCacheManager>();           
             services.AddTransient<IFileManager, FileManager>();
         }
 

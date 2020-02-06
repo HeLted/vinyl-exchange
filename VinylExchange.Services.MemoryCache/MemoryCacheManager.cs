@@ -220,6 +220,7 @@ namespace VinylExchange.Services.MemoryCache
         public virtual void Remove(string key)
         {
             _cache.Remove(RemoveKey(key));
+            
         }
 
 

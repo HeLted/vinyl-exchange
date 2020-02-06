@@ -23,7 +23,7 @@ namespace VinylExchange.Controllers
         }
 
         [HttpPost]
-        [Route("delete")]
+        [Route("Delete")]
         public IActionResult DeleteFile(string formSessionId, string fileGuid)
         {
 
@@ -33,7 +33,8 @@ namespace VinylExchange.Controllers
 
             var image = formSessionStorage.SingleOrDefault(x => x.FileGuid.ToString() == fileGuid);
 
-            if (image != null) {
+            if (image != null)
+            {
                 formSessionStorage.Remove(image);
 
                 var returnObj = new
@@ -52,11 +53,42 @@ namespace VinylExchange.Controllers
         }
 
         [HttpPost]
-        [Route("upload")]
+        [Route("DeleteAll")]
+        public IActionResult DeleteFile(string formSessionId)
+        {
+
+            var key = cacheManager.GetKeys().Where(x => x == formSessionId).SingleOrDefault();
+
+            if (cacheManager.IsSet(formSessionId))
+            {
+                var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
+
+                formSessionStorage.Clear();
+                                
+                cacheManager.Remove(formSessionId);
+
+                var returnObj = new
+                {
+                    message = $"All files for {formSessionId} cleared from cache "
+                };
+                return Json(returnObj);
+            }
+            else
+            {
+                return BadRequest($"there is no key associated with {formSessionId}");
+
+            }
+
+
+        }
+
+
+        [HttpPost]
+        [Route("Upload")]
         public IActionResult UploadFile(IFormFile file, string formSessionId)
         {
             var imageGuid = Guid.NewGuid();
-                       
+
             UploadFileUtilityModel image = new UploadFileUtilityModel(file, imageGuid);
 
             if (!cacheManager.IsSet(formSessionId))

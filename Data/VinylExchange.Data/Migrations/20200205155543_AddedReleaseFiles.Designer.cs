@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VinylExchange.Data;
 
 namespace VinylExchange.Data.Migrations
 {
     [DbContext(typeof(VinylExchangeDbContext))]
-    partial class VinylExchangeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200205155543_AddedReleaseFiles")]
+    partial class AddedReleaseFiles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -293,9 +295,6 @@ namespace VinylExchange.Data.Migrations
 
                     b.Property<string>("FileName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("FileType")
-                        .HasColumnType("int");
 
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
