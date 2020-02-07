@@ -30,12 +30,7 @@
  transition: max-width 0.2s ease-in-out;
 }
 
-.sm2-bar-ui .sm2-playlist li {
- text-align: center;
- margin-top: -2px;
- font-size: 95%;
- line-height: 1em;
-}
+
 
 .sm2-bar-ui.compact {
  min-width: 1em;
@@ -89,11 +84,7 @@
  overflow: visible;
 }
 
-.sm2-bar-ui.playlist-open .bd {
- border-bottom-left-radius: 0px;
- border-bottom-right-radius: 0px;
- border-bottom-color: transparent;
-}
+
 
 .sm2-bar-ui .bd,
 .sm2-bar-ui .sm2-extra-controls {
@@ -377,27 +368,7 @@
  min-height: 1em;
 }
 
-.sm2-bar-ui .sm2-playlist ul {
- position: absolute;
- left: 0px;
- top: 0px;
- width: 100%;
- list-style-type: none;
- overflow: hidden;
- white-space: nowrap;
- text-overflow: ellipsis;
-}
 
-.sm2-bar-ui p,
-.sm2-bar-ui .sm2-playlist ul,
-.sm2-bar-ui .sm2-playlist ul li {
- margin: 0px;
- padding: 0px;
-}
-
-.sm2-bar-ui .sm2-playlist ul li {
- position: relative;
-}
 
 .sm2-bar-ui .sm2-playlist ul li,
 .sm2-bar-ui .sm2-playlist ul li a {

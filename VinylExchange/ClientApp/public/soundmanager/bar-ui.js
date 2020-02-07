@@ -157,6 +157,8 @@
         item = links[0];
       }
 
+      // <ul class="sm2-playlist-bd"><li></li>
+
       // remove any failed character sequence, also
       dom.playlistTarget.innerHTML = '<ul class="sm2-playlist-bd"><li>' + item.innerHTML.replace(extras.loadFailedCharacter, '') + '</li></ul>';
 

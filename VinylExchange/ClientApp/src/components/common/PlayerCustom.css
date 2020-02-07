@@ -37,3 +37,25 @@
 .player-wrapper {
   margin-top: 50px;
 }
+
+ul {
+  list-style-type: none;
+  padding:0;
+  margin:0;
+}
+
+.playlistContainer{
+  overflow-x: hidden;
+  padding-right: 20px !important;
+  
+}
+
+.player-row{
+  margin-left: 0px;
+  margin-bottom: 5px;
+}
+
+.releaseAnchor{
+  height: 38px;
+  background-color: silver;
+}
