@@ -1,8 +1,7 @@
 import React from "react";
 import "./PlayerCustom.css";
 import PlayerRelease from "./PlayerRelease";
-import {PlayerContext} from "./../../contexts/PlayerContext";
-
+import { PlayerContext } from "./../../contexts/PlayerContext";
 
 export default class Player extends React.Component {
   constructor() {
@@ -154,11 +153,20 @@ export default class Player extends React.Component {
           >
             <ul className="sm2-playlist-bd">
               <div className="playlistContainer container-fluid p-0">
-              
-              {this.context.releases.map((release)=>{
-                return ( <PlayerRelease name={release.name} tracks={release.tracks} key={release.id}/>)
-              })}
-              
+                {this.context.releases.map(release => {
+                  return (
+                    <PlayerRelease
+                      handleRemoveReleaseFromPlayer={
+                        this.context.handleRemoveReleaseFromPlayer
+                      }
+                      name={release.name}
+                      tracks={release.tracks}
+                      image={release.image}
+                      key={release.id}
+                      releaseId={release.id}
+                    />
+                  );
+                })}
               </div>
             </ul>
           </div>

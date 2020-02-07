@@ -9,6 +9,9 @@ namespace VinylExchange.Models.ViewModels.ReleaseFiles
 {
     public class ReleaseFileViewModel : IMapFrom<ReleaseFile>
     {
+
+        public Guid Id { get; set; }
+
         public string Path { get; set; }
 
         public string FileName { get; set; }

@@ -1,17 +1,19 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown,faAngleUp ,faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDown,
+  faAngleUp,
+  faTimes
+} from "@fortawesome/free-solid-svg-icons";
 import PlayerTrack from "./PlayerTrack";
 
 export default class PlyerRelease extends React.Component {
-  
-  constructor(){
+  constructor() {
     super();
     this.state = {
-      isHidden : true
-    }
+      isHidden: true
+    };
   }
-  
 
   handleOnToggle = event => {
     event.preventDefault();
@@ -21,44 +23,67 @@ export default class PlyerRelease extends React.Component {
       };
     });
   };
- 
- 
-  render() {
 
-    const trakcsUlDisplay = this.state.isHidden ? "none" : "block"
+  render() {
+    const trakcsUlDisplay = this.state.isHidden ? "none" : "block";
 
     const icon =
-    this.state.isHidden === true ? (
-      <FontAwesomeIcon icon={faAngleDown} />
-    ) : (
-      <FontAwesomeIcon icon={faAngleUp} />
-    );
+      this.state.isHidden === true ? (
+        <FontAwesomeIcon icon={faAngleDown} />
+      ) : (
+        <FontAwesomeIcon icon={faAngleUp} />
+      );
 
     return (
       <li>
         <div className="player-row row ">
           <div className="col-11 sm2-row p-0">
             <div className="sm2-col sm2-wide">
-              <a className="releaseAnchor">{this.props.name}</a>
+              <div className="player-row row">
+                <div className="col-1 p-0 m-0">
+                  <img src={this.props.image} height="38px" width="38px" />
+                </div>
+                <div className="col-11 p-0">
+                  <a className="releaseAnchor">{this.props.name}</a>
+                </div>
+              </div>
             </div>
           </div>
           <div className="col-1 p-0">
-            <button className="btn btn-primary w-50" onClick={this.handleOnToggle} type="button">
+            <button
+              className="btn btn-primary w-50"
+              onClick={this.handleOnToggle}
+              type="button"
+            >
               {icon}
             </button>
-            <button className="btn btn-danger w-50" onClick={this.handleOnToggle} type="button">
+            <button
+              className="btn btn-danger w-50"
+              onClick={() =>
+                this.props.handleRemoveReleaseFromPlayer(this.props.releaseId)
+              }
+              type="button"
+            >
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
         </div>
         <div className="player-row row bg-dark">
-          <ul class="list-group" style={{display:trakcsUlDisplay}} active>
-            {this.props.tracks.map((track, index) => {
-              return (
-                <PlayerTrack path={track.path} name={track.name} key={track.id} />
-              );
-            })}
+        <div className="col-12 ">
+          <ul className="list-group" style={{ display: trakcsUlDisplay }}>
+          
+              {this.props.tracks.map((track, index) => {
+                return (
+                  <PlayerTrack
+                    path={track.path}
+                    name={track.name}
+                    key={track.id}
+                  />
+                );
+              })}
+           
           </ul>
+          </div>
         </div>
       </li>
     );
