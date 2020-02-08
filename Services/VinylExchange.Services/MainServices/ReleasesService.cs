@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using VinylExchange.Data;
@@ -31,7 +32,9 @@ namespace VinylExchange.Services.MainServices
 
         public async Task<IEnumerable<GetAllReleasesViewModel>> GetAllReleases()
         {
-            var releases = await dbContext.Releases.To<GetAllReleasesViewModel>().ToListAsync();
+            Thread.Sleep(5000);
+
+            var releases = await dbContext.Releases.Take(5).To<GetAllReleasesViewModel>().ToListAsync();
 
             releases.ForEach( r => {
                 r.CoverArt =  releaseFilesService.GetReleaseCoverArt(r.Id).GetAwaiter().GetResult();            
@@ -40,12 +43,29 @@ namespace VinylExchange.Services.MainServices
             return releases;
         }
 
-        public async Task<IEnumerable<GetAllReleasesViewModel>> SearchReleases(string searchTerm)
+        public async Task<IEnumerable<GetAllReleasesViewModel>> SearchReleases(string searchTerm, int releasesToSkip)
         {
-            var releases = await dbContext.Releases
-                .Where(x => x.Artist.Contains(searchTerm) || x.Title.Contains(searchTerm))
+            Thread.Sleep(5000);
+            List<GetAllReleasesViewModel> releases = null;
+
+            if(searchTerm == null)
+            {
+                releases  = await dbContext.Releases               
+                .Skip(releasesToSkip)
+                .Take(5)
                 .To<GetAllReleasesViewModel>()
                 .ToListAsync();
+            }
+            else
+            {
+                releases = await dbContext.Releases
+               .Where(x => x.Artist.Contains(searchTerm) || x.Title.Contains(searchTerm))
+               .Skip(releasesToSkip)
+               .Take(5)
+                .To<GetAllReleasesViewModel>()
+                .ToListAsync();
+
+            }
 
             releases.ForEach( r => {
                 r.CoverArt = releaseFilesService.GetReleaseCoverArt(r.Id).GetAwaiter().GetResult();
@@ -95,5 +115,10 @@ namespace VinylExchange.Services.MainServices
 
             dbContext.SaveChangesAsync();
         }
+
+        public async Task<int> GetAllReleasesCount() { 
+            return await dbContext.Releases.CountAsync();
+        }
+
     }
 }

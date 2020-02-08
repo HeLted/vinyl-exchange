@@ -20,7 +20,11 @@
 }
 
 .custom-player-controls {
-  background-color: slategrey !important;
+  background-color: black !important;
+}
+
+.sm2-progress-track{
+  background-color: white !important;
 }
 
 .custom-playlist-wrapper {
@@ -31,7 +35,7 @@
 }
 
 .custom-player-progressball{
-   border-radius: 50% !important
+  background-color: black !important;
 }
 
 .player-wrapper {

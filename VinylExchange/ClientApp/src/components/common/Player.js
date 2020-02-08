@@ -156,8 +156,8 @@ export default class Player extends React.Component {
                 {this.context.releases.map(release => {
                   return (
                     <PlayerRelease
-                      handleRemoveReleaseFromPlayer={
-                        this.context.handleRemoveReleaseFromPlayer
+                      handleEjectRelease={
+                        release.ejectReleaseCallback
                       }
                       name={release.name}
                       tracks={release.tracks}

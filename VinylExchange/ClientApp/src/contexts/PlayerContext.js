@@ -12,25 +12,23 @@ export default class PlayerContextProvider extends React.Component {
     };
   }
 
-  handleLoadReleaseTracks = (releaseId, releaseName,imagePath,imageName) => {
-    
+  handleLoadRelease = (releaseId, releaseName, imagePath, imageName,ejectReleaseCallback) => {
     let found = false;
-    for(var i = 0; i < this.state.releases.length; i++) {
-        if (this.state.releases[i].id == releaseId) {
-            found = true;
-            break;
-        }
+    for (var i = 0; i < this.state.releases.length; i++) {
+      if (this.state.releases[i].id == releaseId) {
+        found = true;
+        break;
+      }
     }
 
-    if(!found){
+    if (!found) {
       let self = this;
       axios
         .get(`/api/releasetracks/getalltracksforrelease?releaseId=${releaseId}`)
         .then(function(response) {
           const fileArray = response.data;
-          self.setState(prevState=> {
-            
-            const updatedReleases = prevState.releases
+          self.setState(prevState => {
+            const updatedReleases = prevState.releases;
             updatedReleases.push({
               id: releaseId,
               name: releaseName,
@@ -39,42 +37,47 @@ export default class PlayerContextProvider extends React.Component {
                 return {
                   id: file.id,
                   path: file.path + file.fileName,
-                  name:atob(file.fileName.split("@---@")[1].split(".")[0])
+                  name: atob(file.fileName.split("@---@")[1].split(".")[0])
                 };
-              })
-            })
-  
-            return {releases:updatedReleases}
+              }),
+              ejectReleaseCallback:ejectReleaseCallback
+            });
+
+            return { releases: updatedReleases };
           });
-  
         })
         .catch(function(error) {
           console.log(error.response);
         });
     }
-    
-    
-   
   };
 
-  handleRemoveReleaseFromPlayer = (releaseId) => {
-    
-    this.setState(prevState=>{
-      const updatedReleases = prevState.releases.filter(release=> release.id !== releaseId)   
-      
-      return ({
-        releases:updatedReleases
-      })
-    })
-  }
+  handleEjectRelease = releaseId => {
+    this.setState(prevState => {
+      const updatedReleases = prevState.releases.filter(
+        release => release.id !== releaseId
+      );
+      return {
+        releases: updatedReleases
+      };
+    });
+  };
+
+  isReleaseLoaded = releaseId => {
+    return this.state.releases.some(r => r.id === releaseId);
+  };
+
+  
 
   render() {
     return (
       <PlayerContext.Provider
         value={{
           ...this.state,
-          handleLoadReleaseTracks: this.handleLoadReleaseTracks,
-          handleRemoveReleaseFromPlayer:this.handleRemoveReleaseFromPlayer
+          handleLoadRelease: this.handleLoadRelease,
+          handleEjectRelease: this.handleEjectRelease,
+          handleRemoveReleaseFromPlayer: this.handleRemoveReleaseFromPlayer,
+          isReleaseLoaded: this.isReleaseLoaded
         }}
       >
         {this.props.children}

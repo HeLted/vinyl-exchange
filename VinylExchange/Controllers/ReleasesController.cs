@@ -32,9 +32,10 @@ namespace VinylExchange.Controllers
 
         [HttpGet]
         [Route("SearchReleases")]
-        public async Task<IActionResult> SearchReleases(string searchTerm)
+        public async Task<IActionResult> SearchReleases(string searchTerm,int releasesToSkip)
         {
-            var releases = await this.releasesService.SearchReleases(searchTerm);
+            var releases = await this.releasesService.SearchReleases(searchTerm, releasesToSkip);
+        
             return Ok(releases);
         }
 
@@ -52,6 +53,14 @@ namespace VinylExchange.Controllers
             };
 
             return Json(returnObject);
+        }
+
+        [HttpGet]
+        [Route("GetReleasesCount")]
+        public async Task<ActionResult> GetReleasesCount()
+        {
+           return Json(await releasesService.GetAllReleasesCount());
+
         }
 
 

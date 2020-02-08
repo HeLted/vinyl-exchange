@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleDown,
   faAngleUp,
-  faTimes
+  faEject
 } from "@fortawesome/free-solid-svg-icons";
 import PlayerTrack from "./PlayerTrack";
 
@@ -58,18 +58,18 @@ export default class PlyerRelease extends React.Component {
               {icon}
             </button>
             <button
-              className="btn btn-danger w-50"
+              className="btn btn-warning w-50"
               onClick={() =>
-                this.props.handleRemoveReleaseFromPlayer(this.props.releaseId)
+                this.props.handleEjectRelease(this.props.releaseId)
               }
               type="button"
             >
-              <FontAwesomeIcon icon={faTimes} />
+              <FontAwesomeIcon icon={faEject} />
             </button>
           </div>
         </div>
         <div className="player-row row bg-dark">
-        <div className="col-12 ">
+        <div className="col-12 p-0">
           <ul className="list-group" style={{ display: trakcsUlDisplay }}>
           
               {this.props.tracks.map((track, index) => {
