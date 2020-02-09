@@ -23,6 +23,7 @@ namespace VinylExchange.Services.Files
             this.cacheManager = cacheManager;
         }
 
+
         public IEnumerable<UploadFileUtilityModel> RetrieveFilesFromCache(string formSessionId)
         {
             return cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId, null);

@@ -1,6 +1,7 @@
 import React from "react";
 import SearchReleasesContainer from "./searchReleases/SearchReleasesContainer";
 import ReleasesContainer from "./releases/ReleasesContainer";
+import FilterReleasesContainer from "./filterReleases/FilterReleasesContainer"
 import { withRouter } from "react-router-dom";
 
 export default function MarketplaceComponent(props) {
@@ -25,6 +26,7 @@ export default function MarketplaceComponent(props) {
               onUpdateSearchValue={props.onUpdateSearchValue}
               searchValue={props.searchValue}
             />
+            <FilterReleasesContainer/>
             <br />
             <Button />
           </div>

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Releases;
@@ -30,20 +29,9 @@ namespace VinylExchange.Services.MainServices
             this.releaseFilesService = releaseFilesService;
         }
 
-        public async Task<IEnumerable<GetAllReleasesViewModel>> GetAllReleases()
-        {
-            Thread.Sleep(5000);
+       
 
-            var releases = await dbContext.Releases.Take(5).To<GetAllReleasesViewModel>().ToListAsync();
-
-            releases.ForEach( r => {
-                r.CoverArt =  releaseFilesService.GetReleaseCoverArt(r.Id).GetAwaiter().GetResult();            
-            });
-
-            return releases;
-        }
-
-        public async Task<IEnumerable<GetAllReleasesViewModel>> SearchReleases(string searchTerm, int releasesToSkip)
+        public async Task<IEnumerable<GetAllReleasesViewModel>> GetReleases(string searchTerm, int releasesToSkip)
         {
         
             List<GetAllReleasesViewModel> releases = null;
@@ -116,9 +104,6 @@ namespace VinylExchange.Services.MainServices
             dbContext.SaveChangesAsync();
         }
 
-        public async Task<int> GetAllReleasesCount() { 
-            return await dbContext.Releases.CountAsync();
-        }
-
+      
     }
 }

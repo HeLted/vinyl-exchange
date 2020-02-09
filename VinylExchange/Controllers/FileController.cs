@@ -15,11 +15,11 @@ namespace VinylExchange.Controllers
     [ApiController]
     public class FileController : Controller
     {
-        private readonly MemoryCacheManager cacheManager;
+        private readonly IMemoryCacheFileSevice memoryCacheFileSevice;
 
-        public FileController(MemoryCacheManager cacheManager)
+        public FileController(IMemoryCacheFileSevice memoryCacheFileSevice)
         {
-            this.cacheManager = cacheManager;
+            this.memoryCacheFileSevice = memoryCacheFileSevice;
         }
 
         [HttpPost]
@@ -27,57 +27,20 @@ namespace VinylExchange.Controllers
         public IActionResult DeleteFile(string formSessionId, string fileGuid)
         {
 
-            var key = cacheManager.GetKeys().Where(x => x == formSessionId).SingleOrDefault();
+            var returnObj = this.memoryCacheFileSevice.RemoveFile(formSessionId, fileGuid);
 
-            var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
-
-            var image = formSessionStorage.SingleOrDefault(x => x.FileGuid.ToString() == fileGuid);
-
-            if (image != null)
-            {
-                formSessionStorage.Remove(image);
-
-                var returnObj = new
-                {
-                    removed = image.FileName,
-                    filesStillInStorage = string.Join(",", formSessionStorage.Select(x => x.FileName))
-                };
-
-                return Json(returnObj);
-            }
-            else
-            {
-                return BadRequest("there is no file with this fileGuid in cache storage");
-            }
+            return Ok(returnObj);
 
         }
 
         [HttpPost]
         [Route("DeleteAll")]
-        public IActionResult DeleteFile(string formSessionId)
+        public IActionResult DeleteAllFiles(string formSessionId)
         {
 
-            var key = cacheManager.GetKeys().Where(x => x == formSessionId).SingleOrDefault();
+            this.memoryCacheFileSevice.RemoveAllFilesForFormSession(formSessionId);
 
-            if (cacheManager.IsSet(formSessionId))
-            {
-                var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
-
-                formSessionStorage.Clear();
-                                
-                cacheManager.Remove(formSessionId);
-
-                var returnObj = new
-                {
-                    message = $"All files for {formSessionId} cleared from cache "
-                };
-                return Json(returnObj);
-            }
-            else
-            {
-                return BadRequest($"there is no key associated with {formSessionId}");
-
-            }
+            return Ok();
 
 
         }
@@ -87,27 +50,12 @@ namespace VinylExchange.Controllers
         [Route("Upload")]
         public IActionResult UploadFile(IFormFile file, string formSessionId)
         {
-            var imageGuid = Guid.NewGuid();
+           
+            UploadFileUtilityModel fileModel = new UploadFileUtilityModel(file);
 
-            UploadFileUtilityModel image = new UploadFileUtilityModel(file, imageGuid);
+            var returnObj = this.memoryCacheFileSevice.AddFile(fileModel, formSessionId);
 
-            if (!cacheManager.IsSet(formSessionId))
-            {
-                cacheManager.Set(formSessionId, new List<UploadFileUtilityModel>(), 1800);
-            }
-
-            var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId, null);
-
-            formSessionStorage.Add(image);
-
-            var returnObj = new
-            {
-                added = image.FileName,
-                guid = imageGuid,
-                filesInStorage = string.Join(",", formSessionStorage.Select(x => x.FileName))
-            };
-
-            return Json(returnObj);
+            return Ok(returnObj);
         }
 
 

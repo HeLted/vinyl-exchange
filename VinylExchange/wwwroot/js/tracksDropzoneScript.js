@@ -12,7 +12,7 @@
   const dropzoneUploadPath =
     dropzoneElement.attributes[2].value + formSessionId;
   
-  const dropzoneDeletePath =
+  const dropzoneDropPath =
    dropzoneElement.attributes[3].value + formSessionId;
   
    const acceptedFiles = dropzoneElement.attributes[4].value
@@ -47,9 +47,9 @@ var myDropzone = new Dropzone(`#${dropzoneId}`, {
     });
 
     this.on("success", function(file, jsonResponse) {
-      console.log(jsonResponse);
+      console.log("added",jsonResponse);
 
-      file.serverGuid = jsonResponse.guid;
+      file.serverGuid = jsonResponse.fileId;
     });
 
     this.on("addedfile", function(file) {
@@ -69,7 +69,7 @@ var myDropzone = new Dropzone(`#${dropzoneId}`, {
             method: "POST"
           })
             .then(response => response.json())
-            .then(data => console.log(data));
+            .then(data => console.log("removed",data));
         }
 
         _this.removeFile(file);

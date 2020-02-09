@@ -65,8 +65,10 @@ namespace VinylExchange
             services.AddTransient<IReleaseFilesService, ReleaseFilesService>();
 
             //Tool Services
-            services.AddTransient<MemoryCacheManager>();           
+            services.AddTransient<MemoryCacheManager>();
+            services.AddTransient<IMemoryCacheFileSevice, MemoryCacheFileService>();
             services.AddTransient<IFileManager, FileManager>();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

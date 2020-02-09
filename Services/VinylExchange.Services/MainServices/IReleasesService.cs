@@ -8,12 +8,9 @@ using VinylExchange.Models.ViewModels.Releases;
 namespace VinylExchange.Services.MainServices
 {
     public interface IReleasesService
-    {
-        Task<IEnumerable<GetAllReleasesViewModel>> GetAllReleases();
-        Task<IEnumerable<GetAllReleasesViewModel>> SearchReleases(string searchTerm,int releasesToSkip);
+    {       
+        Task<IEnumerable<GetAllReleasesViewModel>> GetReleases(string searchTerm,int releasesToSkip);
         Task<Release> AddRelease(AddReleaseInputModel inputModel);
-
-        Task<int> GetAllReleasesCount();
 
     }
 }

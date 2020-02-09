@@ -11,7 +11,7 @@ namespace VinylExchange.Models.Utility
     public class UploadFileUtilityModel
     {
 
-        public UploadFileUtilityModel(IFormFile file,Guid fileGuid)
+        public UploadFileUtilityModel(IFormFile file)
         {
 
             this.FileExtension =  file.FileName.Substring(file.FileName.LastIndexOf("."));
@@ -19,7 +19,7 @@ namespace VinylExchange.Models.Utility
             this.FileType = this.FileExtension == ".mp3" ? FileType.Audio : FileType.Image;
             this.FileByteContent = this.ConvertIFormFileToByteArray(file);            
             this.CreatedOn = DateTime.UtcNow;
-            this.FileGuid = fileGuid;
+            this.FileGuid = new Guid();
         }
         public string FileName { get; set; }        
         public string FileExtension { get; set; }
