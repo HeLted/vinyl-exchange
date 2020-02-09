@@ -40,14 +40,14 @@ namespace VinylExchange.Services.MemoryCache
 
         }
 
-        public DeleteFileViewModel RemoveFile(string formSessionId, string fileGuid)
+        public DeleteFileViewModel RemoveFile(string formSessionId, Guid fileGuid)
         {
 
             var key = cacheManager.GetKeys().Where(x => x == formSessionId).SingleOrDefault();
 
             var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
-            var file = formSessionStorage.SingleOrDefault(x => x.FileGuid.ToString() == fileGuid);
+            var file = formSessionStorage.SingleOrDefault(x => x.FileGuid == fileGuid);
 
 
             formSessionStorage.Remove(file);

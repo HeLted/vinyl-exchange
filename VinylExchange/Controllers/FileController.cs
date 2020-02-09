@@ -27,7 +27,7 @@ namespace VinylExchange.Controllers
         public IActionResult DeleteFile(string formSessionId, string fileGuid)
         {
 
-            var returnObj = this.memoryCacheFileSevice.RemoveFile(formSessionId, fileGuid);
+            var returnObj = this.memoryCacheFileSevice.RemoveFile(formSessionId, Guid.Parse(fileGuid));
 
             return Ok(returnObj);
 
