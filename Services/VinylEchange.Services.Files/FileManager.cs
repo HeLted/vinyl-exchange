@@ -14,7 +14,7 @@ namespace VinylExchange.Services.Files
 {
     public class FileManager : IFileManager
     {
-        private const string storageFolderName = @"wwwroot\";
+        private const string storageFolderName = @"MediaStorage\";
 
         private readonly MemoryCacheManager cacheManager;
 

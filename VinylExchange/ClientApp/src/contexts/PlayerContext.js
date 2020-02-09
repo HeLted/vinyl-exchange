@@ -32,11 +32,11 @@ export default class PlayerContextProvider extends React.Component {
             updatedReleases.push({
               id: releaseId,
               name: releaseName,
-              image: imagePath + imageName,
+              image: "/file/media"  + imagePath + imageName,
               tracks: fileArray.map(file => {
                 return {
                   id: file.id,
-                  path: file.path + file.fileName,
+                  path: "/file/media" + file.path + file.fileName,
                   name: atob(file.fileName.split("@---@")[1].split(".")[0])
                 };
               }),

@@ -45,7 +45,7 @@ namespace VinylExchange.Services.MainServices
 
         public async Task<IEnumerable<GetAllReleasesViewModel>> SearchReleases(string searchTerm, int releasesToSkip)
         {
-            Thread.Sleep(5000);
+        
             List<GetAllReleasesViewModel> releases = null;
 
             if(searchTerm == null)
