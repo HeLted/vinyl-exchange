@@ -10,6 +10,7 @@ namespace VinylExchange.Services.MemoryCache
     {
         UploadFileViewModel AddFile(UploadFileUtilityModel file, string formSessionId);
         DeleteFileViewModel RemoveFile(string formSessionId, string fileGuid);
-        void RemoveAllFilesForFormSession(string formSessionId);    
+        void RemoveAllFilesForFormSession(string formSessionId);
+        IEnumerable<UploadFileUtilityModel> GetAllFilesForFormSession(string formSessionId);
     }
 }

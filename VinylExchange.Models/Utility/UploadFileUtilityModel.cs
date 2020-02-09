@@ -19,7 +19,7 @@ namespace VinylExchange.Models.Utility
             this.FileType = this.FileExtension == ".mp3" ? FileType.Audio : FileType.Image;
             this.FileByteContent = this.ConvertIFormFileToByteArray(file);            
             this.CreatedOn = DateTime.UtcNow;
-            this.FileGuid = new Guid();
+            this.FileGuid = Guid.NewGuid();
         }
         public string FileName { get; set; }        
         public string FileExtension { get; set; }

@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VinylExchange.Common.Enumerations;
-using VinylExchange.Data.Models;
 using VinylExchange.Models.Utility;
 using VinylExchange.Services.MemoryCache;
 
@@ -15,18 +11,17 @@ namespace VinylExchange.Services.Files
     public class FileManager : IFileManager
     {
         private const string storageFolderName = @"MediaStorage\";
-
-        private readonly MemoryCacheManager cacheManager;
-
-        public FileManager(MemoryCacheManager cacheManager)
-        {
-            this.cacheManager = cacheManager;
+                
+        private readonly IMemoryCacheFileSevice memoryCacheFileSevice;
+        public FileManager(IMemoryCacheFileSevice memoryCacheFileSevice)
+        {         
+            this.memoryCacheFileSevice = memoryCacheFileSevice;
         }
 
 
         public IEnumerable<UploadFileUtilityModel> RetrieveFilesFromCache(string formSessionId)
         {
-            return cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId, null);
+            return this.memoryCacheFileSevice.GetAllFilesForFormSession(formSessionId);
 
         }
 

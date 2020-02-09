@@ -87,5 +87,10 @@ namespace VinylExchange.Services.MemoryCache
 
         }
 
+        public IEnumerable<UploadFileUtilityModel> GetAllFilesForFormSession(string formSessionId)
+        {
+            return cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId, null);
+        }
+
     }
 }
