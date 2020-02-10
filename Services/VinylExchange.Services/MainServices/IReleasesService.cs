@@ -10,6 +10,7 @@ namespace VinylExchange.Services.MainServices
     public interface IReleasesService
     {       
         Task<IEnumerable<GetAllReleasesViewModel>> GetReleases(string searchTerm,int releasesToSkip);
+        Task<GetAllReleasesViewModel> GetRelease(Guid releaseId);
         Task<Release> AddRelease(AddReleaseInputModel inputModel);
 
     }

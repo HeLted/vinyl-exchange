@@ -10,13 +10,19 @@ export default class NotificationContextProvider extends React.Component {
 
   handleServerNotification = (notificationObj) => {
     console.log(notificationObj)
-    if(notificationObj.status >=400){
+    if(notificationObj.status >= 400){
       const errorMessages = [];
+     
+     if(notificationObj.data.errors != undefined){
       const errors = notificationObj.data.errors;
 
       Object.keys(errors).forEach(function(field) {
         errorMessages.push({messageText:`${field} : ${errors[field].join()}`,id:uuidv4()});
       });
+      
+     }else{
+       errorMessages.push({messageText:notificationObj.data.message,id:uuidv4()});
+     }
       
       this.setState({
         messages:errorMessages,
@@ -49,6 +55,10 @@ export default class NotificationContextProvider extends React.Component {
     });
   };
 
+  handleRemoveAllNotifications  = () =>{
+    this.setState({ messages: [] });
+  }
+
 
   render() {
     return (
@@ -56,7 +66,8 @@ export default class NotificationContextProvider extends React.Component {
         value={{
           ...this.state,
           handleServerNotification: this.handleServerNotification,
-          handleRemoveNotification : this.handleRemoveNotification
+          handleRemoveNotification : this.handleRemoveNotification,
+          handleRemoveAllNotifications :this. handleRemoveAllNotifications 
         }}
       >
         {this.props.children}

@@ -14,6 +14,7 @@ using VinylExchange.Data.Models;
 using VinylExchange.Models;
 using VinylExchange.Services.Files;
 using VinylExchange.Services.HelperServices;
+using VinylExchange.Services.Logging;
 using VinylExchange.Services.MainServices;
 using VinylExchange.Services.Mapping;
 using VinylExchange.Services.MemoryCache;
@@ -32,7 +33,7 @@ namespace VinylExchange
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
+
 
             services.AddDbContext<VinylExchangeDbContext>(options =>
                 options.UseSqlServer(
@@ -58,7 +59,7 @@ namespace VinylExchange
             });
 
             //Enitity Services
-                        
+
             services.AddTransient<IReleasesService, ReleasesService>();
             services.AddTransient<IGenresService, GenresService>();
             services.AddTransient<IStylesService, StylesService>();
@@ -68,14 +69,15 @@ namespace VinylExchange
             services.AddTransient<MemoryCacheManager>();
             services.AddTransient<IMemoryCacheFileSevice, MemoryCacheFileService>();
             services.AddTransient<IFileManager, FileManager>();
-           
+            services.AddTransient<ILoggerService, LoggerService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             AutoMapperConfig.RegisterMappings(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly);
-            
+
 
             if (env.IsDevelopment())
             {
@@ -108,9 +110,10 @@ namespace VinylExchange
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+               
+                endpoints.MapControllerRoute("Default",
+                "api/{controller}/{id}",
+                new { id = System.Web.Http.RouteParameter.Optional });
                 endpoints.MapRazorPages();
             });
 
@@ -121,6 +124,7 @@ namespace VinylExchange
                 if (env.IsDevelopment())
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");
+
                 }
             });
         }

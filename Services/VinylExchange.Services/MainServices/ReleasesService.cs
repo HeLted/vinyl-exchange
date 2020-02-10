@@ -63,6 +63,14 @@ namespace VinylExchange.Services.MainServices
         }
 
 
+        public async Task<GetAllReleasesViewModel> GetRelease(Guid releaseId)
+        {
+            return await dbContext.Releases
+                 .To<GetAllReleasesViewModel>()
+                .SingleOrDefaultAsync(x => x.Id == releaseId);
+                                 
+        }
+
         public async Task<Release> AddRelease(AddReleaseInputModel inputModel)
         {
             var formSessionId = inputModel.FormSessionId;

@@ -34,10 +34,9 @@ export default class ServerNotification extends React.Component {
       <div className="server-notification-wrapper">
         {this.context.messages.map((messageObj, index) => {
           return (
-            <div className="d-flex">
+            <div className="d-flex"  key={messageObj.id}>
             <div
               className={"server-notification alert " + alertTypeClass}
-              key={messageObj.id}
               role="alert"
             >
               {messageObj.messageText}

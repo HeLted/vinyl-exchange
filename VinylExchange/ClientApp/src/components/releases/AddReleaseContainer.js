@@ -9,13 +9,13 @@ export default class AddRelease extends React.Component {
     super();
     this.state = {
       formSessionId: uuidv4(),
-      artistInput: "",
-      titleInput: "",
-      genreSelectInput: "",
+      artistInput: "d",
+      titleInput: "d",
+      genreSelectInput: "d",
       styleMultiSelectInput: [],
-      formatInput: "",
-      yearInput: "",
-      labelInput: "",
+      formatInput: "d",
+      yearInput: "0",
+      labelInput: "d",
       genres: [],
       styles: []
     };
@@ -83,16 +83,21 @@ export default class AddRelease extends React.Component {
 
     let self = this;
     axios
-      .post("/api/releases/addrelease", submitFormObj)
+      .post("/api/releases/create", submitFormObj)
       .then(function(response) {
-        self.context.handleServerNotification(response, false);
+        console.log(response)
+
+        self.context.handleServerNotification(response);
       })
       .catch(function(error) {
-        self.context.handleServerNotification(error.response, true);
+        console.log(error)
+        self.context.handleServerNotification(error.response);
       });
   };
 
   componentWillUnmount(){
+
+    this.context.handleRemoveAllNotifications();
 
     axios
       .post(`/api/file/deleteall?formSessionId=${this.state.formSessionId}`)
