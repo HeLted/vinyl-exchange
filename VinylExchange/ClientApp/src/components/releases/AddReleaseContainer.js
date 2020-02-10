@@ -1,10 +1,10 @@
 import React from "react";
 import AddReleaseComponent from "./AddReleaseComponent";
-import uuidv4 from "./../../guidGenerator";
+import uuidv4 from "../../functions/guidGenerator";
 import axios from "axios";
 import { NotificationContext } from "./../../contexts/NotificationContext";
 
-export default class AddRelease extends React.Component {
+export default class AddReleaseContainer extends React.Component {
   constructor() {
     super();
     this.state = {

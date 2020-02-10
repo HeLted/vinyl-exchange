@@ -1,6 +1,6 @@
 import React from "react";
 import "./ServerNotification.css";
-import { NotificationContext } from "./../contexts/NotificationContext";
+import { NotificationContext } from "../../../contexts/NotificationContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 

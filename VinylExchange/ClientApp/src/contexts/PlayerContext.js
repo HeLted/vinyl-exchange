@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 import axios from "axios";
-import uuidv4 from "./../guidGenerator";
+import uuidv4 from "../functions/guidGenerator";
 
 export const PlayerContext = createContext();
 

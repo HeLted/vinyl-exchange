@@ -10,6 +10,7 @@ using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Releases;
 using VinylExchange.Models.Utility;
+using VinylExchange.Models.ViewModels.ReleaseFiles;
 using VinylExchange.Models.ViewModels.Releases;
 using VinylExchange.Services.Files;
 using VinylExchange.Services.HelperServices;
@@ -56,7 +57,7 @@ namespace VinylExchange.Services.MainServices
             }
 
             releases.ForEach( r => {
-                r.CoverArt = releaseFilesService.GetReleaseCoverArt(r.Id).GetAwaiter().GetResult();
+                r.CoverArt = releaseFilesService.GetReleaseCoverArt(r.Id).GetAwaiter().GetResult();               
             });
                         
             return releases;

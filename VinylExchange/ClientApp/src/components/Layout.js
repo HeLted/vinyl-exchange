@@ -1,9 +1,9 @@
 import React, { Component, ReactChild } from "react";
 import { Container } from "reactstrap";
 import { NavMenu } from "./NavMenu";
-import Player from "./common/Player";
+import Player from "./layoutComponents/Player/Player";
 import { Helmet } from "react-helmet";
-import ServerNotification from "./ServerNotification";
+import ServerNotification from "./layoutComponents/ServerNotification/ServerNotification";
 import NotificationContextProvider from "./../contexts/NotificationContext";
 import PlayerContextProvider from "./../contexts/PlayerContext";
 

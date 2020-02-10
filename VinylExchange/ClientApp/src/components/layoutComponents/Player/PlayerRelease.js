@@ -69,9 +69,8 @@ export default class PlyerRelease extends React.Component {
           </div>
         </div>
         <div className="player-row row bg-dark">
-        <div className="col-12 p-0">
-          <ul className="list-group" style={{ display: trakcsUlDisplay }}>
-          
+          <div className="col-12 p-0">
+            <ul className="list-group" style={{ display: trakcsUlDisplay }}>
               {this.props.tracks.map((track, index) => {
                 return (
                   <PlayerTrack
@@ -81,8 +80,7 @@ export default class PlyerRelease extends React.Component {
                   />
                 );
               })}
-           
-          </ul>
+            </ul>
           </div>
         </div>
       </li>

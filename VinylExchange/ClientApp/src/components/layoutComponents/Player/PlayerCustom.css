@@ -21,6 +21,9 @@
 
 .custom-player-controls {
   background-color: black !important;
+  width:100%;
+  display:inherit !important;
+  /* padding-left: 15px; */
 }
 
 .sm2-progress-track{
@@ -62,4 +65,14 @@ ul {
 .releaseAnchor{
   height: 38px;
   background-color: silver;
+}
+
+.custom-player-progressbar{
+  width: 100%;
+ 
+}
+
+.custom-player-status{
+  padding-left: 30px !important;
+  padding-right:30px !important;
 }

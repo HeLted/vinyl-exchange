@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import uuidv4 from "./../guidGenerator";
+import uuidv4 from "../functions/guidGenerator";
 export const NotificationContext = createContext();
 
 export default class NotificationContextProvider extends React.Component {
