@@ -20,7 +20,7 @@ export default function MarketplaceComponent(props) {
   return (
     <div className="container-fluid">
       <div className="row">
-        <div className="custom-container col-3 center-block">
+        <div className="custom-container col-lg-3 col-sm-12 col-xs-12 center-block">
           <div className="container-fluid justify-content-center">
             <SearchReleasesContainer
               onUpdateSearchValue={props.onUpdateSearchValue}
@@ -31,7 +31,7 @@ export default function MarketplaceComponent(props) {
             <Button />
           </div>
         </div>
-        <div className="custom-container col-9 align-items-center justify-content-center">
+        <div className="custom-container col-lg-9 col-sm-12 col-xs-12 align-items-center justify-content-center">
           <ReleasesContainer searchValue={props.searchValue} />
          
         </div>
