@@ -7,21 +7,21 @@ using VinylExchange.Services.HelperServices;
 
 namespace VinylExchange.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
-    public class ReleaseTracksController : Controller
+    public class ReleaseImagesController : Controller
     {
         private readonly IReleaseFilesService releaseFilesService;
-        public ReleaseTracksController(IReleaseFilesService releaseFilesService)
+        public ReleaseImagesController(IReleaseFilesService releaseFilesService)
         {
             this.releaseFilesService = releaseFilesService;
         }
         [HttpGet]
-        [Route("GetAllTracksForRelease")]
-        public async Task<IActionResult> GetAllTracksForRelease(Guid releaseId)
+        [Route("GetAllImagesForRelease")]
+        public async Task<IActionResult> GetAllImagesForRelease(Guid releaseId)
         {
-            return Ok(await releaseFilesService.GetReleaseTracks(releaseId));
-        }        
+            return Ok(await releaseFilesService.GetReleaseImages(releaseId));
+        }
+
     }
 }

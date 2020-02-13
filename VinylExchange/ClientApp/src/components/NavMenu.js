@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {
   Collapse,
   Container,
@@ -40,9 +41,10 @@ export class NavMenu extends Component {
         >
           <Container>
             <NavbarBrand tag={Link} to="/">
-              VinylExchange
+              <img src="img/appLogo.png" heigth="300px" width="150px"/>
             </NavbarBrand>
-            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
+            
+            <div className="navbar-toggler" onClick={this.toggleNavbar}><FontAwesomeIcon icon={faBars}/></div>
             <Collapse
               className="d-sm-inline-flex flex-sm-row-reverse"
               isOpen={!this.state.collapsed}
@@ -50,18 +52,13 @@ export class NavMenu extends Component {
             >
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/">
+                  <NavLink tag={Link} className="navbar-link btn btn-outline-light text-light" to="/">
                     Home
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/marketplace">
+                  <NavLink tag={Link} className="navbar-link btn btn-outline-light text-light" to="/marketplace">
                     Marketplace
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/counter">
-                    Counter
                   </NavLink>
                 </NavItem>
                 <LoginMenu />

@@ -29,6 +29,7 @@ namespace VinylExchange.Controllers
         [Route("GetReleases")]
         public async Task<IActionResult> GetReleases(string searchTerm, int releasesToSkip)
         {
+            
             try
             {
                 var releases = await this.releasesService.GetReleases(searchTerm, releasesToSkip);
