@@ -7,7 +7,10 @@ namespace VinylExchange.Data.Models
 {
     public class Release
     {
-        [Key]
+        public Release()
+        {
+            this.Id = Guid.NewGuid();
+        }
         public Guid Id { get; set; }
         [Required]
         public string Artist { get; set; }
@@ -22,6 +25,8 @@ namespace VinylExchange.Data.Models
         public ICollection<StyleRelease> Styles { get; set; } = new HashSet<StyleRelease>();
 
         public ICollection<ReleaseFile> ReleaseFiles { get; set; } = new HashSet<ReleaseFile>();
+
+        public ICollection<CollectionItem> ReleaseInCollections { get; set; } = new HashSet<CollectionItem>();
 
     }
 }

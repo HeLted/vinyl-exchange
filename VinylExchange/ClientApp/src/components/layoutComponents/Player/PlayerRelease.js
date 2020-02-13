@@ -44,7 +44,9 @@ export default class PlyerRelease extends React.Component {
                   <img src={this.props.image} height="38px" width="38px" />
                 </div>
                 <div className="col-11 p-0">
-                  <a className="releaseAnchor">{this.props.name}</a>
+                  <a className="releaseAnchor">
+                    {this.props.artist} - {this.props.title}
+                  </a>
                 </div>
               </div>
             </div>

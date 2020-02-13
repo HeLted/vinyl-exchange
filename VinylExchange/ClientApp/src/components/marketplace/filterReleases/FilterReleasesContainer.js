@@ -1,10 +1,12 @@
-import React from "react";
+import React,{Component} from "react";
 import FilterReleasesComponent from "./FilterReleasesComponent"
 
 
-export default class FilterReleaseContainer extends React.Component{
+class FilterReleaseContainer extends Component{
 
     render(){
         return(<FilterReleasesComponent/>);
     }
 }
+
+export default  FilterReleaseContainer;

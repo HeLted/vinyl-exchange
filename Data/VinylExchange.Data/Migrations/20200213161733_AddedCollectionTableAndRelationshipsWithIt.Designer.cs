@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VinylExchange.Data;
 
 namespace VinylExchange.Data.Migrations
 {
     [DbContext(typeof(VinylExchangeDbContext))]
-    partial class VinylExchangeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200213161733_AddedCollectionTableAndRelationshipsWithIt")]
+    partial class AddedCollectionTableAndRelationshipsWithIt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,7 +256,7 @@ namespace VinylExchange.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Collections");
+                    b.ToTable("Collection");
                 });
 
             modelBuilder.Entity("VinylExchange.Data.Models.Genre", b =>

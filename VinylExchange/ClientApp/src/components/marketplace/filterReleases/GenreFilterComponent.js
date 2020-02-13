@@ -1,8 +1,8 @@
-import React from "react";
+import React , {Component} from "react";
 import SingleSelect from "./../../common/inputComponents/SingleSelect";
 import Label from "./../../common/inputComponents/Label";
 
-export default class GenreFilterComponent extends React.Component {
+ class GenreFilterComponent extends Component {
   render() {
     return (
       <div className="form-group">
@@ -18,3 +18,5 @@ export default class GenreFilterComponent extends React.Component {
     );
   }
 }
+
+export default GenreFilterComponent;

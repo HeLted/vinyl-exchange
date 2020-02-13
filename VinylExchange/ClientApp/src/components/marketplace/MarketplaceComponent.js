@@ -1,6 +1,6 @@
 import React from "react";
 import SearchReleasesContainer from "./searchReleases/SearchReleasesContainer";
-import ReleasesContainer from "./releases/ReleasesContainer";
+import ReleasesContainerWrapper from "./releases/ReleasesContainer";
 import FilterReleasesContainer from "./filterReleases/FilterReleasesContainer"
 import { withRouter } from "react-router-dom";
 
@@ -32,7 +32,7 @@ export default function MarketplaceComponent(props) {
           </div>
         </div>
         <div className="custom-container col-lg-9 col-sm-12 col-xs-12 align-items-center justify-content-center">
-          <ReleasesContainer searchValue={props.searchValue} />
+          <ReleasesContainerWrapper searchValue={props.searchValue} />
          
         </div>
       </div>

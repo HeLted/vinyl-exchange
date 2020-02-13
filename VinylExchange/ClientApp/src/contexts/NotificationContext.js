@@ -8,57 +8,69 @@ export default class NotificationContextProvider extends React.Component {
     severity: 0
   };
 
-  handleServerNotification = (notificationObj) => {
-    console.log(notificationObj)
-    if(notificationObj.status >= 400){
+  handleServerNotification = notificationObj => {
+    console.log(notificationObj);
+
+    if (notificationObj.status === 404) {
+      this.setState({
+        messages: [
+          { messageText: "Error 404 Not Found.Try Again Later!", id: uuidv4() }
+        ],
+        severity: 1
+      });
+    } else if (notificationObj.status >= 400) {
       const errorMessages = [];
-     
-     if(notificationObj.data.errors != undefined){
-      const errors = notificationObj.data.errors;
 
-      Object.keys(errors).forEach(function(field) {
-        errorMessages.push({messageText:`${field} : ${errors[field].join()}`,id:uuidv4()});
-      });
-      
-     }else{
-       errorMessages.push({messageText:notificationObj.data.message,id:uuidv4()});
-     }
-      
+      if (notificationObj.data.errors != undefined) {
+        const errors = notificationObj.data.errors;
+
+        Object.keys(errors).forEach(function(field) {
+          errorMessages.push({
+            messageText: `${field} : ${errors[field].join()}`,
+            id: uuidv4()
+          });
+        });
+      } else {
+        errorMessages.push({
+          messageText: notificationObj.data.message,
+          id: uuidv4()
+        });
+      }
+
       this.setState({
-        messages:errorMessages,
-        severity:1
+        messages: errorMessages,
+        severity: 1
       });
-    }else{
-
+    } else {
       const successMessages = [];
-      successMessages.push({messageText:notificationObj.data.message,id:uuidv4()})
-     
+      successMessages.push({
+        messageText: notificationObj.data.message,
+        id: uuidv4()
+      });
+
       this.setState({
-        messages:successMessages,
-        severity:3
+        messages: successMessages,
+        severity: 3
       });
     }
-    
   };
 
-
   handleRemoveNotification = notificationElementId => {
-   
     this.setState(prevState => {
-       console.log(prevState.messages);
-      const updatedMessages = prevState.messages
-      .filter(function(element) { return  element.id != notificationElementId; });
+      console.log(prevState.messages);
+      const updatedMessages = prevState.messages.filter(function(element) {
+        return element.id != notificationElementId;
+      });
 
-      console.log(updatedMessages,notificationElementId)
+      console.log(updatedMessages, notificationElementId);
 
       return { messages: updatedMessages };
     });
   };
 
-  handleRemoveAllNotifications  = () =>{
+  handleRemoveAllNotifications = () => {
     this.setState({ messages: [] });
-  }
-
+  };
 
   render() {
     return (
@@ -66,8 +78,8 @@ export default class NotificationContextProvider extends React.Component {
         value={{
           ...this.state,
           handleServerNotification: this.handleServerNotification,
-          handleRemoveNotification : this.handleRemoveNotification,
-          handleRemoveAllNotifications :this. handleRemoveAllNotifications 
+          handleRemoveNotification: this.handleRemoveNotification,
+          handleRemoveAllNotifications: this.handleRemoveAllNotifications
         }}
       >
         {this.props.children}

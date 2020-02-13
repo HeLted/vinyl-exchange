@@ -23,5 +23,12 @@ namespace VinylExchange.Controllers
             return Ok(await releaseFilesService.GetReleaseImages(releaseId));
         }
 
+        [HttpGet]
+        [Route("GetCoverArtForRelease")]
+        public async Task<IActionResult> GetCoverArtForRelease(Guid releaseId)
+        {
+            return Ok(await releaseFilesService.GetReleaseCoverArt(releaseId));
+        }
+
     }
 }

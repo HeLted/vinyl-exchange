@@ -18,14 +18,14 @@ code {
   background-color: silver;
 } */
 
-
-
 * {
   border-radius: 0 !important;
 }
 
-nav{
-  background-color: lightgray;
+body{
+   /* background-color: #EDFFEC;  */
+   background-color:white;
+ 
 }
 
 ::-webkit-scrollbar {

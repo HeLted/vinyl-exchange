@@ -7,6 +7,11 @@ namespace VinylExchange.Data.Models
 {
     public class ReleaseFile
     {
+
+        public ReleaseFile()
+        {
+            this.Id = Guid.NewGuid();
+        }
         public Guid Id { get; set; }
         public string Path { get; set; }
 

@@ -51,7 +51,8 @@ export default class Player extends React.Component {
                   return (
                     <PlayerRelease
                       handleEjectRelease={release.ejectReleaseCallback}
-                      name={release.name}
+                      artist={release.artist}
+                      title={release.title}
                       tracks={release.tracks}
                       image={release.image}
                       key={release.id}

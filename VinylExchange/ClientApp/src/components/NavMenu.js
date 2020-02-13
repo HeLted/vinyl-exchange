@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./NavMenu.css";
-import { LoginMenu } from "./api-authorization/LoginMenu";
+import  UserMenu  from "./api-authorization/UserMenu";
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
@@ -20,17 +20,26 @@ export class NavMenu extends Component {
   constructor(props) {
     super(props);
 
-    this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
       collapsed: true
     };
   }
 
-  toggleNavbar() {
+  shouldComponentUpdate(){
+    if(window.innerWidth > 575){
+      return false
+    }else{
+      return true
+    }
+  }
+
+  handleToggleNavbar = () =>  {
     this.setState({
       collapsed: !this.state.collapsed
     });
   }
+
+ 
 
   render() {
     return (
@@ -41,27 +50,39 @@ export class NavMenu extends Component {
         >
           <Container>
             <NavbarBrand tag={Link} to="/">
-              <img src="img/appLogo.png" heigth="300px" width="150px"/>
+              <img src="img/appLogo.png" heigth="300px" width="150px" />
             </NavbarBrand>
-            
-            <div className="navbar-toggler" onClick={this.toggleNavbar}><FontAwesomeIcon icon={faBars}/></div>
+
+            <div className="navbar-toggler" onClick={this.handleToggleNavbar}>
+              <FontAwesomeIcon icon={faBars} color="white" />
+            </div>
             <Collapse
               className="d-sm-inline-flex flex-sm-row-reverse"
               isOpen={!this.state.collapsed}
               navbar
             >
               <ul className="navbar-nav flex-grow">
-                <NavItem>
-                  <NavLink tag={Link} className="navbar-link btn btn-outline-light text-light" to="/">
+                <li className="nav-item">
+                  <NavLink
+                    tag={Link}
+                    className="navbar-link btn btn-outline-light text-light"
+                    to="/"
+                    onClick={this.handleToggleNavbar}
+                  >
                     Home
                   </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="navbar-link btn btn-outline-light text-light" to="/marketplace">
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    tag={Link}
+                    className="navbar-link btn btn-outline-light text-light"
+                    to="/marketplace"
+                    onClick={this.handleToggleNavbar}
+                  >
                     Marketplace
                   </NavLink>
-                </NavItem>
-                <LoginMenu />
+                </li>
+                <UserMenu />
               </ul>
             </Collapse>
           </Container>
