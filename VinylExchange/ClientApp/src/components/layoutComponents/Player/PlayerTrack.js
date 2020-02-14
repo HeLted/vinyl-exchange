@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function PlyerTrack(props) {
+function PlayerTrack(props) {
   return (
     <li>
       <a href={props.path}>
@@ -9,3 +9,5 @@ export default function PlyerTrack(props) {
     </li>
   );
 }
+
+export default PlayerTrack;

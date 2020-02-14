@@ -1,10 +1,10 @@
-import React from "react";
+import React,{Component} from "react";
 import "./ServerNotification.css";
 import { NotificationContext } from "../../../contexts/NotificationContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-export default class ServerNotification extends React.Component {
+class ServerNotification extends Component {
   static contextType = NotificationContext;
 
   constructor() {
@@ -53,3 +53,6 @@ export default class ServerNotification extends React.Component {
     );
   }
 }
+
+
+export default ServerNotification;

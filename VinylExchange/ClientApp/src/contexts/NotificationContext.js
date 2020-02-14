@@ -57,12 +57,9 @@ export default class NotificationContextProvider extends React.Component {
 
   handleRemoveNotification = notificationElementId => {
     this.setState(prevState => {
-      console.log(prevState.messages);
       const updatedMessages = prevState.messages.filter(function(element) {
         return element.id != notificationElementId;
       });
-
-      console.log(updatedMessages, notificationElementId);
 
       return { messages: updatedMessages };
     });

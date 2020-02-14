@@ -1,6 +1,8 @@
 import React from "react"
 
-export default function Label(props){
+function Label(props){
 return <label htmlFor={props.forId}>{props.value}</label>
   
 }
+
+export default Label;

@@ -1,7 +1,7 @@
-﻿import React from "react";
+﻿import React,{Component} from "react";
 import MarketplaceComponent from "./MarketplaceComponent";
 
-export class MarketplaceContainer extends React.Component {
+class MarketplaceContainer extends Component {
   
   constructor(){
 
@@ -25,3 +25,6 @@ export class MarketplaceContainer extends React.Component {
      
   }
 }
+
+
+export default MarketplaceContainer;

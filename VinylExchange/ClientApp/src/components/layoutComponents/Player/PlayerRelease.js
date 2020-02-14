@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{Component} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleDown,
@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import PlayerTrack from "./PlayerTrack";
 
-export default class PlyerRelease extends React.Component {
+class PlayerRelease extends Component {
   constructor() {
     super();
     this.state = {
@@ -89,3 +89,5 @@ export default class PlyerRelease extends React.Component {
     );
   }
 }
+
+export default PlayerRelease;

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function SingleSelect(props) {
+ function SingleSelect(props) {
   const options = props.options.map(optionsObj => {
     return <option key={optionsObj.id} value={optionsObj.id}>{optionsObj.name}</option>;
     //mapping requires to have name and id in props passed object
@@ -30,3 +30,5 @@ export default function SingleSelect(props) {
     </select>
   );
 }
+
+export default SingleSelect;

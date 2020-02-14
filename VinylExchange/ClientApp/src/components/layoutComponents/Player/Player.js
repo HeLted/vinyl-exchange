@@ -1,10 +1,10 @@
-import React from "react";
+import React ,{Component} from "react";
 import PlayerControlls from "./PlayerControlls";
 import PlayerRelease from "./PlayerRelease";
 import { PlayerContext } from "../../../contexts/PlayerContext";
 import "./PlayerCustom.css";
 
-export default class Player extends React.Component {
+class Player extends Component {
   constructor() {
     super();
     this.state = {
@@ -68,3 +68,5 @@ export default class Player extends React.Component {
     );
   }
 }
+
+export default Player

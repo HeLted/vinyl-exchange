@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faSync } from "@fortawesome/free-solid-svg-icons";
 import TextInput from "./../../common/inputComponents/TextInput";
 
-export default function SearchReleaseComponent(props) {
+function SearchReleaseComponent(props) {
   const icon =
     props.isTyping === true ? (
       <FontAwesomeIcon icon={faSync} spin />
@@ -27,3 +27,5 @@ export default function SearchReleaseComponent(props) {
     </div>
   );
 }
+
+export default SearchReleaseComponent;

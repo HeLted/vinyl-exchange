@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TextInput(props) {
+function TextInput(props) {
   const extraClasses =
     props.extraClasses === undefined ? "" : " " + props.extraClasses;
 
@@ -16,3 +16,5 @@ export default function TextInput(props) {
     />
   );
 }
+
+export default TextInput;

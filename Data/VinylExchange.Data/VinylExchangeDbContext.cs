@@ -61,12 +61,12 @@ namespace VinylExchange.Data
 
                 collectionItem
                 .HasOne(ci => ci.User)
-                .WithMany(u => u.ReleaseCollection)
+                .WithMany(u => u.Collection)
                 .HasForeignKey(ci => ci.UserId);
 
                 collectionItem
                 .HasOne(ci=> ci.Release)
-                .WithMany(r => r.ReleaseInCollections)
+                .WithMany(r => r.ReleaseCollections)
                 .HasForeignKey(ci => ci.ReleaseId);
             });
                

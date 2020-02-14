@@ -21,6 +21,9 @@ code {
 * {
   border-radius: 0 !important;
 }
+*:focus{
+  box-shadow: none !important;
+}
 
 body{
    /* background-color: #EDFFEC;  */

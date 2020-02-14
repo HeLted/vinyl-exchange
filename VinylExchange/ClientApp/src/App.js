@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route } from "react-router";
 import { Layout } from "./components/Layout";
 import { Home } from "./components/Home";
-import { MarketplaceContainer } from "./components/marketplace/MarketplaceContainer";
+import  MarketplaceContainer  from "./components/marketplace/MarketplaceContainer";
 import ReleaseContainer from "./components/releases/ReleaseContainer";
 import AddReleaseContainer from "./components/releases/AddReleaseContainer";
 import AuthorizeRoute from "./components/api-authorization/AuthorizeRoute";

@@ -1,7 +1,7 @@
-import React from "react";
+import React,{Component} from "react";
 import SearchReleaseComponent from "./SearchReleasesComponent";
 
-export default class SearchReleaseContainer extends React.Component {
+ class SearchReleaseContainer extends Component {
   constructor() {
     super();
 
@@ -39,3 +39,5 @@ export default class SearchReleaseContainer extends React.Component {
     );
   }
 }
+
+export default SearchReleaseContainer;

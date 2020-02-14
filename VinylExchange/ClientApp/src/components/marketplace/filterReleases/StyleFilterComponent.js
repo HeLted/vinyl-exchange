@@ -1,8 +1,8 @@
-import React from "react";
+import React,{Component} from "react";
 import Select, { components } from "react-select";
 import Label from "./../../common/inputComponents/Label";
 
-export default class StyleFilterComponent extends React.Component {
+class StyleFilterComponent extends Component {
   render() {
     return (
       <div className="form-group">
@@ -19,3 +19,5 @@ export default class StyleFilterComponent extends React.Component {
     );
   }
 }
+
+export default StyleFilterComponent

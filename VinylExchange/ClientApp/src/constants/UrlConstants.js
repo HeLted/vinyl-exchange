@@ -1,11 +1,23 @@
 export const Url = {
   api: "/api",
   mediaStorage: "/file/media",
-  releaseIdQuery:"?releaseId="
+  releaseIdQuery: "?releaseId="
 };
 
 export const Controllers = {
-  releases: { name: "/Releases" },
+  releases: {
+    name: "/Releases",
+    actions: { getReleases: "/GetReleases", create: "/Create" }
+  },
+  genres: { name: "/Genres", actions: { getAllGenres: "/GetAllGenres" } },
+  styles: {
+    name: "/Styles",
+    actions: { getAllStylesForGenre: "/GetAllStylesForGenre" }
+  },
+  files: {
+    name: "/Files",
+    actions: { upload: "/Upload", delete: "/Delete", deleteAll: "/DeleteAll" }
+  },
   releaseImages: {
     name: "/ReleaseImages",
     actions: { getCoverArtForRelease: "/GetCoverArtForRelease" }

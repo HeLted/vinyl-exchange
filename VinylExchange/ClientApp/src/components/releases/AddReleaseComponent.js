@@ -1,12 +1,13 @@
-import React from "react";
+import React,{Component} from "react";
 import Label from "./../common/inputComponents/Label";
 import TextInput from "./../common/inputComponents/TextInput";
 import SingleSelect from "./../common/inputComponents/SingleSelect";
 import Select, { components } from "react-select";
+import { Url, Controllers } from "./../../constants/UrlConstants";
 import $script from "scriptjs";
 import { Helmet } from "react-helmet";
 
-export default class AddReleaseComponent extends React.Component {
+ class AddReleaseComponent extends Component {
   constructor() {
     super();
   }
@@ -126,8 +127,8 @@ export default class AddReleaseComponent extends React.Component {
             <div
               id="imagesDropzone"
               formsessionid={this.props.state.formSessionId}
-              dropzoneuploadpath="/api/file/upload?formSessionId="
-              dropzonedeletepath="/api/file/delete?formSessionId="
+              dropzoneuploadpath= {Url.api + Controllers.files.name + Controllers.files.actions.upload}
+              dropzonedeletepath={Url.api + Controllers.files.name + Controllers.files.actions.delete}
               acceptedfiles=".png, .jpg"
             ></div>
           </div>
@@ -137,8 +138,8 @@ export default class AddReleaseComponent extends React.Component {
             <div
               id="tracksDropzone"
               formsessionid={this.props.state.formSessionId}
-              dropzoneuploadpath="/api/file/upload?formSessionId="
-              dropzonedeletepath="/api/file/delete?formSessionId="
+              dropzoneuploadpath= {Url.api + Controllers.files.name + Controllers.files.actions.upload}
+              dropzonedeletepath={Url.api + Controllers.files.name + Controllers.files.actions.delete}
               acceptedfiles=".mp3"
             ></div>
           </div>
@@ -151,3 +152,5 @@ export default class AddReleaseComponent extends React.Component {
     );
   }
 }
+
+export default AddReleaseComponent;

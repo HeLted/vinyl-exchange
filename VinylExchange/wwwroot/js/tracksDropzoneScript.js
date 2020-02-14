@@ -10,10 +10,10 @@
   const formSessionId = dropzoneElement.attributes[1].value
   
   const dropzoneUploadPath =
-    dropzoneElement.attributes[2].value + formSessionId;
+      dropzoneElement.attributes[2].value + "?formSessionId=" + formSessionId;
   
   const dropzoneDeletePath=
-   dropzoneElement.attributes[3].value + formSessionId;
+      dropzoneElement.attributes[3].value + "?formSessionId=" + formSessionId;
   
    const acceptedFiles = dropzoneElement.attributes[4].value
 // Dropzone class:
@@ -23,7 +23,7 @@ var myDropzone = new Dropzone(`#${dropzoneId}`, {
   maxFilesize: 30,
   uploadMultiple: false,
   createImageThumbnails: true,
-  maxFiles: 20,
+  maxFiles: 30,
   maxfilesexceeded: function(file) {
     this.removeAllFiles();
     this.addFile(file);

@@ -13,11 +13,11 @@ namespace VinylExchange.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FileController : Controller
+    public class FilesController : Controller
     {
         private readonly IMemoryCacheFileSevice memoryCacheFileSevice;
 
-        public FileController(IMemoryCacheFileSevice memoryCacheFileSevice)
+        public FilesController(IMemoryCacheFileSevice memoryCacheFileSevice)
         {
             this.memoryCacheFileSevice = memoryCacheFileSevice;
         }

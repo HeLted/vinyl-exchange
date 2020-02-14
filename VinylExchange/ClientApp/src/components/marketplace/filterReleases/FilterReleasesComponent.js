@@ -1,8 +1,8 @@
-import React,{Fragment} from "react";
+import React,{Fragment,Component} from "react";
 import GenreFilterComponent from "./GenreFilterComponent";
 import StyleFilterComponent from "./StyleFilterComponent";
 
-export default class FilterReleasesComponent extends React.Component {
+class FilterReleasesComponent extends Component {
   render() {
     return (
       <Fragment>
@@ -12,3 +12,5 @@ export default class FilterReleasesComponent extends React.Component {
     );
   }
 }
+
+export default FilterReleasesComponent;

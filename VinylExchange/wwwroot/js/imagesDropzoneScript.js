@@ -11,10 +11,10 @@
   const formSessionId = dropzoneElement.attributes[1].value;
 
   const dropzoneUploadPath =
-    dropzoneElement.attributes[2].value + formSessionId;
+      dropzoneElement.attributes[2].value + "?formSessionId=" + formSessionId;
 
   const dropzoneDeletePath =
-    dropzoneElement.attributes[3].value + formSessionId;
+      dropzoneElement.attributes[3].value + "?formSessionId=" + formSessionId;
 
   const acceptedFiles = dropzoneElement.attributes[4].value;
 

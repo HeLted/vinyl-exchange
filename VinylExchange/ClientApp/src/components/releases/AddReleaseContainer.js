@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import AddReleaseComponent from "./AddReleaseComponent";
 import uuidv4 from "../../functions/guidGenerator";
+import { Url, Controllers } from "./../../constants/UrlConstants";
 import axios from "axios";
 import { NotificationContext } from "./../../contexts/NotificationContext";
 
-export default class AddReleaseContainer extends React.Component {
+class AddReleaseContainer extends Component {
   constructor() {
     super();
     this.state = {
@@ -24,10 +25,17 @@ export default class AddReleaseContainer extends React.Component {
   static contextType = NotificationContext;
 
   componentDidMount() {
-    fetch("/api/genres/getallgenres")
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ genres: data });
+    axios
+      .get(
+        Url.api +
+          Controllers.genres.name +
+          Controllers.genres.actions.getAllGenres
+      )
+      .then(response => {
+        this.setState({ genres: response.data });
+      })
+      .catch(error => {
+        this.context.handleServerNotification(error.response);
       });
   }
 
@@ -36,21 +44,25 @@ export default class AddReleaseContainer extends React.Component {
       prevState.genreSelectInput !== this.state.genreSelectInput &&
       this.state.genreSelectInput !== "not selected"
     ) {
-      fetch(
-        `/api/styles/getallstylesforgenre?genreId=${this.state.genreSelectInput}`
-      )
-        .then(response => response.json())
-        .then(data => {
-          const styles = data.map(style => {
+      axios
+        .get(
+          Url.api +
+            Controllers.styles.name +
+            Controllers.styles.actions.getAllStylesForGenre +
+            `?genreId=${this.state.genreSelectInput}`
+        )
+        .then(response => {
+          const styles = response.data.map(style => {
             return { value: style.id, label: style.name };
           });
 
           this.setState({ styles: styles });
+        })
+        .catch(error => {
+          this.context.handleServerNotification(error.response);
         });
     }
   }
-
- 
 
   handleOnChange = event => {
     const { value, name } = event.target;
@@ -81,34 +93,39 @@ export default class AddReleaseContainer extends React.Component {
       label: this.state.labelInput
     };
 
-    let self = this;
+    const self = this;
     axios
-      .post("/api/releases/create", submitFormObj)
-      .then(function(response) {
-        console.log(response)
-
+      .post(
+        Url.api +
+          Controllers.releases.name +
+          Controllers.releases.actions.create,
+        submitFormObj
+      )
+      .then(response => {
         self.context.handleServerNotification(response);
       })
-      .catch(function(error) {
-        console.log(error)
+      .catch(error => {
         self.context.handleServerNotification(error.response);
       });
   };
 
-  componentWillUnmount(){
-
+  componentWillUnmount() {
     this.context.handleRemoveAllNotifications();
 
     axios
-      .post(`/api/file/deleteall?formSessionId=${this.state.formSessionId}`)
+      .post(
+        Url.api +
+          Controllers.files.name +
+          Controllers.files.actions.deleteAll +
+          `?formSessionId=${this.state.formSessionId}`
+      )
       .then(function(response) {
-        console.log(response)
+        console.log(response);
       })
-      .catch(function(error) {
-        console.log(error.response)
+      .catch(error => {
+        this.context.handleServerNotification(error.response);
       });
   }
-
 
   render() {
     return (
@@ -121,3 +138,5 @@ export default class AddReleaseContainer extends React.Component {
     );
   }
 }
+
+export default AddReleaseContainer;

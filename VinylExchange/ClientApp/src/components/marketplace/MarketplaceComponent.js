@@ -4,7 +4,7 @@ import ReleasesContainerWrapper from "./releases/ReleasesContainer";
 import FilterReleasesContainer from "./filterReleases/FilterReleasesContainer"
 import { withRouter } from "react-router-dom";
 
-export default function MarketplaceComponent(props) {
+ function MarketplaceComponent(props) {
   const Button = withRouter(({ history }) => (
     <button
       type="button"
@@ -39,3 +39,5 @@ export default function MarketplaceComponent(props) {
     </div>
   );
 }
+
+export default MarketplaceComponent;

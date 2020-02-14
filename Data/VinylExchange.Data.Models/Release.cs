@@ -26,7 +26,7 @@ namespace VinylExchange.Data.Models
 
         public ICollection<ReleaseFile> ReleaseFiles { get; set; } = new HashSet<ReleaseFile>();
 
-        public ICollection<CollectionItem> ReleaseInCollections { get; set; } = new HashSet<CollectionItem>();
+        public ICollection<CollectionItem> ReleaseCollections { get; set; } = new HashSet<CollectionItem>();
 
     }
 }
