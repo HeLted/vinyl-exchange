@@ -18,6 +18,8 @@ using VinylExchange.Services.Logging;
 using VinylExchange.Services.MainServices;
 using VinylExchange.Services.Mapping;
 using VinylExchange.Services.MemoryCache;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+
 
 namespace VinylExchange
 {
@@ -42,12 +44,14 @@ namespace VinylExchange
             services.AddDefaultIdentity<VinylExchangeUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<VinylExchangeDbContext>();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
+            services.AddIdentityServer()
+                .AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>();
+
+            services.AddControllers().AddNewtonsoftJson();
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDistributedMemoryCache();
@@ -58,12 +62,15 @@ namespace VinylExchange
                 configuration.RootPath = "ClientApp/build";
             });
 
+           
+
             //Enitity Services
 
             services.AddTransient<IReleasesService, ReleasesService>();
             services.AddTransient<IGenresService, GenresService>();
             services.AddTransient<IStylesService, StylesService>();
             services.AddTransient<IReleaseFilesService, ReleaseFilesService>();
+            services.AddTransient<ICollectionsService, CollectionsService>();
 
             //Tool Services
             services.AddTransient<MemoryCacheManager>();

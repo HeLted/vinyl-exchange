@@ -55,18 +55,11 @@ export default class NotificationContextProvider extends React.Component {
     }
   };
 
-  handleRemoveNotification = notificationElementId => {
-    this.setState(prevState => {
-      const updatedMessages = prevState.messages.filter(function(element) {
-        return element.id != notificationElementId;
-      });
-
-      return { messages: updatedMessages };
+  handleAppNotification = (message, severity) => {
+    this.setState({
+      messages: [{ messageText: message, id: uuidv4() }],
+      severity
     });
-  };
-
-  handleRemoveAllNotifications = () => {
-    this.setState({ messages: [] });
   };
 
   render() {
@@ -75,8 +68,7 @@ export default class NotificationContextProvider extends React.Component {
         value={{
           ...this.state,
           handleServerNotification: this.handleServerNotification,
-          handleRemoveNotification: this.handleRemoveNotification,
-          handleRemoveAllNotifications: this.handleRemoveAllNotifications
+          handleAppNotification: this.handleAppNotification
         }}
       >
         {this.props.children}

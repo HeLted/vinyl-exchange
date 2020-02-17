@@ -68,12 +68,12 @@ namespace VinylExchange.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public async Task<IActionResult> Create(AddReleaseInputModel inputModel)
+        public async Task<IActionResult> Create(CreateReleaseInputModel inputModel,Guid formSessionId)
         {
             
             try
             {
-                var release = await releasesService.AddRelease(inputModel);
+                var release = await releasesService.CreateRelease(inputModel,formSessionId);
                                            
                 return CreatedAtRoute("Default", new { id = release.Id ,message = "Succesfully Added Release"});
             }

@@ -10,7 +10,7 @@ namespace VinylExchange.Services.HelperServices
 {
     public interface IReleaseFilesService
     {
-        Task<IEnumerable<ReleaseFile>> AddFilesForRelease(Guid releaseId, string formSessionId);
+        Task<IEnumerable<ReleaseFile>> AddFilesForRelease(Guid releaseId, Guid formSessionId);
         Task<IEnumerable<ReleaseFileViewModel>> GetReleaseTracks(Guid releaseId);
         Task<IEnumerable<ReleaseFileViewModel>> GetReleaseImages(Guid releaseId);
         Task<ReleaseFileViewModel> GetReleaseCoverArt(Guid releaseId);

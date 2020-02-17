@@ -1,82 +1,81 @@
 import React from "react";
+import SingleSelect from "./../../inputComponents/SingleSelect";
+import Label from "./../../inputComponents/Label";
+import TextAreaInput from "./../../inputComponents/TextAreaInput";
 
-function AddToCollectionPopupFormBody(){
- return(
+function AddToCollectionPopupFormBody(props) {
+  return (
     <div
-          class="modal fade"
-          id="exampleModalCenter"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalCenterTitle"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">
-                  Add To Collection
-                </h5>
-                <button
-                  type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form>
-                  <div class="form-group">
-                    <label for="exampleFormControlSelect1">Item Grade</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                      <option value="1">Mint </option>
-                      <option value="2">Near Mint</option>
-                      <option value="3">Very Good</option>
-                      <option value="4">Good</option>
-                      <option value="5">Fair</option>
-                      <option value="6">Poor</option>
-                    </select>
-                  </div>
-  
-                  <div class="form-group">
-                    <label for="exampleFormControlSelect1">Sleeve Grade</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                      <option value="1">Mint </option>
-                      <option value="2">Near Mint</option>
-                      <option value="3">Very Good</option>
-                      <option value="4">Good</option>
-                      <option value="5">Fair</option>
-                      <option value="6">Poor</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleFormControlTextarea1">
-                      Description
-                    </label>
-                    <textarea
-                      class="form-control"
-                      id="exampleFormControlTextarea1"
-                      rows="3"
-                    ></textarea>
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" class="btn btn-outline-primary">
-                  Add to Collection
-                </button>
-              </div>
-            </div>
+      className="modal fade"
+      id="exampleModalCenter"
+      tabIndex="-1"
+      role="dialog"
+    >
+      <div className="modal-dialog modal-dialog-centered" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLongTitle">
+              Add To Collection
+            </h5>
+            <button type="submit" className="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
           </div>
-        </div>)
+          <div className="modal-body">
+            <form
+              id="addToCollectionForm"
+              onSubmit={props.functions.handleOnSubmit}
+            >
+              <div className="form-group">
+                <Label for="vinylGradeInput" value="Vinyl Grade" />
+                <SingleSelect
+                  id="vinylGradeInput"
+                  value={props.data.vinylGrageInput}
+                  onChange={props.functions.handleOnChange}
+                  options={props.data.gradeOptions}
+                  defaultOptionLabel="--Grade Vinyl--"
+                />
+              </div>
+
+              <div className="form-group">
+                <Label for="sleeveGradeInput" value="Sleeve Grade" />
+                <SingleSelect
+                  id="sleeveGradeInput"
+                  value={props.data.sleeveGrageInput}
+                  onChange={props.functions.handleOnChange}
+                  options={props.data.gradeOptions}
+                  defaultOptionLabel="--Grade Sleeve--"
+                />
+              </div>
+              <div className="form-group">
+                <Label for="descriptionInput" value="Description" />
+                <TextAreaInput
+                  id="descriptionInput"
+                  rows="3"
+                  onChange={props.functions.handleOnChange}
+                />
+              </div>
+            </form>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <input
+              type="submit"
+              className="btn btn-outline-primary"
+              form="addToCollectionForm"
+              value="Add to Collection"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default AddToCollectionPopupFormBody;

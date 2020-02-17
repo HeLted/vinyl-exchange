@@ -29,10 +29,10 @@ namespace VinylExchange.Services.HelperServices
             this.cacheManager = cacheManager;
             this.fileManager = fileManager;           
         }
-        public async Task<IEnumerable<ReleaseFile>> AddFilesForRelease(Guid releaseId,string formSessionId)
+        public async Task<IEnumerable<ReleaseFile>> AddFilesForRelease(Guid releaseId,Guid formSessionId)
         {
                        
-            var uploadFileUtilityModels = fileManager.RetrieveFilesFromCache(formSessionId);
+            var uploadFileUtilityModels = fileManager.RetrieveFilesFromCache(formSessionId.ToString());
 
             var filesContent = fileManager.GetFilesByteContent(uploadFileUtilityModels);
 
@@ -43,9 +43,7 @@ namespace VinylExchange.Services.HelperServices
             releaseFilesModels = fileManager.SaveFilesToServer<ReleaseFile>(releaseFilesModels, filesContent);
             
             await dbContext.ReleaseFiles.AddRangeAsync(releaseFilesModels);
-
-            await dbContext.SaveChangesAsync();
-
+                      
             return releaseFilesModels;
            
         }

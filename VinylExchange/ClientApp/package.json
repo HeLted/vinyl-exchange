@@ -28,6 +28,7 @@
     "react-scripts": "^3.0.1",
     "react-select": "^3.0.8",
     "react-spinners": "^0.8.0",
+    "react-toasts": "^3.0.6",
     "reactstrap": "^6.3.0",
     "rimraf": "^2.6.2",
     "scriptjs": "^2.5.9"

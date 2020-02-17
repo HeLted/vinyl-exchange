@@ -11,7 +11,7 @@ namespace VinylExchange.Services.MainServices
     {       
         Task<IEnumerable<GetAllReleasesViewModel>> GetReleases(string searchTerm,int releasesToSkip);
         Task<GetAllReleasesViewModel> GetRelease(Guid releaseId);
-        Task<Release> AddRelease(AddReleaseInputModel inputModel);
+        Task<Release> CreateRelease(CreateReleaseInputModel inputModel, Guid formSessionId);
 
     }
 }

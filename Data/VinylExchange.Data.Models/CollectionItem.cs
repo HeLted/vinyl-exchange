@@ -15,22 +15,20 @@ namespace VinylExchange.Data.Models
         }
 
         public Guid Id { get; set; }
-
-        public Condition Condition { get; set; }
-
+        [Required]
+        public Condition VinylGrade { get; set; }
+        [Required]
+        public Condition SleeveGrade{ get; set; }
+        [Required]
         public string Description { get; set; }
 
         [Required]
         public Guid ReleaseId { get; set; }
-
         public Release Release { get; set; }
 
         [Required]
         public string UserId { get; set; }
-
         public VinylExchangeUser User { get; set; }
-
-
 
     }
 }

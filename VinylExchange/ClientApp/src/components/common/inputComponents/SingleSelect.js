@@ -12,6 +12,7 @@ import React from "react";
     <option
       key="default"
       style={{ display: defaultOptionDisplay }}
+      value="0"
     >
       {props.defaultOptionLabel}
     </option>

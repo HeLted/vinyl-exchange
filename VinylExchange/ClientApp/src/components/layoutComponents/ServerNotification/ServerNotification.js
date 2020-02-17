@@ -1,58 +1,64 @@
-import React,{Component} from "react";
+import React, { Component } from "react";
 import "./ServerNotification.css";
+import {
+  ToastsContainer,
+  ToastsStore,
+  ToastsContainerPosition
+} from "react-toasts";
 import { NotificationContext } from "../../../contexts/NotificationContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+
+const notificationsIds = [];
+const notificationClass = "toastNotification"
 
 class ServerNotification extends Component {
   static contextType = NotificationContext;
 
-  constructor() {
-    super();
-    this.state = {
-      messages: [],
-      isUpdatedInternally:false
-    };
+  componentDidUpdate() {
+    let notificationElementTimer = 3000;
+    const notificationSeverity = this.context.severity;
+    const filteredNotifications = this.context.messages.filter(
+      notificationObj => !notificationsIds.includes(notificationObj.id)
+    );
+
+    filteredNotifications.forEach(notificationObj => {
+      notificationsIds.push(notificationObj.id);
+      setTimeout(() => {
+        notificationElementTimer += 3000;
+        if (notificationSeverity === 1) {
+          ToastsStore.error(
+            notificationObj.messageText,
+            notificationElementTimer,
+            notificationClass
+          );
+        } else if (notificationSeverity === 2) {
+          ToastsStore.info(
+            notificationObj.messageText,
+            notificationElementTimer,
+            notificationClass
+          );
+        } else if (notificationSeverity === 3) {
+          ToastsStore.success(
+            notificationObj.messageText,
+            notificationElementTimer,
+            notificationClass
+          );
+        }
+      }, 300);
+    });
+
+    if(notificationsIds > 20){
+      notificationsIds = [];
+    }
   }
 
-  static contextType = NotificationContext;
-
   render() {
-    let alertTypeClass = "alert-secondary";
-
-    const notificationSeverity = this.context.severity;
-
-    if (notificationSeverity === 3) {
-      alertTypeClass = "alert-success";
-    } else if (notificationSeverity === 2) {
-      alertTypeClass = "alert-primary";
-    } else if (notificationSeverity === 1) {
-      alertTypeClass = "alert-danger";
-    }
-
     return (
-      <div className="server-notification-wrapper">
-        {this.context.messages.map((messageObj, index) => {
-          return (
-            <div className="d-flex"  key={messageObj.id}>
-            <div
-              className={"server-notification alert " + alertTypeClass}
-              role="alert"
-            >
-              {messageObj.messageText}
-
-              <FontAwesomeIcon
-                onClick={() => this.context.handleRemoveNotification(messageObj.id)}
-                icon={faTimes}
-              />
-            </div>
-            </div>
-          );
-        })}
-      </div>
+      <ToastsContainer
+        position={ToastsContainerPosition.TOP_RIGHT}
+        store={ToastsStore}
+      />
     );
   }
 }
-
 
 export default ServerNotification;

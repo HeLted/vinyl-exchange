@@ -1,7 +1,23 @@
-.server-notification{
-    margin-bottom:0px ;
+.server-notification {
+  margin-bottom: 0px;
+  width: 100%;
 }
 
-.server-notification-wrapper{
-    margin-bottom: 20px;
+.server-notification-wrapper {
+  margin-bottom: 20px;
+}
+
+.toastNotification {
+    animation: fadeIn 1s ease-in both !important;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translate3d(0, -20%, 0);
+	}
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
 }

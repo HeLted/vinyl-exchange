@@ -20,7 +20,7 @@ export default class App extends Component {
         <Route exact path="/" component={Home} />
         <Route path="/marketplace" component={MarketplaceContainer} />
         <AuthorizeRoute path="/releases/addrelease" component={AddReleaseContainer}/>
-        <Route path="/release" component={ReleaseContainer}/>
+        <AuthorizeRoute path="/release" component={ReleaseContainer}/>
         <Route
           path={ApplicationPaths.ApiAuthorizationPrefix}
           component={ApiAuthorizationRoutes}

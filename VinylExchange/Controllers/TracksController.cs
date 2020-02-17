@@ -21,7 +21,7 @@ namespace VinylExchange.Controllers
 
 
         [HttpPost]
-        [Route("upload")]
+        [Route("Upload")]
         public IActionResult UploadTrack(IFormFile file, string formSessionId)
         {
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import AddReleaseComponent from "./AddReleaseComponent";
 import uuidv4 from "../../functions/guidGenerator";
-import { Url, Controllers } from "./../../constants/UrlConstants";
+import { Url, Controllers, Queries } from "./../../constants/UrlConstants";
 import axios from "axios";
 import { NotificationContext } from "./../../contexts/NotificationContext";
 
@@ -10,13 +10,13 @@ class AddReleaseContainer extends Component {
     super();
     this.state = {
       formSessionId: uuidv4(),
-      artistInput: "d",
-      titleInput: "d",
-      genreSelectInput: "d",
+      artistInput: "",
+      titleInput: "",
+      genreSelectInput: "",
       styleMultiSelectInput: [],
-      formatInput: "d",
-      yearInput: "0",
-      labelInput: "d",
+      formatInput: "",
+      yearInput: "",
+      labelInput: "",
       genres: [],
       styles: []
     };
@@ -82,7 +82,6 @@ class AddReleaseContainer extends Component {
     event.stopPropagation();
 
     const submitFormObj = {
-      formSessionId: this.state.formSessionId,
       artist: this.state.artistInput,
       title: this.state.titleInput,
       styleIds: this.state.styleMultiSelectInput.map(styleObj => {
@@ -98,7 +97,11 @@ class AddReleaseContainer extends Component {
       .post(
         Url.api +
           Controllers.releases.name +
-          Controllers.releases.actions.create,
+          Controllers.releases.actions.create +
+          Url.queryStart +
+          Queries.formSessionId +
+          Url.equal +
+          this.state.formSessionId,
         submitFormObj
       )
       .then(response => {
@@ -110,15 +113,23 @@ class AddReleaseContainer extends Component {
   };
 
   componentWillUnmount() {
-    this.context.handleRemoveAllNotifications();
 
-    axios
-      .post(
-        Url.api +
-          Controllers.files.name +
-          Controllers.files.actions.deleteAll +
-          `?formSessionId=${this.state.formSessionId}`
-      )
+    fetch(
+      Url.api +
+        Controllers.files.name +
+        Controllers.files.actions.deleteAll +
+        Url.queryStart +
+        Queries.formSessionId +
+        Url.equal +
+        this.state.formSessionId,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    )
       .then(function(response) {
         console.log(response);
       })

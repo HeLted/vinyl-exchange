@@ -30,8 +30,6 @@ namespace VinylExchange.Services.MainServices
             this.releaseFilesService = releaseFilesService;
         }
 
-       
-
         public async Task<IEnumerable<GetAllReleasesViewModel>> GetReleases(string searchTerm, int releasesToSkip)
         {
         
@@ -72,10 +70,9 @@ namespace VinylExchange.Services.MainServices
                                  
         }
 
-        public async Task<Release> AddRelease(AddReleaseInputModel inputModel)
+        public async Task<Release> CreateRelease(CreateReleaseInputModel inputModel,Guid formSessionId)
         {
-            var formSessionId = inputModel.FormSessionId;
-
+            
             Release release = new Release()
             {
                 Artist = inputModel.Artist,
@@ -86,18 +83,18 @@ namespace VinylExchange.Services.MainServices
 
             };
 
-            await this.dbContext.Releases.AddAsync(release);
+            var trackedRelease = await this.dbContext.Releases.AddAsync(release);
+                       
+            await releaseFilesService.AddFilesForRelease(release.Id, formSessionId);
+
+            await this.AddStylesForRelease(release.Id, inputModel.StyleIds);
 
             await dbContext.SaveChangesAsync();
 
-            await releaseFilesService.AddFilesForRelease(release.Id, formSessionId);
-
-            this.AddStylesForRelease(release.Id, inputModel.StyleIds);
-
-            return release;
+            return trackedRelease.Entity;
         }
 
-        private void AddStylesForRelease(Guid releaseId, ICollection<int> styleIds)
+        private async Task AddStylesForRelease(Guid releaseId, ICollection<int> styleIds)
         {
             foreach (var styleId in styleIds)
             {
@@ -107,10 +104,10 @@ namespace VinylExchange.Services.MainServices
                     StyleId = styleId
                 };
 
-                dbContext.StyleReleases.Add(styleRelease);
+               await dbContext.StyleReleases.AddAsync(styleRelease);
             }
 
-            dbContext.SaveChangesAsync();
+       
         }
 
       

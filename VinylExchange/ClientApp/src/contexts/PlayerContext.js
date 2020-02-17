@@ -1,6 +1,6 @@
 import React, { Component, createContext } from "react";
 import axios from "axios";
-import { Url, Controllers } from "./../constants/UrlConstants";
+import { Url, Controllers, Queries } from "./../constants/UrlConstants";
 import { NotificationContext } from "./NotificationContext";
 
 class PlayerContextProvider extends Component {
@@ -32,43 +32,42 @@ class PlayerContextProvider extends Component {
       const releaseTracksDataPromise = await this.getReleaseTracksPromise(
         releaseId
       );
-      
-        Promise.all([
-          releaseDataPromise,
-          releaseCoverArtDataPromise,
-          releaseTracksDataPromise
-        ]).then(values => {
-          const releaseData = values[0].data;
-          const releaseCoverArtData = values[1].data;
-          const releaseTracksData = values[2].data;
 
-          self.setState(prevState => {
-            const updatedReleases = prevState.releases;
-            updatedReleases.push({
-              id: releaseData.id,
-              artist: releaseData.artist,
-              title: releaseData.title,
-              image: Url.mediaStorage + releaseCoverArtData.path + releaseCoverArtData.fileName,
-              tracks: releaseTracksData.map(track => {
-                return {
-                  id: track.id,
-                  path: Url.mediaStorage + track.path + track.fileName,
-                  name: atob(track.fileName.split("@---@")[1].split(".")[0])
-                };
-              }),
-              ejectReleaseCallback: ejectReleaseCallback
-            });
+      Promise.all([
+        releaseDataPromise,
+        releaseCoverArtDataPromise,
+        releaseTracksDataPromise
+      ]).then(values => {
 
-            return { releases: updatedReleases };
+        this.context.handleAppNotification("Added Release To Player",2);
+
+        const releaseData = values[0].data;
+        const releaseCoverArtData = values[1].data;
+        const releaseTracksData = values[2].data;
+
+        self.setState(prevState => {
+          const updatedReleases = prevState.releases;
+          updatedReleases.push({
+            id: releaseData.id,
+            artist: releaseData.artist,
+            title: releaseData.title,
+            image:
+              Url.mediaStorage +
+              releaseCoverArtData.path +
+              releaseCoverArtData.fileName,
+            tracks: releaseTracksData.map(track => {
+              return {
+                id: track.id,
+                path: Url.mediaStorage + track.path + track.fileName,
+                name: atob(track.fileName.split("@---@")[1].split(".")[0])
+              };
+            }),
+            ejectReleaseCallback: ejectReleaseCallback
           });
-        })
 
-
-
-
-
-        
-      
+          return { releases: updatedReleases };
+        });
+      });
     }
   };
 
@@ -89,10 +88,10 @@ class PlayerContextProvider extends Component {
 
   getReleasePromise = async releaseId => {
     return axios
-      .get(Url.api + Controllers.releases.name + `/${releaseId}`)
+      .get(Url.api + Controllers.releases.name + Url.slash + releaseId)
       .catch(error => {
         this.context.handleServerNotification(error.response);
-        throw "Reject Promise"
+        throw "Reject Promise";
       });
   };
 
@@ -102,12 +101,14 @@ class PlayerContextProvider extends Component {
         Url.api +
           Controllers.releaseImages.name +
           Controllers.releaseImages.actions.getCoverArtForRelease +
-          Url.releaseIdQuery +
+          Url.queryStart +
+          Queries.releaseId +
+          Url.equal +
           releaseId
       )
       .catch(error => {
         this.context.handleServerNotification(error.response);
-        throw "Reject Promise"
+        throw "Reject Promise";
       });
   };
 
@@ -117,12 +118,14 @@ class PlayerContextProvider extends Component {
         Url.api +
           Controllers.releaseTracks.name +
           Controllers.releaseTracks.actions.getAllTracksForRelease +
-          Url.releaseIdQuery +
+          Url.queryStart +
+          Queries.releaseId +
+          Url.equal +
           releaseId
       )
       .catch(error => {
         this.context.handleServerNotification(error.response);
-        throw "Reject Promise"
+        throw "Reject Promise";
       });
   };
 
