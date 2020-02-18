@@ -42,11 +42,7 @@ class UserMenu extends Component {
     });
   }
 
-  handleClickOutside = () => {
-    if (this.state.isDropDownActive) {
-      this.handleDropDownMenuToggle();
-    }
-  };
+
 
   handleDropDownMenuToggle = () => {
     this.setState(prevState => {
@@ -87,9 +83,9 @@ class UserMenu extends Component {
             className="user-dropdown dropdown-menu"
             style={{ display: this.state.isDropDownActive ? "block" : "none" }}
           >
-            <a className="dropdown-item" href="#">
+              <Link className="dropdown-item" to={ApplicationPaths.UserCollection}>
               Collection
-            </a>
+            </Link>
             <Link className="dropdown-item" to={profilePath}>
               Settings
             </Link>
