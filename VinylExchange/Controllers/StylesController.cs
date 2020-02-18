@@ -14,7 +14,7 @@ namespace VinylExchange.Controllers
 
         [HttpGet]
         [Route("GetAllStylesForGenre")]
-        public async Task<IActionResult> GetAllGenres(int genreId)
+        public async Task<IActionResult> GetAllStylesForGenre(int genreId)
         {
             var styles = await this.styleService.GetAllStylesForGenre(genreId);
             return Ok(styles);

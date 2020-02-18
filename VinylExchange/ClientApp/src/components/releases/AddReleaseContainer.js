@@ -97,7 +97,7 @@ class AddReleaseContainer extends Component {
       .post(
         Url.api +
           Controllers.releases.name +
-          Controllers.releases.actions.create +
+          Url.slash +
           Url.queryStart +
           Queries.formSessionId +
           Url.equal +
@@ -105,15 +105,20 @@ class AddReleaseContainer extends Component {
         submitFormObj
       )
       .then(response => {
-        self.context.handleServerNotification(response);
+        self.context.handleServerNotification(
+          response,
+          "Succesfully added release"
+        );
       })
       .catch(error => {
-        self.context.handleServerNotification(error.response);
+        self.context.handleServerNotification(
+          error.response,
+          "There was An error when creating release!"
+        );
       });
   };
 
   componentWillUnmount() {
-
     fetch(
       Url.api +
         Controllers.files.name +
@@ -134,7 +139,10 @@ class AddReleaseContainer extends Component {
         console.log(response);
       })
       .catch(error => {
-        this.context.handleServerNotification(error.response);
+        this.context.handleServerNotification(
+          error.response,
+          "There was an error on the server!"
+        );
       });
   }
 

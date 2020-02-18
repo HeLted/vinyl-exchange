@@ -8,7 +8,7 @@ export default class NotificationContextProvider extends React.Component {
     severity: 0
   };
 
-  handleServerNotification = notificationObj => {
+  handleServerNotification = (notificationObj,customMessage) => {
     console.log(notificationObj);
 
     if (notificationObj.status === 404) {
@@ -18,6 +18,14 @@ export default class NotificationContextProvider extends React.Component {
         ],
         severity: 1
       });
+    }else if(notificationObj.status === 401){
+      this.setState({
+        messages: [
+          { messageText: "Error 401 Unauthorized!", id: uuidv4() }
+        ],
+        severity: 1
+      });
+
     } else if (notificationObj.status >= 400) {
       const errorMessages = [];
 
@@ -31,10 +39,19 @@ export default class NotificationContextProvider extends React.Component {
           });
         });
       } else {
-        errorMessages.push({
-          messageText: notificationObj.data.message,
-          id: uuidv4()
-        });
+
+        if(customMessage != undefined){
+          errorMessages.push({
+            messageText: customMessage,
+            id: uuidv4()
+          });
+        }else{
+          errorMessages.push({
+            messageText: notificationObj.data.message,
+            id: uuidv4()
+          });
+        }
+        
       }
 
       this.setState({
@@ -43,10 +60,17 @@ export default class NotificationContextProvider extends React.Component {
       });
     } else {
       const successMessages = [];
-      successMessages.push({
-        messageText: notificationObj.data.message,
-        id: uuidv4()
-      });
+      if(customMessage != undefined){
+        successMessages.push({
+          messageText: customMessage,
+          id: uuidv4()
+        });
+      }else{
+        successMessages.push({
+          messageText: notificationObj.data.message,
+          id: uuidv4()
+        });
+      }
 
       this.setState({
         messages: successMessages,

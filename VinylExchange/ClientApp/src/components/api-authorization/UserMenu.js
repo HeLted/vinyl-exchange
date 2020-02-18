@@ -9,7 +9,7 @@ import {
   faAngleDown,
   faAngleUp
 } from "@fortawesome/free-solid-svg-icons";
-import onClickOutside from "react-onclickoutside";
+
 
 class UserMenu extends Component {
   constructor(props) {
@@ -130,4 +130,4 @@ class UserMenu extends Component {
   }
 }
 
-export default onClickOutside(UserMenu);
+export default UserMenu;

@@ -34,7 +34,7 @@ namespace VinylExchange.Controllers
             catch(Exception ex)
             {
                 loggerService.LogException(ex);
-                return NotFound(new { message = UserErrorMessages.ServerErrorMessage });
+                return NotFound();
             }
            
                      
@@ -49,7 +49,7 @@ namespace VinylExchange.Controllers
 
                 if (release == null)
                 {
-                    return NotFound(new { message = "Release Not Found" });
+                    return NotFound();
                 }
 
                 return Ok(release);
@@ -57,27 +57,26 @@ namespace VinylExchange.Controllers
             catch(Exception ex)
             {
                 loggerService.LogException(ex);
-                return BadRequest(new { message = UserErrorMessages.ServerErrorMessage });
+                return BadRequest();
             }
             
         }
 
-        [HttpPost]
-        [Route("Create")]
+        [HttpPost]        
         public async Task<IActionResult> Create(CreateReleaseInputModel inputModel,Guid formSessionId)
         {
-            
             try
             {
-                var release = await releasesService.CreateRelease(inputModel,formSessionId);
-                                           
-                return CreatedAtRoute("Default", new { id = release.Id ,message = "Succesfully Added Release"});
+                var release = await releasesService.CreateRelease(inputModel, formSessionId);
+
+                return CreatedAtRoute("Default", new { id = release.Id});
             }
             catch (Exception ex)
             {
                 loggerService.LogException(ex);
-                return BadRequest(new { message = UserErrorMessages.ServerErrorMessage });
+                return BadRequest();
             }
+
 
         }
 

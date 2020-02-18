@@ -32,12 +32,12 @@ namespace VinylExchange.Controllers
                 {
                     var collectionItem = await this.collectionsService.AddToCollection(inputModel, releaseId, userId);
 
-                    return CreatedAtRoute("Default", new { id = collectionItem.Id, message = "Succesfully Added To My Collection" });
+                    return CreatedAtRoute("Default", new { id = collectionItem.Id });
                 }
                 catch (Exception ex)
                 {
                     loggerService.LogException(ex);
-                    return BadRequest(new { message = UserErrorMessages.ServerErrorMessage });
+                    return BadRequest();
                 }
 
             }
