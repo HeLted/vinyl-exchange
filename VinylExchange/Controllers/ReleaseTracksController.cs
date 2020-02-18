@@ -1,16 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using VinylExchange.Services.HelperServices;
 
 namespace VinylExchange.Controllers
 {
-
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ReleaseTracksController : Controller
+    public class ReleaseTracksController : ApiController
     {
         private readonly IReleaseFilesService releaseFilesService;
         public ReleaseTracksController(IReleaseFilesService releaseFilesService)

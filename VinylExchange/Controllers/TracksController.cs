@@ -1,16 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using VinylExchange.Services.MemoryCache;
 
 namespace VinylExchange.Controllers
 {
-    [Route("file/[controller]")]
-    [ApiController]
-    public class TracksController : Controller
+    public class TracksController : ApiController
     {
         private readonly MemoryCacheManager cache;
 

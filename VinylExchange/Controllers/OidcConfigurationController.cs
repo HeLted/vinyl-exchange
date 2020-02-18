@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace VinylExchange.Controllers
 {
-    public class OidcConfigurationController : Controller
+    public class OidcConfigurationController : ControllerBase
     {
         private readonly ILogger<OidcConfigurationController> _logger;
 

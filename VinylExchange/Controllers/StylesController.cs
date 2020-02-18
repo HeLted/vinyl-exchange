@@ -4,9 +4,7 @@ using VinylExchange.Services.MainServices;
 
 namespace VinylExchange.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class StylesController : Controller
+    public class StylesController : ApiController
     {
         private readonly IStylesService styleService;
         public StylesController(IStylesService styleService)

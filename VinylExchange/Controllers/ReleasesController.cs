@@ -1,6 +1,4 @@
-﻿using IdentityServer4.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using VinylExchange.Common;
@@ -10,9 +8,7 @@ using VinylExchange.Services.MainServices;
 
 namespace VinylExchange.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ReleasesController : Controller
+    public class ReleasesController : ApiController
     {
 
         private readonly IReleasesService releasesService;
