@@ -6,7 +6,7 @@ using VinylExchange.Data;
 using VinylExchange.Models.ResourceModels.Styles;
 using VinylExchange.Services.Mapping;
 
-namespace VinylExchange.Services.MainServices
+namespace VinylExchange.Services.MainServices.Styles
 {
     public class StylesService : IStylesService
     {

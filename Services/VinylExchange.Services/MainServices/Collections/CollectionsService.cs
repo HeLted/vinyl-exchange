@@ -12,7 +12,7 @@ using VinylExchange.Models.Utility;
 using VinylExchange.Services.HelperServices;
 using VinylExchange.Services.Mapping;
 
-namespace VinylExchange.Services.MainServices
+namespace VinylExchange.Services.MainServices.Collections
 {
     public class CollectionsService : ICollectionsService
     {

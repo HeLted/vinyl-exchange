@@ -7,7 +7,7 @@ using VinylExchange.Models.InputModels.Collections;
 using VinylExchange.Models.ResourceModels.Collections;
 using VinylExchange.Models.Utility;
 
-namespace VinylExchange.Services.MainServices
+namespace VinylExchange.Services.MainServices.Collections
 {
     public interface ICollectionsService
     {

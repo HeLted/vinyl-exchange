@@ -5,7 +5,7 @@ using VinylExchange.Data;
 using VinylExchange.Models.ResourceModels.Genres;
 using VinylExchange.Services.Mapping;
 
-namespace VinylExchange.Services.MainServices
+namespace VinylExchange.Services.MainServices.Genres
 {
     public class GenresService : IGenresService
     {

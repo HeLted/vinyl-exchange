@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using VinylExchange.Models.ResourceModels.Genres;
 
-namespace VinylExchange.Services.MainServices
+namespace VinylExchange.Services.MainServices.Genres
 {
     public interface IGenresService
     {
