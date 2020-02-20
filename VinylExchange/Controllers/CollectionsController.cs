@@ -2,12 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-
-using VinylExchange.Common;
 using VinylExchange.Models.InputModels.Collections;
 using VinylExchange.Services.Logging;
-using VinylExchange.Services.MainServices;
-
+using VinylExchange.Services.MainServices.Collections;
 
 namespace VinylExchange.Controllers
 {

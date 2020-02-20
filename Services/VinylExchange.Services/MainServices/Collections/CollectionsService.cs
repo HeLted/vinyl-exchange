@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
@@ -11,6 +10,8 @@ using VinylExchange.Models.ResourceModels.Collections;
 using VinylExchange.Models.Utility;
 using VinylExchange.Services.HelperServices;
 using VinylExchange.Services.Mapping;
+using VinylExchange.Data.Common.Enumerations;
+
 
 namespace VinylExchange.Services.MainServices.Collections
 {
@@ -30,6 +31,7 @@ namespace VinylExchange.Services.MainServices.Collections
         {
             var collectionItem = new CollectionItem()
             {
+                
                 VinylGrade = inputModel.VinylGrade,
                 SleeveGrade = inputModel.SleeveGrade,
                 Description = inputModel.Description,

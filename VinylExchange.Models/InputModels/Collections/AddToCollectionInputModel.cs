@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using VinylExchange.Data.Models.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using VinylExchange.Data.Common.Enumerations;
 
 namespace VinylExchange.Models.InputModels.Collections
 {

@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using VinylExchange.Common;
 using VinylExchange.Models.InputModels.Releases;
 using VinylExchange.Services.Logging;
-using VinylExchange.Services.MainServices;
+using VinylExchange.Services.MainServices.Releases;
 
 namespace VinylExchange.Controllers
 {

@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using VinylExchange.Data.Models;
-using VinylExchange.Data.Models.Enums;
+
 using VinylExchange.Models.ResourceModels.ReleaseFiles;
 using VinylExchange.Services.Mapping;
 

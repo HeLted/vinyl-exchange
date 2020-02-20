@@ -15,11 +15,12 @@ using VinylExchange.Models;
 using VinylExchange.Services.Files;
 using VinylExchange.Services.HelperServices;
 using VinylExchange.Services.Logging;
-using VinylExchange.Services.MainServices;
+using VinylExchange.Services.MainServices.Collections;
+using VinylExchange.Services.MainServices.Genres;
+using VinylExchange.Services.MainServices.Releases;
+using VinylExchange.Services.MainServices.Styles;
 using VinylExchange.Services.Mapping;
 using VinylExchange.Services.MemoryCache;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-
 
 namespace VinylExchange
 {
@@ -61,9 +62,7 @@ namespace VinylExchange
             {
                 configuration.RootPath = "ClientApp/build";
             });
-
-           
-
+            
             //Enitity Services
 
             services.AddTransient<IReleasesService, ReleasesService>();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VinylExchange.Services.MainServices;
+using VinylExchange.Services.MainServices.Styles;
 
 namespace VinylExchange.Controllers
 {
