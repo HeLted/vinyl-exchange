@@ -32,7 +32,7 @@ import { Helmet } from "react-helmet";
         <Helmet>
           <link rel="stylesheet" href="/css/dropzone.css" />
         </Helmet>
-        <form onSubmit={event => this.props.onSubmit(event)}>
+        <form onSubmit={event => this.props.functions.handleOnSubmit(event)}>
           <div className="row">
             <div className="col">
               <div className="form-group">
@@ -41,7 +41,7 @@ import { Helmet } from "react-helmet";
                   id="artistInput"
                   placeholder="Artist"
                   value={this.props.state.artistInput}
-                  onChange={this.props.onChange}
+                  onChange={this.props.functions.handleOnChange}
                 />
               </div>
             </div>
@@ -53,7 +53,7 @@ import { Helmet } from "react-helmet";
                   id="titleInput"
                   placeholder="Title"
                   value={this.props.state.titleInput}
-                  onChange={this.props.onChange}
+                  onChange={this.props.functions.handleOnChange}
                 />
               </div>
             </div>
@@ -65,7 +65,7 @@ import { Helmet } from "react-helmet";
                 <SingleSelect
                   id="genreSelectInput"
                   value={this.props.state.genreSelectInput}
-                  onChange={this.props.onChange}
+                  onChange={this.props.functions.handleOnChange}
                   options={this.props.state.genres}
                   defaultOptionLabel="--Please Select Genre--"
                 />
@@ -79,8 +79,8 @@ import { Helmet } from "react-helmet";
                   id="styleMultiSelectInput"
                   closeMenuOnSelect={false}
                   isMulti
-                  onChange={this.props.onChangeMultiSelect}
                   value={this.props.state.styleMultiSelectInput}
+                  onChange={this.props.functions.handleOnChangeMultiSelect}
                   options={this.props.state.styles}
                 />
               </div>
@@ -95,7 +95,7 @@ import { Helmet } from "react-helmet";
                   id="formatInput"
                   placeholder="Format"
                   value={this.props.state.formatInput}
-                  onChange={this.props.onChange}
+                  onChange={this.props.functions.handleOnChange}
                 />
               </div>
             </div>
@@ -106,7 +106,7 @@ import { Helmet } from "react-helmet";
                   id="yearInput"
                   placeholder="Year"
                   value={this.props.state.yearInput}
-                  onChange={this.props.onChange}
+                  onChange={this.props.functions.handleOnChange}
                 />
               </div>
             </div>
@@ -117,7 +117,7 @@ import { Helmet } from "react-helmet";
                   id="labelInput"
                   placeholder="Label"
                   value={this.props.state.labelInput}
-                  onChange={this.props.onChange}
+                  onChange={this.props.functions.handleOnChange}
                 />
               </div>
             </div>

@@ -106,10 +106,7 @@ class AddReleaseContainer extends Component {
         submitFormObj
       )
       .then(response => {
-        self.context.handleAppNotification(
-          "Succesfully added release",
-          4
-        );
+        self.context.handleAppNotification("Succesfully added release", 4);
       })
       .catch(error => {
         self.context.handleServerNotification(
@@ -150,9 +147,11 @@ class AddReleaseContainer extends Component {
   render() {
     return (
       <AddReleaseComponent
-        onChange={this.handleOnChange}
-        onChangeMultiSelect={this.handleOnChangeMultiSelect}
-        onSubmit={this.handleOnSubmit}
+        functions={{
+          handleOnChange: this.handleOnChange,
+          handleOnChangeMultiSelect: this.handleOnChangeMultiSelect,
+          hadnleOnSubmit: this.handleOnSubmit
+        }}
         state={this.state}
       />
     );

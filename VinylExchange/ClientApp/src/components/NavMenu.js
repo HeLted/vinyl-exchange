@@ -82,6 +82,16 @@ export class NavMenu extends Component {
                     Marketplace
                   </NavLink>
                 </li>
+                <li className="nav-item">
+                  <NavLink
+                    tag={Link}
+                    className="navbar-link btn btn-outline-light text-light"
+                    to="/marketplace"
+                    onClick={this.handleToggleNavbar}
+                  >
+                    Shops
+                  </NavLink>
+                </li>
                 <UserMenu />
               </ul>
             </Collapse>
