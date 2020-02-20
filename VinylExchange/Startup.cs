@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -45,6 +46,13 @@ namespace VinylExchange
             services.AddDefaultIdentity<VinylExchangeUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<VinylExchangeRole>()
                 .AddEntityFrameworkStores<VinylExchangeDbContext>();
+
+            services.Configure<IdentityOptions>(options => {
+
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                
+            });
 
 
             services.AddAuthentication()
