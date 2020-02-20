@@ -112,7 +112,7 @@ class ReleasesContainer extends Component {
           if (error !== "State not updated!!!") {
             this.context.handleServerNotification(error.response);
           }
-          this.setState({ isThereMoreReleasesToLoad: false });
+          this.setState({ isThereMoreReleasesToLoad: false ,isLoadMoreReleasesLoading: false });
         });
     }, 1000);
   };

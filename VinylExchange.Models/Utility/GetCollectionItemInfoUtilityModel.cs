@@ -9,7 +9,6 @@ namespace VinylExchange.Models.Utility
     public class GetCollectionItemInfoUtilityModel : IMapFrom<CollectionItem>
     {
         public Guid Id { get; set; }
-
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

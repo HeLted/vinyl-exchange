@@ -25,7 +25,7 @@ namespace VinylExchange.Data.Models
         public Release Release { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public VinylExchangeUser User { get; set; }
 
     }

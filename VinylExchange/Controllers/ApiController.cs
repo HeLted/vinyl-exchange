@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Security.Claims;
 
 namespace VinylExchange.Controllers
@@ -7,9 +8,9 @@ namespace VinylExchange.Controllers
     [ApiController]
     public class ApiController : ControllerBase
     {     
-        protected string GetUserId(ClaimsPrincipal user)
+        protected Guid GetUserId(ClaimsPrincipal user)
         {
-            return user.FindFirst("sub").Value;
+            return  Guid.Parse(user.FindFirst("sub").Value);
         }
 
     }

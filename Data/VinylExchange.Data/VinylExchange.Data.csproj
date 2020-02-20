@@ -5,6 +5,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200119211702_Init.cs" />
+    <Compile Remove="Migrations\20200119211702_Init.Designer.cs" />
+    <Compile Remove="Migrations\20200129114105_transferToApiIndentityContext.cs" />
+    <Compile Remove="Migrations\20200129114105_transferToApiIndentityContext.Designer.cs" />
+    <Compile Remove="Migrations\20200205155543_AddedReleaseFiles.cs" />
+    <Compile Remove="Migrations\20200205155543_AddedReleaseFiles.Designer.cs" />
+    <Compile Remove="Migrations\20200205160430_AddedFileTypeToReleaseFile.cs" />
+    <Compile Remove="Migrations\20200205160430_AddedFileTypeToReleaseFile.Designer.cs" />
+    <Compile Remove="Migrations\20200213161733_AddedCollectionTableAndRelationshipsWithIt.cs" />
+    <Compile Remove="Migrations\20200213161733_AddedCollectionTableAndRelationshipsWithIt.Designer.cs" />
+    <Compile Remove="Migrations\20200216190454_AddedDescriptionAndConditionToCollections.cs" />
+    <Compile Remove="Migrations\20200216190454_AddedDescriptionAndConditionToCollections.Designer.cs" />
+    <Compile Remove="Migrations\20200217091412_MinorCollectionTweaks.cs" />
+    <Compile Remove="Migrations\20200217091412_MinorCollectionTweaks.Designer.cs" />
+    <Compile Remove="Migrations\20200220204546_CompletelyRedesignedIdentity.cs" />
+    <Compile Remove="Migrations\20200220204546_CompletelyRedesignedIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200220205132_CompletelyRedesignedIdentity.cs" />
+    <Compile Remove="Migrations\20200220205132_CompletelyRedesignedIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200220210324_CompletelyRedesignedIdentity.cs" />
+    <Compile Remove="Migrations\20200220210324_CompletelyRedesignedIdentity.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.0.0" />
     

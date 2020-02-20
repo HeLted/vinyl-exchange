@@ -1,17 +1,13 @@
 ﻿using IdentityServer4.EntityFramework.Options;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using VinylExchange.Data.Models;
 
 
 namespace VinylExchange.Data
 {
-    public class VinylExchangeDbContext : ApiAuthorizationDbContext<VinylExchangeUser>
+    public class VinylExchangeDbContext : KeyApiAuthorizationDbContext<VinylExchangeUser,VinylExchangeRole,Guid>
     {
         public VinylExchangeDbContext(
            DbContextOptions options,

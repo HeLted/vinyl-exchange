@@ -27,7 +27,7 @@ namespace VinylExchange.Services.MainServices.Collections
         }
 
 
-        public async Task<CollectionItem> AddToCollection(AddToCollectionInputModel inputModel, Guid releaseId, string userId)
+        public async Task<CollectionItem> AddToCollection(AddToCollectionInputModel inputModel, Guid releaseId, Guid userId)
         {
             var collectionItem = new CollectionItem()
             {
@@ -47,7 +47,7 @@ namespace VinylExchange.Services.MainServices.Collections
 
         }
 
-        public async Task<IEnumerable<GetUserCollectionResourceModel>> GetUserCollection(string userId)
+        public async Task<IEnumerable<GetUserCollectionResourceModel>> GetUserCollection(Guid userId)
         {
             var collectionItems = await this.dbContext.Collections.Where(ci => ci.UserId == userId).To<GetUserCollectionResourceModel>().ToListAsync();
 
@@ -80,7 +80,7 @@ namespace VinylExchange.Services.MainServices.Collections
             };
         }
 
-        public async Task<bool> DoesUserCollectionContainReleas(Guid releaseId, string userId)
+        public async Task<bool> DoesUserCollectionContainReleas(Guid releaseId, Guid userId)
         => await this.dbContext.Collections
                 .Where(ci => ci.ReleaseId == releaseId && ci.UserId == userId)
                 .CountAsync() > 0;

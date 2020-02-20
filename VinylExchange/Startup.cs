@@ -43,6 +43,7 @@ namespace VinylExchange
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<VinylExchangeUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<VinylExchangeRole>()
                 .AddEntityFrameworkStores<VinylExchangeDbContext>();
 
 
