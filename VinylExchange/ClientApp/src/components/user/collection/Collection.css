@@ -1,0 +1,13 @@
+.collection-item-info{
+    border-style: groove;
+    margin: 20px;
+}
+
+.grade-badge{
+    border-radius: 10px !important;
+    margin-left: 10px;
+}
+
+.collection-container{
+    margin-bottom: 20px;
+}

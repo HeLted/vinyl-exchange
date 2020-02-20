@@ -26,24 +26,19 @@ class PlayerContextProvider extends Component {
       let self = this;
 
       const releaseDataPromise = await this.getReleasePromise(releaseId);
-      const releaseCoverArtDataPromise = await this.getReleaseCoverArtPromise(
-        releaseId
-      );
       const releaseTracksDataPromise = await this.getReleaseTracksPromise(
         releaseId
       );
 
       Promise.all([
         releaseDataPromise,
-        releaseCoverArtDataPromise,
         releaseTracksDataPromise
       ]).then(values => {
 
         this.context.handleAppNotification("Added Release To Player",2);
 
         const releaseData = values[0].data;
-        const releaseCoverArtData = values[1].data;
-        const releaseTracksData = values[2].data;
+        const releaseTracksData = values[1].data;
 
         self.setState(prevState => {
           const updatedReleases = prevState.releases;
@@ -53,8 +48,8 @@ class PlayerContextProvider extends Component {
             title: releaseData.title,
             image:
               Url.mediaStorage +
-              releaseCoverArtData.path +
-              releaseCoverArtData.fileName,
+              releaseData.coverArt.path +
+              releaseData.coverArt.fileName,
             tracks: releaseTracksData.map(track => {
               return {
                 id: track.id,
@@ -89,23 +84,6 @@ class PlayerContextProvider extends Component {
   getReleasePromise = async releaseId => {
     return axios
       .get(Url.api + Controllers.releases.name + Url.slash + releaseId)
-      .catch(error => {
-        this.context.handleServerNotification(error.response);
-        throw "Reject Promise";
-      });
-  };
-
-  getReleaseCoverArtPromise = async releaseId => {
-    return await axios
-      .get(
-        Url.api +
-          Controllers.releaseImages.name +
-          Controllers.releaseImages.actions.getCoverArtForRelease +
-          Url.queryStart +
-          Queries.releaseId +
-          Url.equal +
-          releaseId
-      )
       .catch(error => {
         this.context.handleServerNotification(error.response);
         throw "Reject Promise";

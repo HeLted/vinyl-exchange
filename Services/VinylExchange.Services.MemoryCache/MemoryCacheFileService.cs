@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using VinylExchange.Models.ResourceModels.File;
 using VinylExchange.Models.Utility;
-using VinylExchange.Models.ViewModels.File;
+
 
 namespace VinylExchange.Services.MemoryCache
 {
@@ -19,19 +18,20 @@ namespace VinylExchange.Services.MemoryCache
         }
 
 
-        public UploadFileViewModel AddFile(UploadFileUtilityModel file, string formSessionId)
+        public UploadFileResourceModel AddFile(UploadFileUtilityModel file, Guid formSessionId)
         {
+            var formSessionIdAsString = formSessionId.ToString();
 
-            if (!cacheManager.IsSet(formSessionId))
+            if (!cacheManager.IsSet(formSessionIdAsString))
             {
-                cacheManager.Set(formSessionId, new List<UploadFileUtilityModel>(), 1800);
+                cacheManager.Set(formSessionIdAsString, new List<UploadFileUtilityModel>(), 1800);
             }
 
-            var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId, null);
+            var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(formSessionIdAsString, null);
 
             formSessionStorage.Add(file);
 
-            return new UploadFileViewModel
+            return new UploadFileResourceModel
             {
                 FileId = file.FileGuid,
                 FileName = file.FileName
@@ -40,10 +40,10 @@ namespace VinylExchange.Services.MemoryCache
 
         }
 
-        public DeleteFileViewModel RemoveFile(string formSessionId, Guid fileGuid)
+        public DeleteFileResourceModel RemoveFile(Guid formSessionId, Guid fileGuid)
         {
 
-            var key = cacheManager.GetKeys().Where(x => x == formSessionId).SingleOrDefault();
+            var key = cacheManager.GetKeys().Where(x => x == formSessionId.ToString()).SingleOrDefault();
 
             var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
@@ -52,7 +52,7 @@ namespace VinylExchange.Services.MemoryCache
 
             formSessionStorage.Remove(file);
 
-            return new DeleteFileViewModel
+            return new DeleteFileResourceModel
             {
                 FileId = file.FileGuid,
                 FileName = file.FileName
@@ -61,18 +61,19 @@ namespace VinylExchange.Services.MemoryCache
 
         }
 
-        public void RemoveAllFilesForFormSession(string formSessionId)
+        public void RemoveAllFilesForFormSession(Guid formSessionId)
         {
+            var formSessionIdAsString = formSessionId.ToString();
 
-            var key = cacheManager.GetKeys().Where(x => x == formSessionId).SingleOrDefault();
+            var key = cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
 
-            if (cacheManager.IsSet(formSessionId))
+            if (cacheManager.IsSet(formSessionIdAsString))
             {
                 var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
                 formSessionStorage.Clear();
 
-                cacheManager.Remove(formSessionId);
+                cacheManager.Remove(formSessionIdAsString);
 
 
                 //returns sucessobject
@@ -87,9 +88,9 @@ namespace VinylExchange.Services.MemoryCache
 
         }
 
-        public IEnumerable<UploadFileUtilityModel> GetAllFilesForFormSession(string formSessionId)
+        public IEnumerable<UploadFileUtilityModel> GetAllFilesForFormSession(Guid formSessionId)
         {
-            return cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId, null);
+            return cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId.ToString(), null);
         }
 
     }

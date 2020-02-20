@@ -10,17 +10,17 @@
 
   const formSessionId = dropzoneElement.attributes[1].value;
 
-  const dropzoneUploadPath =
-      dropzoneElement.attributes[2].value + "?formSessionId=" + formSessionId;
+  const dropzoneUploadPath = dropzoneElement.attributes[2].value;
 
-  const dropzoneDeletePath =
-      dropzoneElement.attributes[3].value + "?formSessionId=" + formSessionId;
+  const dropzoneDeletePath = dropzoneElement.attributes[3].value;
+
+  const formSessionIdUrl = "?formSessionId=" + formSessionId;
 
   const acceptedFiles = dropzoneElement.attributes[4].value;
 
   // Dropzone class:
   var myDropzone = new Dropzone(`#${dropzoneId}`, {
-    url: dropzoneUploadPath,
+    url: dropzoneUploadPath + formSessionIdUrl,
     acceptedFiles: acceptedFiles,
     maxFilesize: 0.5,
     uploadMultiple: false,
@@ -65,8 +65,8 @@
           e.stopPropagation();
 
           if (file.status === "success") {
-            fetch(dropzoneDeletePath + `&fileGuid=${file.serverGuid}`, {
-              method: "POST"
+            fetch(dropzoneDeletePath + file.serverGuid + formSessionIdUrl, {
+              method: "DELETE"
             })
               .then(response => response.json())
               .then(data => console.log(`Removed file: ${data.fileName}`));

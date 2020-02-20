@@ -15,33 +15,31 @@ namespace VinylExchange.Controllers
             this.memoryCacheFileSevice = memoryCacheFileSevice;
         }
 
-        [HttpPost]
-        [Route("Delete")]
-        public IActionResult DeleteFile(string formSessionId, string fileGuid)
+        [HttpDelete]
+        [Route("{id}")]
+      
+        public IActionResult DeleteFile(Guid id, Guid formSessionId)
         {
 
-            var returnObj = this.memoryCacheFileSevice.RemoveFile(formSessionId, Guid.Parse(fileGuid));
+            var returnObj = this.memoryCacheFileSevice.RemoveFile(formSessionId, id);
 
             return Ok(returnObj);
 
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("DeleteAll")]
-        public IActionResult DeleteAllFiles(string formSessionId)
+        public IActionResult DeleteAllFiles(Guid formSessionId)
         {
-
             this.memoryCacheFileSevice.RemoveAllFilesForFormSession(formSessionId);
 
             return Ok();
-
-
+            
         }
 
 
-        [HttpPost]
-        [Route("Upload")]
-        public IActionResult UploadFile(IFormFile file, string formSessionId)
+        [HttpPost]        
+        public IActionResult UploadFile(IFormFile file, Guid formSessionId)
         {
            
             UploadFileUtilityModel fileModel = new UploadFileUtilityModel(file);

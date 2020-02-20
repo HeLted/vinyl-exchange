@@ -14,6 +14,7 @@ class PlayerLoaderButton extends Component {
   static contextType = PlayerContext;
 
   componentDidMount() {
+
     this.setState({
       isLoadedToPlayer: this.context.isReleaseLoaded(this.props.data.releaseId)
     });

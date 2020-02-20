@@ -5,9 +5,9 @@ using System.Text;
 using VinylExchange.Data.Models;
 using VinylExchange.Services.Mapping;
 
-namespace VinylExchange.Models.ViewModels.ReleaseFiles
+namespace VinylExchange.Models.ResourceModels.ReleaseFiles
 {
-    public class ReleaseFileViewModel : IMapFrom<ReleaseFile>
+    public class ReleaseFileResourceModel : IMapFrom<ReleaseFile>
     {
 
         public Guid Id { get; set; }

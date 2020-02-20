@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using VinylExchange.Common;
 using VinylExchange.Models.InputModels.Releases;
 using VinylExchange.Services.Logging;
@@ -23,12 +25,12 @@ namespace VinylExchange.Controllers
 
         [HttpGet]
         [Route("GetReleases")]
-        public async Task<IActionResult> GetReleases(string searchTerm, int releasesToSkip)
+        public async Task<IActionResult> GetReleases(string searchTerm , [FromQuery(Name="styleIds")] List<int> styleIds , int releasesToSkip)
         {
             
             try
             {
-                var releases = await this.releasesService.GetReleases(searchTerm, releasesToSkip);
+                var releases = await this.releasesService.GetReleases(searchTerm, styleIds, releasesToSkip);
                 return Ok(releases);
             }
             catch(Exception ex)

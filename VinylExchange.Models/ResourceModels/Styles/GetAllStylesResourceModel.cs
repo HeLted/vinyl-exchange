@@ -1,9 +1,9 @@
 ﻿using VinylExchange.Data.Models;
 using VinylExchange.Services.Mapping;
 
-namespace VinylExchange.Models.ViewModels.Styles
+namespace VinylExchange.Models.ResourceModels.Styles
 {
-    public class GetAllStylesViewModel : IMapFrom<Style>
+    public class GetAllStylesResourceModel : IMapFrom<Style>
     {
         public int Id { get; set; }
 

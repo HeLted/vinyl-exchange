@@ -13,8 +13,7 @@ namespace VinylExchange.Controllers
             this.genreService = genreService;
         }
 
-        [HttpGet]
-        [Route("GetAllGenres")]
+        [HttpGet]        
         public async Task<IActionResult> GetAllGenres()
         {
             var genres = await this.genreService.GetAllGenres();

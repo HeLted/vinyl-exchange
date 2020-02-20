@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace VinylExchange.Models.ViewModels.File
+namespace VinylExchange.Models.ResourceModels.File
 {
-    public class UploadFileViewModel
+    public class UploadFileResourceModel
     {
         public Guid FileId { get; set; }
 

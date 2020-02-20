@@ -8,7 +8,8 @@ import {
 import { NotificationContext } from "../../../contexts/NotificationContext";
 
 const notificationsIds = [];
-const notificationClass = "toastNotification"
+const notificationClass = "toast-notification";
+const devNotificationClass = "toast-notification dev-notification"
 
 class ServerNotification extends Component {
   static contextType = NotificationContext;
@@ -31,22 +32,35 @@ class ServerNotification extends Component {
             notificationClass
           );
         } else if (notificationSeverity === 2) {
-          ToastsStore.info(
+          ToastsStore.warning(
             notificationObj.messageText,
             notificationElementTimer,
             notificationClass
           );
         } else if (notificationSeverity === 3) {
+          ToastsStore.info(
+            notificationObj.messageText,
+            notificationElementTimer,
+            notificationClass
+          );
+        } else if (notificationSeverity === 4) {
           ToastsStore.success(
             notificationObj.messageText,
             notificationElementTimer,
             notificationClass
           );
         }
+        else if (notificationSeverity === 5) {
+          ToastsStore.info(
+            notificationObj.messageText,
+            notificationElementTimer,
+            devNotificationClass
+          );
+        }
       }, 300);
     });
 
-    if(notificationsIds > 20){
+    if (notificationsIds > 20) {
       notificationsIds = [];
     }
   }

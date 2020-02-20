@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using VinylExchange.Models.ViewModels.Styles;
+using VinylExchange.Models.ResourceModels.Styles;
 
 namespace VinylExchange.Services.MainServices
 {
     public interface IStylesService
     {
-        Task<IEnumerable<GetAllStylesViewModel>> GetAllStylesForGenre(int genreId);
+        Task<IEnumerable<GetAllStylesResourceModel>> GetAllStylesForGenre(int genreId);
     }
 }

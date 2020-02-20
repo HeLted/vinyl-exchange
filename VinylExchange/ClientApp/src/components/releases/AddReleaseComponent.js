@@ -127,8 +127,8 @@ import { Helmet } from "react-helmet";
             <div
               id="imagesDropzone"
               formsessionid={this.props.state.formSessionId}
-              dropzoneuploadpath= {Url.api + Controllers.files.name + Controllers.files.actions.upload}
-              dropzonedeletepath={Url.api + Controllers.files.name + Controllers.files.actions.delete}
+              dropzoneuploadpath= {Url.api + Controllers.files.name}
+              dropzonedeletepath={Url.api + Controllers.files.name + Url.slash}
               acceptedfiles=".png, .jpg"
             ></div>
           </div>
@@ -138,8 +138,8 @@ import { Helmet } from "react-helmet";
             <div
               id="tracksDropzone"
               formsessionid={this.props.state.formSessionId}
-              dropzoneuploadpath= {Url.api + Controllers.files.name + Controllers.files.actions.upload}
-              dropzonedeletepath={Url.api + Controllers.files.name + Controllers.files.actions.delete}
+              dropzoneuploadpath= {Url.api + Controllers.files.name }
+              dropzonedeletepath={Url.api + Controllers.files.name + Url.slash }
               acceptedfiles=".mp3"
             ></div>
           </div>

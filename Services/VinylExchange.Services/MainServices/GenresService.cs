@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using VinylExchange.Data;
-using VinylExchange.Models.ViewModels.Genres;
+using VinylExchange.Models.ResourceModels.Genres;
 using VinylExchange.Services.Mapping;
 
 namespace VinylExchange.Services.MainServices
 {
-   public class GenresService : IGenresService
+    public class GenresService : IGenresService
     {
         private readonly VinylExchangeDbContext dbContext;
 
@@ -17,9 +15,9 @@ namespace VinylExchange.Services.MainServices
         {
             this.dbContext = dbContext;
         }
-        public async Task<IEnumerable<GetAllGenresViewModel>> GetAllGenres()
+        public async Task<IEnumerable<GetAllGenresResourceModel>> GetAllGenres()
         {
-            return await dbContext.Genres.To<GetAllGenresViewModel>().ToListAsync();
+            return await dbContext.Genres.To<GetAllGenresResourceModel>().ToListAsync();
 
         }
         

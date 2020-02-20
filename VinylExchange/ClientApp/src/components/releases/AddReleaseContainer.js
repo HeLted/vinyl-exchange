@@ -26,12 +26,9 @@ class AddReleaseContainer extends Component {
 
   componentDidMount() {
     axios
-      .get(
-        Url.api +
-          Controllers.genres.name +
-          Controllers.genres.actions.getAllGenres
-      )
+      .get(Url.api + Controllers.genres.name + Url.slash)
       .then(response => {
+        this.context.handleAppNotification("Loaded Genres", 5);
         this.setState({ genres: response.data });
       })
       .catch(error => {
@@ -49,9 +46,13 @@ class AddReleaseContainer extends Component {
           Url.api +
             Controllers.styles.name +
             Controllers.styles.actions.getAllStylesForGenre +
-            `?genreId=${this.state.genreSelectInput}`
+            Url.queryStart +
+            Queries.genreId +
+            Url.equal +
+            this.state.genreSelectInput
         )
         .then(response => {
+          this.context.handleAppNotification("Loaded styles for genre", 5);
           const styles = response.data.map(style => {
             return { value: style.id, label: style.name };
           });
@@ -105,9 +106,9 @@ class AddReleaseContainer extends Component {
         submitFormObj
       )
       .then(response => {
-        self.context.handleServerNotification(
-          response,
-          "Succesfully added release"
+        self.context.handleAppNotification(
+          "Succesfully added release",
+          4
         );
       })
       .catch(error => {
@@ -128,7 +129,7 @@ class AddReleaseContainer extends Component {
         Url.equal +
         this.state.formSessionId,
       {
-        method: "POST",
+        method: "DELETE",
 
         headers: {
           "Content-Type": "application/json"

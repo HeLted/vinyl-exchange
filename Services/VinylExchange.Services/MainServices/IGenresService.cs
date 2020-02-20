@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using VinylExchange.Models.ViewModels.Genres;
+using VinylExchange.Models.ResourceModels.Genres;
 
 namespace VinylExchange.Services.MainServices
 {
     public interface IGenresService
     {
-        Task<IEnumerable<GetAllGenresViewModel>> GetAllGenres();
+        Task<IEnumerable<GetAllGenresResourceModel>> GetAllGenres();
     }
 }

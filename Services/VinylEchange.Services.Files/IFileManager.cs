@@ -11,7 +11,7 @@ namespace VinylExchange.Services.Files
 {
     public interface IFileManager
     {
-        public IEnumerable<UploadFileUtilityModel> RetrieveFilesFromCache(string formSessionId);
+        public IEnumerable<UploadFileUtilityModel> RetrieveFilesFromCache(Guid formSessionId);
         IEnumerable<TModel> MapFilesToDbObjects
              <TModel>(IEnumerable<UploadFileUtilityModel> uploadFileUtilityModels,
              Guid entityId, string entityIdPropertyName, string subFolderName);

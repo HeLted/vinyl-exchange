@@ -1,21 +1,28 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Collections;
+using VinylExchange.Models.ResourceModels.Collections;
+using VinylExchange.Models.Utility;
+using VinylExchange.Services.HelperServices;
+using VinylExchange.Services.Mapping;
 
 namespace VinylExchange.Services.MainServices
 {
     public class CollectionsService : ICollectionsService
     {
         private readonly VinylExchangeDbContext dbContext;
+        private readonly IReleaseFilesService releaseFileService;
 
-        public CollectionsService(VinylExchangeDbContext dbContext)
+        public CollectionsService(VinylExchangeDbContext dbContext, IReleaseFilesService releaseFileService)
         {
             this.dbContext = dbContext;
-
+            this.releaseFileService = releaseFileService;
         }
 
 
@@ -37,6 +44,46 @@ namespace VinylExchange.Services.MainServices
             return trackedCollectionItem.Entity;
 
         }
+
+        public async Task<IEnumerable<GetUserCollectionResourceModel>> GetUserCollection(string userId)
+        {
+            var collectionItems = await this.dbContext.Collections.Where(ci => ci.UserId == userId).To<GetUserCollectionResourceModel>().ToListAsync();
+
+            collectionItems.ForEach(ci =>
+            {
+                ci.CoverArt = this.releaseFileService.GetReleaseCoverArt(ci.ReleaseId).GetAwaiter().GetResult();
+            });
+
+            return collectionItems;
+        }
+
+        public async Task<GetCollectionItemInfoUtilityModel> GetCollectionItemInfo(Guid collectionItemId)
+        {
+            var collectionItem = await this.dbContext.Collections
+                .Where(ci => ci.Id == collectionItemId)
+                .To<GetCollectionItemInfoUtilityModel>()
+                .FirstOrDefaultAsync();
+
+            return collectionItem;
+        }
+
+        public async Task<RemoveCollectionItemResourceModel> RemoveCollectionItem(Guid collectionItemId)
+        {
+            var collectionItem = await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItemId);
+            this.dbContext.Collections.Remove(collectionItem);
+            await this.dbContext.SaveChangesAsync();
+            return new RemoveCollectionItemResourceModel()
+            {
+                Id = collectionItem.Id,
+            };
+        }
+
+        public async Task<bool> DoesUserCollectionContainReleas(Guid releaseId, string userId)
+        => await this.dbContext.Collections
+                .Where(ci => ci.ReleaseId == releaseId && ci.UserId == userId)
+                .CountAsync() > 0;
+
+
     }
 
 }

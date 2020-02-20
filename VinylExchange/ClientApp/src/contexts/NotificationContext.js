@@ -47,7 +47,7 @@ export default class NotificationContextProvider extends React.Component {
           });
         }else{
           errorMessages.push({
-            messageText: notificationObj.data.message,
+            messageText:notificationObj.status + " " + notificationObj.data.title,
             id: uuidv4()
           });
         }

@@ -4,6 +4,7 @@ import Label from "./../../inputComponents/Label";
 import TextAreaInput from "./../../inputComponents/TextAreaInput";
 
 function AddToCollectionPopupFormBody(props) {
+  
   return (
     <div
       className="modal fade"

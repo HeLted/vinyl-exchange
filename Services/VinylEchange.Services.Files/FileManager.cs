@@ -19,7 +19,7 @@ namespace VinylExchange.Services.Files
         }
 
 
-        public IEnumerable<UploadFileUtilityModel> RetrieveFilesFromCache(string formSessionId)
+        public IEnumerable<UploadFileUtilityModel> RetrieveFilesFromCache(Guid formSessionId)
         {
             return this.memoryCacheFileSevice.GetAllFilesForFormSession(formSessionId);
 

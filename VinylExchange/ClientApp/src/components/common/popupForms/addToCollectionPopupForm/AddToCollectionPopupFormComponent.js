@@ -16,7 +16,7 @@ function AddToCollectionPopupFormComponent(props) {
     <div>
       <AddToCollectionPopupFormButton
         data={{
-          isReleaseAlreadyInCollection: props.data.isReleaseAlreadyInCollection
+          isReleaseAlreadyInUserCollection: props.data.isReleaseAlreadyInUserCollection
         }}
       />
       <AddToCollectionPopupFormBody
@@ -24,7 +24,8 @@ function AddToCollectionPopupFormComponent(props) {
           gradeOptions: gradeOptions,
           descriptionInput: props.data.descriptionInput,
           vinylGradeInput: props.data.vinylGradeInput,
-          sleeveGradeInput: props.data.sleeveGradeInput
+          sleeveGradeInput: props.data.sleeveGradeInput,
+       
         }}
         functions={{
           handleOnChange: props.functions.handleOnChange,

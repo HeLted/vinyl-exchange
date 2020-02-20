@@ -1,22 +1,35 @@
-import React from "react";
+import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { NotificationContext } from "./../../../../contexts/NotificationContext";
 
-function AddToCollectionPopupFormButton(props) {
-  const buttonClass = props.data.isReleaseAlreadyInCollection
-    ? "btn btn-outline-danger"
-    : "btn btn-outline-primary";
+class AddToCollectionPopupFormButton extends Component {
+ 
+  static contextType = NotificationContext;
+ 
+  notifyIfReleaseAlreadyInUserCollection = () => {
+    if (this.props.data.isReleaseAlreadyInUserCollection) {
+      this.context.handleAppNotification("Release already in collection!",2)
+    }
+  };
 
-  return (
-    <button
-      type="button"
-      className= {buttonClass}
-      data-toggle="modal"
-      data-target="#exampleModalCenter"
-    >
-      <FontAwesomeIcon icon={faHeart} />
-    </button>
-  );
+  render() {
+    const buttonClass = this.props.data.isReleaseAlreadyInUserCollection
+      ? "btn btn-outline-danger"
+      : "btn btn-outline-primary";
+
+    return (
+      <button
+        type="button"
+        className={buttonClass}
+        data-toggle="modal"
+        onClick={this.notifyIfReleaseAlreadyInUserCollection}
+        data-target="#exampleModalCenter"
+      >
+        <FontAwesomeIcon icon={faHeart} />
+      </button>
+    );
+  }
 }
 
 export default AddToCollectionPopupFormButton;

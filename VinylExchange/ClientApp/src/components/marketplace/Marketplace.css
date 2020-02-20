@@ -1,0 +1,16 @@
+.filter-collapse-body {
+  height: 300px;
+}
+
+.accordion div.card:only-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: calc(0.25rem - 1px);
+}
+
+.filter-collapse {
+  margin-top: 20px;
+}
+
+.filter-collapse-btn {
+  width: 100% !important;
+}

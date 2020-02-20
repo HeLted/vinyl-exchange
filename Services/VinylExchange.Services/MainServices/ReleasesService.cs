@@ -1,26 +1,21 @@
-﻿
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Releases;
-using VinylExchange.Models.Utility;
-using VinylExchange.Models.ViewModels.ReleaseFiles;
-using VinylExchange.Models.ViewModels.Releases;
-using VinylExchange.Services.Files;
+using VinylExchange.Models.ResourceModels.Releases;
 using VinylExchange.Services.HelperServices;
 using VinylExchange.Services.Mapping;
-using VinylExchange.Services.MemoryCache;
 
 namespace VinylExchange.Services.MainServices
 {
     public class ReleasesService : IReleasesService
     {
+        private const int releasesToTake = 10;
+
         private readonly VinylExchangeDbContext dbContext;
         private readonly IReleaseFilesService releaseFilesService;
 
@@ -30,26 +25,28 @@ namespace VinylExchange.Services.MainServices
             this.releaseFilesService = releaseFilesService;
         }
 
-        public async Task<IEnumerable<GetAllReleasesViewModel>> GetReleases(string searchTerm, int releasesToSkip)
+        public async Task<IEnumerable<GetAllReleasesResourceModel>> GetReleases(string searchTerm,IEnumerable<int> filterStyleIds, int releasesToSkip)
         {
         
-            List<GetAllReleasesViewModel> releases = null;
+            List<GetAllReleasesResourceModel> releases = null;
 
             if(searchTerm == null)
             {
-                releases  = await dbContext.Releases               
+                releases  = await dbContext.Releases
+                .Where(r => r.Styles.Any(s => filterStyleIds.Contains(s.StyleId)) || filterStyleIds.Count() == 0)
                 .Skip(releasesToSkip)
-                .Take(5)
-                .To<GetAllReleasesViewModel>()
+                .Take(releasesToTake)
+                .To<GetAllReleasesResourceModel>()
                 .ToListAsync();
             }
             else
             {
                 releases = await dbContext.Releases
-               .Where(x => x.Artist.Contains(searchTerm) || x.Title.Contains(searchTerm))
+               .Where(r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm))
+               .Where(r=> r.Styles.Any(s=> filterStyleIds.Contains(s.StyleId)) || filterStyleIds.Count() == 0)
                .Skip(releasesToSkip)
-               .Take(5)
-                .To<GetAllReleasesViewModel>()
+               .Take(releasesToTake)
+                .To<GetAllReleasesResourceModel>()
                 .ToListAsync();
 
             }
@@ -62,11 +59,15 @@ namespace VinylExchange.Services.MainServices
         }
 
 
-        public async Task<GetAllReleasesViewModel> GetRelease(Guid releaseId)
+        public async Task<GetReleaseResourceModel> GetRelease(Guid releaseId)
         {
-            return await dbContext.Releases
-                 .To<GetAllReleasesViewModel>()
+            var release =  await dbContext.Releases
+                 .To<GetReleaseResourceModel>()
                 .SingleOrDefaultAsync(x => x.Id == releaseId);
+
+            release.CoverArt = await  releaseFilesService.GetReleaseCoverArt(release.Id);
+
+            return release;
                                  
         }
 

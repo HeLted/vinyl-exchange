@@ -7,17 +7,23 @@
   margin-bottom: 20px;
 }
 
-.toastNotification {
-    animation: fadeIn 1s ease-in both !important;
+.toast-notification {
+  animation: fadeIn 1s ease-in both !important;
+}
+
+.dev-notification {
+  color: white !important;
+  background-color: peru !important;
+  
 }
 
 @keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translate3d(0, -20%, 0);
-	}
-	to {
-		opacity: 1;
-		transform: translate3d(0, 0, 0);
-	}
+  from {
+    opacity: 0;
+    transform: translate3d(0, -20%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
