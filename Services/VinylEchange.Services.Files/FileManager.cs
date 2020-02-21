@@ -96,7 +96,7 @@ namespace VinylExchange.Services.Files
                         fileStream.Write(fileContent);
                     }
                 }
-                catch(Exception ex)
+                catch
                 {
                     fileModelsList.Remove(fileModel);
                 }

@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\VinylExchange.Common\VinylExchange.Common.csproj" />
+    <ProjectReference Include="..\..\Common\VinylExchange.Common\VinylExchange.Common.csproj" />
     <ProjectReference Include="..\VinylExchange.Data.Common\VinylExchange.Data.Common.csproj" />
   </ItemGroup>
 

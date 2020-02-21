@@ -10,7 +10,6 @@ using VinylExchange.Models.ResourceModels.Collections;
 using VinylExchange.Models.Utility;
 using VinylExchange.Services.HelperServices;
 using VinylExchange.Services.Mapping;
-using VinylExchange.Data.Common.Enumerations;
 
 
 namespace VinylExchange.Services.MainServices.Collections

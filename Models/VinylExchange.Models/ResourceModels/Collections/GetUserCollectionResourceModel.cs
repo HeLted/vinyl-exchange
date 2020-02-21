@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using System;
 using VinylExchange.Data.Models;
-
 using VinylExchange.Models.ResourceModels.ReleaseFiles;
 using VinylExchange.Services.Mapping;
 
