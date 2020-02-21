@@ -11,6 +11,7 @@ namespace VinylExchange.Data.Models
         public VinylExchangeUser()
         {
             this.Id = Guid.NewGuid();
+            this.CreatedOn = DateTime.UtcNow;
             this.Roles = new HashSet<IdentityUserRole<Guid>>();
             this.Claims = new HashSet<IdentityUserClaim<Guid>>();
             this.Logins = new HashSet<IdentityUserLogin<Guid>>();

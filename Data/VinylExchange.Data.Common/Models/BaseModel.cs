@@ -5,6 +5,11 @@ namespace VinylExchange.Data.Common.Models
 {
     public abstract class BaseModel<TKey> : IAuditInfo
     {
+
+        public BaseModel()
+        {
+            this.CreatedOn = DateTime.UtcNow;
+        }
         [Key]
         public TKey Id { get; set; }
 

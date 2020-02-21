@@ -150,7 +150,7 @@ class AddReleaseContainer extends Component {
         functions={{
           handleOnChange: this.handleOnChange,
           handleOnChangeMultiSelect: this.handleOnChangeMultiSelect,
-          hadnleOnSubmit: this.handleOnSubmit
+          handleOnSubmit: this.handleOnSubmit
         }}
         state={this.state}
       />
