@@ -6,7 +6,7 @@ using VinylExchange.Services.Mapping;
 
 namespace VinylExchange.Models.ResourceModels.Collections
 {
-    public class GetUserCollectionResourceModel : IHaveCustomMappings
+    public class GetUserCollectionResourceModel :IMapFrom<CollectionItem>, IHaveCustomMappings
     {
         #region CollectionItem
         public Guid Id { get; set; }
@@ -31,10 +31,8 @@ namespace VinylExchange.Models.ResourceModels.Collections
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<CollectionItem, GetUserCollectionResourceModel>()
-                 .ForMember(m=> m.VinylGrade,ci=> ci.MapFrom(x=> x.VinylGrade.ToString()))
-                 .ForMember(m => m.SleeveGrade, ci => ci.MapFrom(x => x.SleeveGrade.ToString()))
-                 .ForMember(m => m.Artist, r => r.MapFrom(x => x.Release.Artist))
-                 .ForMember(m => m.Title, r => r.MapFrom(x => x.Release.Title));
+                 .ForMember(m => m.VinylGrade, ci => ci.MapFrom(x => x.VinylGrade.ToString()))
+                 .ForMember(m => m.SleeveGrade, ci => ci.MapFrom(x => x.SleeveGrade.ToString()));                
         }
     }
 }

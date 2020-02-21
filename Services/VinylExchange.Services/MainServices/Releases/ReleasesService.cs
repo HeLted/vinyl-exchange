@@ -15,74 +15,64 @@ namespace VinylExchange.Services.MainServices.Releases
 {
     public class ReleasesService : IReleasesService
     {
-        private const int releasesToTake = 10;
+        private const int releasesToTake = 5;
 
         private readonly VinylExchangeDbContext dbContext;
         private readonly IReleaseFilesService releaseFilesService;
-        private readonly IMapper mapper;
 
-        public ReleasesService(VinylExchangeDbContext dbContext,
-            IReleaseFilesService releaseFilesService,
-            IMapper mapper)
+        public ReleasesService(VinylExchangeDbContext dbContext, IReleaseFilesService releaseFilesService)
         {
             this.dbContext = dbContext;
             this.releaseFilesService = releaseFilesService;
-            this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetAllReleasesResourceModel>> GetReleases(string searchTerm,IEnumerable<int> filterStyleIds, int releasesToSkip)
+        public async Task<IEnumerable<GetAllReleasesResourceModel>> GetReleases(string searchTerm, IEnumerable<int> filterStyleIds, int releasesToSkip)
         {
-        
+
             List<GetAllReleasesResourceModel> releases = null;
 
-            if(searchTerm == null)
-            {
-                releases  = await dbContext.Releases
-                .Where(r => r.Styles.Any(s => filterStyleIds.Contains(s.StyleId)) || filterStyleIds.Count() == 0)
-                .Skip(releasesToSkip)
-                .Take(releasesToTake)
-                .To<GetAllReleasesResourceModel>()
-                .ToListAsync();
-            }
-            else
-            {
-                releases = await dbContext.Releases
-               .Where(r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm))
-               .Where(r=> r.Styles.Any(s=> filterStyleIds.Contains(s.StyleId)) || filterStyleIds.Count() == 0)
-               .Skip(releasesToSkip)
-               .Take(releasesToTake)
-                .To<GetAllReleasesResourceModel>()
-                .ToListAsync();
+            var releasesQuariable = dbContext.Releases;
 
+            if (searchTerm != null)
+            {
+                releasesQuariable.Where(r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm));
             }
-
-            releases.ForEach( r => {
-                r.CoverArt = releaseFilesService.GetReleaseCoverArt(r.Id).GetAwaiter().GetResult();               
+            
+            releases = await releasesQuariable
+            .Where(r => r.Styles.Any(s => filterStyleIds.Contains(s.StyleId)) || filterStyleIds.Count() == 0)
+            .Skip(releasesToSkip)
+            .Take(releasesToTake)
+            .To<GetAllReleasesResourceModel>()
+            .ToListAsync();
+                                   
+            releases.ForEach(r =>
+            {
+                r.CoverArt = Task.Run(() => releaseFilesService.GetReleaseCoverArt(r.Id)).Result;
             });
-                        
+
             return releases;
         }
 
 
         public async Task<GetReleaseResourceModel> GetRelease(Guid releaseId)
         {
-            var release =  await dbContext.Releases
+            var release = await dbContext.Releases
                  .To<GetReleaseResourceModel>()
                 .SingleOrDefaultAsync(x => x.Id == releaseId);
 
-            release.CoverArt = await  releaseFilesService.GetReleaseCoverArt(release.Id);
+            release.CoverArt = await releaseFilesService.GetReleaseCoverArt(release.Id);
 
             return release;
-                                 
+
         }
 
-        public async Task<Release> CreateRelease(CreateReleaseInputModel inputModel,Guid formSessionId)
+        public async Task<Release> CreateRelease(CreateReleaseInputModel inputModel, Guid formSessionId)
         {
-            
-            var release = mapper.Map<Release>(inputModel);
+
+            var release = inputModel.To<Release>();
 
             var trackedRelease = await this.dbContext.Releases.AddAsync(release);
-                       
+
             await releaseFilesService.AddFilesForRelease(release.Id, formSessionId);
 
             await this.AddStylesForRelease(release.Id, inputModel.StyleIds);
@@ -102,12 +92,12 @@ namespace VinylExchange.Services.MainServices.Releases
                     StyleId = styleId
                 };
 
-               await dbContext.StyleReleases.AddAsync(styleRelease);
+                await dbContext.StyleReleases.AddAsync(styleRelease);
             }
 
-       
+
         }
 
-      
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace VinylExchange.Services.MainServices.Collections
         private readonly VinylExchangeDbContext dbContext;
         private readonly IReleaseFilesService releaseFileService;
 
-        public CollectionsService(VinylExchangeDbContext dbContext, IReleaseFilesService releaseFileService)
+        public CollectionsService(VinylExchangeDbContext dbContext,IReleaseFilesService releaseFileService)
         {
             this.dbContext = dbContext;
             this.releaseFileService = releaseFileService;
@@ -28,15 +29,11 @@ namespace VinylExchange.Services.MainServices.Collections
 
         public async Task<CollectionItem> AddToCollection(AddToCollectionInputModel inputModel, Guid releaseId, Guid userId)
         {
-            var collectionItem = new CollectionItem()
-            {
-                
-                VinylGrade = inputModel.VinylGrade,
-                SleeveGrade = inputModel.SleeveGrade,
-                Description = inputModel.Description,
-                ReleaseId = releaseId,
-                UserId = userId
-            };
+
+           var collectionItem = inputModel.To<CollectionItem>();
+
+            collectionItem.ReleaseId = releaseId;
+            collectionItem.UserId = userId;
 
             var trackedCollectionItem = await this.dbContext.Collections.AddAsync(collectionItem);
 

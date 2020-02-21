@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -68,10 +67,6 @@ namespace VinylExchange
             services.AddRazorPages();
             services.AddDistributedMemoryCache();
 
-         
-
-            services.AddSingleton(AutoMapperConfig.GetMapper(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly));
-
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -97,8 +92,7 @@ namespace VinylExchange
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-         
-
+            AutoMapperConfig.RegisterMappings(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly);
 
             if (env.IsDevelopment())
             {
