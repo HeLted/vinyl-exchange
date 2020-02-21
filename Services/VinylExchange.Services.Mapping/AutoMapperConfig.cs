@@ -14,11 +14,11 @@
 
         public static IMapper MapperInstance { get; set; }
 
-        public static void RegisterMappings(params Assembly[] assemblies)
+        public static IMapper GetMapper(params Assembly[] assemblies)
         {
             if (initialized)
             {
-                return;
+                return null;
             }
 
             initialized = true;
@@ -48,7 +48,10 @@
                         map.CreateMappings(configuration);
                     }
                 });
-            MapperInstance = new Mapper(new MapperConfiguration(config));
+
+            MapperInstance = new MapperConfiguration(config).CreateMapper();
+
+            return MapperInstance;
         }
 
         private static IEnumerable<TypesMap> GetFromMaps(IEnumerable<Type> types)

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,15 @@ namespace VinylExchange.Services.MainServices.Releases
 
         private readonly VinylExchangeDbContext dbContext;
         private readonly IReleaseFilesService releaseFilesService;
+        private readonly IMapper mapper;
 
-        public ReleasesService(VinylExchangeDbContext dbContext,IReleaseFilesService releaseFilesService)
+        public ReleasesService(VinylExchangeDbContext dbContext,
+            IReleaseFilesService releaseFilesService,
+            IMapper mapper)
         {
             this.dbContext = dbContext;
             this.releaseFilesService = releaseFilesService;
+            this.mapper = mapper;
         }
 
         public async Task<IEnumerable<GetAllReleasesResourceModel>> GetReleases(string searchTerm,IEnumerable<int> filterStyleIds, int releasesToSkip)
@@ -74,15 +79,7 @@ namespace VinylExchange.Services.MainServices.Releases
         public async Task<Release> CreateRelease(CreateReleaseInputModel inputModel,Guid formSessionId)
         {
             
-            Release release = new Release()
-            {
-                Artist = inputModel.Artist,
-                Title = inputModel.Title,
-                Format = inputModel.Format,
-                Label = inputModel.Label,
-                Year = inputModel.Year,
-
-            };
+            var release = mapper.Map<Release>(inputModel);
 
             var trackedRelease = await this.dbContext.Releases.AddAsync(release);
                        

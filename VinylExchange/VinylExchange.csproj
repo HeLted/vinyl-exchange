@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
@@ -39,7 +40,7 @@
     <ProjectReference Include="..\Data\VinylExchange.Data.Models\VinylExchange.Data.Models.csproj" />
     <ProjectReference Include="..\Data\VinylExchange.Data\VinylExchange.Data.csproj" />
     <ProjectReference Include="..\Services\VinylExchange.Services.Logging\VinylExchange.Services.Logging.csproj" />
-    <ProjectReference Include="..\Services\VinylExchange.Services\VinylExchange.Services.csproj" />
+    <ProjectReference Include="..\Services\VinylExchange.Services\VinylExchange.Services.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

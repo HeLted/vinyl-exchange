@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,11 +48,12 @@ namespace VinylExchange
                 .AddRoles<VinylExchangeRole>()
                 .AddEntityFrameworkStores<VinylExchangeDbContext>();
 
-            services.Configure<IdentityOptions>(options => {
+            services.Configure<IdentityOptions>(options =>
+            {
 
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
-                
+
             });
 
 
@@ -66,12 +68,16 @@ namespace VinylExchange
             services.AddRazorPages();
             services.AddDistributedMemoryCache();
 
+         
+
+            services.AddSingleton(AutoMapperConfig.GetMapper(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly));
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
-            
+
             //Enitity Services
 
             services.AddTransient<IReleasesService, ReleasesService>();
@@ -91,7 +97,7 @@ namespace VinylExchange
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly);
+         
 
 
             if (env.IsDevelopment())
@@ -125,7 +131,7 @@ namespace VinylExchange
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-               
+
                 endpoints.MapControllerRoute("Default",
                 "api/{controller}/{id}",
                 new { id = System.Web.Http.RouteParameter.Optional });

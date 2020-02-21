@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{D9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Mapping", "Services\VinylExchange.Services.Mapping\VinylExchange.Services.Mapping.csproj", "{0AF57DB3-899E-47C9-8C87-DB73D06BF886}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services", "Services\VinylExchange.Services\VinylExchange.Services.csproj", "{9065D74C-5517-4746-B0FA-59209B83A6A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Data", "Services\VinylExchange.Services\VinylExchange.Services.Data.csproj", "{9065D74C-5517-4746-B0FA-59209B83A6A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Files", "Services\VinylEchange.Services.Files\VinylExchange.Services.Files.csproj", "{13BF96CB-74CF-40AD-8256-BA76C7B7A05A}"
 EndProject
