@@ -3,6 +3,9 @@ import axios from "axios";
 import { Url, Controllers, Queries } from "./../constants/UrlConstants";
 import { NotificationContext } from "./NotificationContext";
 
+const failedToLoadReleaseToPlayerNotificationMessage =
+  "Failed to load release to player!";
+
 class PlayerContextProvider extends Component {
   constructor() {
     super();
@@ -30,39 +33,37 @@ class PlayerContextProvider extends Component {
         releaseId
       );
 
-      Promise.all([
-        releaseDataPromise,
-        releaseTracksDataPromise
-      ]).then(values => {
+      Promise.all([releaseDataPromise, releaseTracksDataPromise]).then(
+        values => {
+          this.context.handleAppNotification("Added Release To Player", 2);
 
-        this.context.handleAppNotification("Added Release To Player",2);
+          const releaseData = values[0].data;
+          const releaseTracksData = values[1].data;
 
-        const releaseData = values[0].data;
-        const releaseTracksData = values[1].data;
+          self.setState(prevState => {
+            const updatedReleases = prevState.releases;
+            updatedReleases.push({
+              id: releaseData.id,
+              artist: releaseData.artist,
+              title: releaseData.title,
+              image:
+                Url.mediaStorage +
+                releaseData.coverArt.path +
+                releaseData.coverArt.fileName,
+              tracks: releaseTracksData.map(track => {
+                return {
+                  id: track.id,
+                  path: Url.mediaStorage + track.path + track.fileName,
+                  name: atob(track.fileName.split("@---@")[1].split(".")[0])
+                };
+              }),
+              ejectReleaseCallback: ejectReleaseCallback
+            });
 
-        self.setState(prevState => {
-          const updatedReleases = prevState.releases;
-          updatedReleases.push({
-            id: releaseData.id,
-            artist: releaseData.artist,
-            title: releaseData.title,
-            image:
-              Url.mediaStorage +
-              releaseData.coverArt.path +
-              releaseData.coverArt.fileName,
-            tracks: releaseTracksData.map(track => {
-              return {
-                id: track.id,
-                path: Url.mediaStorage + track.path + track.fileName,
-                name: atob(track.fileName.split("@---@")[1].split(".")[0])
-              };
-            }),
-            ejectReleaseCallback: ejectReleaseCallback
+            return { releases: updatedReleases };
           });
-
-          return { releases: updatedReleases };
-        });
-      });
+        }
+      );
     }
   };
 
@@ -85,7 +86,10 @@ class PlayerContextProvider extends Component {
     return axios
       .get(Url.api + Controllers.releases.name + Url.slash + releaseId)
       .catch(error => {
-        this.context.handleServerNotification(error.response);
+        this.context.handleServerNotification(
+          error.response,
+          failedToLoadReleaseToPlayerNotificationMessage
+        );
         throw "Reject Promise";
       });
   };
@@ -96,13 +100,14 @@ class PlayerContextProvider extends Component {
         Url.api +
           Controllers.releaseTracks.name +
           Controllers.releaseTracks.actions.getAllTracksForRelease +
-          Url.queryStart +
-          Queries.releaseId +
-          Url.equal +
+          Url.slash +
           releaseId
       )
       .catch(error => {
-        this.context.handleServerNotification(error.response);
+        this.context.handleServerNotification(
+          error.response,
+          failedToLoadReleaseToPlayerNotificationMessage
+        );
         throw "Reject Promise";
       });
   };

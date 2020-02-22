@@ -15,44 +15,44 @@ namespace VinylExchange.Services.HelperServices
 {
     public class ReleaseFilesService : IReleaseFilesService
     {
+        private const string EntityTableName = "Releases";
+        private const string ForeignKeyForFile = "ReleaseId";
+
         private readonly VinylExchangeDbContext dbContext;
-        private readonly MemoryCacheManager cacheManager;
         private readonly IFileManager fileManager;
-       
-        public ReleaseFilesService(VinylExchangeDbContext dbContext,
-            MemoryCacheManager cacheManager, 
-            IFileManager fileManager)
+
+        public ReleaseFilesService(VinylExchangeDbContext dbContext,IFileManager fileManager)
         {
             this.dbContext = dbContext;
-            this.cacheManager = cacheManager;
-            this.fileManager = fileManager;           
+            this.fileManager = fileManager;
         }
-        public async Task<IEnumerable<ReleaseFile>> AddFilesForRelease(Guid releaseId,Guid formSessionId)
+
+        public async Task<IEnumerable<ReleaseFile>> AddFilesForRelease(Guid releaseId, Guid formSessionId)
         {
-                       
+
             var uploadFileUtilityModels = fileManager.RetrieveFilesFromCache(formSessionId);
 
             var filesContent = fileManager.GetFilesByteContent(uploadFileUtilityModels);
 
             var releaseFilesModels = fileManager
                 .MapFilesToDbObjects<ReleaseFile>(uploadFileUtilityModels,
-                releaseId,"ReleaseId" ,"Releases");
+                releaseId, ForeignKeyForFile, EntityTableName);
 
             releaseFilesModels = fileManager.SaveFilesToServer<ReleaseFile>(releaseFilesModels, filesContent);
-            
+
             await dbContext.ReleaseFiles.AddRangeAsync(releaseFilesModels);
-                      
+
             return releaseFilesModels;
-           
+
         }
 
         public async Task<IEnumerable<ReleaseFileResourceModel>> GetReleaseTracks(Guid releaseId)
         {
-           return await dbContext.ReleaseFiles
-                .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Audio)
-                .OrderBy(rf => rf.CreatedOn)
-                .To<ReleaseFileResourceModel>()
-                .ToListAsync();
+            return await dbContext.ReleaseFiles
+                 .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Audio)
+                 .OrderBy(rf => rf.CreatedOn)
+                 .To<ReleaseFileResourceModel>()
+                 .ToListAsync();
         }
 
 
@@ -75,7 +75,6 @@ namespace VinylExchange.Services.HelperServices
         }
 
 
-     
 
     }
 }

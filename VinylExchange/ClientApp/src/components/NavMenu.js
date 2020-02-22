@@ -86,7 +86,7 @@ export class NavMenu extends Component {
                   <NavLink
                     tag={Link}
                     className="navbar-link btn btn-outline-light text-light"
-                    to="/marketplace"
+                    to="/shops"
                     onClick={this.handleToggleNavbar}
                   >
                     Shops

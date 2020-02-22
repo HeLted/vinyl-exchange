@@ -1,0 +1,25 @@
+.releases-table{
+    display: block ;
+    height: 400px ;
+    overflow-y: scroll ;
+    overflow-x:hidden;
+  
+}
+
+tbody{
+    display:table;
+    width: 100%;
+}
+
+.search-not-found{
+    margin-top:30px;
+    color:gray;
+    border-style: groove;
+    padding: 10px;
+    text-align: center;
+   
+}
+
+.css-0{
+    border-radius: 2 !important;
+}

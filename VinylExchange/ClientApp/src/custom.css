@@ -50,3 +50,16 @@ body{
   background: #555; 
 }
 
+h5{
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-size:20px;
+}
+
+.transparent-border{
+  white-space: nowrap;
+    overflow: hidden;
+    max-width: 300px;
+    border-left:1em solid transparent;
+    border-right:1em solid transparent;
+    text-overflow: ellipsis;
+}

@@ -8,24 +8,14 @@ export default class NotificationContextProvider extends React.Component {
     severity: 0
   };
 
-  handleServerNotification = (notificationObj,customMessage) => {
+  handleServerNotification = (notificationObj, customMessage) => {
     console.log(notificationObj);
 
-    if (notificationObj.status === 404) {
+    if (notificationObj.status === 401) {
       this.setState({
-        messages: [
-          { messageText: "Error 404 Not Found.Try Again Later!", id: uuidv4() }
-        ],
+        messages: [{ messageText: "Error 401 Unauthorized!", id: uuidv4() }],
         severity: 1
       });
-    }else if(notificationObj.status === 401){
-      this.setState({
-        messages: [
-          { messageText: "Error 401 Unauthorized!", id: uuidv4() }
-        ],
-        severity: 1
-      });
-
     } else if (notificationObj.status >= 400) {
       const errorMessages = [];
 
@@ -39,19 +29,18 @@ export default class NotificationContextProvider extends React.Component {
           });
         });
       } else {
-
-        if(customMessage != undefined){
+        if (customMessage != undefined) {
           errorMessages.push({
             messageText: customMessage,
             id: uuidv4()
           });
-        }else{
+        } else {
           errorMessages.push({
-            messageText:notificationObj.status + " " + notificationObj.data.title,
+            messageText:
+              notificationObj.status + " " + notificationObj.data.title,
             id: uuidv4()
           });
         }
-        
       }
 
       this.setState({
@@ -60,12 +49,12 @@ export default class NotificationContextProvider extends React.Component {
       });
     } else {
       const successMessages = [];
-      if(customMessage != undefined){
+      if (customMessage != undefined) {
         successMessages.push({
           messageText: customMessage,
           id: uuidv4()
         });
-      }else{
+      } else {
         successMessages.push({
           messageText: notificationObj.data.message,
           id: uuidv4()

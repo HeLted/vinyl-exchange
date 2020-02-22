@@ -44,9 +44,9 @@ class UserMenu extends Component {
 
 
 
-  handleDropDownMenuToggle = () => {
+  handleDropDownMenuToggle = (isDropDownActive) => {
     this.setState(prevState => {
-      return { isDropDownActive: prevState.isDropDownActive ? false : true };
+      return { isDropDownActive };
     });
   };
 
@@ -68,11 +68,11 @@ class UserMenu extends Component {
 
   authenticatedView(userName, profilePath, logoutPath) {
     return (
-      <Fragment>
-        <li className="nav-item dropdown">
+      <Fragment >
+        <li  onMouseLeave={()=>this.handleDropDownMenuToggle(false)} className="nav-item dropdown">
           <NavLink
             className="navbar-link btn btn-outline-light text-light"
-            onClick={this.handleDropDownMenuToggle}
+            onMouseEnter={()=> this.handleDropDownMenuToggle(true)}
           >
             <FontAwesomeIcon icon={faUser} /> {userName}{" "}
             <FontAwesomeIcon
@@ -83,6 +83,9 @@ class UserMenu extends Component {
             className="user-dropdown dropdown-menu"
             style={{ display: this.state.isDropDownActive ? "block" : "none" }}
           >
+             <Link className="dropdown-item" to={ApplicationPaths.UserCollection}>
+              Exchanges
+            </Link>
               <Link className="dropdown-item" to={ApplicationPaths.UserCollection}>
               Collection
             </Link>

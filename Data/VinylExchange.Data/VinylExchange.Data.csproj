@@ -25,6 +25,8 @@
     <Compile Remove="Migrations\20200220205132_CompletelyRedesignedIdentity.Designer.cs" />
     <Compile Remove="Migrations\20200220210324_CompletelyRedesignedIdentity.cs" />
     <Compile Remove="Migrations\20200220210324_CompletelyRedesignedIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200222110337_AddedShopsTable.cs" />
+    <Compile Remove="Migrations\20200222110337_AddedShopsTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

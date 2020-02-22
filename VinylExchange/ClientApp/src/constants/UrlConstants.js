@@ -45,5 +45,8 @@ export const Controllers = {
   collections: {
     name: "/Collections",
     actions: { getUserCollection: "/GetUserCollection" , doesUserCollectionContainRelease:"/DoesUserCollectionContainRelease" }
+  },
+  shops:{
+    name:"/Shops"
   }
 };

@@ -13,6 +13,8 @@ using System.Reflection;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models;
+using VinylExchange.Services.Data.HelperServices;
+using VinylExchange.Services.Data.MainServices.Shops;
 using VinylExchange.Services.Files;
 using VinylExchange.Services.HelperServices;
 using VinylExchange.Services.Logging;
@@ -80,6 +82,8 @@ namespace VinylExchange
             services.AddTransient<IStylesService, StylesService>();
             services.AddTransient<IReleaseFilesService, ReleaseFilesService>();
             services.AddTransient<ICollectionsService, CollectionsService>();
+            services.AddTransient<IShopsService, ShopsService>();
+            services.AddTransient<IShopFilesService, ShopFilesService>();
 
             //Tool Services
             services.AddTransient<MemoryCacheManager>();

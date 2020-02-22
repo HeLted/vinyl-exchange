@@ -10,6 +10,9 @@ namespace VinylExchange.Services.Files
 {
     public class FileManager : IFileManager
     {
+        private const string fileNameSplitter = "@---@";
+        private const string ImagePath = @"\Image";
+        private const string AudioPath = @"\Audio";
         private const string storageFolderName = @"MediaStorage\";
                 
         private readonly IMemoryCacheFileSevice memoryCacheFileSevice;
@@ -52,7 +55,7 @@ namespace VinylExchange.Services.Files
                 var fileType = fileUtilityModel.FileType;
                 var createdOn = fileUtilityModel.CreatedOn;
 
-                var contentFolderName = fileType == FileType.Audio ? @"\Audio" : @"\Image";
+                var contentFolderName = fileType == FileType.Audio ? AudioPath : ImagePath;
                 var path = "\\" + subFolderName + contentFolderName + "\\";
 
                 var modelInstance = (TModel)Activator.CreateInstance(typeof(TModel));
@@ -61,7 +64,7 @@ namespace VinylExchange.Services.Files
 
                 modelType.GetProperty("Path").SetValue(modelInstance, path);
                 modelType.GetProperty("FileName")
-                    .SetValue(modelInstance, fileGuid + "@---@" + encodedFileName + fileExtension);
+                    .SetValue(modelInstance, fileGuid + fileNameSplitter + encodedFileName + fileExtension);
                 modelType.GetProperty("FileType").SetValue(modelInstance, fileType);
                 modelType.GetProperty("CreatedOn").SetValue(modelInstance, createdOn);
                 modelType.GetProperty(entityIdPropertyName).SetValue(modelInstance, entityId);

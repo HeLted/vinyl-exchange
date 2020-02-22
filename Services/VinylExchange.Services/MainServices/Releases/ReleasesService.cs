@@ -15,7 +15,7 @@ namespace VinylExchange.Services.MainServices.Releases
 {
     public class ReleasesService : IReleasesService
     {
-        private const int releasesToTake = 5;
+        private const int releasesToTake = 6;
 
         private readonly VinylExchangeDbContext dbContext;
         private readonly IReleaseFilesService releaseFilesService;
@@ -26,23 +26,23 @@ namespace VinylExchange.Services.MainServices.Releases
             this.releaseFilesService = releaseFilesService;
         }
 
-        public async Task<IEnumerable<GetAllReleasesResourceModel>> GetReleases(string searchTerm, IEnumerable<int> filterStyleIds, int releasesToSkip)
+        public async Task<IEnumerable<GetReleasesResourceModel>> GetReleases(string searchTerm, IEnumerable<int> filterStyleIds, int releasesToSkip)
         {
 
-            List<GetAllReleasesResourceModel> releases = null;
+            List<GetReleasesResourceModel> releases = null;
 
-            var releasesQuariable = dbContext.Releases;
+            var releasesQuariable = dbContext.Releases.AsQueryable();
 
             if (searchTerm != null)
             {
-                releasesQuariable.Where(r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm));
+                releasesQuariable = releasesQuariable.Where(r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm));
             }
             
             releases = await releasesQuariable
             .Where(r => r.Styles.Any(s => filterStyleIds.Contains(s.StyleId)) || filterStyleIds.Count() == 0)
             .Skip(releasesToSkip)
             .Take(releasesToTake)
-            .To<GetAllReleasesResourceModel>()
+            .To<GetReleasesResourceModel>()
             .ToListAsync();
                                    
             releases.ForEach(r =>

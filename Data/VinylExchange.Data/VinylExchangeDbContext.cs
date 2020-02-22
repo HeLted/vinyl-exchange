@@ -20,8 +20,9 @@ namespace VinylExchange.Data
         public DbSet<StyleRelease> StyleReleases { get; set; }        
         public DbSet<Release> Releases { get; set; }
         public DbSet<ReleaseFile> ReleaseFiles { get; set; }
-
+        public DbSet<ShopFile> ShopFiles { get; set; }
         public DbSet<CollectionItem> Collections { get; set; }
+        public DbSet<Shop> Shops { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -51,6 +52,11 @@ namespace VinylExchange.Data
                 .HasOne(r => r.Release)
                 .WithMany(rf => rf.ReleaseFiles)
                 .HasForeignKey(r => r.ReleaseId);
+
+            modelBuilder.Entity<ShopFile>()
+               .HasOne(sf => sf.Shop )
+               .WithMany(s => s.ShopFiles)
+               .HasForeignKey(sf => sf.ShopId);
 
             modelBuilder.Entity<CollectionItem>(collectionItem =>
             {

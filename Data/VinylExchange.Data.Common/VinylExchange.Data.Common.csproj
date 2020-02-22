@@ -7,4 +7,8 @@
     <StartupObject />
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\VinylExchange.Common\VinylExchange.Common.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,7 @@
 {
     public enum Condition
     {
+        NotSelected=0,
         Mint = 1,
         NearMint = 2,
         VeryGood = 3,

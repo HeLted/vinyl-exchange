@@ -12,11 +12,13 @@ namespace VinylExchange.Controllers
         {
             this.releaseFilesService = releaseFilesService;
         }
+      
         [HttpGet]
-        [Route("GetAllTracksForRelease")]
-        public async Task<IActionResult> GetAllTracksForRelease(Guid releaseId)
+        [Route("GetAllTracksForRelease/{id}")]
+        public async Task<IActionResult> GetAllTracksForRelease(Guid id)
         {
-            return Ok(await releaseFilesService.GetReleaseTracks(releaseId));
+            return Ok(await releaseFilesService.GetReleaseTracks(id));
         }        
+        
     }
 }
