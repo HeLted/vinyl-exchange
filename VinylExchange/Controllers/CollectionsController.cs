@@ -20,6 +20,28 @@ namespace VinylExchange.Controllers
             this.loggerService = loggerService;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            try
+            {
+                var collectionItem = await collectionsService.GetCollectionItem(id);
+
+                if (collectionItem == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(collectionItem);
+            }
+            catch (Exception ex)
+            {
+                loggerService.LogException(ex);
+                return BadRequest();
+            }
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> Add(AddToCollectionInputModel inputModel, Guid releaseId)
         {
@@ -101,7 +123,7 @@ namespace VinylExchange.Controllers
             try
             {
                 bool doesUserCollectionContainRelease  = await this.collectionsService
-                    .DoesUserCollectionContainReleas(releaseId,this.GetUserId(this.User));
+                    .DoesUserCollectionContainRelease(releaseId,this.GetUserId(this.User));
                 
                 return Ok(new { doesUserCollectionContainRelease });
             }

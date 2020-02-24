@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import AddToCollectionPopupFormComponent from "./AddToCollectionPopupFormComponent";
-import authService from "./../../../api-authorization/AuthorizeService";
 import {
   Url,
   Controllers,
@@ -8,7 +7,6 @@ import {
 } from "./../../../../constants/UrlConstants";
 import { NotificationContext } from "./../../../../contexts/NotificationContext";
 import axios from "axios";
-
 
 class AddtoColletionPopupFormContainer extends Component {
   constructor() {
@@ -25,25 +23,27 @@ class AddtoColletionPopupFormContainer extends Component {
   static contextType = NotificationContext;
 
   componentDidMount() {
-    axios.get(
-      Url.api + Controllers.collections.name+
-      Controllers.collections.actions.doesUserCollectionContainRelease
-      + Url.queryStart + Queries.releaseId + Url.equal +this.props.data.releaseId
-    ).then(response =>{
-
-      this.context.handleAppNotification("Release is in user collection",5)
-      this.setState({
-        releaseId: this.props.data.releaseId,
-        isReleaseAlreadyInUserCollection: response.data.doesUserCollectionContainRelease
-        
+    axios
+      .get(
+        Url.api +
+          Controllers.collections.name +
+          Controllers.collections.actions.doesUserCollectionContainRelease +
+          Url.queryStart +
+          Queries.releaseId +
+          Url.equal +
+          this.props.data.releaseId
+      )
+      .then(response => {
+        this.context.handleAppNotification("Release is in user collection", 5);
+        this.setState({
+          releaseId: this.props.data.releaseId,
+          isReleaseAlreadyInUserCollection:
+            response.data.doesUserCollectionContainRelease
+        });
+      })
+      .catch(error => {
+        this.context.handleServerNotification(error.response);
       });
-       
-    }).catch(error=> {
-
-      this.context.handleServerNotification(error.response);
-    });
-
-    
   }
 
   handleOnChange = event => {
@@ -68,11 +68,14 @@ class AddtoColletionPopupFormContainer extends Component {
           Url.queryStart +
           Queries.releaseId +
           Url.equal +
-          this.state.releaseId ,
+          this.state.releaseId,
         submitFormObj
       )
       .then(response => {
-        this.context.handleAppNotification("Sucesfully added release to collection",4)
+        this.context.handleAppNotification(
+          "Sucesfully added release to collection",
+          4
+        );
         this.setState({ isReleaseAlreadyInUserCollection: true });
       })
       .catch(error => {
@@ -87,7 +90,8 @@ class AddtoColletionPopupFormContainer extends Component {
           descriptionInput: this.state.descriptionInput,
           vinylGradeInput: this.state.vinylGradeInput,
           sleeveGradeInput: this.state.sleeveGradeInput,
-          isReleaseAlreadyInUserCollection: this.state.isReleaseAlreadyInUserCollection
+          isReleaseAlreadyInUserCollection: this.state
+            .isReleaseAlreadyInUserCollection
         }}
         functions={{
           handleOnChange: this.handleOnChange,

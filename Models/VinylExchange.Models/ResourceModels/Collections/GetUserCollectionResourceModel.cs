@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System;
+using VinylExchange.Data.Common.Enumerations;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.ResourceModels.ReleaseFiles;
 using VinylExchange.Services.Mapping;
@@ -13,9 +14,9 @@ namespace VinylExchange.Models.ResourceModels.Collections
 
         public Guid ReleaseId { get; set; }
   
-        public string VinylGrade { get; set; }
+        public Condition VinylGrade { get; set; }
        
-        public string SleeveGrade { get; set; }
+        public Condition SleeveGrade { get; set; }
       
         public string Description { get; set; }
 
@@ -31,8 +32,8 @@ namespace VinylExchange.Models.ResourceModels.Collections
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<CollectionItem, GetUserCollectionResourceModel>()
-                 .ForMember(m => m.VinylGrade, ci => ci.MapFrom(x => x.VinylGrade.ToString()))
-                 .ForMember(m => m.SleeveGrade, ci => ci.MapFrom(x => x.SleeveGrade.ToString()));                
+                 .ForMember(m => m.Artist, ci => ci.MapFrom(x => x.Release.Artist))
+                 .ForMember(m => m.Title, ci => ci.MapFrom(x => x.Release.Title));                
         }
     }
 }

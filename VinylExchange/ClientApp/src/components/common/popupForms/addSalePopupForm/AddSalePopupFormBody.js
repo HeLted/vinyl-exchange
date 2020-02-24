@@ -2,22 +2,15 @@ import React from "react";
 import SingleSelect from "./../../inputComponents/SingleSelect";
 import Label from "./../../inputComponents/Label";
 import TextAreaInput from "./../../inputComponents/TextAreaInput";
+import MoneyInput from "./../../inputComponents/MoneyInput";
 
-function AddToCollectionPopupFormBody(props) {
-  
+function AddSalePopupBody(props) {
   return (
-    <div
-      className="modal fade"
-      id="addToCollectionModal"
-      tabIndex="-1"
-      role="dialog"
-    >
+    <div className="modal fade" tabIndex="-1" id={"addSaleModal-" + props.data.collectionItemId} role="dialog">
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" >
-              Add To Collection
-            </h5>
+            <h5 className="modal-title">Add To Collection</h5>
             <button type="submit" className="close" data-dismiss="modal">
               <span>&times;</span>
             </button>
@@ -31,7 +24,7 @@ function AddToCollectionPopupFormBody(props) {
                 <Label for="vinylGradeInput" value="Vinyl Grade" />
                 <SingleSelect
                   id="vinylGradeInput"
-                  value={props.data.vinylGrageInput}
+                  value={props.data.vinylGradeInput}
                   onChange={props.functions.handleOnChange}
                   options={props.data.gradeOptions}
                   defaultOptionLabel="--Grade Vinyl--"
@@ -42,7 +35,7 @@ function AddToCollectionPopupFormBody(props) {
                 <Label for="sleeveGradeInput" value="Sleeve Grade" />
                 <SingleSelect
                   id="sleeveGradeInput"
-                  value={props.data.sleeveGrageInput}
+                  value={props.data.sleeveGradeInput}
                   onChange={props.functions.handleOnChange}
                   options={props.data.gradeOptions}
                   defaultOptionLabel="--Grade Sleeve--"
@@ -53,8 +46,23 @@ function AddToCollectionPopupFormBody(props) {
                 <TextAreaInput
                   id="descriptionInput"
                   rows="3"
+                  value={props.data.descriptionInput}
                   onChange={props.functions.handleOnChange}
                 />
+              </div>
+              <div className="form-group">
+              <Label for="priceInput" value="Price" />
+              <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">€</div>
+                </div>
+                <MoneyInput
+                  id="priceInput"
+                  placeholder="Price"
+                  value={props.data.priceInput}
+                  onChange={props.functions.handleOnChange}
+                />
+              </div>
               </div>
             </form>
           </div>
@@ -70,7 +78,7 @@ function AddToCollectionPopupFormBody(props) {
               type="submit"
               className="btn btn-outline-primary"
               form="addToCollectionForm"
-              value="Add to Collection"
+              value="Create Sale"
             />
           </div>
         </div>
@@ -79,4 +87,4 @@ function AddToCollectionPopupFormBody(props) {
   );
 }
 
-export default AddToCollectionPopupFormBody;
+export default AddSalePopupBody;

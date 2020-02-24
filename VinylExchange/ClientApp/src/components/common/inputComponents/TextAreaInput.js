@@ -8,6 +8,7 @@ function TextAreaInput(props) {
       name={props.id}
       rows={props.rows}
       onChange={props.onChange}
+      value={props.value}
     ></textarea>
   );
 }

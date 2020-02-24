@@ -24,7 +24,7 @@ class AddToCollectionPopupFormButton extends Component {
         className={buttonClass}
         data-toggle="modal"
         onClick={this.notifyIfReleaseAlreadyInUserCollection}
-        data-target="#exampleModalCenter"
+        data-target="#addToCollectionModal"
       >
         <FontAwesomeIcon icon={faHeart} />
       </button>

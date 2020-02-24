@@ -20,17 +20,25 @@ namespace VinylExchange.Services.MainServices.Collections
         private readonly VinylExchangeDbContext dbContext;
         private readonly IReleaseFilesService releaseFileService;
 
-        public CollectionsService(VinylExchangeDbContext dbContext,IReleaseFilesService releaseFileService)
+        public CollectionsService(VinylExchangeDbContext dbContext, IReleaseFilesService releaseFileService)
         {
             this.dbContext = dbContext;
             this.releaseFileService = releaseFileService;
         }
 
 
+        public async Task<GetCollectionItemResourceModel> GetCollectionItem(Guid collectionItemId) 
+            => await this.dbContext.Collections
+                .Where(ci => ci.Id == collectionItemId)
+                .To<GetCollectionItemResourceModel>()
+                .FirstOrDefaultAsync();
+ 
+
+
         public async Task<CollectionItem> AddToCollection(AddToCollectionInputModel inputModel, Guid releaseId, Guid userId)
         {
 
-           var collectionItem = inputModel.To<CollectionItem>();
+            var collectionItem = inputModel.To<CollectionItem>();
 
             collectionItem.ReleaseId = releaseId;
             collectionItem.UserId = userId;
@@ -56,14 +64,12 @@ namespace VinylExchange.Services.MainServices.Collections
         }
 
         public async Task<GetCollectionItemInfoUtilityModel> GetCollectionItemInfo(Guid collectionItemId)
-        {
-            var collectionItem = await this.dbContext.Collections
+            => await this.dbContext.Collections
                 .Where(ci => ci.Id == collectionItemId)
                 .To<GetCollectionItemInfoUtilityModel>()
                 .FirstOrDefaultAsync();
 
-            return collectionItem;
-        }
+
 
         public async Task<RemoveCollectionItemResourceModel> RemoveCollectionItem(Guid collectionItemId)
         {
@@ -76,7 +82,7 @@ namespace VinylExchange.Services.MainServices.Collections
             };
         }
 
-        public async Task<bool> DoesUserCollectionContainReleas(Guid releaseId, Guid userId)
+        public async Task<bool> DoesUserCollectionContainRelease(Guid releaseId, Guid userId)
         => await this.dbContext.Collections
                 .Where(ci => ci.ReleaseId == releaseId && ci.UserId == userId)
                 .CountAsync() > 0;
