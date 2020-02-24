@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Data\VinylExchange.Data\VinylExchange.Data.csproj" />
     <ProjectReference Include="..\..\Models\VinylExchange.Models\VinylExchange.Models.csproj" />
     <ProjectReference Include="..\VinylExchange.Services.MemoryCache\VinylExchange.Services.MemoryCache.csproj" />
   </ItemGroup>

@@ -37,6 +37,7 @@ namespace VinylExchange.Data.Models
         public DateTime? DeletedOn { get; set; }
 
         public ICollection<ShopFile> ShopFiles { get; set; } = new HashSet<ShopFile>();
-     
+
+        public ICollection<Sale> Sales { get; set; } = new HashSet<Sale>();
     }
 }

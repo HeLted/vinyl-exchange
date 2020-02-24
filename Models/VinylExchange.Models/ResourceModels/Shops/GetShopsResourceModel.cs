@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using VinylExchange.Data.Models;
 using VinylExchange.Models.ResourceModels.ShopFiles;
+using VinylExchange.Services.Mapping;
 
 namespace VinylExchange.Models.ResourceModels.Shops
 {
-    public class GetShopsResourceModel
+    public class GetShopsResourceModel : IMapFrom<Shop>
     {
 
         public Guid Id { get; set; }

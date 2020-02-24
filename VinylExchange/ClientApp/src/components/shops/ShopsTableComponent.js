@@ -7,7 +7,6 @@ import PlayerLoaderButton from "./../common/PlayerLoaderButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMeh } from "@fortawesome/free-solid-svg-icons";
 
-
 class ShopsTableComponent extends Component {
   constructor() {
     super();
@@ -15,71 +14,79 @@ class ShopsTableComponent extends Component {
   }
 
   render() {
-    const releases = this.props.data.releases.map(release => {
-      const coverArtimageSource =
-        release.coverArt !== null
-          ? "/file/media" + release.coverArt.path + release.coverArt.fileName
+    const shops = this.props.data.shops.map(shop => {
+      const mainPhotoImageSource =
+        shop.mainPhoto !== null
+          ? "/file/media" + shop.mainPhoto.path + shop.mainPhoto.fileName
           : "https://cdn4.iconfinder.com/data/icons/ui-beast-4/32/Ui-12-512.png";
 
       return (
-        <Fragment key={release.id}>
-          <tr
-            onClick={() =>
-              this.props.functions.handleRedirectToRelease(release.id)
-            }
+        <Fragment key={shop.id}>
+          {/* <tr
+            onClick={() => this.props.functions.handleRedirectToshop(shop.id)}
           >
             <td>
-              <img src={coverArtimageSource} width="80" height="80" alt="" />
+              <img src={mainPhotoimageSource} width="80" height="80" alt="" />
             </td>
+            <td>{shop.name}</td>
+
             <td>
-              <PlayerLoaderButton data={{ releaseId: release.id }} />
+              {shop.country} - {shop.town}
             </td>
-            <td>{release.artist}</td>
-            <td>{release.title}</td>
-            <td>
-              {release.label} - {release.year} - {release.format}
-            </td>
-          </tr>
-         
+          </tr> */}
+          <li class="list-inline-item" >
+            <div class="card" style={{ width: "18rem" }}>
+              <img
+                class="card-img-top"
+                src={mainPhotoImageSource}
+               height="250px"
+                alt="Card image cap"
+              />
+              <div class="card-body">
+                <h5 class="card-title">{shop.name}</h5>
+                <p class="card-text">
+                  Some quick example text to build on the card title and make up
+                  the bulk of the card's content.
+                </p>
+                <a href="#" class="btn btn-primary" />
+              </div>
+            </div>
+          </li>
         </Fragment>
       );
     });
 
     const loader = (
-      <tr key="release loader">
+      <tr key="shop loader">
         <td>
           <PulseLoader
-            
             size={15}
             //size={"150px"} this also works
             color={"#13eddb"}
-            loading={this.props.data.isLoadMoreReleasesLoading}
+            loading={this.props.data.isLoadMoreshopsLoading}
           />
         </td>
       </tr>
     );
 
     return (
-      <table
-        className="releases-table table-hover"
-        ref={ref => (this.scrollParentRef = ref)}
-      >
+      <div className="shop-div">
         <InfiniteScroll
           initialLoad={false}
-          hasMore={this.props.data.isThereMoreReleasesToLoad}
-          loadMore={() => this.props.functions.handleLoadReleases(false)}
+          hasMore={this.props.data.isThereMoreShopsToLoad}
+          loadMore={() => this.props.functions.handleLoadShops(false)}
           loader={loader}
-          element={"tbody"}
+          element={"div"}
           useWindow={false}
           getScrollParent={() => this.scrollParentRef}
         >
-          {releases}
+          <ul className="list-inline">{shops}</ul>
         </InfiniteScroll>
 
-        {(this.props.data.isThereMoreReleasesToLoad === false &&
-          releases.length > 6) ||
-        (releases.length === 0 &&
-          this.props.data.isLoadMoreReleasesLoading === false) ? (
+        {(this.props.data.isThereMoreshopsToLoad === false &&
+          shops.length > 6) ||
+        (shops.length === 0 &&
+          this.props.data.isLoadMoreshopsLoading === false) ? (
           <tbody>
             <tr>
               <td colSpan="3">
@@ -87,8 +94,8 @@ class ShopsTableComponent extends Component {
                   <h6>
                     <b>
                       <i>
-                        <FontAwesomeIcon icon={faMeh} /> No More Releases.Maybe
-                        Try Another Search Term.
+                        <FontAwesomeIcon icon={faMeh} /> No More shops.Maybe Try
+                        Another Search Term.
                       </i>
                     </b>
                   </h6>
@@ -97,7 +104,7 @@ class ShopsTableComponent extends Component {
             </tr>
           </tbody>
         ) : null}
-      </table>
+      </div>
     );
   }
 }

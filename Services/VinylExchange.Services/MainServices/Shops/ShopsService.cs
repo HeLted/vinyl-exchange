@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Shops;
+using VinylExchange.Models.ResourceModels.Shops;
 using VinylExchange.Services.Data.HelperServices;
 using VinylExchange.Services.Mapping;
 
@@ -39,28 +40,27 @@ namespace VinylExchange.Services.Data.MainServices.Shops
             return trackedShop.Entity;
         }
 
-        public async Task<IEnumerable<GetShopsResourceModel>> GetReleases(string searchTerm, IEnumerable<int> filterStyleIds, int releasesToSkip)
+        public async Task<IEnumerable<GetShopsResourceModel>> GetShops(string searchTerm,  int shopsToSkip)
         {
 
             List<GetShopsResourceModel> releases = null;
 
-            var shopsQuariable = dbContext.Releases.AsQueryable();
+            var shopsQuariable = dbContext.Shops.AsQueryable();
 
             if (searchTerm != null)
             {
-                shopsQuariable = shopsQuariable.Where(r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm));
+                shopsQuariable = shopsQuariable.Where(r => r.Name.Contains(searchTerm));
             }
 
-            releases = await shopsQuariable
-            .Where(r => r.Styles.Any(s => filterStyleIds.Contains(s.StyleId)) || filterStyleIds.Count() == 0)
-            .Skip(releasesToSkip)
+            releases = await shopsQuariable          
+            .Skip(shopsToSkip)
             .Take(shopsToTake)
             .To<GetShopsResourceModel>()
             .ToListAsync();
 
             releases.ForEach(r =>
             {
-                r.CoverArt = Task.Run(() => shopFilesService.GetShopCoverArt(r.Id)).Result;
+                r.MainPhoto = Task.Run(() => shopFilesService.GetShopMainPhoto(r.Id)).Result;
             });
 
             return releases;

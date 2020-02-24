@@ -341,6 +341,60 @@ namespace VinylExchange.Data.Migrations
                     b.ToTable("ReleaseFiles");
                 });
 
+            modelBuilder.Entity("VinylExchange.Data.Models.Sale", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BuyerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<Guid?>("SellerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ShopId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SleeveCondition")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VinylCondition")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuyerId");
+
+                    b.HasIndex("SellerId");
+
+                    b.HasIndex("ShopId");
+
+                    b.ToTable("Sales");
+                });
+
             modelBuilder.Entity("VinylExchange.Data.Models.Shop", b =>
                 {
                     b.Property<Guid>("Id")
@@ -652,6 +706,24 @@ namespace VinylExchange.Data.Migrations
                         .HasForeignKey("ReleaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("VinylExchange.Data.Models.Sale", b =>
+                {
+                    b.HasOne("VinylExchange.Data.Models.VinylExchangeUser", "Buyer")
+                        .WithMany("Purchases")
+                        .HasForeignKey("BuyerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("VinylExchange.Data.Models.VinylExchangeUser", "Seller")
+                        .WithMany("Sales")
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("VinylExchange.Data.Models.Shop", "Shop")
+                        .WithMany("Sales")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("VinylExchange.Data.Models.ShopFile", b =>

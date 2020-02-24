@@ -14,6 +14,7 @@ export const Queries = {
   genreId:"genreId",
   searchTerm:"searchTerm",
   releasesToSkip:"releasesToSkip",
+  shopsToSkip:"shopsToSkip",
   styleIds:"styleIds"
 };
 
@@ -47,6 +48,9 @@ export const Controllers = {
     actions: { getUserCollection: "/GetUserCollection" , doesUserCollectionContainRelease:"/DoesUserCollectionContainRelease" }
   },
   shops:{
-    name:"/Shops"
+    name:"/Shops",actions:{ getShops: "/GetShops" }
+  },
+  sales:{
+    name:"/Sales"
   }
 };

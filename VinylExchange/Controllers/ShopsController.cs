@@ -21,8 +21,8 @@ namespace VinylExchange.Controllers
         }
 
         [HttpGet]
-        [Route("GetReleases")]
-        public async Task<IActionResult> GetReleases(string searchTerm, int releasesToSkip)
+        [Route("GetShops")]
+        public async Task<IActionResult> GetShops(string searchTerm, int shopsToSkip)
         {
 
             try

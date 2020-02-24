@@ -58,7 +58,7 @@ h5{
 .transparent-border{
   white-space: nowrap;
     overflow: hidden;
-    max-width: 300px;
+    
     border-left:1em solid transparent;
     border-right:1em solid transparent;
     text-overflow: ellipsis;

@@ -34,5 +34,9 @@ namespace VinylExchange.Data.Models
         public virtual ICollection<IdentityUserLogin<Guid>> Logins { get; set; }
 
         public ICollection<CollectionItem> Collection { get; set; } = new HashSet<CollectionItem>();
+
+        public ICollection<Sale> Sales { get; set; } = new HashSet<Sale>();
+
+        public ICollection<Sale> Purchases { get; set; } = new HashSet<Sale>();
     }
 }

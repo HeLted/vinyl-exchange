@@ -6,67 +6,58 @@ import ShopsTableComponent from "./ShopsTableComponent";
 import PulseLoader from "react-spinners/PulseLoader";
 import axios from "axios";
 import { NotificationContext } from "./../../contexts/NotificationContext";
-import qsArrayStringify from "./../../functions/qsArrayStringify";
+
 
 class ShopsTableContainer extends Component {
   constructor() {
     super();
     this.state = {
-      releases: [],
-      isLoadMoreReleasesLoading: false,
-      isThereMoreReleasesToLoad: true
+      shops: [],
+      isLoadMoreShopsLoading: false,
+      isThereMoreShopsToLoad: true
     };
   }
 
   static contextType = NotificationContext;
 
   componentDidMount() {
-    this.handleLoadReleases();
+    this.handleLoadShops();
   }
 
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.searchValue !== this.props.data.searchValue ||
-      qsArrayStringify(this.props.data.filterStyleIds) !==
-        qsArrayStringify(nextProps.data.filterStyleIds)
-    ) {
-      this.setState({isThereMoreReleasesToLoad:true})
-      this.handleLoadReleases(true);
+      nextProps.searchValue !== this.props.data.searchValue ){
+      this.setState({isThereMoreShopsToLoad:true})
+      this.handleLoadShops(true);
     }
   }
 
-  handleLoadReleases = shouldUnloadReleases => {
+  handleLoadShops = shouldUnloadShops => {
     this.setState({
-      isLoadMoreReleasesLoading: true
+      isLoadMoreShopsLoading: true
     });
 
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      const qsStringifiedFilterStyleIds = qsArrayStringify(
-        this.props.data.filterStyleIds,
-        Queries.styleIds
-      );
 
       axios
         .get(
           Url.api +
-            Controllers.releases.name +
-            Controllers.releases.actions.getReleases +
+            Controllers.shops.name +
+            Controllers.shops.actions.getShops +
             Url.queryStart +
             Queries.searchTerm +
             Url.equal +
             this.props.data.searchValue +
             Url.and +
-            Queries.releasesToSkip +
+            Queries.shopsToSkip +
             Url.equal +
-            `${shouldUnloadReleases ? 0 : this.state.releases.length}` +
-            `${qsStringifiedFilterStyleIds !== "" ? Url.and : ""}` +
-            qsStringifiedFilterStyleIds
+            `${shouldUnloadShops ? 0 : this.state.shops.length}` 
         )
 
         .then(response => {
           if (
-            JSON.stringify(this.state.releases) !==
+            JSON.stringify(this.state.shops) !==
             JSON.stringify(response.data)
           ) {
             return response.data;
@@ -76,49 +67,50 @@ class ShopsTableContainer extends Component {
         })
         .then(data => {
           if (data.length === 0) {
-            if (shouldUnloadReleases) {
+            if (shouldUnloadShops) {
               this.setState({
-                releases: [],
-                isLoadMoreReleasesLoading: false,
-                isThereMoreReleasesToLoad: false
+                Shops: [],
+                isLoadMoreShopsLoading: false,
+                isThereMoreShopsToLoad: false
               });
             } else {
               this.setState({
-                isLoadMoreReleasesLoading: false,
-                isThereMoreReleasesToLoad: false
+                isLoadMoreShopsLoading: false,
+                isThereMoreShopsToLoad: false
               });
             }
           } else {
-            if (this.state.isThereMoreReleasesToLoad) {
-              this.context.handleAppNotification("Loading more releases", 5);
+            if (this.state.isThereMoreShopsToLoad) {
+              this.context.handleAppNotification("Loading more shops", 5);
               this.setState(prevState => {
-                const updatedReleases = shouldUnloadReleases
+                const updatedShops = shouldUnloadShops
                   ? []
-                  : prevState.releases;
-                data.forEach(release => {
-                  updatedReleases.push(release);
+                  : prevState.shops;
+                data.forEach(shop => {
+                  updatedShops.push(shop);
                 });
 
                 return {
-                  releases: updatedReleases,
-                  isLoadMoreReleasesLoading: false,
-                  isThereMoreReleasesToLoad: true
+                  shops: updatedShops,
+                  isLoadMoreShopsLoading: false,
+                  isThereMoreShopsToLoad: true
                 };
               });
             }
           }
         })
         .catch(error => {
+          console.log(error)
           if (error !== "State not updated!!!") {
             this.context.handleServerNotification(error.response);
           }
-          this.setState({ isThereMoreReleasesToLoad: false ,isLoadMoreReleasesLoading: false });
+          this.setState({ isThereMoreShopsToLoad: false ,isLoadMoreShopsLoading: false });
         });
     }, 1000);
   };
 
-  handleRedirectToRelease = releaseId => {
-    this.props.history.push(`/release/${releaseId}`, { releaseId: releaseId });
+  handleRedirectToShop = shopId => {
+    this.props.history.push(`/Shop/${shopId}`, { shopId: shopId });
   };
 
   render() {
@@ -132,18 +124,15 @@ class ShopsTableContainer extends Component {
     ) : (
       <ShopsTableComponent
         data={{
-          releases: this.state.releases,
-          isLoadMoreReleasesLoading: this.state.isLoadMoreReleasesLoading,
-          isThereMoreReleasesToLoad: this.state.isThereMoreReleasesToLoad
+          shops: this.state.shops,
+          isLoadMoreShopsLoading: this.state.isLoadMoreShopsLoading,
+          isThereMoreShopsToLoad: this.state.isThereMoreShopsToLoad
         }}
         functions={{
-          handleLoadReleases: this.handleLoadReleases,
-          handleRedirectToRelease: this.handleRedirectToRelease
+          handleLoadShops: this.handleLoadShops,
+          handleRedirectToShop: this.handleRedirectToShop
         }}
-        playerContextFunctions={{
-          handleLoadReleaseToPlayer: this.handleLoadReleaseToPlayer,
-          handleEjectReleaseFromPlayer: this.handleEjectReleaseFromPlayer
-        }}
+      
       />
     );
     return renderComponent;

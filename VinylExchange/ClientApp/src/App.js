@@ -5,9 +5,10 @@ import { Home } from "./components/Home";
 import  MarketplaceContainer  from "./components/marketplace/MarketplaceContainer";
 import ReleaseContainer from "./components/releases/release/ReleaseContainer";
 import AddReleaseContainer from "./components/releases/addRelease/AddReleaseContainer";
-import CollectionContainer from "./components/releases/release/ReleaseContainer"
+import CollectionContainer from "./components/user/collection/CollectionContainer"
 import ShopsContainer from "./components/shops/ShopsContainer";
 import AddShopContainer from "./components/shops/addShop/AddShopContainer"
+import SaleContainer from "./components/sales/sale/SaleContainer"
 import AuthorizeRoute from "./components/api-authorization/AuthorizeRoute";
 import ApiAuthorizationRoutes from "./components/api-authorization/ApiAuthorizationRoutes";
 import { ApplicationPaths } from "./components/api-authorization/ApiAuthorizationConstants";
@@ -27,6 +28,7 @@ export default class App extends Component {
         <Route exact path="/Shops" component={ShopsContainer} />
         <AuthorizeRoute path="/Releases/AddRelease" component={AddReleaseContainer}/>
         <AuthorizeRoute  path="/Shops/AddShop" component={AddShopContainer}/>
+        <AuthorizeRoute  path="/Sale" component={SaleContainer}/>
         <AuthorizeRoute path="/Release" component={ReleaseContainer}/>
         <AuthorizeRoute path="/User/Collection" component={CollectionContainer}/>
         <Route

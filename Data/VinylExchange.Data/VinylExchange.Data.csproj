@@ -25,8 +25,26 @@
     <Compile Remove="Migrations\20200220205132_CompletelyRedesignedIdentity.Designer.cs" />
     <Compile Remove="Migrations\20200220210324_CompletelyRedesignedIdentity.cs" />
     <Compile Remove="Migrations\20200220210324_CompletelyRedesignedIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200221084007_AddedBaseModelToRelease.cs" />
+    <Compile Remove="Migrations\20200221084007_AddedBaseModelToRelease.Designer.cs" />
     <Compile Remove="Migrations\20200222110337_AddedShopsTable.cs" />
     <Compile Remove="Migrations\20200222110337_AddedShopsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200223145638_AddedSale.cs" />
+    <Compile Remove="Migrations\20200223145638_AddedSale.Designer.cs" />
+    <Compile Remove="Migrations\20200223150708_AddedSales.cs" />
+    <Compile Remove="Migrations\20200223150708_AddedSales.Designer.cs" />
+    <Compile Remove="Migrations\20200223153840_AddedSales.cs" />
+    <Compile Remove="Migrations\20200223153840_AddedSales.Designer.cs" />
+    <Compile Remove="Migrations\20200223154314_AddedSales.cs" />
+    <Compile Remove="Migrations\20200223154314_AddedSales.Designer.cs" />
+    <Compile Remove="Migrations\20200223154859_AddedSales.cs" />
+    <Compile Remove="Migrations\20200223154859_AddedSales.Designer.cs" />
+    <Compile Remove="Migrations\20200223155842_AddedSales.cs" />
+    <Compile Remove="Migrations\20200223155842_AddedSales.Designer.cs" />
+    <Compile Remove="Migrations\20200223160239_AddedSales.cs" />
+    <Compile Remove="Migrations\20200223160239_AddedSales.Designer.cs" />
+    <Compile Remove="Migrations\20200223160717_AddedSales.cs" />
+    <Compile Remove="Migrations\20200223160717_AddedSales.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
