@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace VinylExchange.Data.Migrations
 {
-    public partial class AddedSales : Migration
+    public partial class AddedSalesAndShops : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -58,6 +58,7 @@ namespace VinylExchange.Data.Migrations
                     SellerId = table.Column<Guid>(nullable: true),
                     BuyerId = table.Column<Guid>(nullable: true),
                     ShopId = table.Column<Guid>(nullable: true),
+                    ReleaseId = table.Column<Guid>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     VinylCondition = table.Column<int>(nullable: false),
@@ -75,6 +76,12 @@ namespace VinylExchange.Data.Migrations
                         name: "FK_Sales_AspNetUsers_BuyerId",
                         column: x => x.BuyerId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Sales_Releases_ReleaseId",
+                        column: x => x.ReleaseId,
+                        principalTable: "Releases",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -117,6 +124,11 @@ namespace VinylExchange.Data.Migrations
                 name: "IX_Sales_BuyerId",
                 table: "Sales",
                 column: "BuyerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sales_ReleaseId",
+                table: "Sales",
+                column: "ReleaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sales_SellerId",

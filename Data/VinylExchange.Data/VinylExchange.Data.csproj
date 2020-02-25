@@ -45,6 +45,10 @@
     <Compile Remove="Migrations\20200223160239_AddedSales.Designer.cs" />
     <Compile Remove="Migrations\20200223160717_AddedSales.cs" />
     <Compile Remove="Migrations\20200223160717_AddedSales.Designer.cs" />
+    <Compile Remove="Migrations\20200223184941_AddedSales.cs" />
+    <Compile Remove="Migrations\20200223184941_AddedSales.Designer.cs" />
+    <Compile Remove="Migrations\20200225080826_AddedSalesAndShops.cs" />
+    <Compile Remove="Migrations\20200225080826_AddedSalesAndShops.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

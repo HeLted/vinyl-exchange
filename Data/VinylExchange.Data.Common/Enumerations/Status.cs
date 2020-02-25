@@ -12,7 +12,7 @@ namespace VinylExchange.Data.Common.Enumerations
         Paid = 4,
         Sent= 5,
         Finished=6,
-        closed=7
+        Closed=7
         
     }
 }

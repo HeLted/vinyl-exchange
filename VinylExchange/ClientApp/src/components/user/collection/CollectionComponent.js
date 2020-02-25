@@ -55,6 +55,7 @@ function CollectionCoponent(props) {
             <AddSalePopupContainer
               data={{
                 collectionItemId: props.data.id,
+                releaseId : props.data.releaseId,
                 vinylGrade: props.data.vinylGrade,
                 sleeveGrade: props.data.sleeveGrade,
                 description: props.data.description

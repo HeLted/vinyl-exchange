@@ -40,6 +40,8 @@ namespace VinylExchange.Data.Models
         public ICollection<ReleaseFile> ReleaseFiles { get; set; } = new HashSet<ReleaseFile>();
 
         public ICollection<CollectionItem> ReleaseCollections { get; set; } = new HashSet<CollectionItem>();
+
+        public ICollection<Sale> Sales { get; set; } = new HashSet<Sale>();
   
     }
 }

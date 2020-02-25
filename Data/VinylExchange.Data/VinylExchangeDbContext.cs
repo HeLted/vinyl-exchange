@@ -75,8 +75,7 @@ namespace VinylExchange.Data
 
             modelBuilder.Entity<Sale>(sale =>
             {
-             
-                
+                             
                 sale.HasOne(s => s.Buyer)
                     .WithMany(b => b.Purchases)
                     .HasForeignKey(s => s.BuyerId)
@@ -91,6 +90,10 @@ namespace VinylExchange.Data
                 .WithMany(s => s.Sales)
                 .HasForeignKey(s => s.ShopId)
                  .OnDelete(DeleteBehavior.Restrict);
+
+                sale.HasOne(s => s.Release)
+                .WithMany(r => r.Sales)
+                .HasForeignKey(s => s.ReleaseId);
 
             });
 

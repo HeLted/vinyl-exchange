@@ -14,6 +14,7 @@ function MoneyInput(props) {
       step="any"
       onChange={props.onChange}
       placeholder={props.placeholder}
+      required
     />
   );
 }

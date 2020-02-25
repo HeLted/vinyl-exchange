@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VinylExchange.Models.InputModels.Sales;
 using VinylExchange.Services.Data.MainServices.Sales;
 using VinylExchange.Services.Logging;
 
@@ -39,6 +40,23 @@ namespace VinylExchange.Controllers
                 return BadRequest();
             }
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateSaleInputModel inputModel)
+        {
+            try
+            {                
+                var sale = await salesService.CreateSale(inputModel,this.GetUserId(this.User));
+
+                return CreatedAtRoute("Default", new { id = sale.Id });
+            }
+            catch (Exception ex)
+            {
+                loggerService.LogException(ex);
+                return BadRequest();
+            }
+            
         }
 
     }

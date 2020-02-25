@@ -8,7 +8,13 @@ namespace VinylExchange.Data.Models
 {
     public class Sale : IAuditInfo, IDeletableEntity
     {
+        public Sale()
+        {
+            this.Id = Guid.NewGuid();
+            this.CreatedOn = DateTime.UtcNow;
+            this.Status = Status.Open;
 
+        }
         public Guid Id { get; set; }
                 
         public Nullable<Guid>  SellerId { get; set; }
@@ -21,6 +27,10 @@ namespace VinylExchange.Data.Models
         public Shop Shop { get; set; }
 
         public Nullable<Guid> ShopId { get; set; }
+
+        public Nullable<Guid> ReleaseId { get; set; }
+
+        public Release Release { get; set; }
 
         [Required]
         public Status Status { get; set; }

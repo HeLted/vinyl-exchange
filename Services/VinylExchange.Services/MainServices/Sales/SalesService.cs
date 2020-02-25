@@ -3,6 +3,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using VinylExchange.Data;
+using VinylExchange.Data.Models;
+using VinylExchange.Models.InputModels.Sales;
 using VinylExchange.Models.ResourceModels.Sales;
 using VinylExchange.Services.Mapping;
 
@@ -19,11 +21,24 @@ namespace VinylExchange.Services.Data.MainServices.Sales
         }
 
         public async Task<GetSaleResourceModel> GetSale(Guid saleId)
-        {
-            return await this.dbContext.Sales
+        => await this.dbContext.Sales
                  .Where(s => s.Id == saleId)
                  .To<GetSaleResourceModel>()
                  .FirstOrDefaultAsync();
+
+
+
+        public async Task<Sale> CreateSale(CreateSaleInputModel inputModel,Guid sellerId)
+        {
+            inputModel.SellerId = sellerId;
+
+            var sale = inputModel.To<Sale>();
+
+            var trackedSale = await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            return trackedSale.Entity;
 
         }
 

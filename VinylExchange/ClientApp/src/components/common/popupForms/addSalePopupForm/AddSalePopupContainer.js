@@ -12,6 +12,7 @@ class AddSalePopupContainer extends Component {
   constructor() {
     super();
     this.state = {
+      releaseId: "",
       collectionItemId: "",
       descriptionInput: "",
       vinylGradeInput: "0",
@@ -23,8 +24,10 @@ class AddSalePopupContainer extends Component {
   static contextType = NotificationContext;
 
   componentDidMount() {
-    console.log("hiii");
-    this.setState({ collectionItemId: this.props.data.collectionItemId });
+    this.setState({
+      releaseId: this.props.data.releaseId,
+      collectionItemId: this.props.data.collectionItemId
+    });
   }
 
   handleLoadColletionItemData = () => {
@@ -64,7 +67,10 @@ class AddSalePopupContainer extends Component {
   handleOnSubmit = event => {
     event.preventDefault();
 
+    console.log(this.state.releaseId)
+
     const submitFormObj = {
+      releaseId:this.state.releaseId,
       description: this.state.descriptionInput,
       vinylGrade: this.state.vinylGradeInput,
       sleeveGrade: this.state.sleeveGradeInput,

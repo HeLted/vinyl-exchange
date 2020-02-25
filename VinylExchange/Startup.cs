@@ -14,6 +14,7 @@ using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models;
 using VinylExchange.Services.Data.HelperServices;
+using VinylExchange.Services.Data.MainServices.Sales;
 using VinylExchange.Services.Data.MainServices.Shops;
 using VinylExchange.Services.Files;
 using VinylExchange.Services.HelperServices;
@@ -84,6 +85,7 @@ namespace VinylExchange
             services.AddTransient<ICollectionsService, CollectionsService>();
             services.AddTransient<IShopsService, ShopsService>();
             services.AddTransient<IShopFilesService, ShopFilesService>();
+            services.AddTransient<ISalesService, SalesService>();
 
             //Tool Services
             services.AddTransient<MemoryCacheManager>();

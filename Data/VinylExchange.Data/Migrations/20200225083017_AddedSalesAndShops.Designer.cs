@@ -10,8 +10,8 @@ using VinylExchange.Data;
 namespace VinylExchange.Data.Migrations
 {
     [DbContext(typeof(VinylExchangeDbContext))]
-    [Migration("20200223184941_AddedSales")]
-    partial class AddedSales
+    [Migration("20200225083017_AddedSalesAndShops")]
+    partial class AddedSalesAndShops
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -371,6 +371,9 @@ namespace VinylExchange.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,4)");
 
+                    b.Property<Guid?>("ReleaseId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("SellerId")
                         .HasColumnType("uniqueidentifier");
 
@@ -389,6 +392,8 @@ namespace VinylExchange.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BuyerId");
+
+                    b.HasIndex("ReleaseId");
 
                     b.HasIndex("SellerId");
 
@@ -716,6 +721,10 @@ namespace VinylExchange.Data.Migrations
                         .WithMany("Purchases")
                         .HasForeignKey("BuyerId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("VinylExchange.Data.Models.Release", "Release")
+                        .WithMany("Sales")
+                        .HasForeignKey("ReleaseId");
 
                     b.HasOne("VinylExchange.Data.Models.VinylExchangeUser", "Seller")
                         .WithMany("Sales")
