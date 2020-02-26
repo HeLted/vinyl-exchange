@@ -1,0 +1,28 @@
+﻿using AutoMapper;
+using System;
+using VinylExchange.Data.Common.Enumerations;
+using VinylExchange.Data.Models;
+using VinylExchange.Services.Mapping;
+
+namespace VinylExchange.Models.ResourceModels.Sales
+{
+    public class GetAllSalesForReleaseResouceModel : IMapFrom<Sale>, IHaveCustomMappings
+    {
+        public Guid Id { get; set; }
+
+        public string SellerUsername { get; set; }
+        public decimal Price { get; set; }
+
+        public Condition VinylCondition { get; set; }
+
+        public Condition SleeveCondition { get; set; }
+
+        public string Description { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<Sale, GetAllSalesForReleaseResouceModel>()
+                .ForMember(m => m.SellerUsername, ci => ci.MapFrom(x => x.Seller.UserName));
+        }
+    }
+}

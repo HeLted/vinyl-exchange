@@ -3,14 +3,14 @@ import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-class GoToReleaseButton extends Component {
+class GoToSaleButton extends Component {
   constructor(props) {
     super(props);
   }
 
   handleToRelease = () => {
-    this.props.history.push(`/release/${this.props.data.releaseId}`, {
-      releaseId: this.props.data.releaseId
+    this.props.history.push(`/sale/${this.props.data.saleId}`, {
+      saleId: this.props.data.saleId
     });
   };
 
@@ -23,4 +23,4 @@ class GoToReleaseButton extends Component {
   }
 }
 
-export default withRouter(GoToReleaseButton);
+export default withRouter(GoToSaleButton);

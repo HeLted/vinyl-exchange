@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using VinylExchange.Data.Common.Enumerations;
 using VinylExchange.Models.InputModels.Sales;
 using VinylExchange.Services.Data.MainServices.Sales;
 using VinylExchange.Services.Logging;
 
 namespace VinylExchange.Controllers
 {
+    [Authorize]
     public class SalesController : ApiController
     {
         private readonly ISalesService salesService;
@@ -23,13 +24,22 @@ namespace VinylExchange.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
+           
             try
             {
                 var sale = await this.salesService.GetSale(id);
-
+                               
                 if (sale == null)
                 {
                     return NotFound();
+                }
+
+                var currentUserId = this.GetUserId(this.User);
+
+                if((sale.BuyerId != currentUserId && sale.SellerId != currentUserId) 
+                    && sale.Status != Status.Open)
+                {
+                    return Unauthorized();
                 }
 
                 return Ok(sale);
@@ -57,6 +67,23 @@ namespace VinylExchange.Controllers
                 return BadRequest();
             }
             
+        }
+
+        [HttpGet]
+        [Route("GetAllSalesForRelease/{id}")]
+        public async Task<IActionResult> GetAllSalesForRelease(Guid id)
+        {
+            try
+            {
+                var sales = await this.salesService.GetAllSalesForRelease(id);
+
+                return Ok(sales);
+            }
+            catch (Exception ex)
+            {
+                loggerService.LogException(ex);
+                return BadRequest();
+            }
         }
 
     }

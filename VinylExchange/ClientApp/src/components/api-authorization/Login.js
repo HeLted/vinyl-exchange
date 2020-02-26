@@ -21,21 +21,21 @@ export class Login extends Component {
         const action = this.props.action;
         switch (action) {
             case LoginActions.Login:
-                this.login(this.getReturnUrl());
+                // this.login(this.getReturnUrl());
                 break;
             case LoginActions.LoginCallback:
                 this.processLoginCallback();
                 break;
             case LoginActions.LoginFailed:
-                const params = new URLSearchParams(window.location.search);
-                const error = params.get(QueryParameterNames.Message);
-                this.setState({ message: error });
+                // const params = new URLSearchParams(window.location.search);
+                // const error = params.get(QueryParameterNames.Message);
+                // this.setState({ message: error });
                 break;
             case LoginActions.Profile:
                 this.redirectToProfile();
                 break;
             case LoginActions.Register:
-                this.redirectToRegister();
+                // this.redirectToRegister();
                 break;
             default:
                 throw new Error(`Invalid action '${action}'`);
@@ -51,9 +51,9 @@ export class Login extends Component {
         } else {
             switch (action) {
                 case LoginActions.Login:
-                    return (<div>Processing login</div>);
+                    return (<div></div>);
                 case LoginActions.LoginCallback:
-                    return (<div>Processing login callback</div>);
+                    return (<div></div>);
                 case LoginActions.Profile:
                 case LoginActions.Register:
                     return (<div></div>);
@@ -101,8 +101,10 @@ export class Login extends Component {
     }
 
     getReturnUrl(state) {
+ 
         const params = new URLSearchParams(window.location.search);
-        const fromQuery = params.get(QueryParameterNames.ReturnUrl);
+        let fromQuery = params.get(QueryParameterNames.ReturnUrl);
+        
         if (fromQuery && !fromQuery.startsWith(`${window.location.origin}/`)) {
             // This is an extra check to prevent open redirects.
             throw new Error("Invalid return url. The return url needs to have the same origin as the current page.")

@@ -39,6 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Data\VinylExchange.Data.Models\VinylExchange.Data.Models.csproj" />
     <ProjectReference Include="..\Data\VinylExchange.Data\VinylExchange.Data.csproj" />
+    <ProjectReference Include="..\Services\VinylExchange.Services.Authentication\VinylExchange.Services.Authentication.csproj" />
     <ProjectReference Include="..\Services\VinylExchange.Services.Logging\VinylExchange.Services.Logging.csproj" />
     <ProjectReference Include="..\Services\VinylExchange.Services\VinylExchange.Services.Data.csproj" />
   </ItemGroup>

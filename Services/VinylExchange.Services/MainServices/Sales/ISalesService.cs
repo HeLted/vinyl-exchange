@@ -12,5 +12,6 @@ namespace VinylExchange.Services.Data.MainServices.Sales
     {
         Task<GetSaleResourceModel> GetSale(Guid saleId);
         Task<Sale> CreateSale(CreateSaleInputModel inputModel,Guid sellerId);
+        Task<IEnumerable<GetAllSalesForReleaseResouceModel>> GetAllSalesForRelease(Guid releaseId);
     }
 }

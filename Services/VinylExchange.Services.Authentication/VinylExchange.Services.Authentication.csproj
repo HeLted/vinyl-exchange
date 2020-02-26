@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\VinylExchange.Data.Models\VinylExchange.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Models\VinylExchange.Models\VinylExchange.Models.csproj" />
+  </ItemGroup>
+
+</Project>

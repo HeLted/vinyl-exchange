@@ -12,9 +12,8 @@ namespace VinylExchange.Data.Models
         {
             this.Id = Guid.NewGuid();
             this.CreatedOn = DateTime.UtcNow;
-            this.Roles = new HashSet<IdentityUserRole<Guid>>();
-            this.Claims = new HashSet<IdentityUserClaim<Guid>>();
-            this.Logins = new HashSet<IdentityUserLogin<Guid>>();
+
+            
         }
 
         // Audit info
@@ -27,12 +26,7 @@ namespace VinylExchange.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
-        public virtual ICollection<IdentityUserRole<Guid>> Roles { get; set; }
-
-        public virtual ICollection<IdentityUserClaim<Guid>> Claims { get; set; }
-
-        public virtual ICollection<IdentityUserLogin<Guid>> Logins { get; set; }
-
+     
         public ICollection<CollectionItem> Collection { get; set; } = new HashSet<CollectionItem>();
 
         public ICollection<Sale> Sales { get; set; } = new HashSet<Sale>();

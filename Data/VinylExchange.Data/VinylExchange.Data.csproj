@@ -67,5 +67,9 @@
     <ProjectReference Include="..\VinylExchange.Data.Models\VinylExchange.Data.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Seeding\" />
+  </ItemGroup>
+
 
 </Project>

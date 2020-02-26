@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace VinylExchange.Controllers
             this.loggerService = loggerService;          
         }
 
-
+       
         [HttpGet]
         [Route("GetReleases")]
         public async Task<IActionResult> GetReleases(string searchTerm , [FromQuery(Name="styleIds")] List<int> styleIds , int releasesToSkip)

@@ -1,5 +1,6 @@
 export const Url = {
   api: "/api",
+  authentication:"/authentication",
   mediaStorage: "/file/media",
   and: "&",
   equal: "=",
@@ -15,7 +16,8 @@ export const Queries = {
   searchTerm:"searchTerm",
   releasesToSkip:"releasesToSkip",
   shopsToSkip:"shopsToSkip",
-  styleIds:"styleIds"
+  styleIds:"styleIds",
+  returnUrl:"returnUrl"
 };
 
 export const Controllers = {
@@ -51,6 +53,12 @@ export const Controllers = {
     name:"/Shops",actions:{ getShops: "/GetShops" }
   },
   sales:{
-    name:"/Sales"
+    name:"/Sales",
+    actions:{getAllSalesForRelease:"/GetAllSalesForRelease"}
+  },
+  users:{
+    name:"/Users",
+    actions:{register:"/Register",
+  login:"/Login"}
   }
 };

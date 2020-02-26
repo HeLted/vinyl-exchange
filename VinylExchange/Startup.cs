@@ -1,7 +1,9 @@
+using IdentityServer4.AspNetIdentity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +15,8 @@ using System.Reflection;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Models;
+using VinylExchange.Roles;
+using VinylExchange.Services.Authentication;
 using VinylExchange.Services.Data.HelperServices;
 using VinylExchange.Services.Data.MainServices.Sales;
 using VinylExchange.Services.Data.MainServices.Shops;
@@ -41,10 +45,11 @@ namespace VinylExchange
         public void ConfigureServices(IServiceCollection services)
         {
 
-
             services.AddDbContext<VinylExchangeDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+
+            });
 
             services.AddDefaultIdentity<VinylExchangeUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<VinylExchangeRole>()
@@ -55,6 +60,8 @@ namespace VinylExchange
 
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
+                options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedEmail = false;
 
             });
 
@@ -62,12 +69,17 @@ namespace VinylExchange
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
+
+
             services.AddIdentityServer()
-                .AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>();
+                .AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>()
+                .AddProfileService<ProfileService>();
+
+
 
             services.AddControllers().AddNewtonsoftJson();
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+            //services.AddControllersWithViews();
+            //services.AddRazorPages();
             services.AddDistributedMemoryCache();
 
             // In production, the React files will be served from this directory
@@ -92,12 +104,29 @@ namespace VinylExchange
             services.AddTransient<IMemoryCacheFileSevice, MemoryCacheFileService>();
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<ILoggerService, LoggerService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<RoleSeeder>();
+            services.AddTransient<UserSeeder>();
+
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetRequiredService<VinylExchangeDbContext>();
+                serviceScope.ServiceProvider.GetRequiredService<UserManager<VinylExchangeUser>>();
+                serviceScope.ServiceProvider.GetRequiredService<RoleManager<VinylExchangeRole>>();
+                serviceScope.ServiceProvider.GetRequiredService<UserSeeder>().SeedAdmin().GetAwaiter().GetResult();
+                serviceScope.ServiceProvider.GetRequiredService<RoleSeeder>().SeedRoles().GetAwaiter().GetResult();
+
+            }
+
+
+
             AutoMapperConfig.RegisterMappings(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly);
 
             if (env.IsDevelopment())
@@ -135,7 +164,7 @@ namespace VinylExchange
                 endpoints.MapControllerRoute("Default",
                 "api/{controller}/{id}",
                 new { id = System.Web.Http.RouteParameter.Optional });
-                endpoints.MapRazorPages();
+                //endpoints.MapRazorPages();
             });
 
             app.UseSpa(spa =>

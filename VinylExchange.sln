@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Models", "Mod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Logging", "Services\VinylExchange.Services.Logging\VinylExchange.Services.Logging.csproj", "{21EA526F-FE0B-42C0-A19B-04E671F21B6D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Authentication", "Services\VinylExchange.Services.Authentication\VinylExchange.Services.Authentication.csproj", "{599DE079-92B2-4A21-89BB-5784D4DEABF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{E7F4D057-D142-4019-800E-B49B474A5963} = {E9897BC8-8857-4187-B534-484854FD4A27}
 		{12FAB19D-E098-4573-A536-69C6E6D62B35} = {5458B1B8-B097-42B1-91AD-F79F451EAFAC}
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
+		{599DE079-92B2-4A21-89BB-5784D4DEABF2} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D615B1D1-B2B9-425C-B0C3-87C0763326B3}

@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VinylExchange.Data;
+using VinylExchange.Data.Common.Enumerations;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Sales;
 using VinylExchange.Models.ResourceModels.Sales;
@@ -41,6 +43,13 @@ namespace VinylExchange.Services.Data.MainServices.Sales
             return trackedSale.Entity;
 
         }
+
+        public async Task<IEnumerable<GetAllSalesForReleaseResouceModel>> GetAllSalesForRelease(Guid releaseId)
+            => await this.dbContext.Sales
+            .Where(s => s.ReleaseId == releaseId)
+            .Where(s=> s.Status == Status.Open)
+            .To<GetAllSalesForReleaseResouceModel>()
+            .ToListAsync();
 
     }
 }
