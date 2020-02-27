@@ -63,3 +63,7 @@ h5{
     border-right:1em solid transparent;
     text-overflow: ellipsis;
 }
+
+.spinner-border{
+  border-radius: 50% !important;
+}

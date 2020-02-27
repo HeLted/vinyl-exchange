@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\VinylExchange.Data.Models\VinylExchange.Data.Models.csproj" />
     <ProjectReference Include="..\..\Models\VinylExchange.Models\VinylExchange.Models.csproj" />
+    <ProjectReference Include="..\VinylExchange.Services.EmaiSender\VinylExchange.Services.EmailSender.csproj" />
   </ItemGroup>
 
 </Project>

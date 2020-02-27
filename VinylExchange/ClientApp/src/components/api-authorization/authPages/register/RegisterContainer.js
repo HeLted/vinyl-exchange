@@ -16,7 +16,8 @@ class RegisterContainer extends Component {
       usernameInput: "",
       emailInput: "",
       passwordInput: "",
-      confirmPasswordInput: ""
+      confirmPasswordInput: "",
+      isLoading:false
     };
   }
 
@@ -38,7 +39,7 @@ class RegisterContainer extends Component {
       confirmPassword: this.state.confirmPasswordInput
     };
 
-    
+    this.setState({isLoading:true})
     axios
       .post(
         Url.authentication +
@@ -47,6 +48,7 @@ class RegisterContainer extends Component {
         submitFormObj
       )
       .then(response => {
+        this.setState({isLoading:false})
         if(response.status === 200){
           this.context.handleAppNotification("Succesfully registered", 4);
           this.props.history.push("/Authentication/Login");
@@ -54,6 +56,7 @@ class RegisterContainer extends Component {
         
       })
       .catch(error => {
+        this.setState({isLoading:false})
         this.context.handleServerNotification(
           error.response,
           "There was an error in registering account!"
@@ -68,7 +71,8 @@ class RegisterContainer extends Component {
           usernameInput: this.state.usernameInput,
           emailInput: this.state.emailInput,
           passwordInput: this.state.passwordInput,
-          confirmPasswordInput: this.state.confirmPasswordInput
+          confirmPasswordInput: this.state.confirmPasswordInput,
+          isLoading: this.state.isLoading
         }}
         functions={{
           handleOnChange: this.handleOnChange,

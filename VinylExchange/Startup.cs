@@ -1,9 +1,8 @@
-using IdentityServer4.AspNetIdentity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +19,7 @@ using VinylExchange.Services.Authentication;
 using VinylExchange.Services.Data.HelperServices;
 using VinylExchange.Services.Data.MainServices.Sales;
 using VinylExchange.Services.Data.MainServices.Shops;
+using VinylExchange.Services.EmaiSender;
 using VinylExchange.Services.Files;
 using VinylExchange.Services.HelperServices;
 using VinylExchange.Services.Logging;
@@ -62,6 +62,7 @@ namespace VinylExchange
                 options.Password.RequireNonAlphanumeric = false;
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
+                options.User.RequireUniqueEmail = true;
 
             });
 
@@ -105,6 +106,7 @@ namespace VinylExchange
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<ILoggerService, LoggerService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<RoleSeeder>();
             services.AddTransient<UserSeeder>();
 

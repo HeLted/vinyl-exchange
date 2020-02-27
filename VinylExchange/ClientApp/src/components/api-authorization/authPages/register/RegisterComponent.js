@@ -3,12 +3,15 @@ import Label from "./../../../common/inputComponents/Label";
 import TextInput from "./../../../common/inputComponents/TextInput";
 import EmailInput from "./../../../common/inputComponents/EmailInput";
 import PasswordInput from "./../../../common/inputComponents/PasswordInput";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {  faSync } from "@fortawesome/free-solid-svg-icons";
+import "./../authForm.css"
 
 function RegisterComponent(props) {
   return (
     <div className="container-fluid">
       <div className="row justify-content-center">
-        <div className="col-6">
+        <div className="auth-form col-4 border">
           <form onSubmit={props.functions.handleOnSubmit}>
             <div class="form-group">
               <Label for="usernameInput" value="Username" />
@@ -46,10 +49,17 @@ function RegisterComponent(props) {
                 onChange={props.functions.handleOnChange}
               />
             </div>
-          
-            <button type="submit" class="btn btn-primary">
-              Submit
-            </button>
+            <div className="text-center">
+              {props.data.isLoading ? (
+                <button class="btn btn-primary"> 
+                  <FontAwesomeIcon icon={faSync} spin />
+                </button>
+              ) : (
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+              )}
+            </div>
           </form>
         </div>
       </div>

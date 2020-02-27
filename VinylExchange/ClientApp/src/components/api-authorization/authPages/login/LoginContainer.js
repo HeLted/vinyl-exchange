@@ -16,14 +16,28 @@ class LoginContainer extends Component {
         this.state = {
           usernameInput: "",
           passwordInput: "",
+          rememberMeInput:false,
+          isLoading:false
         };
       }
     
       static contextType = NotificationContext;
     
       handleOnChange = event => {
-        const { value, name } = event.target;
-        this.setState({ [name]: value });
+
+        console.log("hi");
+        if(event.target.type ==="checkbox"){
+          const { value, name } = event.target;
+          this.setState(prevstate =>{
+            
+            return{ rememberMeInput : prevstate.rememberMeInput ? false: true }
+          
+          });
+        }else{
+          const { value, name } = event.target;
+          this.setState({ [name]: value });
+        }
+        
       };
     
       handleOnSubmit = event => {
@@ -33,9 +47,10 @@ class LoginContainer extends Component {
         const submitFormObj = {
           username: this.state.usernameInput,
           password: this.state.passwordInput,
+          rememberMe:this.state.rememberMeInput
         };
     
-        
+        this.setState({isLoading:true})
         axios
           .post(
             Url.authentication +
@@ -52,6 +67,7 @@ class LoginContainer extends Component {
                 const state = { returnUrl:redirectUrl };
                 await authService.signIn(state);
                 this.context.handleAppNotification("Succesfully logged in", 4);
+                this.setState({isLoading:false})
                 if(redirectUrl === ""){
                     redirectUrl = "/"
                       this.props.history.push(redirectUrl)
@@ -63,8 +79,9 @@ class LoginContainer extends Component {
             
           })
           .catch(error => {
+            this.setState({isLoading:false})
             this.context.handleServerNotification(
-              error.response,
+              error.response, error.response.status === 401 ?"Invalid credentials!" :
               "There was an error in logging you in!"
             );
           });
@@ -76,6 +93,8 @@ class LoginContainer extends Component {
             data={{
               usernameInput: this.state.usernameInput,
               passwordInput: this.state.passwordInput,
+              rememberMeInput: this.state.rememberMeInput,
+              isLoading : this.state.isLoading
             }}
             functions={{
               handleOnChange: this.handleOnChange,

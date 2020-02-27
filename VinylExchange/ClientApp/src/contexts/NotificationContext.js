@@ -10,21 +10,25 @@ export default class NotificationContextProvider extends React.Component {
 
   handleServerNotification = (notificationObj, customMessage) => {
     console.log(notificationObj);
+    let severity = 1;
 
-    if (notificationObj.status === 401) {
-      this.setState({
-        messages: [{ messageText: "Error 401 Unauthorized!", id: uuidv4() }],
-        severity: 1
-      });
-    } else if (notificationObj.status >= 400) {
+   if (notificationObj.status >= 400) {
       const errorMessages = [];
 
-      if (notificationObj.data.errors != undefined) {
+      if (typeof notificationObj.data ==="object" && notificationObj.data.errors != undefined) {
         const errors = notificationObj.data.errors;
 
         Object.keys(errors).forEach(function(field) {
           errorMessages.push({
             messageText: `${field} : ${errors[field].join()}`,
+            id: uuidv4()
+          });
+        });
+      }else if ((Array.isArray(notificationObj.data))) {
+        severity = 2;
+        notificationObj.data.forEach(warn=>{
+          errorMessages.push({
+            messageText: warn.description,
             id: uuidv4()
           });
         });
@@ -45,7 +49,7 @@ export default class NotificationContextProvider extends React.Component {
 
       this.setState({
         messages: errorMessages,
-        severity: 1
+        severity
       });
     } else {
       const successMessages = [];

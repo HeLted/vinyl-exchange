@@ -1,6 +1,6 @@
 export const Url = {
   api: "/api",
-  authentication:"/authentication",
+  authentication: "/authentication",
   mediaStorage: "/file/media",
   and: "&",
   equal: "=",
@@ -12,12 +12,13 @@ export const Queries = {
   releaseId: "releaseId",
   userId: "userId",
   formSessionId: "formSessionId",
-  genreId:"genreId",
-  searchTerm:"searchTerm",
-  releasesToSkip:"releasesToSkip",
-  shopsToSkip:"shopsToSkip",
-  styleIds:"styleIds",
-  returnUrl:"returnUrl"
+  genreId: "genreId",
+  searchTerm: "searchTerm",
+  releasesToSkip: "releasesToSkip",
+  shopsToSkip: "shopsToSkip",
+  styleIds: "styleIds",
+  returnUrl: "returnUrl",
+  cofirmToken: "cofirmToken"
 };
 
 export const Controllers = {
@@ -32,7 +33,7 @@ export const Controllers = {
   },
   files: {
     name: "/Files",
-    actions: {  deleteAll: "/DeleteAll" }
+    actions: { deleteAll: "/DeleteAll" }
   },
   releaseImages: {
     name: "/ReleaseImages",
@@ -47,18 +48,21 @@ export const Controllers = {
   },
   collections: {
     name: "/Collections",
-    actions: { getUserCollection: "/GetUserCollection" , doesUserCollectionContainRelease:"/DoesUserCollectionContainRelease" }
+    actions: {
+      getUserCollection: "/GetUserCollection",
+      doesUserCollectionContainRelease: "/DoesUserCollectionContainRelease"
+    }
   },
-  shops:{
-    name:"/Shops",actions:{ getShops: "/GetShops" }
+  shops: {
+    name: "/Shops",
+    actions: { getShops: "/GetShops" }
   },
-  sales:{
-    name:"/Sales",
-    actions:{getAllSalesForRelease:"/GetAllSalesForRelease"}
+  sales: {
+    name: "/Sales",
+    actions: { getAllSalesForRelease: "/GetAllSalesForRelease" }
   },
-  users:{
-    name:"/Users",
-    actions:{register:"/Register",
-  login:"/Login"}
+  users: {
+    name: "/Users",
+    actions: { register: "/Register", login: "/Login" ,confirmEmail:"/ConfirmEmail"}
   }
 };

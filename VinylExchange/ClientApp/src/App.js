@@ -12,8 +12,9 @@ import SaleContainer from "./components/sales/sale/SaleContainer"
 import AuthorizeRoute from "./components/api-authorization/AuthorizeRoute";
 import ApiAuthorizationRoutes from "./components/api-authorization/ApiAuthorizationRoutes";
 import { ApplicationPaths } from "./components/api-authorization/ApiAuthorizationConstants";
-import RegisterContainer from "./components/api-authorization/authPages/register/RegisterContainer"
-import LoginContainer from "./components/api-authorization/authPages/login/LoginContainer"
+import RegisterContainer from "./components/api-authorization/authPages/register/RegisterContainer";
+import LoginContainer from "./components/api-authorization/authPages/login/LoginContainer";
+import EmailConfirmContainer from "./components/api-authorization/authPages/register/EmailConfirmContainer";
 
 
 import "./custom.css";
@@ -30,6 +31,7 @@ export default class App extends Component {
         <Route exact path="/Shops" component={ShopsContainer} />
         <Route exact path="/Authentication/Register" component={RegisterContainer}/>
         <Route exact path="/Authentication/Login" component={LoginContainer}/>
+        <Route exact path ="/Authentication/EmailConfirm" component={EmailConfirmContainer}/>
         <AuthorizeRoute path="/Releases/AddRelease" component={AddReleaseContainer}/>
         <AuthorizeRoute  path="/Shops/AddShop" component={AddShopContainer}/>
         <AuthorizeRoute  path="/Sale" component={SaleContainer}/>

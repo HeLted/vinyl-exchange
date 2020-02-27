@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 function SaleStatusBar(props) {
-  const status = props.status;
+  const status = props.data.status;
   const statusColorClass = "";
 
   if (status === 1) {

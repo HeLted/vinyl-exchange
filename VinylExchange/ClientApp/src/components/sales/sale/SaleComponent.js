@@ -6,7 +6,7 @@ function SaleComponent(props) {
   return (
     <div className="row">
       <div className="col-4">
-        <SaleStatusBar data={{status:props.status}}/>
+        <SaleStatusBar data={{status:props.data.status}}/>
         <br />
         <div className="chat-container border">
           <ul>

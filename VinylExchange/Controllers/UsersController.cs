@@ -38,8 +38,8 @@ namespace VinylExchange.Controllers
                     return Ok();
                 }
                 else
-                {
-                    return BadRequest();
+                {                  
+                    return BadRequest(registerUserIdentityResult.Errors);
                 }
             }
             catch (Exception ex)
@@ -55,7 +55,6 @@ namespace VinylExchange.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login(LoginUserInputModel inputModel)
         {
-
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             try
@@ -68,7 +67,33 @@ namespace VinylExchange.Controllers
                 }
                 else
                 {
-                    return BadRequest();
+                    return Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                loggerService.LogException(ex);
+                return BadRequest();
+            }
+
+        }
+
+        [HttpPost]
+        [Route("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailInputModel inputModel)
+        {
+      
+            try
+            {
+                var confirmEmailIdentityResult = await this.userService.ConfirmUserEmail(inputModel);
+
+                if (confirmEmailIdentityResult.Succeeded)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(confirmEmailIdentityResult.Errors);
                 }
             }
             catch (Exception ex)
