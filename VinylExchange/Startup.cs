@@ -1,14 +1,19 @@
+using IdentityServer4.AspNetIdentity;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.IO;
 using System.Reflection;
 using VinylExchange.Data;
@@ -78,7 +83,17 @@ namespace VinylExchange
 
 
 
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            }).AddNewtonsoftJson();
+
+            services.AddAntiforgery(options =>
+            {                               
+                options.HeaderName = "RequestVerificationToken";
+                options.SuppressXFrameOptionsHeader = false;
+            });
+
             //services.AddControllersWithViews();
             //services.AddRazorPages();
             services.AddDistributedMemoryCache();
@@ -114,7 +129,7 @@ namespace VinylExchange
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IAntiforgery antiforgery)
         {
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -168,6 +183,26 @@ namespace VinylExchange
                 new { id = System.Web.Http.RouteParameter.Optional });
                 //endpoints.MapRazorPages();
             });
+
+
+            app.Use(next => context =>
+            {
+                string path = context.Request.Path.Value;
+
+                if (
+                    string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(path, "/index.html", StringComparison.OrdinalIgnoreCase))
+                {
+                        // The request token can be sent as a JavaScript-readable cookie, 
+                        // and Angular uses it by default.
+                        var tokens = antiforgery.GetAndStoreTokens(context);
+                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+                        new CookieOptions() { HttpOnly = false });
+                }
+
+                return next(context);
+            });
+
 
             app.UseSpa(spa =>
             {

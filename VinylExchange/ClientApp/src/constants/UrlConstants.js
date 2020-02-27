@@ -21,6 +21,8 @@ export const Queries = {
   cofirmToken: "cofirmToken"
 };
 
+export const Headers = { requestVerificationToken: "RequestVerificationToken" };
+
 export const Controllers = {
   releases: {
     name: "/Releases",
@@ -63,6 +65,10 @@ export const Controllers = {
   },
   users: {
     name: "/Users",
-    actions: { register: "/Register", login: "/Login" ,confirmEmail:"/ConfirmEmail"}
+    actions: {
+      register: "/Register",
+      login: "/Login",
+      confirmEmail: "/ConfirmEmail"
+    }
   }
 };

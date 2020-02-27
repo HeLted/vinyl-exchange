@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
 import "./../authForm.css";
 
+
 function LoginComponent(props) {
   return (
     <div className="container-fluid">

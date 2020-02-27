@@ -9,6 +9,7 @@ import axios from "axios";
 import {NotificationContext} from "./../../../../contexts/NotificationContext"
 import authService from "./../../../api-authorization/AuthorizeService"
 import urlPathSeparator from "./../../../../functions/urlPathSeparator"
+import getAntiForgeryAxiosConfig from "./../../../../functions/getAntiForgeryAxiosConfig"
 
 class LoginContainer extends Component {
     constructor() {
@@ -56,7 +57,8 @@ class LoginContainer extends Component {
             Url.authentication +
               Controllers.users.name +
               Controllers.users.actions.login,
-            submitFormObj
+            submitFormObj,
+            getAntiForgeryAxiosConfig()
           )
           .then(async(response) => {
             if(response.status === 200){
