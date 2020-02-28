@@ -1,10 +1,10 @@
 function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
+  var ca = decodedCookie.split(";");
+  for (var i = 0; i < ca.length; i++) {
     var c = ca[i];
-    while (c.charAt(0) == ' ') {
+    while (c.charAt(0) == " ") {
       c = c.substring(1);
     }
     if (c.indexOf(name) == 0) {
@@ -13,7 +13,6 @@ function getCookie(cname) {
   }
   return "";
 }
-
 
 (() => {
   Dropzone.autoDiscover = false;
@@ -44,8 +43,8 @@ function getCookie(cname) {
     createImageThumbnails: true,
     maxFiles: 3,
     headers: {
-      'RequestVerificationToken':  getCookie("XSRF-TOKEN")
-      }  ,
+      RequestVerificationToken: getCookie("XSRF-TOKEN")
+    },
     maxfilesexceeded: function(file) {
       this.removeAllFiles();
       this.addFile(file);
@@ -88,7 +87,7 @@ function getCookie(cname) {
             fetch(dropzoneDeletePath + file.serverGuid + formSessionIdUrl, {
               method: "DELETE",
               headers: {
-                "RequestVerificationToken":getCookie("XSRF-TOKEN")
+                RequestVerificationToken: getCookie("XSRF-TOKEN")
               }
             })
               .then(response => response.json())

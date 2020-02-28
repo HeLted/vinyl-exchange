@@ -52,9 +52,9 @@ function AddSalePopupBody(props) {
               </div>
               <div className="form-group">
               <Label for="priceInput" value="Price" />
-              <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">€</div>
+              <div className="input-group mb-2">
+                <div className="input-group-prepend">
+                  <div className="input-group-text">€</div>
                 </div>
                 <MoneyInput
                   id="priceInput"

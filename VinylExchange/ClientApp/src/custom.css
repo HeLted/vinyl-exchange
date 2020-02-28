@@ -67,3 +67,9 @@ h5{
 .spinner-border{
   border-radius: 50% !important;
 }
+
+.property-text{
+  margin: 30px;
+  font-family: 'Oxanium';
+  font-weight: bold;
+}

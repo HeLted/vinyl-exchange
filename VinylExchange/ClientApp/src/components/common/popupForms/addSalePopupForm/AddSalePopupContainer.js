@@ -68,8 +68,6 @@ class AddSalePopupContainer extends Component {
   handleOnSubmit = event => {
     event.preventDefault();
 
-    console.log(this.state.releaseId);
-
     const submitFormObj = {
       releaseId: this.state.releaseId,
       description: this.state.descriptionInput,

@@ -34,6 +34,7 @@ namespace VinylExchange.Controllers
                     return NotFound();
                 }
 
+                
                 var currentUserId = this.GetUserId(this.User);
 
                 if((sale.BuyerId != currentUserId && sale.SellerId != currentUserId) 

@@ -78,14 +78,15 @@ namespace VinylExchange
 
 
             services.AddIdentityServer()
-                .AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>()
-                .AddProfileService<ProfileService>();
+                .AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>();
+                //.AddProfileService<ProfileService>();
 
 
 
             services.AddControllers(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                //options.Filters.Add(typeof(AntiXssAttribute));
             }).AddNewtonsoftJson();
 
             services.AddAntiforgery(options =>

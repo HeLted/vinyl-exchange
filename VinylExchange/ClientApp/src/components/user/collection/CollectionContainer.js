@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import CollectionComponent from "./CollectionComponent";
-import authService from "./../../api-authorization/AuthorizeService";
 import axios from "axios";
-import { Url, Controllers, Queries } from "./../../../constants/UrlConstants";
+import { Url, Controllers } from "./../../../constants/UrlConstants";
 import PulseLoader from "react-spinners/PulseLoader";
 import { NotificationContext } from "./../../../contexts/NotificationContext";
+import getAntiForgeryAxiosConfig from "./../../../functions/getAntiForgeryAxiosConfig";
 
 class CollectionContainer extends Component {
   constructor() {
@@ -44,13 +44,15 @@ class CollectionContainer extends Component {
 
   handleRemoveFromCollection = collectionItemId => {
     axios.delete(
-      Url.api + Controllers.collections.name + Url.slash + collectionItemId
-    ) .then(response => {
+      Url.api + Controllers.collections.name + Url.slash + collectionItemId,
+      getAntiForgeryAxiosConfig()
+
+    ).then(response => {
       this.context.handleAppNotification("Sucessfully removed release from collection",4)
       this.getUserCollection();
     })
     .catch(error => {
-      this.context.handleServerNotification(error.response);
+      this.context.handleServerNotification(error.response,"Error while trying to delete item from collection!");
     });
   };
 

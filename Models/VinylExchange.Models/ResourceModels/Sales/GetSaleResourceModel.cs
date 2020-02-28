@@ -25,11 +25,17 @@ namespace VinylExchange.Models.ResourceModels.Sales
 
         public Status Status { get; set; }
 
+        public string StatusText { get; set; }
+
         public decimal Price { get; set; }
 
         public Condition VinylCondition { get; set; }
 
+        public string VinylConditionText { get; set; }
+
         public Condition SleeveCondition { get; set; }
+
+        public string SleeveConditionText { get; set; }
 
         public string Description { get; set; }
 
@@ -37,7 +43,10 @@ namespace VinylExchange.Models.ResourceModels.Sales
         {
             configuration.CreateMap<Sale, GetSaleResourceModel>()
                .ForMember(m => m.SellerUsername, ci => ci.MapFrom(x => x.Seller.UserName))
-               .ForMember(m => m.BuyerUsername, ci => ci.MapFrom(x => x.Buyer.UserName));
+               .ForMember(m => m.BuyerUsername, ci => ci.MapFrom(x => x.Buyer.UserName))
+               .ForMember(m => m.StatusText, ci => ci.MapFrom(x => x.Status.ToString()))
+               .ForMember(m => m.VinylConditionText, ci => ci.MapFrom(x => x.VinylCondition.ToString()))
+               .ForMember(m => m.SleeveConditionText, ci => ci.MapFrom(x => x.SleeveCondition.ToString()));
         }
     }
 }

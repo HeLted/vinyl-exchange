@@ -25,6 +25,7 @@ namespace VinylExchange.Data
         public DbSet<CollectionItem> Collections { get; set; }
         public DbSet<Shop> Shops { get; set; }
         public DbSet<Sale> Sales { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -97,6 +98,11 @@ namespace VinylExchange.Data
                 .HasForeignKey(s => s.ReleaseId);
 
             });
+
+            modelBuilder.Entity<Address>()
+                .HasOne(a => a.User)
+                .WithMany(u => u.Addresses)
+                .HasForeignKey(a => a.UserId);
 
         }
 

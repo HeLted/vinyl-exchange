@@ -32,5 +32,7 @@ namespace VinylExchange.Data.Models
         public ICollection<Sale> Sales { get; set; } = new HashSet<Sale>();
 
         public ICollection<Sale> Purchases { get; set; } = new HashSet<Sale>();
+
+        public ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
     }
 }
