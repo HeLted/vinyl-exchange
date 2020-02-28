@@ -7,6 +7,7 @@ import {
 } from "./../../../../constants/UrlConstants";
 import axios from "axios";
 import {NotificationContext} from "./../../../../contexts/NotificationContext"
+import getAntiForgeryAxiosConfig  from "./../../../../functions/getAntiForgeryAxiosConfig"
 
 
 class RegisterContainer extends Component {
@@ -45,7 +46,8 @@ class RegisterContainer extends Component {
         Url.authentication +
           Controllers.users.name +
           Controllers.users.actions.register,
-        submitFormObj
+        submitFormObj,
+        getAntiForgeryAxiosConfig()
       )
       .then(response => {
         this.setState({isLoading:false})

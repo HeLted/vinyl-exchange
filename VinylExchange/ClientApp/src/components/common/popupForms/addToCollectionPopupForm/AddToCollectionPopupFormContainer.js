@@ -7,6 +7,7 @@ import {
 } from "./../../../../constants/UrlConstants";
 import { NotificationContext } from "./../../../../contexts/NotificationContext";
 import axios from "axios";
+import getAntiForgeryAxiosConfig  from "./../../../../functions/getAntiForgeryAxiosConfig"
 
 class AddtoColletionPopupFormContainer extends Component {
   constructor() {
@@ -69,7 +70,8 @@ class AddtoColletionPopupFormContainer extends Component {
           Queries.releaseId +
           Url.equal +
           this.state.releaseId,
-        submitFormObj
+        submitFormObj,
+        getAntiForgeryAxiosConfig()
       )
       .then(response => {
         this.context.handleAppNotification(

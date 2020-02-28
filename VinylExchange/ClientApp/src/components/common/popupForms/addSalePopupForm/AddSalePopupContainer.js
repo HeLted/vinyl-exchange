@@ -7,6 +7,7 @@ import {
 } from "./../../../../constants/UrlConstants";
 import { NotificationContext } from "./../../../../contexts/NotificationContext";
 import axios from "axios";
+import getAntiForgeryAxiosConfig from "./../../../../functions/getAntiForgeryAxiosConfig";
 
 class AddSalePopupContainer extends Component {
   constructor() {
@@ -67,10 +68,10 @@ class AddSalePopupContainer extends Component {
   handleOnSubmit = event => {
     event.preventDefault();
 
-    console.log(this.state.releaseId)
+    console.log(this.state.releaseId);
 
     const submitFormObj = {
-      releaseId:this.state.releaseId,
+      releaseId: this.state.releaseId,
       description: this.state.descriptionInput,
       vinylGrade: this.state.vinylGradeInput,
       sleeveGrade: this.state.sleeveGradeInput,
@@ -78,7 +79,11 @@ class AddSalePopupContainer extends Component {
     };
 
     axios
-      .post(Url.api + Controllers.sales.name + Url.slash, submitFormObj)
+      .post(
+        Url.api + Controllers.sales.name + Url.slash,
+        submitFormObj,
+        getAntiForgeryAxiosConfig()
+      )
       .then(response => {
         this.context.handleAppNotification("Sucessfully created sale", 4);
       })

@@ -7,6 +7,7 @@ import {
 } from "./../../../../constants/UrlConstants";
 import axios from "axios";
 import { NotificationContext } from "./../../../../contexts/NotificationContext";
+import  getAntiForgeryAxiosConfig from "./../../../../functions/getAntiForgeryAxiosConfig";
 
 class EmailConfirmContainer extends Component {
   constructor() {
@@ -52,7 +53,8 @@ class EmailConfirmContainer extends Component {
         Url.authentication +
           Controllers.users.name +
           Controllers.users.actions.confirmEmail,
-        submitFormObj
+        submitFormObj,
+        getAntiForgeryAxiosConfig()
       )
       .then(response => {
         this.setState({ isLoading: false });

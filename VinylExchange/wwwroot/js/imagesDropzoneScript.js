@@ -1,3 +1,20 @@
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+
 (() => {
   Dropzone.autoDiscover = false;
 
@@ -26,6 +43,9 @@
     uploadMultiple: false,
     createImageThumbnails: true,
     maxFiles: 3,
+    headers: {
+      'RequestVerificationToken':  getCookie("XSRF-TOKEN")
+      }  ,
     maxfilesexceeded: function(file) {
       this.removeAllFiles();
       this.addFile(file);
@@ -66,7 +86,10 @@
 
           if (file.status === "success") {
             fetch(dropzoneDeletePath + file.serverGuid + formSessionIdUrl, {
-              method: "DELETE"
+              method: "DELETE",
+              headers: {
+                "RequestVerificationToken":getCookie("XSRF-TOKEN")
+              }
             })
               .then(response => response.json())
               .then(data => console.log(`Removed file: ${data.fileName}`));

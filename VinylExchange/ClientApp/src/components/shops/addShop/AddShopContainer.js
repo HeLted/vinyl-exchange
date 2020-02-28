@@ -4,6 +4,7 @@ import uuidv4 from "../../../functions/guidGenerator";
 import { Url, Controllers, Queries } from "../../../constants/UrlConstants";
 import axios from "axios";
 import { NotificationContext } from "./../../../contexts/NotificationContext";
+import  getAntiForgeryAxiosConfig from "./../../../functions/getAntiForgeryAxiosConfig"
 
 class AddShopContainer extends Component {
   constructor() {
@@ -50,7 +51,8 @@ class AddShopContainer extends Component {
           Queries.formSessionId +
           Url.equal +
           this.state.formSessionId,
-        submitFormObj
+        submitFormObj,
+        getAntiForgeryAxiosConfig()
       )
       .then(response => {
         self.context.handleAppNotification("Succesfully created shop", 4);

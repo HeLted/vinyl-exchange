@@ -26,7 +26,6 @@ class LoginContainer extends Component {
     
       handleOnChange = event => {
 
-        console.log("hi");
         if(event.target.type ==="checkbox"){
           const { value, name } = event.target;
           this.setState(prevstate =>{
