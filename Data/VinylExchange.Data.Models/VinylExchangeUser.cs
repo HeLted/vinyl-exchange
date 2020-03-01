@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using VinylExchange.Common.Constants;
 using VinylExchange.Data.Common.Models;
 
 namespace VinylExchange.Data.Models
@@ -12,9 +14,13 @@ namespace VinylExchange.Data.Models
         {
             this.Id = Guid.NewGuid();
             this.CreatedOn = DateTime.UtcNow;
-
-            
+            this.Avatar = ImageConstants.DefaultUserAvatarImage;
+                        
         }
+
+        [Required]
+        [MaxLength(10000000)]
+        public byte[] Avatar { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }

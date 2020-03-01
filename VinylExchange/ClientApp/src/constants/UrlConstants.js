@@ -68,7 +68,16 @@ export const Controllers = {
     actions: {
       register: "/Register",
       login: "/Login",
-      confirmEmail: "/ConfirmEmail"
+      confirmEmail: "/ConfirmEmail",
+      changeUserAvatar:"/ChangeUserAvatar",
+      getCurrentUserAvatar:"/GetCurrentUserAvatar",
+      getUserAvatar:"/GetUserAvatar"
+    }
+  },
+  addresses:{
+    name:"/Addresses",
+    actions:{
+      getUserAddresses:"/GetUserAddresses"
     }
   }
 };

@@ -22,6 +22,7 @@ using VinylExchange.Models;
 using VinylExchange.Roles;
 using VinylExchange.Services.Authentication;
 using VinylExchange.Services.Data.HelperServices;
+using VinylExchange.Services.Data.MainServices.Addresses;
 using VinylExchange.Services.Data.MainServices.Sales;
 using VinylExchange.Services.Data.MainServices.Shops;
 using VinylExchange.Services.EmaiSender;
@@ -115,13 +116,15 @@ namespace VinylExchange
             services.AddTransient<IShopsService, ShopsService>();
             services.AddTransient<IShopFilesService, ShopFilesService>();
             services.AddTransient<ISalesService, SalesService>();
+            services.AddTransient<IAddressesService, AddressesService>();
+            services.AddTransient<IUsersAvatarService, UsersAvatarService>();
 
             //Tool Services
             services.AddTransient<MemoryCacheManager>();
             services.AddTransient<IMemoryCacheFileSevice, MemoryCacheFileService>();
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<ILoggerService, LoggerService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<RoleSeeder>();
             services.AddTransient<UserSeeder>();

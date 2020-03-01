@@ -53,7 +53,10 @@ namespace VinylExchange.Services.MainServices.Collections
 
         public async Task<IEnumerable<GetUserCollectionResourceModel>> GetUserCollection(Guid userId)
         {
-            var collectionItems = await this.dbContext.Collections.Where(ci => ci.UserId == userId).To<GetUserCollectionResourceModel>().ToListAsync();
+            var collectionItems = await this.dbContext.Collections
+                .Where(ci => ci.UserId == userId)
+                .To<GetUserCollectionResourceModel>()
+                .ToListAsync();
 
             collectionItems.ForEach(ci =>
             {
@@ -74,12 +77,17 @@ namespace VinylExchange.Services.MainServices.Collections
         public async Task<RemoveCollectionItemResourceModel> RemoveCollectionItem(Guid collectionItemId)
         {
             var collectionItem = await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItemId);
+           
+            if(collectionItem == null)
+            {
+                throw new NullReferenceException("Collection item with this Id doesn't exist");
+            }
+
             this.dbContext.Collections.Remove(collectionItem);
             await this.dbContext.SaveChangesAsync();
-            return new RemoveCollectionItemResourceModel()
-            {
-                Id = collectionItem.Id,
-            };
+            var resourceModel = collectionItem.To<RemoveCollectionItemResourceModel>();
+
+            return resourceModel;
         }
 
         public async Task<bool> DoesUserCollectionContainRelease(Guid releaseId, Guid userId)

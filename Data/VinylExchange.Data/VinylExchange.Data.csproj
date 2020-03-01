@@ -49,6 +49,8 @@
     <Compile Remove="Migrations\20200223184941_AddedSales.Designer.cs" />
     <Compile Remove="Migrations\20200225080826_AddedSalesAndShops.cs" />
     <Compile Remove="Migrations\20200225080826_AddedSalesAndShops.Designer.cs" />
+    <Compile Remove="Migrations\20200229214350_AddedUserAvatars.cs" />
+    <Compile Remove="Migrations\20200229214350_AddedUserAvatars.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,10 +67,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VinylExchange.Data.Models\VinylExchange.Data.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Seeding\" />
   </ItemGroup>
 
 

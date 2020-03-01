@@ -98,12 +98,7 @@ namespace VinylExchange.Controllers
         {
             try
             {
-                var userCollection = await this.collectionsService.GetUserCollection(this.GetUserId(this.User));
-
-                if (userCollection == null)
-                {
-                    return NotFound();
-                }
+                var userCollection = await this.collectionsService.GetUserCollection(this.GetUserId(this.User));                            
 
                 return Ok(userCollection);
             }

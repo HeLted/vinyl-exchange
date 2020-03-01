@@ -9,7 +9,7 @@ using VinylExchange.Models.InputModels.Users;
 
 namespace VinylExchange.Services.Authentication
 {
-    public interface IUserService
+    public interface IUsersService
     {
         Task<IdentityResult> RegisterUser(RegisterUserInputModel inputModel);
 

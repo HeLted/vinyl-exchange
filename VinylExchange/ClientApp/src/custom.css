@@ -4,7 +4,7 @@ a {
 }
 
 code {
-  color: #E01A76;
+  color: #e01a76;
 }
 
 .btn-primary {
@@ -21,14 +21,13 @@ code {
 * {
   border-radius: 0 !important;
 }
-*:focus{
+*:focus {
   box-shadow: none !important;
 }
 
-body{
-   /* background-color: #EDFFEC;  */
-   background-color:white;
- 
+body {
+  /* background-color: #EDFFEC;  */
+  background-color: white;
 }
 
 ::-webkit-scrollbar {
@@ -37,39 +36,46 @@ body{
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: #f1f1f1;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }
 
-h5{
+h5 {
   font-family: "Arial Black", Gadget, sans-serif;
-  font-size:20px;
+  font-size: 20px;
 }
 
-.transparent-border{
+.transparent-border {
   white-space: nowrap;
-    overflow: hidden;
-    
-    border-left:1em solid transparent;
-    border-right:1em solid transparent;
-    text-overflow: ellipsis;
+  overflow: hidden;
+
+  border-left: 1em solid transparent;
+  border-right: 1em solid transparent;
+  text-overflow: ellipsis;
 }
 
-.spinner-border{
+.spinner-border {
   border-radius: 50% !important;
 }
 
-.property-text{
+.property-text {
   margin: 30px;
-  font-family: 'Oxanium';
+  font-family: "Oxanium";
   font-weight: bold;
 }
+
+
+.property-text-nm {
+  font-family: "Oxanium";
+  font-weight: bold;
+}
+

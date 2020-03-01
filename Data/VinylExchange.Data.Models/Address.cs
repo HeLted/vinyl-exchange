@@ -1,12 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace VinylExchange.Data.Models
 {
     public class Address
     {
+        public Address()
+        {
+            this.Id = Guid.NewGuid();
+        }
+
         public Guid Id { get; set; }
         [Required]
         [MinLength(3)]

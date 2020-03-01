@@ -89,8 +89,8 @@ class UserMenu extends Component {
               <Link className="dropdown-item" to={ApplicationPaths.UserCollection}>
               Collection
             </Link>
-            <Link className="dropdown-item" to={profilePath}>
-              Settings
+            <Link className="dropdown-item" to={ApplicationPaths.Profile}>
+              Profile
             </Link>
           </div>
         </li>

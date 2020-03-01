@@ -14,14 +14,14 @@ using VinylExchange.Services.Mapping;
 
 namespace VinylExchange.Services.Authentication
 {
-    public class UserService : IUserService
+    public class UsersService : IUsersService
     {
         private readonly UserManager<VinylExchangeUser> _userManager;
         private readonly SignInManager<VinylExchangeUser> _signInManager;
         private readonly IEmailSender emailSender;
         private readonly IHttpContextAccessor contextAccessor;
 
-        public UserService(UserManager<VinylExchangeUser> userManager,
+        public UsersService(UserManager<VinylExchangeUser> userManager,
             SignInManager<VinylExchangeUser> signInManager,
             IEmailSender emailSender, IHttpContextAccessor contextAccessor)
         {
