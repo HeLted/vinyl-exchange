@@ -53,7 +53,7 @@ class LoginContainer extends Component {
         this.setState({isLoading:true})
         axios
           .post(
-            Url.authentication +
+            Url.api +
               Controllers.users.name +
               Controllers.users.actions.login,
             submitFormObj,
@@ -62,7 +62,6 @@ class LoginContainer extends Component {
           .then(async(response) => {
             if(response.status === 200){
 
-                console.log("hiii");
                 let redirectUrl = this.props.location.search.replace(Url.queryStart + Queries.returnUrl + Url.equal,"");
                 redirectUrl = urlPathSeparator(redirectUrl);
                 const state = { returnUrl:redirectUrl };

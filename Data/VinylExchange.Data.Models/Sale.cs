@@ -37,12 +37,21 @@ namespace VinylExchange.Data.Models
         [Required]
         [Column(TypeName = "decimal(18,4)")]
         public decimal Price { get; set; }
+
+     
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal ShippingPrice { get; set; }
         [Required]
         public Condition VinylCondition { get; set; }
         [Required]
         public Condition SleeveCondition { get; set; }
         [Required]
         public string Description { get; set; }
+        public string ShipsFrom { get; set; }
+        public string ShipsTo { get; set; }
+
+        public string OrderId { get; set; }
+
         
         // Audit info
         public DateTime CreatedOn { get; set; }

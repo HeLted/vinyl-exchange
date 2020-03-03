@@ -107,8 +107,7 @@ namespace VinylExchange.Controllers
                 loggerService.LogException(ex);
                 return BadRequest();
             }
-
-
+            
         }
 
         [HttpGet]

@@ -30,9 +30,9 @@ function SaleStatusBar(props) {
   }
 
   return (
-    <div class="progress border">
+    <div className="progress border">
       <div
-        class={
+        className={
           "progress-bar progress-bar-striped progress-bar-animated " +
           statusColorClass
         }

@@ -79,3 +79,18 @@ h5 {
   font-weight: bold;
 }
 
+.thumbnail-image{
+  border: 1px solid #ddd; /* Gray border */
+  border-radius: 50% !important;  /* Rounded border */
+  padding: 5px;
+}
+
+.thumbnail-image:hover{
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+td{
+  padding: 10px;
+  
+}
+

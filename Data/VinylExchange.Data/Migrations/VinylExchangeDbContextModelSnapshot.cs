@@ -387,6 +387,9 @@ namespace VinylExchange.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,4)");
 
@@ -395,6 +398,15 @@ namespace VinylExchange.Data.Migrations
 
                     b.Property<Guid?>("SellerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("ShippingPrice")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("ShipsFrom")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShipsTo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ShopId")
                         .HasColumnType("uniqueidentifier");

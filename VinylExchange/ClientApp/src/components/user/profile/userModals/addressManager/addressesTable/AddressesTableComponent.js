@@ -14,7 +14,7 @@ function AddressesTableComponent(props) {
         <td className="address-td">{addressObj.fullAddress}</td>
         <td className="address-td">
           <button
-            class="btn btn-danger"
+            className="btn btn-danger"
             onClick={() => props.functions.handleDeleteAddress(addressObj.id)}
           >
             <FontAwesomeIcon icon={faTimes} />
@@ -36,7 +36,7 @@ function AddressesTableComponent(props) {
           </tr>
         ) : addressRows.length === 0 ? (
           <tr className="border">
-            <td className="address-td">
+            <td className="no-addresses-container">
               <h6>You currentlly don't have registered addresses</h6>
             </td>
           </tr>

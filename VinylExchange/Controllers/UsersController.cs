@@ -15,8 +15,7 @@ using VinylExchange.Services.Data.HelperServices;
 using VinylExchange.Services.Logging;
 
 namespace VinylExchange.Controllers
-{
-    [Route("authentication/[controller]")]
+{    
     public class UsersController : ApiController
     {
         private readonly IUsersService userService;
@@ -121,7 +120,7 @@ namespace VinylExchange.Controllers
             {
                 await this.usersAvatarService.ChangeUserAvatar(avatar, this.GetUserId(this.User));
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {

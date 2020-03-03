@@ -39,6 +39,11 @@ namespace VinylExchange.Models.ResourceModels.Sales
 
         public string Description { get; set; }
 
+        public decimal ShippingPrice { get; set; }
+
+        public string ShipsFrom { get; set; }
+        public string ShipsTo { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Sale, GetSaleResourceModel>()

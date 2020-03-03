@@ -50,7 +50,7 @@ class EmailConfirmContainer extends Component {
     };
     axios
       .post(
-        Url.authentication +
+        Url.api +
           Controllers.users.name +
           Controllers.users.actions.confirmEmail,
         submitFormObj,

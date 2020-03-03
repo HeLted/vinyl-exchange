@@ -3,14 +3,15 @@ import ChangeAvatarModalComponent from "./ChangeAvatarModalComponent";
 import getAntiForgeryAxiosConfig from "./../../../../../functions/getAntiForgeryAxiosConfig";
 import { Url, Controllers } from "./../../../../../constants/UrlConstants";
 import axios from "axios";
-import {NotificationContext} from "./../../../../../contexts/NotificationContext";
+import { NotificationContext } from "./../../../../../contexts/NotificationContext";
+import $ from "jquery";
 
 class ChangeAvatarModalContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       avatarInput: null,
-      isLoading:false
+      isLoading: false
     };
   }
 
@@ -24,28 +25,37 @@ class ChangeAvatarModalContainer extends Component {
   };
 
   handleOnSubmit = () => {
-
-    this.setState({isLoading:true})
+    this.setState({ isLoading: true });
 
     const fileFormData = new FormData();
     fileFormData.append("avatar", this.state.avatarInput);
 
-    axios.put(
-      Url.authentication +
-        Controllers.users.name +
-        Controllers.users.actions.changeUserAvatar,
-      fileFormData,
-      getAntiForgeryAxiosConfig()
-    )
-    .then(response=>{
-       this.setState({isLoading:false})
-       this.context.handleAppNotification("Succesfully changed your avatar",4)
-       this.props.functions.handleShouldAvatarUpdate();
-    })
-    .catch(error=>{
-      this.setState({isLoading:false})
-      this.context.handleServerNotification(error.response,"Failed to change your avatar!")
-    });
+    axios
+      .put(
+        Url.api +
+          Controllers.users.name +
+          Controllers.users.actions.changeUserAvatar,
+        fileFormData,
+        getAntiForgeryAxiosConfig()
+      )
+      .then(response => {
+        $(".modal").hide();
+        $(".modal-backdrop").hide();
+
+        this.setState({ isLoading: false });
+        this.context.handleAppNotification(
+          "Succesfully changed your avatar",
+          4
+        );
+        this.props.functions.handleShouldAvatarUpdate();
+      })
+      .catch(error => {
+        this.setState({ isLoading: false });
+        this.context.handleServerNotification(
+          error.response,
+          "Failed to change your avatar!"
+        );
+      });
   };
 
   render() {
@@ -55,7 +65,7 @@ class ChangeAvatarModalContainer extends Component {
           handleOnFileUpload: this.handleOnFileUpload,
           handleOnSubmit: this.handleOnSubmit
         }}
-        data={{isLoading:this.state.isLoading}}
+        data={{ isLoading: this.state.isLoading }}
       />
     );
   }

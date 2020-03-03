@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Logg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Authentication", "Services\VinylExchange.Services.Authentication\VinylExchange.Services.Authentication.csproj", "{599DE079-92B2-4A21-89BB-5784D4DEABF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylExchange.Services.EmailSender", "Services\VinylExchange.Services.EmaiSender\VinylExchange.Services.EmailSender.csproj", "{76836F56-DEBE-4E42-9C7F-A146D16E908A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.EmailSender", "Services\VinylExchange.Services.EmaiSender\VinylExchange.Services.EmailSender.csproj", "{76836F56-DEBE-4E42-9C7F-A146D16E908A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

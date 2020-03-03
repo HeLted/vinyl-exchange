@@ -36,6 +36,7 @@ using VinylExchange.Services.MainServices.Styles;
 using VinylExchange.Services.Mapping;
 using VinylExchange.Services.MemoryCache;
 
+
 namespace VinylExchange
 {
     public class Startup
@@ -128,7 +129,7 @@ namespace VinylExchange
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<RoleSeeder>();
             services.AddTransient<UserSeeder>();
-
+     
 
         }
 

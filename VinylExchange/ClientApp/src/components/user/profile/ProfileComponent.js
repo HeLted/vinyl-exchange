@@ -3,6 +3,8 @@ import "./Profile.css";
 import AddressManagerModalContainer from "./userModals/addressManager/AddressManagerModalContainer";
 import ChangeAvatarModalContainer from "./userModals/changeAvatar/ChangeAvatarModalContainer";
 import UserAvatarContainer from "./userAvatar/UserAvatarContainer";
+import UserPurchasesContainer from "./userPurchases/UserPurchasesContainer";
+import UserSalesContainer from "./userSales/UserSalesContainer";
 
 function ProfileComponent(props) {
   return (
@@ -52,6 +54,22 @@ function ProfileComponent(props) {
               Administration
             </button>
           </div>
+        </div>
+      </div>
+      <br/>
+      <div className="row ">
+        <div className="col-12 border p-0" style={{marginBottom:"30px"}}>
+          <div className="row border justify-content-center m-0">
+            <h4 className="property-text">Purchases</h4>
+          </div>
+          <UserPurchasesContainer />
+        </div>
+       
+        <div className="col-12 border p-0">
+        <div className="row border justify-content-center m-0">
+            <h4 className="property-text">Sales</h4>
+          </div>
+          <UserSalesContainer />
         </div>
       </div>
     </div>

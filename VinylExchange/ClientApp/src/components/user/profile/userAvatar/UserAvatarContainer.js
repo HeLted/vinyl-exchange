@@ -6,6 +6,7 @@ import {
   Controllers,
   Queries
 } from "./../../../../constants/UrlConstants";
+import { NotificationContext } from "./../../../../contexts/NotificationContext";
 
 class UserAvatarContainer extends Component {
   constructor(props) {
@@ -16,28 +17,41 @@ class UserAvatarContainer extends Component {
     };
   }
 
+  static contextType = NotificationContext;
+
   componentDidMount() {
     this.loadAvatar();
   }
 
-  componentWillReceiveProps(){
-    this.loadAvatar();
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.props.data.shouldAvatarUpdate !== nextProps.data.shouldAvatarUpdate
+    ) {
+      this.loadAvatar();
+    }
   }
 
-  loadAvatar = () =>{
+  loadAvatar = () => {
     this.setState({ isLoading: true });
 
     axios
       .get(
-        Url.authentication +
+        Url.api +
           Controllers.users.name +
           Controllers.users.actions.getCurrentUserAvatar
       )
       .then(response => {
+        this.context.handleAppNotification("Loaded user avatar", 5);
         this.setState({ avatar: response.data.avatar, isLoading: false });
       })
-      .catch(error => {});
-  }
+      .catch(error => {
+        this.setState({ isLoading: false });
+        this.context.handleAppNotification(
+          error.response,
+          "Failed to load user avatar!"
+        );
+      });
+  };
 
   render() {
     return (

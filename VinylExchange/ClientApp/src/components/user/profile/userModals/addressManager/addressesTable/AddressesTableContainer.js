@@ -37,7 +37,7 @@ class AddressesTableContainer extends Component {
           addresses: response.data,
           isLoading: false
         });
-        this.context.handleAppNotification("Loaded user addresses");
+        this.context.handleAppNotification("Loaded user addresses",5);
       })
       .catch(error => {
         this.setState({ isLoading: false });

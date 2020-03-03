@@ -1,7 +1,7 @@
 import React from "react"
 
 function Label(props){
-return <label htmlFor={props.forId}>{props.value}</label>
+return <label className="property-text-nm" htmlFor={props.forId}>{props.value}</label>
   
 }
 

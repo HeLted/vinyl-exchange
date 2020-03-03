@@ -1,6 +1,5 @@
 export const Url = {
   api: "/api",
-  authentication: "/authentication",
   mediaStorage: "/file/media",
   and: "&",
   equal: "=",
@@ -61,7 +60,14 @@ export const Controllers = {
   },
   sales: {
     name: "/Sales",
-    actions: { getAllSalesForRelease: "/GetAllSalesForRelease" }
+    actions: {
+      getAllSalesForRelease: "/GetAllSalesForRelease",
+      placeOrder: "/PlaceOrder",
+      setShippingPrice:"/SetShippingPrice",
+      completePayment:"/CompletePayment",
+      getUserSales:"/GetUserSales",
+      getUserPurchases:"/GetUserPurchases"
+    }
   },
   users: {
     name: "/Users",
@@ -69,15 +75,15 @@ export const Controllers = {
       register: "/Register",
       login: "/Login",
       confirmEmail: "/ConfirmEmail",
-      changeUserAvatar:"/ChangeUserAvatar",
-      getCurrentUserAvatar:"/GetCurrentUserAvatar",
-      getUserAvatar:"/GetUserAvatar"
+      changeUserAvatar: "/ChangeUserAvatar",
+      getCurrentUserAvatar: "/GetCurrentUserAvatar",
+      getUserAvatar: "/GetUserAvatar"
     }
   },
-  addresses:{
-    name:"/Addresses",
-    actions:{
-      getUserAddresses:"/GetUserAddresses"
+  addresses: {
+    name: "/Addresses",
+    actions: {
+      getUserAddresses: "/GetUserAddresses"
     }
   }
 };

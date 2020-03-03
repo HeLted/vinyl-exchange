@@ -43,7 +43,7 @@ class RegisterContainer extends Component {
     this.setState({isLoading:true})
     axios
       .post(
-        Url.authentication +
+        Url.api +
           Controllers.users.name +
           Controllers.users.actions.register,
         submitFormObj,

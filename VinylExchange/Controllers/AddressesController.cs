@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using VinylExchange.Models.InputModels.Addresses;
@@ -7,6 +8,7 @@ using VinylExchange.Services.Logging;
 
 namespace VinylExchange.Controllers
 {
+    [Authorize]
     public class AddressesController : ApiController
     {
         private readonly IAddressesService addressesService;
@@ -70,7 +72,7 @@ namespace VinylExchange.Controllers
 
         [HttpGet]
         [Route("GetUserAddresses")]
-        public async Task<IActionResult> GetUserCollection()
+        public async Task<IActionResult> GetUserAddresses()
         {
             try
             {
@@ -83,8 +85,7 @@ namespace VinylExchange.Controllers
                 loggerService.LogException(ex);
                 return BadRequest();
             }
-
-
+            
         }
                
     }

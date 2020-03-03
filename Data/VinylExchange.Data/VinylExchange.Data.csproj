@@ -51,6 +51,8 @@
     <Compile Remove="Migrations\20200225080826_AddedSalesAndShops.Designer.cs" />
     <Compile Remove="Migrations\20200229214350_AddedUserAvatars.cs" />
     <Compile Remove="Migrations\20200229214350_AddedUserAvatars.Designer.cs" />
+    <Compile Remove="Migrations\20200301225011_AddedDeliveryPriceShipsFromAndShipsToToSaleEntity.cs" />
+    <Compile Remove="Migrations\20200301225011_AddedDeliveryPriceShipsFromAndShipsToToSaleEntity.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
