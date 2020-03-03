@@ -1,0 +1,28 @@
+.release-info-container{
+    padding: 30px;
+    opacity: 0.8;
+}
+
+
+.release-tracklist-container{
+    padding: 10px;
+    opacity: 0.8;
+    height: 500px;
+}
+
+.release-sales-container{
+    padding: 10px;
+    opacity: 0.8;
+    height: 500px;
+}
+
+.button-menu-container {
+    padding: 10px;
+}
+
+.tracklist-table{
+    display: block;
+    height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
