@@ -218,7 +218,7 @@ namespace VinylExchange.Controllers
         {
             try
             {
-                var sales = await this.salesService.GetUserPurchases(this.GetUserId(this.User));
+                var sales = await this.salesService.GetUserSales(this.GetUserId(this.User));
 
                 return Ok(sales);
             }

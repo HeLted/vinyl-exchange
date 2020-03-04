@@ -6,7 +6,7 @@ function UserAvatarComponent(props) {
     <BorderSpinner />
   ) : (
     <img
-      className="img-thumbnail"
+      className="img-thumbnail image-responsive"
       src={"data:image/png;base64, " + props.data.avatar}
     ></img>
   );

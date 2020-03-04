@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet";
 import ServerNotification from "./layoutComponents/ServerNotification/ServerNotification";
 import NotificationContextProvider from "./../contexts/NotificationContext";
 import PlayerContextProvider from "./../contexts/PlayerContext";
+import Footer from "./Footer"
 
 export class Layout extends Component {
   static displayName = Layout.name;
@@ -21,6 +22,7 @@ export class Layout extends Component {
             <Player />
           </PlayerContextProvider>
         </NotificationContextProvider>
+        <Footer/>
       </div>
     );
   }

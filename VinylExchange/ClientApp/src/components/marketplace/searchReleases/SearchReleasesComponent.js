@@ -14,7 +14,7 @@ function SearchReleaseComponent(props) {
   return (
     <div className="input-group" id="searchBar">
       <span className="input-group-btn">
-        <button className="btn btn-outline-primary" type="button">
+        <button className="btn btn-outline-primary" type="button" disabled>
           {icon}
         </button>
       </span>

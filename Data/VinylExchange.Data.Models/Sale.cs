@@ -42,9 +42,9 @@ namespace VinylExchange.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal ShippingPrice { get; set; }
         [Required]
-        public Condition VinylCondition { get; set; }
+        public Condition VinylGrade { get; set; }
         [Required]
-        public Condition SleeveCondition { get; set; }
+        public Condition SleeveGrade { get; set; }
         [Required]
         public string Description { get; set; }
         public string ShipsFrom { get; set; }

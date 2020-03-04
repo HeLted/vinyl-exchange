@@ -11,9 +11,7 @@ namespace VinylExchange.Models.InputModels.Sales
         [Required]
         public Guid ReleaseId { get; set; }
 
-        [Required]
-        public Guid SellerId { get; set; }
-                 
+                       
         public Nullable<Guid> ShopId { get; set; }
                
         [Required]
@@ -21,10 +19,10 @@ namespace VinylExchange.Models.InputModels.Sales
         public decimal Price { get; set; }
 
         [Required]
-        public Condition VinylCondition { get; set; }
+        public Condition VinylGrade { get; set; }
 
         [Required]
-        public Condition SleeveCondition { get; set; }
+        public Condition SleeveGrade { get; set; }
 
         [Required]
         public string Description { get; set; }

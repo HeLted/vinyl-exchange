@@ -14,6 +14,9 @@ namespace VinylExchange.Models.ResourceModels.Sales
         #region Sale
         public Guid Id { get; set; }
 
+        public Guid ReleaseId { get; set; }
+
+
         public Condition VinylGrade { get; set; }
 
         public Condition SleeveGrade { get; set; }
@@ -21,6 +24,7 @@ namespace VinylExchange.Models.ResourceModels.Sales
         public Status Status { get; set; }
 
         #endregion
+        
 
         #region Release
         public string Artist { get; set; }
@@ -28,10 +32,9 @@ namespace VinylExchange.Models.ResourceModels.Sales
         public ReleaseFileResourceModel CoverArt { get; set; }
         #endregion
 
-
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<Sale, GetUserPurchasesResourceModel>()
+            configuration.CreateMap<Sale, GetUserSalesResourceModel>()
                  .ForMember(m => m.Artist, ci => ci.MapFrom(x => x.Release.Artist))
                  .ForMember(m => m.Title, ci => ci.MapFrom(x => x.Release.Title));
         }

@@ -46,7 +46,7 @@ class PlayerLoaderButton extends Component {
   render() {
     const loadToPlayerControlls = !this.state.isLoadedToPlayer ? (
       <button
-        className="btn btn-outline-dark"
+        className="btn-spr btn btn-outline-dark"
         onClick={event =>
           this.handleLoadReleaseToPlayer(this.props.data.releaseId, event)
         }
@@ -56,7 +56,7 @@ class PlayerLoaderButton extends Component {
       </button>
     ) : (
       <button
-        className="btn btn-outline-warning"
+        className="btn-spr btn btn-outline-warning"
         onClick={event =>
           this.handleEjectReleaseFromPlayer(this.props.data.releaseId, event)
         }

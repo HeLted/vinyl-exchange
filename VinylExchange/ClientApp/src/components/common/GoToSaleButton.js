@@ -16,9 +16,11 @@ class GoToSaleButton extends Component {
 
   render() {
     return (
-      <button type="button"  className="btn btn-primary" onClick={()=> this.handleToRelease()}>
+      <span style={{whiteSpace: "normal"}}>
+      <button type="button"  className="btn btn-primary" onClick={()=> this.handleToRelease()} >
         <FontAwesomeIcon icon={faArrowRight} />
       </button>
+      </span>
     );
   }
 }

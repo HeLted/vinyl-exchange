@@ -10,14 +10,14 @@ class InfoTooltip extends Component {
   render() {
     return (
       <span
-        class="d-inline-block"
-        tabindex="0"
+        className="d-inline-block"
+        tabIndex="0"
         data-toggle="tooltip"
         title={this.props.data.tooltipValue}
       >
         <button
-          class="btn btn-primary btn-lg"
-          style={{"pointer-events": "none"}}
+          className="btn btn-primary btn-lg"
+          style={{pointerEvents: "none"}}
           type="button"
           disabled
         >

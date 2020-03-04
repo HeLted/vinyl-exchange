@@ -2,12 +2,13 @@
 {
     public enum Condition
     {
-        NotSelected=0,
-        Mint = 1,
-        NearMint = 2,
-        VeryGood = 3,
-        Good = 4,
-        Fair = 5,
-        Poor = 6
+        NotSelected = 0,
+        Poor = 1,        
+        Fair = 2,
+        Good = 3,
+        VeryGood = 4,
+        NearMint = 5,
+        Mint = 6,
+
     }
 }

@@ -6,17 +6,7 @@ import { withRouter } from "react-router-dom";
 import "./Marketplace.css";
 
 function MarketplaceComponent(props) {
-  const Button = withRouter(({ history }) => (
-    <button
-      type="button"
-      className="btn btn-primary w-100"
-      onClick={() => {
-        history.push("/releases/addrelease");
-      }}
-    >
-      Add Release
-    </button>
-  ));
+  
 
   return (
     <div className="container-fluid">
@@ -35,7 +25,7 @@ function MarketplaceComponent(props) {
             />
 
             <br />
-            <Button />
+            
           </div>
         </div>
         <div className="custom-container col-lg-9 col-sm-12 col-xs-12 align-items-center justify-content-center">
@@ -46,7 +36,9 @@ function MarketplaceComponent(props) {
             }}
           />
         </div>
+        
       </div>
+     
     </div>
   );
 }

@@ -10,6 +10,7 @@ using VinylExchange.Models.InputModels.Sales;
 using VinylExchange.Models.ResourceModels.Sales;
 using VinylExchange.Models.Utility;
 using VinylExchange.Services.Data.MainServices.Addresses;
+using VinylExchange.Services.HelperServices;
 using VinylExchange.Services.Mapping;
 
 namespace VinylExchange.Services.Data.MainServices.Sales
@@ -18,12 +19,12 @@ namespace VinylExchange.Services.Data.MainServices.Sales
     public class SalesService : ISalesService
     {
         private readonly VinylExchangeDbContext dbContext;
+        private readonly IReleaseFilesService releaseFileService;
 
-
-        public SalesService(VinylExchangeDbContext dbContext)
+        public SalesService(VinylExchangeDbContext dbContext,IReleaseFilesService releaseFileService)
         {
             this.dbContext = dbContext;
-
+            this.releaseFileService = releaseFileService;
         }
 
         public async Task<GetSaleResourceModel> GetSale(Guid saleId)
@@ -36,9 +37,10 @@ namespace VinylExchange.Services.Data.MainServices.Sales
 
         public async Task<Sale> CreateSale(CreateSaleInputModel inputModel, Guid sellerId)
         {
-            inputModel.SellerId = sellerId;
-
+           
             var sale = inputModel.To<Sale>();
+
+            sale.SellerId = sellerId;
 
             var trackedSale = await this.dbContext.Sales.AddAsync(sale);
 
@@ -117,6 +119,11 @@ namespace VinylExchange.Services.Data.MainServices.Sales
             .To<GetUserPurchasesResourceModel>()
             .ToListAsync();
 
+            purchases.ForEach(s =>
+            {
+                s.CoverArt = this.releaseFileService.GetReleaseCoverArt(s.ReleaseId).GetAwaiter().GetResult();
+            });
+
             return purchases;
         }
 
@@ -127,6 +134,12 @@ namespace VinylExchange.Services.Data.MainServices.Sales
            .Where(s => s.SellerId == sellerId)
            .To<GetUserSalesResourceModel>()
            .ToListAsync();
+
+
+           sales.ForEach(s =>
+            {
+                s.CoverArt = this.releaseFileService.GetReleaseCoverArt(s.ReleaseId).GetAwaiter().GetResult();
+            });
 
             return sales;
         }

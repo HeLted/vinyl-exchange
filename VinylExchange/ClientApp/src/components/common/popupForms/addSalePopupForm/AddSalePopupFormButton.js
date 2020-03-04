@@ -6,12 +6,12 @@ function AddSalePopupFormButton(props) {
   return (
     <button
       type="button"
-      className="btn btn-outline-success"
+      className="btn-spr btn btn-outline-success"
       data-toggle="modal"
       onClick={() => props.functions.handleLoadColletionItemData(
         props.data.collectionItemId
       )}
-      data-target={"#addSaleModal-" + props.data.collectionItemId}
+      data-target="#addSaleModal"
     >
       <FontAwesomeIcon icon={faMoneyCheck} />
     </button>

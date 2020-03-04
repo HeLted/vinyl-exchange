@@ -1,47 +1,85 @@
-import React,{Component} from "react";
-import BorderSpinner from "./../../../common/spinners/BorderSpinner"
+import React, { Component } from "react";
+import BorderSpinner from "./../../../common/spinners/BorderSpinner";
 
-function ReleaseInfoComponent (props){
-   
-  const component =  props.data.isLoading ? (<BorderSpinner/>) : (<ul>
+function ReleaseInfoComponent(props) {
+  const component = props.data.isLoading ? (
+    <BorderSpinner />
+  ) : (
+    <ul>
       <li>
-        <h5>
+        <div className="border border-dark">
+          <h5 className="property-text-lm">
+            <b>
+              Artist
+            </b>
+          </h5>
+        </div>
+        <h5 className="property-text-lm">
           <b>
-            -Artist - <i>{props.data.release.artist}</i>
+            <i>{props.data.release.artist}</i>
           </b>
         </h5>
       </li>
       <li>
-        <h5>
+      <div className="border border-dark">
+          <h5 className="property-text-lm">
+            <b>
+              Title
+            </b>
+          </h5>
+        </div>
+        <h5 className="property-text-lm">
           <b>
-            -Title - <i>{props.data.release.title}</i>
+             <i>{props.data.release.title}</i>
           </b>
         </h5>
       </li>
       <li>
-        <h5>
+      <div className="border border-dark">
+          <h5 className="property-text-lm">
+            <b>
+              Label
+            </b>
+          </h5>
+        </div>
+        <h5 className="property-text-lm">
           <b>
-            -Label - <i>{props.data.release.label}</i>
+           <i>{props.data.release.label}</i>
           </b>
         </h5>
       </li>
       <li>
-        <h5>
+      <div className="border border-dark">
+          <h5 className="property-text-lm">
+            <b>
+              Year
+            </b>
+          </h5>
+        </div>
+        <h5 className="property-text-lm">
           <b>
-            -Year - <i>{props.data.release.year}</i>
+           <i>{props.data.release.year}</i>
           </b>
         </h5>
       </li>
       <li>
-        <h5>
+      <div className="border border-dark">
+          <h5 className="property-text-lm">
+            <b>
+              Format
+            </b>
+          </h5>
+        </div>
+        <h5 className="property-text-lm">
           <b>
-            -Format - <i>{props.data.release.format}</i>
+            <i>{props.data.release.format}</i>
           </b>
         </h5>
       </li>
-    </ul>);
-   
-   return(component);
+    </ul>
+  );
+
+  return component;
 }
 
 export default ReleaseInfoComponent;

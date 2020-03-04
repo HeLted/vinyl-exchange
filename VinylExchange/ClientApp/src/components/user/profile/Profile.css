@@ -23,11 +23,6 @@
   padding: 30px;
 }
 
-.user-tbody {
-  display:block;
-  overflow-y: scroll;
-  height: calc(100% - 130px);
-  display: table-row-group;
-}
+
 
 

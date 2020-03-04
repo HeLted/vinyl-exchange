@@ -14,17 +14,23 @@ namespace VinylExchange.Models.ResourceModels.Sales
         
         public Condition VinylGrade { get; set; }
 
+        public Guid ReleaseId { get; set; }
+
+
         public Condition SleeveGrade { get; set; }
         
         public Status Status { get; set; }
 
         #endregion
 
+
         #region Release
         public string Artist { get; set; }
         public string Title { get; set; }
         public ReleaseFileResourceModel CoverArt { get; set; }
         #endregion
+
+
 
 
         public void CreateMappings(IProfileExpression configuration)

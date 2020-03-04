@@ -13,10 +13,12 @@ namespace VinylExchange.Models.ResourceModels.Sales
         public string SellerUsername { get; set; }
         public decimal Price { get; set; }
 
-        public Condition VinylCondition { get; set; }
+        public Condition VinylGrade { get; set; }
 
-        public Condition SleeveCondition { get; set; }
+        public Condition SleeveGrade{ get; set; }
 
+        public Guid SellerId { get; set; }
+           
         public string Description { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)

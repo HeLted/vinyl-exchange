@@ -6,7 +6,8 @@ import PulseLoader from "react-spinners/PulseLoader";
 import PlayerLoaderButton from "./../../common/PlayerLoaderButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMeh } from "@fortawesome/free-solid-svg-icons";
-
+import { Url } from "./../../../constants/UrlConstants";
+import {Link} from "react-router-dom";
 
 class ReleasesComponent extends Component {
   constructor() {
@@ -18,7 +19,7 @@ class ReleasesComponent extends Component {
     const releases = this.props.data.releases.map(release => {
       const coverArtimageSource =
         release.coverArt !== null
-          ? "/file/media" + release.coverArt.path + release.coverArt.fileName
+          ? Url.mediaStorage + release.coverArt.path + release.coverArt.fileName
           : "https://cdn4.iconfinder.com/data/icons/ui-beast-4/32/Ui-12-512.png";
 
       return (
@@ -40,7 +41,6 @@ class ReleasesComponent extends Component {
               {release.label} - {release.year} - {release.format}
             </td>
           </tr>
-         
         </Fragment>
       );
     });
@@ -49,7 +49,6 @@ class ReleasesComponent extends Component {
       <tr key="release loader">
         <td>
           <PulseLoader
-            
             size={15}
             //size={"150px"} this also works
             color={"#13eddb"}
@@ -88,7 +87,13 @@ class ReleasesComponent extends Component {
                     <b>
                       <i>
                         <FontAwesomeIcon icon={faMeh} /> No More Releases.Maybe
-                        Try Another Search Term.
+                        Try Another Search Term or{"    "}
+                        <Link
+                          className="btn btn-outline-secondary"
+                          to="/Releases/AddRelease"
+                        >
+                           Add Release
+                        </Link>
                       </i>
                     </b>
                   </h6>

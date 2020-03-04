@@ -21,7 +21,7 @@ class AddToCollectionPopupFormButton extends Component {
     return (
       <button
         type="button"
-        className={buttonClass}
+        className={"btn-spr " + buttonClass}
         data-toggle="modal"
         onClick={this.notifyIfReleaseAlreadyInUserCollection}
         data-target="#addToCollectionModal"

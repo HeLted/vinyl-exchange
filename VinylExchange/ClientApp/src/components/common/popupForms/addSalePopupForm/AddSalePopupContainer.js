@@ -32,7 +32,8 @@ class AddSalePopupContainer extends Component {
   }
 
   handleLoadColletionItemData = () => {
-    axios
+    if(this.state.collectionItemId != undefined){
+      axios
       .get(
         Url.api +
           Controllers.collections.name +
@@ -58,6 +59,7 @@ class AddSalePopupContainer extends Component {
           "Failed to load collection item info"
         );
       });
+    }
   };
 
   handleOnChange = event => {

@@ -5,6 +5,8 @@ import axios from "axios";
 import { NotificationContext } from "./../../../../../../contexts/NotificationContext";
 import $ from "jquery";
 import getAntiForgeryAxiosConfig from "./../../../../../../functions/getAntiForgeryAxiosConfig";
+import hideModal from "./../../../../../../functions/hideModal";
+
 
 class PlaceOrderModalContainer extends Component {
   constructor(props) {
@@ -54,7 +56,7 @@ class PlaceOrderModalContainer extends Component {
   };
 
   handleFlushModal = () => {
-    $(".modal-backdrop").hide();
+    hideModal();
   };
 
   handleOnSubmit = () => {
@@ -74,8 +76,7 @@ class PlaceOrderModalContainer extends Component {
       .then(response => {
         this.setState({ isSubmitLoading: false });
         this.context.handleAppNotification("Succesfully placed order", 4);
-        $(".modal-backdrop").hide();
-        $(".modal").hide();
+        hideModal();
         this.props.functions. handleReLoadSale();
       })
       .catch(error => {

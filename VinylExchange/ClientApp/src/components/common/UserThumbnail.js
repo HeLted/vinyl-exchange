@@ -16,6 +16,12 @@ class UserThubnail extends Component {
 
   static contextType = NotificationContext;
 
+  componentDidMount(){
+    if(this.props.data.userId  !== ""){
+      this.loadAvatar(this.props.data.userId)
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (
       nextProps.data.userId !== "" &&
@@ -57,7 +63,7 @@ class UserThubnail extends Component {
       </div>
     ) : (
       <img
-        className="thumbnail-image"
+        className="thumbnail-image img-fluid"
         height="50px"
         width="50px"
         src={"data:image/png;base64, " + this.state.avatar}

@@ -54,13 +54,14 @@ class AddtoColletionPopupFormContainer extends Component {
 
   handleOnSubmit = event => {
     event.preventDefault();
+    event.stopPropagation();
     const self = this;
-
-    const submitFormObj = {
+        const submitFormObj = {
       vinylGrade: this.state.vinylGradeInput,
       sleeveGrade: this.state.sleeveGradeInput,
       description: this.state.descriptionInput
     };
+
 
     axios
       .post(

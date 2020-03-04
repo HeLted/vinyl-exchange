@@ -4,7 +4,7 @@ import getAntiForgeryAxiosConfig from "./../../../../../functions/getAntiForgery
 import { Url, Controllers } from "./../../../../../constants/UrlConstants";
 import axios from "axios";
 import { NotificationContext } from "./../../../../../contexts/NotificationContext";
-import $ from "jquery";
+import hideModal from "./../../../../../functions/hideModal";
 
 class ChangeAvatarModalContainer extends Component {
   constructor(props) {
@@ -39,8 +39,7 @@ class ChangeAvatarModalContainer extends Component {
         getAntiForgeryAxiosConfig()
       )
       .then(response => {
-        $(".modal").hide();
-        $(".modal-backdrop").hide();
+        hideModal();
 
         this.setState({ isLoading: false });
         this.context.handleAppNotification(

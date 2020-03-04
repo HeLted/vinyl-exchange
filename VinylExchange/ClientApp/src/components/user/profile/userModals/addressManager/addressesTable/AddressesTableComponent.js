@@ -26,8 +26,8 @@ function AddressesTableComponent(props) {
   });
 
   return (
-    <table className="table-hover">
-      <tbody>
+    <table className="table-hover" style={{width:"100%"}}>
+      <tbody className="normal-tbody" style={{width:"100%"}}>
         {props.data.isLoading ? (
           <tr>
             <td>

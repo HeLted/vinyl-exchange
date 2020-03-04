@@ -9,17 +9,17 @@ import ReleaseTracklistContainer from "./releaseTracklist/ReleaseTracklistContai
 function ReleaseComponent(props) {
   return (
     <div className="container-fluid">
-      <div className="row">
-        <div className=" col-3">
+      <div className="row justify-content-center">
+        <div className=" col-3 m-3">
           <ReleaseImagesCarouselContainer
             data={{ releaseId: props.data.releaseId }}
           />
         </div>
 
         
-        <div className="col-lg-9 col-sm-12">
-          <div className=" transparent-border release-info-container border row">
-            <div className="col-3">
+        <div className="col-lg-12 col-sm-12">
+          <div className=" transparent-border release-info-container border row justify-content-center">
+            <div className="col-12 ">
               <ReleaseInfoContainer
                 data={{ releaseId: props.data.releaseId }}
               />
@@ -27,7 +27,7 @@ function ReleaseComponent(props) {
           </div>
 
           <div className="transparent-border button-menu-container border row ">
-            <div className="col-9">
+            <div className="col-12 text-center">
               <ReleaseMenuContainer
                 data={{ releaseId: props.data.releaseId }}
               />
@@ -47,7 +47,7 @@ function ReleaseComponent(props) {
           </div>
         </div>
         <div className="release-sales-container border col-lg-8 col-sm-12">
-          <div className=" row justify-content-center">
+          <div className=" row justify-content-center ">
             <h2>Sales</h2>
           </div>
           <br />

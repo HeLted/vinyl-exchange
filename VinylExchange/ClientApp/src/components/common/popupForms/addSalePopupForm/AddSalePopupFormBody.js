@@ -6,18 +6,18 @@ import MoneyInput from "./../../inputComponents/MoneyInput";
 
 function AddSalePopupBody(props) {
   return (
-    <div className="modal fade" tabIndex="-1" id={"addSaleModal-" + props.data.collectionItemId} role="dialog">
+    <div className="modal fade" tabIndex="-1" id="addSaleModal" role="dialog">
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Add To Collection</h5>
+            <h5 className="modal-title">Create Sale</h5>
             <button type="submit" className="close" data-dismiss="modal">
               <span>&times;</span>
             </button>
           </div>
           <div className="modal-body">
             <form
-              id="addToCollectionForm"
+              id="createSaleForm"
               onSubmit={props.functions.handleOnSubmit}
             >
               <div className="form-group">
@@ -77,7 +77,7 @@ function AddSalePopupBody(props) {
             <input
               type="submit"
               className="btn btn-outline-primary"
-              form="addToCollectionForm"
+              form="createSaleForm"
               value="Create Sale"
             />
           </div>

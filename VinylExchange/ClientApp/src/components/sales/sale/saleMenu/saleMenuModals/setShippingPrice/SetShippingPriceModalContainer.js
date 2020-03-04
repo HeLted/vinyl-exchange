@@ -3,8 +3,8 @@ import SetShippingPriceModalComponent from "./SetShippingPriceModalComponent";
 import { Url, Controllers } from "./../../../../../../constants/UrlConstants";
 import axios from "axios";
 import getAntiForgeryAxiosConfig from "./../../../../../../functions/getAntiForgeryAxiosConfig";
-import $ from "jquery";
 import { NotificationContext } from "./../../../../../../contexts/NotificationContext";
+import hideModal from "../../../../../../functions/hideModal";
 
 class SetShippingPriceModalContainer extends Component {
   constructor(props) {
@@ -41,8 +41,7 @@ class SetShippingPriceModalContainer extends Component {
       .then(response => {
         this.setState({ isLoading: false });
         this.context.handleAppNotification("Succesfully set shiping price", 4);
-        $(".modal-backdrop").hide();
-        $(".modal").hide();
+        hideModal();
         this.props.functions.handleReLoadSale();
       })
       .catch(error => {
