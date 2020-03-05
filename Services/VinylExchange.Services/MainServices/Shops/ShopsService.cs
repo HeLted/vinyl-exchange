@@ -9,6 +9,7 @@ using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Shops;
 using VinylExchange.Models.ResourceModels.Shops;
 using VinylExchange.Services.Data.HelperServices;
+using VinylExchange.Services.Data.HelperServices.Shops;
 using VinylExchange.Services.Mapping;
 
 namespace VinylExchange.Services.Data.MainServices.Shops

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.ResourceModels.UsersAvatar;
 
-namespace VinylExchange.Services.Data.HelperServices
+namespace VinylExchange.Services.Data.HelperServices.Users
 {
     public interface IUsersAvatarService
     {

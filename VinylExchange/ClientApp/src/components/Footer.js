@@ -16,29 +16,16 @@ class Footer extends Component {
               <img src="img/appLogo.png" heigth="500px" width="350px" />
               </div>
               <div className="col-lg-3 col-sm-2 col-xs-3">
-                <h3> Contact </h3>
+                <h3> </h3>
                 <ul>
-                  <li>
-                    <a className="email" href="#">
-                      {" "}
-                      insert email here{" "}
-                    </a>
-                  </li>
+                 
                   <br />
-                  <li>
-                    {" "}
-                    <p> address line one </p>{" "}
-                  </li>
-                  <li>
-                    {" "}
-                    <p> address line two </p>{" "}
-                  </li>
+                 
                 </ul>
               </div>
               <div className="col-lg-3 col-sm-2 col-xs-3">
                 <ul>
                   <li>
-                    {" "}
                     <h5>
                       {" "}
                       <a href="#" style={{marginTop: "5em"}}>
@@ -46,24 +33,28 @@ class Footer extends Component {
                         ABOUT US
                       </a>{" "}
                     </h5>
+                    <hr/>
                   </li>
                   <li>
                     {" "}
                     <h5>
                       <a href="#"> CURRENT SERIES </a>{" "}
                     </h5>
+                                <hr/>
                   </li>
                   <li>
                     {" "}
                     <h5>
                       <a href="#"> THE HOUSE </a>{" "}
                     </h5>
+                    <hr/>
                   </li>
                   <li>
                     {" "}
                     <h5>
                       <a href="#"> LOOKING BACK </a>{" "}
                     </h5>
+                                <hr/>
                   </li>
                 </ul>
               </div>

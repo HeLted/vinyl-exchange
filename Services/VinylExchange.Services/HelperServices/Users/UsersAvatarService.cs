@@ -9,7 +9,7 @@ using VinylExchange.Data.Models;
 using VinylExchange.Models.ResourceModels.UsersAvatar;
 using VinylExchange.Services.Mapping;
 
-namespace VinylExchange.Services.Data.HelperServices
+namespace VinylExchange.Services.Data.HelperServices.Users
 {
     public class UsersAvatarService : IUsersAvatarService
     {

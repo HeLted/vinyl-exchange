@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using VinylExchange.Data.Common.Enumerations;
@@ -51,8 +52,7 @@ namespace VinylExchange.Data.Models
         public string ShipsTo { get; set; }
 
         public string OrderId { get; set; }
-
-        
+                
         // Audit info
         public DateTime CreatedOn { get; set; }
 
@@ -62,6 +62,8 @@ namespace VinylExchange.Data.Models
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedOn { get; set; }
+
+        public ICollection<SaleMessage> Messages { get; set; } = new HashSet<SaleMessage>();
 
     }
 }

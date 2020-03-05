@@ -9,6 +9,7 @@ using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Releases;
 using VinylExchange.Models.ResourceModels.Releases;
 using VinylExchange.Services.HelperServices;
+using VinylExchange.Services.HelperServices.Releases;
 using VinylExchange.Services.Mapping;
 
 namespace VinylExchange.Services.MainServices.Releases

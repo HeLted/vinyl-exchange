@@ -10,6 +10,7 @@ using VinylExchange.Models.InputModels.Collections;
 using VinylExchange.Models.ResourceModels.Collections;
 using VinylExchange.Models.Utility;
 using VinylExchange.Services.HelperServices;
+using VinylExchange.Services.HelperServices.Releases;
 using VinylExchange.Services.Mapping;
 
 

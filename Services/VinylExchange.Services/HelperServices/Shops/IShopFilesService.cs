@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.ResourceModels.ShopFiles;
 
-namespace VinylExchange.Services.Data.HelperServices
+namespace VinylExchange.Services.Data.HelperServices.Shops
 {
     public interface IShopFilesService
     {

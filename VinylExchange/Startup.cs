@@ -18,16 +18,21 @@ using System.IO;
 using System.Reflection;
 using VinylExchange.Data;
 using VinylExchange.Data.Models;
+using VinylExchange.Hubs;
 using VinylExchange.Models;
 using VinylExchange.Roles;
 using VinylExchange.Services.Authentication;
 using VinylExchange.Services.Data.HelperServices;
+using VinylExchange.Services.Data.HelperServices.Sales;
+using VinylExchange.Services.Data.HelperServices.Shops;
+using VinylExchange.Services.Data.HelperServices.Users;
 using VinylExchange.Services.Data.MainServices.Addresses;
 using VinylExchange.Services.Data.MainServices.Sales;
 using VinylExchange.Services.Data.MainServices.Shops;
 using VinylExchange.Services.EmaiSender;
 using VinylExchange.Services.Files;
 using VinylExchange.Services.HelperServices;
+using VinylExchange.Services.HelperServices.Releases;
 using VinylExchange.Services.Logging;
 using VinylExchange.Services.MainServices.Collections;
 using VinylExchange.Services.MainServices.Genres;
@@ -57,6 +62,8 @@ namespace VinylExchange
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
 
             });
+
+            services.AddSignalR();
 
             services.AddDefaultIdentity<VinylExchangeUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<VinylExchangeRole>()
@@ -119,6 +126,7 @@ namespace VinylExchange
             services.AddTransient<ISalesService, SalesService>();
             services.AddTransient<IAddressesService, AddressesService>();
             services.AddTransient<IUsersAvatarService, UsersAvatarService>();
+            services.AddTransient<ISaleMessagesService, SaleMessagesService>();
 
             //Tool Services
             services.AddTransient<MemoryCacheManager>();
@@ -186,9 +194,10 @@ namespace VinylExchange
                 endpoints.MapControllerRoute("Default",
                 "api/{controller}/{id}",
                 new { id = System.Web.Http.RouteParameter.Optional });
+                endpoints.MapHub<SaleChatHub>("/sale/chathub");
                 //endpoints.MapRazorPages();
             });
-
+            
 
             app.Use(next => context =>
             {

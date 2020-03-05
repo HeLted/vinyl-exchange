@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import BorderSpinner from "./spinners/BorderSpinner";
 import { Url, Controllers } from "./../../constants/UrlConstants";
 import axios from "axios";
 import { NotificationContext } from "./../../contexts/NotificationContext";
+
 
 class UserThubnail extends Component {
   constructor() {
@@ -16,20 +16,18 @@ class UserThubnail extends Component {
 
   static contextType = NotificationContext;
 
-  componentDidMount(){
-    if(this.props.data.userId  !== ""){
-      this.loadAvatar(this.props.data.userId)
+  componentDidMount() {
+    if (this.props.data.avatar != undefined) {
+      this.setState({ avatar: this.props.data.avatar, isIdChosen: true });
     }
-  }
 
-  componentWillReceiveProps(nextProps) {
     if (
-      nextProps.data.userId !== "" &&
-      nextProps.data.userId !== null &&
-      this.state.isIdChosen === false
+      this.props.data.userId !== "" &&
+      this.state.isIdChosen === false &&
+      this.props.data.avatar == undefined
     ) {
-      this.setState({ userId: nextProps.data.userId, isIdChosen: true });
-      this.loadAvatar(nextProps.data.userId);
+      this.setState({ isIdChosen: true });
+      this.loadAvatar(this.props.data.userId);
     }
   }
 

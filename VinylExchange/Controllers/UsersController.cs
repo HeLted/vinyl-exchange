@@ -12,6 +12,7 @@ using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Users;
 using VinylExchange.Services.Authentication;
 using VinylExchange.Services.Data.HelperServices;
+using VinylExchange.Services.Data.HelperServices.Users;
 using VinylExchange.Services.Logging;
 
 namespace VinylExchange.Controllers

@@ -27,8 +27,10 @@ class SaleContainer extends Component {
         statusText: "",
         shipsFrom: "",
         shipsTo: "",
-        shippingPrice: 0
-      }
+        shippingPrice: 0,
+        
+      },
+      isLoading:true
     };
   }
 
@@ -41,12 +43,14 @@ class SaleContainer extends Component {
   };
 
   loadSale = () => {
+    this.setState({isLoading:true})
     axios
       .get(
         Url.api +
           Controllers.sales.name +
           Url.slash +
           this.props.location.pathname.replace("/sale/", "")
+         
       )
       .then(response => {
         const data = response.data;
@@ -69,11 +73,14 @@ class SaleContainer extends Component {
             sleeveConditionText: data.sleeveConditionText,
             shipsFrom: data.shipsFrom,
             shipsTo: data.ShipsTo,
-            shippingPrice: data.shippingPrice
-          }
+            shippingPrice: data.shippingPrice,
+            
+          },
+          isLoading:false
         });
       })
       .catch(error => {
+        this.setState({isLoading:false})
         this.context.handleServerNotification(error.response);
       });
   };
@@ -81,7 +88,7 @@ class SaleContainer extends Component {
   render() {
     return (
       <SaleComponent
-        data={{ sale: this.state.sale }}
+        data={{ sale: this.state.sale ,isLoading:this.state.isLoading }}
         functions={{ handleReLoadSale: this.handleReLoadSale }}
       />
     );

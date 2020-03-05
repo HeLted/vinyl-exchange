@@ -9,8 +9,7 @@ using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Sales;
 using VinylExchange.Models.ResourceModels.Sales;
 using VinylExchange.Models.Utility;
-using VinylExchange.Services.Data.MainServices.Addresses;
-using VinylExchange.Services.HelperServices;
+using VinylExchange.Services.HelperServices.Releases;
 using VinylExchange.Services.Mapping;
 
 namespace VinylExchange.Services.Data.MainServices.Sales

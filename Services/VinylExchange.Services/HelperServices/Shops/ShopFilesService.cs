@@ -11,7 +11,7 @@ using VinylExchange.Models.ResourceModels.ShopFiles;
 using VinylExchange.Services.Files;
 using VinylExchange.Services.Mapping;
 
-namespace VinylExchange.Services.Data.HelperServices
+namespace VinylExchange.Services.Data.HelperServices.Shops
 {
     public class ShopFilesService : IShopFilesService
     {

@@ -26,6 +26,7 @@ namespace VinylExchange.Data
         public DbSet<Shop> Shops { get; set; }
         public DbSet<Sale> Sales { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<SaleMessage> SaleMessages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -97,12 +98,21 @@ namespace VinylExchange.Data
                 .WithMany(r => r.Sales)
                 .HasForeignKey(s => s.ReleaseId);
 
+                sale.HasMany(s => s.Messages)
+                .WithOne(m => m.Sale)
+                .HasForeignKey(m => m.SaleId);
+
             });
 
             modelBuilder.Entity<Address>()
                 .HasOne(a => a.User)
                 .WithMany(u => u.Addresses)
                 .HasForeignKey(a => a.UserId);
+
+            modelBuilder.Entity<SaleMessage>()
+                .HasOne(sm => sm.User)
+                .WithMany(u => u.Messages)
+                .HasForeignKey(sm => sm.UserId);
 
         }
 

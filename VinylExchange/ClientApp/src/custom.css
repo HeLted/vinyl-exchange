@@ -273,3 +273,7 @@ font-size: 0.75em
 	top: 17px;
 }
 
+hr {
+  border-style:solid 3px;
+  border-color: white;
+}

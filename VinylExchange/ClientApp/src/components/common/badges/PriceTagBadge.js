@@ -6,7 +6,7 @@ class PriceTagBadge extends Component {
   render() {
     return (
       <span class="tag">
-        {this.props.data.price} <FontAwesomeIcon icon={faEuroSign} />
+        {this.props.data.price === 0 ?"N/A":(this.props.data.price )} <FontAwesomeIcon icon={faEuroSign} />
       </span>
     );
   }
