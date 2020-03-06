@@ -1,11 +1,9 @@
-using IdentityServer4.AspNetIdentity;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +20,6 @@ using VinylExchange.Hubs;
 using VinylExchange.Models;
 using VinylExchange.Roles;
 using VinylExchange.Services.Authentication;
-using VinylExchange.Services.Data.HelperServices;
 using VinylExchange.Services.Data.HelperServices.Sales;
 using VinylExchange.Services.Data.HelperServices.Shops;
 using VinylExchange.Services.Data.HelperServices.Users;
@@ -31,7 +28,6 @@ using VinylExchange.Services.Data.MainServices.Sales;
 using VinylExchange.Services.Data.MainServices.Shops;
 using VinylExchange.Services.EmaiSender;
 using VinylExchange.Services.Files;
-using VinylExchange.Services.HelperServices;
 using VinylExchange.Services.HelperServices.Releases;
 using VinylExchange.Services.Logging;
 using VinylExchange.Services.MainServices.Collections;
@@ -147,7 +143,10 @@ namespace VinylExchange
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                serviceScope.ServiceProvider.GetRequiredService<VinylExchangeDbContext>();
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<VinylExchangeDbContext>();
+
+                dbContext.Database.Migrate();
+
                 serviceScope.ServiceProvider.GetRequiredService<UserManager<VinylExchangeUser>>();
                 serviceScope.ServiceProvider.GetRequiredService<RoleManager<VinylExchangeRole>>();
                 serviceScope.ServiceProvider.GetRequiredService<UserSeeder>().SeedAdmin().GetAwaiter().GetResult();
