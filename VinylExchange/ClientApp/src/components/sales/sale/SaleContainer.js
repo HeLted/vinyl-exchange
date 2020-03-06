@@ -49,7 +49,7 @@ class SaleContainer extends Component {
         Url.api +
           Controllers.sales.name +
           Url.slash +
-          this.props.location.pathname.replace("/sale/", "")
+          this.props.location.pathname.replace("/Sale/", "")
          
       )
       .then(response => {

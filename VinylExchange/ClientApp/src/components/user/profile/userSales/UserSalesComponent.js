@@ -10,7 +10,7 @@ import StatusBadge from "./../../../common/badges/StatusBadge";
 function UserSalesComponent(props) {
   const rows = props.data.sales.map(saleObj => {
     return (
-      <tr key={saleObj.id}>
+      <tr onClick={() => props.functions.handleGoToSale(saleObj.id)} key={saleObj.id}>
         <td>
           <img
             className="img-thumbnail"
@@ -32,13 +32,6 @@ function UserSalesComponent(props) {
           <GradeBadge data={{ grade: saleObj.sleeveGrade }} />
         </td>
         <td><StatusBadge data={{status:saleObj.status}}/></td>
-        <td>
-          <div className="row justify-content-center">
-          
-            <GoToSaleButton data={{ saleId: saleObj.id }} />
-           
-          </div>
-        </td>
       </tr>
     );
   });
@@ -54,15 +47,12 @@ function UserSalesComponent(props) {
           <th className="border-left border-right">Vinyl Grade</th>
           <th className="border-left border-right">Sleeve Grade</th>
           <th className="border-left border-right">Status</th>
-          <th className="border-left border-right">
-            <FontAwesomeIcon icon={faBars} />
-          </th>
         </tr>
       </thead>
       <tbody className="normal-tbody">
         {props.data.isLoading ? (
           <tr>
-            <td colSpan="7">
+            <td colSpan="6">
               <BorderSpinner />
             </td>
           </tr>
@@ -70,7 +60,7 @@ function UserSalesComponent(props) {
           rows
         ) : (
           <tr className="border">
-            <td colSpan="7" className="no-addresses-container">
+            <td colSpan="6" className="no-addresses-container">
               <h6>You currentlly don't have any sales</h6>
             </td>
           </tr>

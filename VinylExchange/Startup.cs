@@ -88,7 +88,7 @@ namespace VinylExchange
 
             services.AddIdentityServer()
                 .AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>();
-                //.AddProfileService<ProfileService>();
+            //.AddProfileService<ProfileService>();
 
 
 
@@ -99,7 +99,7 @@ namespace VinylExchange
             }).AddNewtonsoftJson();
 
             services.AddAntiforgery(options =>
-            {                               
+            {
                 options.HeaderName = "RequestVerificationToken";
                 options.SuppressXFrameOptionsHeader = false;
             });
@@ -137,12 +137,12 @@ namespace VinylExchange
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<RoleSeeder>();
             services.AddTransient<UserSeeder>();
-     
+
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IAntiforgery antiforgery)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAntiforgery antiforgery)
         {
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -197,7 +197,7 @@ namespace VinylExchange
                 endpoints.MapHub<SaleChatHub>("/sale/chathub");
                 //endpoints.MapRazorPages();
             });
-            
+
 
             app.Use(next => context =>
             {
@@ -205,11 +205,11 @@ namespace VinylExchange
 
                 if (
                     string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(path, "/index.html", StringComparison.OrdinalIgnoreCase))
+                    string.Equals(path, "/Authentication/Logout-Callback", StringComparison.OrdinalIgnoreCase))
                 {
-                        // The request token can be sent as a JavaScript-readable cookie, 
-                        // and Angular uses it by default.
-                        var tokens = antiforgery.GetAndStoreTokens(context);
+                    // The request token can be sent as a JavaScript-readable cookie, 
+                    // and Angular uses it by default.
+                    var tokens = antiforgery.GetAndStoreTokens(context);
                     context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
                         new CookieOptions() { HttpOnly = false });
                 }

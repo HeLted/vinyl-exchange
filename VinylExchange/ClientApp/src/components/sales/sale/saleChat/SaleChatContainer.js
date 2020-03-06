@@ -32,16 +32,23 @@ class SaleChatContainer extends Component {
     this.connection
       .start()
       .then(() => {
-        this.context.handleAppNotification("Established connection with chatHub", 5);
-        this.joinRoom().then(()=>{
-            this.getSellerAvatarPromise()
-            .then(()=>{
-                this.getBuyerAvatarPromise()
-                .then(()=>{
-                    this.invokeLoadMessageHistory()
-                });
-            })
-        })
+        this.context.handleAppNotification(
+          "Established connection with chatHub",
+          5
+        );
+        this.joinRoom().then(() => {
+          this.getSellerAvatarPromise().then(() => {
+            const buyerAvatarPromise = this.getBuyerAvatarPromise();
+
+            if (buyerAvatarPromise != undefined) {
+              buyerAvatarPromise.then(() => {
+                this.invokeLoadMessageHistory();
+              });
+            }else{
+              this.invokeLoadMessageHistory();
+            }
+          });
+        });
       })
       .catch(error => {
         this.setState({ isLoading: false });
@@ -56,10 +63,7 @@ class SaleChatContainer extends Component {
     return this.connection
       .invoke("JoinRoom", this.props.data.sale.id)
       .then(() => {
-        this.context.handleAppNotification(
-          "You joined sale chatroom!",
-          3
-        );
+        this.context.handleAppNotification("You joined sale chatroom!", 3);
       })
       .catch(err => {
         this.setState({ isLoading: false });

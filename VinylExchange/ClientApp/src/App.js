@@ -16,6 +16,8 @@ import RegisterContainer from "./components/api-authorization/authPages/register
 import LoginContainer from "./components/api-authorization/authPages/login/LoginContainer";
 import EmailConfirmContainer from "./components/api-authorization/authPages/register/EmailConfirmContainer";
 import ProfileContainer from "./components/user/profile/ProfileContainer";
+import LogoutContainer from "./components/api-authorization/authPages/logout/LogoutContainer";
+import LogoutCallbackContainer from "./components/api-authorization/authPages/logout/LogoutCallbackContainer";
 
 import "./custom.css";
 
@@ -33,6 +35,12 @@ export default class App extends Component {
           path="/Authentication/Register"
           component={RegisterContainer}
         />
+        <Route
+          exact
+          path="/Authentication/Logout"
+          component={LogoutContainer}
+        />
+        <Route exact path="/Authentication/Logout-Callback" component={LogoutCallbackContainer}/>
         <Route exact path="/Authentication/Login" component={LoginContainer} />
         <Route
           exact

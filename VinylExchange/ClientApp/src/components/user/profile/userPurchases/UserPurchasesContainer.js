@@ -3,6 +3,7 @@ import UserPurchasesComponent from "./UserPurchasesComponent";
 import axios from "axios";
 import { NotificationContext } from "./../../../../contexts/NotificationContext";
 import { Url, Controllers } from "./../../../../constants/UrlConstants";
+import { withRouter } from 'react-router-dom';
 
 class UserPurchasesContainer extends Component {
   constructor(props) {
@@ -36,6 +37,10 @@ class UserPurchasesContainer extends Component {
       });
   }
 
+  handleGoToSale = saleId => {
+   this.props.history.push(`/Sale/${saleId}`);
+  };
+
   render() {
     return (
       <UserPurchasesComponent
@@ -43,9 +48,14 @@ class UserPurchasesContainer extends Component {
           purchases: this.state.purchases,
           isLoading: this.state.isLoading
         }}
+        functions={{ handleGoToSale: this.handleGoToSale }}
       />
     );
   }
 }
 
-export default UserPurchasesContainer;
+function UserPurchasesContainerWrapper(props) {
+  return <UserPurchasesContainer {...props} />;
+}
+
+export default withRouter(UserPurchasesContainerWrapper);

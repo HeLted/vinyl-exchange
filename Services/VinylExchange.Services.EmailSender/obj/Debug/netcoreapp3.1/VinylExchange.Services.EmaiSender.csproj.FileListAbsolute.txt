@@ -1,0 +1,5 @@
+C:\Users\dellpc\source\repos\VinylExchange\Services\VinylExchange.Services.EmaiSender\bin\Debug\netcoreapp3.1\VinylExchange.Services.EmaiSender.deps.json
+C:\Users\dellpc\source\repos\VinylExchange\Services\VinylExchange.Services.EmaiSender\bin\Debug\netcoreapp3.1\VinylExchange.Services.EmaiSender.dll
+C:\Users\dellpc\source\repos\VinylExchange\Services\VinylExchange.Services.EmaiSender\obj\Debug\netcoreapp3.1\VinylExchange.Services.EmaiSender.AssemblyInfoInputs.cache
+C:\Users\dellpc\source\repos\VinylExchange\Services\VinylExchange.Services.EmaiSender\obj\Debug\netcoreapp3.1\VinylExchange.Services.EmaiSender.AssemblyInfo.cs
+C:\Users\dellpc\source\repos\VinylExchange\Services\VinylExchange.Services.EmaiSender\obj\Debug\netcoreapp3.1\VinylExchange.Services.EmaiSender.csprojAssemblyReference.cache

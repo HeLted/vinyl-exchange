@@ -5,7 +5,7 @@ import { faEuroSign } from "@fortawesome/free-solid-svg-icons";
 class PriceTagBadge extends Component {
   render() {
     return (
-      <span class="tag">
+      <span className="tag">
         {this.props.data.price === 0 ?"N/A":(this.props.data.price )} <FontAwesomeIcon icon={faEuroSign} />
       </span>
     );

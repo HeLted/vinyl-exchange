@@ -6,20 +6,18 @@ export const QueryParameterNames = {
 };
 
 export const LogoutActions = {
-  LogoutCallback: 'logout-callback',
-  Logout: 'logout',
-  LoggedOut: 'logged-out'
+  Logout: 'Logout'
 };
 
 export const LoginActions = {
   Login: 'login',
   LoginCallback: 'login-callback',
   LoginFailed: 'login-failed',
-  Profile: 'profile',
-  Register: 'register'
+  Profile: 'Profile',
+  Register: 'Register'
 };
 
-const prefix = '/authentication';
+const prefix = '/Authentication';
 
 export const ApplicationPaths = {
   DefaultLoginRedirectPath: '/',
@@ -31,8 +29,6 @@ export const ApplicationPaths = {
   Register: `${prefix}/${LoginActions.Register}`,
   Profile: "/User/Profile",
   LogOut: `${prefix}/${LogoutActions.Logout}`,
-  LoggedOut: `${prefix}/${LogoutActions.LoggedOut}`,
-  LogOutCallback: `${prefix}/${LogoutActions.LogoutCallback}`,
   IdentityRegisterPath: '/Identity/Account/Register',
   IdentityManagePath: '/Identity/Account/Manage',
   UserCollection: "/User/Collection"

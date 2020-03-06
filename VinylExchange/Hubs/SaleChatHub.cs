@@ -34,8 +34,8 @@ namespace VinylExchange.Hubs
                     await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
                 }
             }
-
         }
+
 
         public async Task LeaveRoom(string roomName)
         {

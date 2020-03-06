@@ -1,20 +1,21 @@
-import React, { Component } from 'react';
-import UserSalesComponent from "./UserSalesComponent"
+import React, { Component } from "react";
+import UserSalesComponent from "./UserSalesComponent";
 import { Url, Controllers } from "./../../../../constants/UrlConstants";
 import axios from "axios";
 import { NotificationContext } from "./../../../../contexts/NotificationContext";
+import { withRouter } from 'react-router-dom';
 
 class UserSalesContainer extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            sales:[],
-            isLoading:false
-          }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      sales: [],
+      isLoading: false
+    };
+  }
 
-    static contextType = NotificationContext;
-    
+  static contextType = NotificationContext;
+
   componentDidMount() {
     this.setState({ isLoading: true });
     axios
@@ -36,9 +37,25 @@ class UserSalesContainer extends Component {
       });
   }
 
-    render() { 
-        return (<UserSalesComponent data={{sales:this.state.sales,isLoading:this.state.isLoading}}/>);
-    }
+  handleGoToSale = saleId => {
+    this.props.history.push(`/Sale/${saleId}`);
+  };
+
+  render() {
+    return (
+      <UserSalesComponent
+        data={{ sales: this.state.sales, isLoading: this.state.isLoading }}
+        functions={{ handleGoToSale: this.handleGoToSale }}
+      />
+    );
+  }
 }
- 
-export default UserSalesContainer;
+
+
+function UserPurchasesContainerWrapper(props) {
+  return <UserSalesContainer {...props} />;
+}
+
+export default withRouter(UserPurchasesContainerWrapper);
+
+

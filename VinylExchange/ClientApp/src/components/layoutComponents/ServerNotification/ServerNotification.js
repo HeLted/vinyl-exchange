@@ -50,13 +50,13 @@ class ServerNotification extends Component {
             notificationClass
           );
         }
-        else if (notificationSeverity === 5) {
-          ToastsStore.info(
-            notificationObj.messageText,
-            notificationElementTimer,
-            devNotificationClass
-          );
-        }
+        // else if (notificationSeverity === 5) {
+        //   ToastsStore.info(
+        //     notificationObj.messageText,
+        //     notificationElementTimer,
+        //     devNotificationClass
+        //   );
+        // }
       }, 300);
     });
 
