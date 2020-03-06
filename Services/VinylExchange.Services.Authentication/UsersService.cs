@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using VinylExchange.Data.Models;
 using VinylExchange.Models.InputModels.Users;
-using VinylExchange.Models.Utility;
 using VinylExchange.Services.EmaiSender;
 using VinylExchange.Services.Mapping;
 

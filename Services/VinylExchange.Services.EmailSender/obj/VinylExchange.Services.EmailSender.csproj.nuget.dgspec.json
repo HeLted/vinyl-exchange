@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dellpc\\source\\repos\\VinylExchange\\Services\\VinylExchange.Services.EmaiSender\\VinylExchange.Services.EmailSender.csproj": {}
+    "C:\\Users\\dellpc\\source\\repos\\VinylExchange\\Services\\VinylExchange.Services.EmailSender\\VinylExchange.Services.EmailSender.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dellpc\\source\\repos\\VinylExchange\\Services\\VinylExchange.Services.EmaiSender\\VinylExchange.Services.EmailSender.csproj": {
+    "C:\\Users\\dellpc\\source\\repos\\VinylExchange\\Services\\VinylExchange.Services.EmailSender\\VinylExchange.Services.EmailSender.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dellpc\\source\\repos\\VinylExchange\\Services\\VinylExchange.Services.EmaiSender\\VinylExchange.Services.EmailSender.csproj",
+        "projectUniqueName": "C:\\Users\\dellpc\\source\\repos\\VinylExchange\\Services\\VinylExchange.Services.EmailSender\\VinylExchange.Services.EmailSender.csproj",
         "projectName": "VinylExchange.Services.EmailSender",
-        "projectPath": "C:\\Users\\dellpc\\source\\repos\\VinylExchange\\Services\\VinylExchange.Services.EmaiSender\\VinylExchange.Services.EmailSender.csproj",
+        "projectPath": "C:\\Users\\dellpc\\source\\repos\\VinylExchange\\Services\\VinylExchange.Services.EmailSender\\VinylExchange.Services.EmailSender.csproj",
         "packagesPath": "C:\\Users\\dellpc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dellpc\\source\\repos\\VinylExchange\\Services\\VinylExchange.Services.EmaiSender\\obj\\",
+        "outputPath": "C:\\Users\\dellpc\\source\\repos\\VinylExchange\\Services\\VinylExchange.Services.EmailSender\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

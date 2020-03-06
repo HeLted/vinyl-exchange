@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Logg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Authentication", "Services\VinylExchange.Services.Authentication\VinylExchange.Services.Authentication.csproj", "{599DE079-92B2-4A21-89BB-5784D4DEABF2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.EmailSender", "Services\VinylExchange.Services.EmaiSender\VinylExchange.Services.EmailSender.csproj", "{76836F56-DEBE-4E42-9C7F-A146D16E908A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.EmailSender", "Services\VinylExchange.Services.EmailSender\VinylExchange.Services.EmailSender.csproj", "{DB5EE662-8EA8-439C-B3FC-4A18276CE271}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,10 +91,10 @@ Global
 		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76836F56-DEBE-4E42-9C7F-A146D16E908A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76836F56-DEBE-4E42-9C7F-A146D16E908A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76836F56-DEBE-4E42-9C7F-A146D16E908A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76836F56-DEBE-4E42-9C7F-A146D16E908A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB5EE662-8EA8-439C-B3FC-4A18276CE271}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB5EE662-8EA8-439C-B3FC-4A18276CE271}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB5EE662-8EA8-439C-B3FC-4A18276CE271}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB5EE662-8EA8-439C-B3FC-4A18276CE271}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,7 +111,7 @@ Global
 		{12FAB19D-E098-4573-A536-69C6E6D62B35} = {5458B1B8-B097-42B1-91AD-F79F451EAFAC}
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
 		{599DE079-92B2-4A21-89BB-5784D4DEABF2} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
-		{76836F56-DEBE-4E42-9C7F-A146D16E908A} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
+		{DB5EE662-8EA8-439C-B3FC-4A18276CE271} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D615B1D1-B2B9-425C-B0C3-87C0763326B3}
