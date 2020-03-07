@@ -7,7 +7,7 @@ class SaleMenuContainer extends Component {
     super();
     this.state = {
       currentUserId: "",
-      isLoading: true
+      isLoading: true,
     };
   }
 
@@ -19,16 +19,17 @@ class SaleMenuContainer extends Component {
     });
   }
 
+
   render() {
     return (
       <SaleMenuComponent
         data={{
           sale: this.props.data.sale,
           currentUserId: this.state.currentUserId,
-          isLoading: this.state.isLoading
+          isLoading: this.state.isLoading,
         }}
         functions={{
-          handleReLoadSale: this.props.functions.handleReLoadSale
+          handleReLoadSale: this.props.functions.handleReLoadSale,
         }}
       />
     );

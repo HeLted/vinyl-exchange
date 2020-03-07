@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
@@ -12,9 +11,9 @@ namespace VinylExchange.Services.EmaiSender
         private const string SENDER_EMAIL = "no-reply@.com";
         private const string NAME_OF_THE_SENDER = "Vinyl Exchange";  
 
-        public EmailSender(IConfiguration Configuration)
+        public EmailSender(string sendGridId)
         {
-            this.SendGridKey = "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";    
+            this.SendGridKey = sendGridId;    
         }
 
         public string SendGridUser { get; set; }
@@ -27,9 +26,7 @@ namespace VinylExchange.Services.EmaiSender
         }
 
         public async  Task Execute(string apiKey, string subject, string message, string email)
-        {
-          
-
+        {          
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("no-reply@vinylexchange.com", "VinylExchangeAdmin");
            

@@ -130,7 +130,7 @@ namespace VinylExchange
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<ILoggerService, LoggerService>();
             services.AddTransient<IUsersService, UsersService>();
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSender>(new EmailSender("SG.LtntWeJrTD - 310jTquhuBA.M5rZlCNcnuM7U7xYTT4w25vcaevdykIY1flFZV - Shec"));
             services.AddTransient<RoleSeeder>();
             services.AddTransient<UserSeeder>();
 
@@ -145,16 +145,17 @@ namespace VinylExchange
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<VinylExchangeDbContext>();
 
-                dbContext.Database.Migrate();
-
+                if(env.IsDevelopment())
+                {
+                    dbContext.Database.Migrate();
+                }
+                               
                 serviceScope.ServiceProvider.GetRequiredService<UserManager<VinylExchangeUser>>();
                 serviceScope.ServiceProvider.GetRequiredService<RoleManager<VinylExchangeRole>>();
                 serviceScope.ServiceProvider.GetRequiredService<UserSeeder>().SeedAdmin().GetAwaiter().GetResult();
                 serviceScope.ServiceProvider.GetRequiredService<RoleSeeder>().SeedRoles().GetAwaiter().GetResult();
 
             }
-
-
 
             AutoMapperConfig.RegisterMappings(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly);
 

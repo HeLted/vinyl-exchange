@@ -1,13 +1,13 @@
-﻿namespace VinylExchange.Services.Mapping
+﻿using AutoMapper;
+using AutoMapper.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
+
+namespace VinylExchange.Services.Mapping
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-
-    using AutoMapper;
-    using AutoMapper.Configuration;
-
     public static class AutoMapperConfig
     {
         private static bool initialized;
@@ -51,7 +51,7 @@
 
             MapperInstance = new Mapper(new MapperConfiguration(config));
 
-           
+
         }
 
         private static IEnumerable<TypesMap> GetFromMaps(IEnumerable<Type> types)

@@ -4,8 +4,8 @@ import TextInput from "./../../../common/inputComponents/TextInput";
 import EmailInput from "./../../../common/inputComponents/EmailInput";
 import PasswordInput from "./../../../common/inputComponents/PasswordInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  faSync } from "@fortawesome/free-solid-svg-icons";
-import "./../authForm.css"
+import { faSync } from "@fortawesome/free-solid-svg-icons";
+import "./../authForm.css";
 
 function RegisterComponent(props) {
   return (
@@ -23,7 +23,7 @@ function RegisterComponent(props) {
               />
             </div>
             <div class="form-group">
-            <Label for="emailInput" value="E-Mail" />
+              <Label for="emailInput" value="E-Mail" />
               <EmailInput
                 id="emailInput"
                 placeholder="E-Mail..."
@@ -32,7 +32,7 @@ function RegisterComponent(props) {
               />
             </div>
             <div class="form-group">
-            <Label for="passwordInput" value="Password" />
+              <Label for="passwordInput" value="Password" />
               <PasswordInput
                 id="passwordInput"
                 placeholder="Password..."
@@ -41,7 +41,7 @@ function RegisterComponent(props) {
               />
             </div>
             <div class="form-group">
-            <Label for="confirmPasswordInput" value="Confirm Password" />
+              <Label for="confirmPasswordInput" value="Confirm Password" />
               <PasswordInput
                 id="confirmPasswordInput"
                 placeholder="Confirm Password..."
@@ -51,7 +51,7 @@ function RegisterComponent(props) {
             </div>
             <div className="text-center">
               {props.data.isLoading ? (
-                <button class="btn btn-primary"> 
+                <button class="btn btn-primary" disabled>
                   <FontAwesomeIcon icon={faSync} spin />
                 </button>
               ) : (

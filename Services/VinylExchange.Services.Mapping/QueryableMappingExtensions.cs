@@ -1,10 +1,10 @@
-﻿namespace VinylExchange.Services.Mapping
-{
-    using System;
-    using System.Linq;
-    using System.Linq.Expressions;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+using AutoMapper.QueryableExtensions;
 
-    using AutoMapper.QueryableExtensions;
+namespace VinylExchange.Services.Mapping
+{
 
     public static class QueryableMappingExtensions
     {

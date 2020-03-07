@@ -28,9 +28,9 @@ class Footer extends Component {
                   <li>
                     <h5>
                       {" "}
-                      <a href="#" style={{marginTop: "5em"}}>
+                      <a href="#" style={{marginTop: "3em"}}>
                         {" "}
-                        ABOUT US
+                        Home
                       </a>{" "}
                     </h5>
                     <hr/>
@@ -38,23 +38,16 @@ class Footer extends Component {
                   <li>
                     {" "}
                     <h5>
-                      <a href="#"> CURRENT SERIES </a>{" "}
+                      <a href="#"> Marketplace </a>{" "}
                     </h5>
                                 <hr/>
                   </li>
                   <li>
                     {" "}
                     <h5>
-                      <a href="#"> THE HOUSE </a>{" "}
+                      <a href="#"> About Us </a>{" "}
                     </h5>
                     <hr/>
-                  </li>
-                  <li>
-                    {" "}
-                    <h5>
-                      <a href="#"> LOOKING BACK </a>{" "}
-                    </h5>
-                                <hr/>
                   </li>
                 </ul>
               </div>

@@ -34,7 +34,7 @@ class StatusBadge extends Component {
     }
 
     return (
-      <a class="badge" style={{backgroundColor:color,padding:"10px",width:"140px"}}>
+      <a class="badge" style={{backgroundColor:color,padding:"10px",width:"170px"}}>
         {badgeText}
       </a>
     );

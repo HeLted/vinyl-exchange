@@ -3,7 +3,6 @@ import { Url, Controllers } from "./../../constants/UrlConstants";
 import axios from "axios";
 import { NotificationContext } from "./../../contexts/NotificationContext";
 
-
 class UserThubnail extends Component {
   constructor() {
     super();
@@ -62,8 +61,14 @@ class UserThubnail extends Component {
     ) : (
       <img
         className="thumbnail-image img-fluid"
-        height="50px"
-        width="50px"
+        height={
+          (this.props.data.height != undefined ? this.props.data.height : 50) +
+          "px"
+        }
+        width={
+          (this.props.data.width != undefined ? this.props.data.width : 50) +
+          "px"
+        }
         src={"data:image/png;base64, " + this.state.avatar}
       ></img>
     );

@@ -8,6 +8,7 @@ namespace VinylExchange.Data.Common.Models
 
         public BaseModel()
         {
+           
             this.CreatedOn = DateTime.UtcNow;
         }
         [Key]

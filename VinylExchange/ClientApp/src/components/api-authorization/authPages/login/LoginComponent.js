@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
 import "./../authForm.css";
 
-
 function LoginComponent(props) {
   return (
     <div className="container-fluid">
@@ -35,8 +34,6 @@ function LoginComponent(props) {
 
             <div class="form-group">
               <div class="form-check text-center">
-                
-
                 <div class="custom-control custom-checkbox">
                   <input
                     type="checkbox"
@@ -45,7 +42,10 @@ function LoginComponent(props) {
                     onChange={props.functions.handleOnChange}
                     checked={props.data.rememberMeInput}
                   />
-                  <label className="custom-control-label" htmlFor="rememberMeInput">
+                  <label
+                    className="custom-control-label"
+                    htmlFor="rememberMeInput"
+                  >
                     Remember Me ?
                   </label>
                 </div>
@@ -54,7 +54,7 @@ function LoginComponent(props) {
 
             <div className="text-center">
               {props.data.isLoading ? (
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" disabled>
                   <FontAwesomeIcon icon={faSync} spin />
                 </button>
               ) : (

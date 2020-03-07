@@ -13,3 +13,23 @@
 .no-addresses-container{
     padding: 30px;
 }
+
+.chat {
+    overflow-x: hidden !important;
+    height: 300px;
+    overflow: scroll;
+    padding: 10px;
+  }
+  
+.sale-log-container{
+    padding: 20px;
+}
+
+
+.sale-release-info{
+    padding: 30px;
+}
+
+.sale-button-container{
+    padding:5px;
+}

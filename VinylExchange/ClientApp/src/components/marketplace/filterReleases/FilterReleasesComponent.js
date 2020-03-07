@@ -24,7 +24,7 @@ class FilterReleasesComponent extends Component {
 
           <div
             id="collapseOne"
-            className="collapse "
+            className="collapse show"
             aria-labelledby="headingOne"
             data-parent="#filterCollapse"
           >

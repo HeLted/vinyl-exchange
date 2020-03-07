@@ -27,10 +27,10 @@ class SaleContainer extends Component {
         statusText: "",
         shipsFrom: "",
         shipsTo: "",
-        shippingPrice: 0,
-        
+        shippingPrice: 0
       },
-      isLoading:true
+      isLoading: true,
+      isChatShown: false
     };
   }
 
@@ -43,14 +43,13 @@ class SaleContainer extends Component {
   };
 
   loadSale = () => {
-    this.setState({isLoading:true})
+    this.setState({ isLoading: true });
     axios
       .get(
         Url.api +
           Controllers.sales.name +
           Url.slash +
           this.props.location.pathname.replace("/Sale/", "")
-         
       )
       .then(response => {
         const data = response.data;
@@ -73,23 +72,35 @@ class SaleContainer extends Component {
             sleeveConditionText: data.sleeveConditionText,
             shipsFrom: data.shipsFrom,
             shipsTo: data.ShipsTo,
-            shippingPrice: data.shippingPrice,
-            
+            shippingPrice: data.shippingPrice
           },
-          isLoading:false
+          isLoading: false
         });
       })
       .catch(error => {
-        this.setState({isLoading:false})
+        this.setState({ isLoading: false });
         this.context.handleServerNotification(error.response);
       });
+  };
+
+  handleToggleChat = () => {
+    this.setState(prevState => {
+      return { isChatShown: prevState.isChatShown ? false : true };
+    });
   };
 
   render() {
     return (
       <SaleComponent
-        data={{ sale: this.state.sale ,isLoading:this.state.isLoading }}
-        functions={{ handleReLoadSale: this.handleReLoadSale }}
+        data={{
+          sale: this.state.sale,
+          isLoading: this.state.isLoading,
+          isChatShown: this.state.isChatShown
+        }}
+        functions={{
+          handleReLoadSale: this.handleReLoadSale,
+          handleToggleChat: this.handleToggleChat
+        }}
       />
     );
   }

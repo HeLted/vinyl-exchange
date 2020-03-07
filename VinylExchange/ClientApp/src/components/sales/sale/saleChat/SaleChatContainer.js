@@ -44,7 +44,7 @@ class SaleChatContainer extends Component {
               buyerAvatarPromise.then(() => {
                 this.invokeLoadMessageHistory();
               });
-            }else{
+            } else {
               this.invokeLoadMessageHistory();
             }
           });
@@ -180,6 +180,12 @@ class SaleChatContainer extends Component {
     this.setState({ [name]: value });
   };
 
+  handleToggleChat = () => {
+    this.setState(prevState => {
+      return { isChatShown: prevState.isChatShown ? false : true };
+    });
+  };
+
   componentWillUnmount() {
     this.connection.stop();
   }
@@ -190,11 +196,13 @@ class SaleChatContainer extends Component {
         data={{
           messageInput: this.state.messageInput,
           messages: this.state.messages,
-          isLoading: this.state.isLoading
+          isLoading: this.state.isLoading,
+          isChatShown : this.state.isChatShown
         }}
         functions={{
           handleSendMessage: this.handleSendMessage,
-          handleOnChange: this.handleOnChange
+          handleOnChange: this.handleOnChange,
+          handleToggleChat: this.handleToggleChat
         }}
       />
     );

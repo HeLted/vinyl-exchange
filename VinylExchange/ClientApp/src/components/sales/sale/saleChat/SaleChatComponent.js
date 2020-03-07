@@ -8,8 +8,17 @@ function SaleChatComponent(props) {
   const listItems = props.data.messages.map(messageObj => {
     return (
       <li key={uuid4()}>
-        <div className="alert alert-primary" role="alert">
-          <h6><UserThumbnail data={{ avatar: messageObj.avatar }} /> : {messageObj.message} </h6>
+        <div
+          className="alert alert-primary round-border text-left"
+          role="alert"
+          style={{ backgroundColor: "#0084ff" }}
+        >
+          <h6 style={{ color: "white", wordWrap: "break-word" }}>
+            <UserThumbnail
+              data={{ avatar: messageObj.avatar, height: 30, width: 30 }}
+            />{" "}
+            : {messageObj.message}{" "}
+          </h6>
         </div>
       </li>
     );
@@ -19,12 +28,7 @@ function SaleChatComponent(props) {
     <BorderSpinner />
   ) : (
     <div className="chat-container border">
-      <ul
-        className="border border-dark"
-        style={{ height: "300px", overflow: "scroll", padding: "10px" }}
-      >
-        {listItems}
-      </ul>
+      <ul className="chat border ">{listItems}</ul>
       <br />
       <div className="input-group">
         <TextInput

@@ -17,7 +17,7 @@ function SaleInfoComponent(props) {
       <div className="row text-center">
         <div
           className={
-            sale.buyerId === "" || sale.buyerId === null ? "col-12" : "col-6"
+            sale.buyerId === "" || sale.buyerId === null ? "col-12" : "col-lg-6 col-md-6 col-sm-12"
           }
         >
           <div className="border border-dark">
@@ -37,7 +37,7 @@ function SaleInfoComponent(props) {
         </div>
 
         {sale.buyerId !== "" && sale.buyerId !== null ? (
-          <div className="col-6">
+          <div className="col-lg-6 col-md-6 col-sm-12">
             <div className="border border-dark">
               <h5 className="property-text-lm">
                 <b>Buyer</b>
@@ -55,7 +55,7 @@ function SaleInfoComponent(props) {
           </div>
         ) : null}
 
-        <div className="col-6">
+        <div className="col-lg-6 col-md-6 col-sm-12">
           <div className="border border-dark">
             <h5 className="property-text-lm">
               <b>Vinyl Grade</b>
@@ -65,7 +65,7 @@ function SaleInfoComponent(props) {
             <GradeBadge data={{ grade: sale.vinylGrade }} />
           </h5>
         </div>
-        <div className="col-6">
+        <div className="col-lg-6 col-md-6 col-sm-12">
           <div className="border border-dark">
             <h5 className="property-text-lm">
               <b> Sleeve Grade</b>
@@ -75,7 +75,7 @@ function SaleInfoComponent(props) {
             <GradeBadge data={{ grade: sale.sleeveGrade }} />
           </h5>
         </div>
-        <div className="col-6">
+        <div className=" col-lg-6 col-md-6 col-sm-12">
           <div className="border border-dark">
             <h5 className="property-text-lm">
               <b> Price</b>
@@ -85,7 +85,7 @@ function SaleInfoComponent(props) {
             <PriceTagBadge data={{ price: sale.price }} />
           </h5>
         </div>
-        <div className="col-6">
+        <div className=" col-lg-6 col-md-6 col-sm-12">
           <div className="border border-dark">
             <h5 className="property-text-lm">
               <b>Shipping Price</b>
