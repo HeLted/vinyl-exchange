@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VinylExchange.Models.ResourceModels.File
+﻿namespace VinylExchange.Models.ResourceModels.File
 {
-   public  class DeleteFileResourceModel
+    using System;
+
+    public class DeleteFileResourceModel
     {
         public Guid FileId { get; set; }
 

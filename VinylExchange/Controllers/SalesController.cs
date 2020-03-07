@@ -1,143 +1,32 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using VinylExchange.Data.Common.Enumerations;
-using VinylExchange.Models.InputModels.Sales;
-using VinylExchange.Models.ResourceModels.Sales;
-using VinylExchange.Services.Data.MainServices.Sales;
-using VinylExchange.Services.Logging;
-
-namespace VinylExchange.Controllers
+﻿namespace VinylExchange.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
+    using VinylExchange.Data.Common.Enumerations;
+    using VinylExchange.Data.Models;
+    using VinylExchange.Models.InputModels.Sales;
+    using VinylExchange.Models.ResourceModels.Sales;
+    using VinylExchange.Models.Utility;
+    using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Services.Logging;
+
     [Authorize]
     public class SalesController : ApiController
     {
-        private readonly ISalesService salesService;
         private readonly ILoggerService loggerService;
 
-        public SalesController(ISalesService salesService,ILoggerService loggerService)
+        private readonly ISalesService salesService;
+
+        public SalesController(ISalesService salesService, ILoggerService loggerService)
         {
             this.salesService = salesService;
             this.loggerService = loggerService;
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-           
-            try
-            {
-                var sale = await this.salesService.GetSale(id);
-                               
-                if (sale == null)
-                {
-                    return NotFound();
-                }
-                                
-                var currentUserId = this.GetUserId(this.User);
-
-                if((sale.BuyerId != currentUserId && sale.SellerId != currentUserId) 
-                    && sale.Status != Status.Open)
-                {
-                    return Unauthorized();
-                }
-
-                return Ok(sale);
-            }
-            catch (Exception ex)
-            {
-                loggerService.LogException(ex);
-                return BadRequest();
-            }
-
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateSaleInputModel inputModel)
-        {
-            try
-            {                
-                var sale = await salesService.CreateSale(inputModel,this.GetUserId(this.User));
-
-                return CreatedAtRoute("Default", new { id = sale.Id });
-            }
-            catch (Exception ex)
-            {
-                loggerService.LogException(ex);
-                return BadRequest();
-            }
-            
-        }
-
-        [HttpPut]
-        [Route("PlaceOrder")]
-        public async Task<IActionResult> PlaceOrder(PlaceOrderInputModel inputModel)
-        {
-            try
-            {
-                var saleModel = await this.salesService.GetSaleInfo(inputModel.SaleId);
-
-                if (saleModel == null)
-                {
-                    return BadRequest();
-                }
-
-                var currentUserId = this.GetUserId(this.User);
-
-                if(saleModel.SellerId == currentUserId 
-                    || saleModel.BuyerId == currentUserId 
-                    || saleModel.Status != Status.Open)
-                {
-                    return Unauthorized();
-                }
-
-                await this.salesService.PlaceOrder(inputModel,currentUserId);
-                
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                loggerService.LogException(ex);
-                return BadRequest();
-            }
-
-        }
-
-        [HttpPut]
-        [Route("SetShippingPrice")]
-        public async Task<IActionResult> SetShippingPrice(SetShippingPriceInputModel inputModel)
-        {
-            try
-            {
-                var saleModel = await this.salesService.GetSaleInfo(inputModel.SaleId);
-
-                if (saleModel== null)
-                {
-                    return BadRequest();
-                }
-
-                var currentUserId = this.GetUserId(this.User);
-
-                if (saleModel.SellerId == currentUserId  && saleModel.Status == Status.ShippingNegotiation)
-                {
-                    await this.salesService.SetShippingPrice(inputModel);
-
-                    return NoContent();
-                }
-                else
-                {
-                    return Unauthorized();
-                }
-
-           
-            }
-            catch (Exception ex)
-            {
-                loggerService.LogException(ex);
-                return BadRequest();
-            }
-
         }
 
         [HttpPut]
@@ -146,36 +35,77 @@ namespace VinylExchange.Controllers
         {
             try
             {
-                var saleModel = await this.salesService.GetSaleInfo(inputModel.SaleId);
+                GetSaleInfoUtilityModel saleModel =
+                    await this.salesService.GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
-                    return BadRequest();
+                    return this.BadRequest();
                 }
 
-                var currentUserId = this.GetUserId(this.User);
+                Guid currentUserId = this.GetUserId(this.User);
 
                 if (saleModel.BuyerId == currentUserId && saleModel.Status == Status.PaymentPending)
                 {
                     await this.salesService.CompletePayment(inputModel);
 
-                    return NoContent();
+                    return this.NoContent();
                 }
                 else
                 {
-                    return Unauthorized();
+                    return this.Unauthorized();
                 }
-
-
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
-
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateSaleInputModel inputModel)
+        {
+            try
+            {
+                Sale sale = await this.salesService.CreateSale(inputModel, this.GetUserId(this.User));
+
+                return this.StatusCode(HttpStatusCode.Created, sale.Id);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            try
+            {
+                GetSaleResourceModel sale = await this.salesService.GetSale(id);
+
+                if (sale == null)
+                {
+                    return this.NotFound();
+                }
+
+                Guid currentUserId = this.GetUserId(this.User);
+
+                if ((sale.BuyerId != currentUserId && sale.SellerId != currentUserId) && sale.Status != Status.Open)
+                {
+                    return this.Unauthorized();
+                }
+
+                return this.Ok(sale);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
 
         [HttpGet]
         [Route("GetAllSalesForRelease/{id}")]
@@ -183,14 +113,14 @@ namespace VinylExchange.Controllers
         {
             try
             {
-                var sales = await this.salesService.GetAllSalesForRelease(id);
+                IEnumerable<GetAllSalesForReleaseResouceModel> sales = await this.salesService.GetAllSalesForRelease(id);
 
-                return Ok(sales);
+                return this.Ok(sales);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -200,16 +130,15 @@ namespace VinylExchange.Controllers
         {
             try
             {
-                var purchases = await this.salesService.GetUserPurchases(this.GetUserId(this.User));
+                IEnumerable<GetUserPurchasesResourceModel> purchases = await this.salesService.GetUserPurchases(this.GetUserId(this.User));
 
-                return Ok(purchases);
+                return this.Ok(purchases);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
-
         }
 
         [HttpGet]
@@ -218,17 +147,83 @@ namespace VinylExchange.Controllers
         {
             try
             {
-                var sales = await this.salesService.GetUserSales(this.GetUserId(this.User));
+                IEnumerable<GetUserSalesResourceModel> sales =
+                    await this.salesService.GetUserSales(this.GetUserId(this.User));
 
-                return Ok(sales);
+                return this.Ok(sales);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
-
         }
 
+        [HttpPut]
+        [Route("PlaceOrder")]
+        public async Task<IActionResult> PlaceOrder(PlaceOrderInputModel inputModel)
+        {
+            try
+            {
+                GetSaleInfoUtilityModel saleModel =
+                    await this.salesService.GetSaleInfo(inputModel.SaleId);
+
+                if (saleModel == null)
+                {
+                    return this.BadRequest();
+                }
+
+                Guid currentUserId = this.GetUserId(this.User);
+
+                if (saleModel.SellerId == currentUserId || saleModel.BuyerId == currentUserId
+                                                        || saleModel.Status != Status.Open)
+                {
+                    return this.Unauthorized();
+                }
+
+                await this.salesService.PlaceOrder(inputModel, currentUserId);
+
+                return this.NoContent();
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("SetShippingPrice")]
+        public async Task<IActionResult> SetShippingPrice(SetShippingPriceInputModel inputModel)
+        {
+            try
+            {
+                GetSaleInfoUtilityModel saleModel =
+                    await this.salesService.GetSaleInfo(inputModel.SaleId);
+
+                if (saleModel == null)
+                {
+                    return this.BadRequest();
+                }
+
+                Guid currentUserId = this.GetUserId(this.User);
+
+                if (saleModel.SellerId == currentUserId && saleModel.Status == Status.ShippingNegotiation)
+                {
+                    await this.salesService.SetShippingPrice(inputModel);
+
+                    return this.NoContent();
+                }
+                else
+                {
+                    return this.Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
     }
 }

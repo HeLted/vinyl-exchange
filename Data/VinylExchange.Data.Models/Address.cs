@@ -1,33 +1,34 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace VinylExchange.Data.Models
+﻿namespace VinylExchange.Data.Models
 {
-    public class Address
-    {
-        public Address()
-        {
-            this.Id = Guid.NewGuid();
-        }
+    using System;
+    using System.ComponentModel.DataAnnotations;
 
-        public Guid Id { get; set; }
+    using VinylExchange.Data.Common.Models;
+
+    public class Address : BaseModel
+    {
         [Required]
         [MinLength(3)]
         [MaxLength(40)]
         public string Country { get; set; }
-        [Required]
-        [MinLength(3)]
-        [MaxLength(40)]
-        public string Town { get; set; }
-        [Required]
-        [MinLength(3)]
-        [MaxLength(40)]
-        public string PostalCode { get; set; }
+
         [Required]
         [MinLength(3)]
         [MaxLength(300)]
         public string FullAddress { get; set; }
+
+        [Required]
+        [MinLength(3)]
+        [MaxLength(40)]
+        public string PostalCode { get; set; }
+
+        [Required]
+        [MinLength(3)]
+        [MaxLength(40)]
+        public string Town { get; set; }
+
         public VinylExchangeUser User { get; set; }
+
         public Guid UserId { get; set; }
     }
 }

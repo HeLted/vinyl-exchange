@@ -1,7 +1,7 @@
-﻿using AutoMapper;
+﻿namespace VinylExchange.Services.Mapping
+{
+    using AutoMapper;
 
-namespace VinylExchange.Services.Mapping
-{   
     public interface IHaveCustomMappings
     {
         void CreateMappings(IProfileExpression configuration);

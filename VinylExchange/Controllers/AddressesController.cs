@@ -1,73 +1,49 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using VinylExchange.Models.InputModels.Addresses;
-using VinylExchange.Services.Data.MainServices.Addresses;
-using VinylExchange.Services.Logging;
-
-namespace VinylExchange.Controllers
+﻿namespace VinylExchange.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
+    using VinylExchange.Data.Models;
+    using VinylExchange.Models.InputModels.Addresses;
+    using VinylExchange.Models.ResourceModels.Addresses;
+    using VinylExchange.Models.Utility;
+    using VinylExchange.Services.Data.MainServices.Addresses;
+    using VinylExchange.Services.Logging;
+
     [Authorize]
     public class AddressesController : ApiController
     {
         private readonly IAddressesService addressesService;
+
         private readonly ILoggerService loggerService;
 
-        public AddressesController(IAddressesService addressesService,ILoggerService loggerService)
+        public AddressesController(IAddressesService addressesService, ILoggerService loggerService)
         {
             this.addressesService = addressesService;
             this.loggerService = loggerService;
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Add(AddAdressInputModel inputModel)
         {
-
             try
             {
-                var address = await this.addressesService.AddAddress(inputModel, this.GetUserId(this.User));
+                Address address = await this.addressesService.AddAddress(
+                                      inputModel,
+                                      this.GetUserId(this.User));
 
-                return CreatedAtRoute("Default", new { id = address.Id });
+                return this.StatusCode(HttpStatusCode.Created, address.Id);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
-            
-        }
-
-
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> Remove(Guid id)
-        {
-            try
-            {
-                var addressInfoModel = await this.addressesService.GetAddressInfo(id);
-
-                if (addressInfoModel == null)
-                {
-                    return NotFound();
-                }
-
-                if (addressInfoModel.UserId != this.GetUserId(this.User))
-                {
-                    return Unauthorized();
-                }
-
-                var addressRemovedModel = await this.addressesService.RemoveAddress(addressInfoModel.Id);
-
-                return Ok(addressRemovedModel);
-            }
-            catch (Exception ex)
-            {
-                loggerService.LogException(ex);
-                return BadRequest();
-            }
-
-
         }
 
         [HttpGet]
@@ -76,17 +52,46 @@ namespace VinylExchange.Controllers
         {
             try
             {
-                var addresses = await this.addressesService.GetUserAddresses(this.GetUserId(this.User));
+                IEnumerable<GetUserAddressesResourceModel> addresses = await this.addressesService.GetUserAddresses(this.GetUserId(this.User));
 
-                return Ok(addresses);
+                return this.Ok(addresses);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
-            
         }
-               
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Remove(Guid id)
+        {
+            try
+            {
+                GetAddressInfoUtilityModel addressInfoModel =
+                    await this.addressesService.GetAddressInfo(id);
+
+                if (addressInfoModel == null)
+                {
+                    return this.NotFound();
+                }
+
+                if (addressInfoModel.UserId != this.GetUserId(this.User))
+                {
+                    return this.Unauthorized();
+                }
+
+                RemoveAddressResourceModel removedAddressResourceModel =
+                    await this.addressesService.RemoveAddress(addressInfoModel.Id);
+
+                return this.Ok(removedAddressResourceModel);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
     }
 }

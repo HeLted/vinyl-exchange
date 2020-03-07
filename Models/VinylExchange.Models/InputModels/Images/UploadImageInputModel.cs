@@ -1,15 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VinylExchange.Models.InputModels.Images
+﻿namespace VinylExchange.Models.InputModels.Images
 {
+    using Microsoft.AspNetCore.Http;
+
     public class UploadImageInputModel
     {
-        IFormFile File { get; set; }
+        private IFormFile File { get; set; }
 
-        string FormSessionId { get; set; }
-
+        private string FormSessionId { get; set; }
     }
 }

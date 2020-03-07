@@ -13,4 +13,11 @@
     <ProjectReference Include="..\..\Models\VinylExchange.Models\VinylExchange.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="MemoryCacheManager.cs">
+      <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+  </ItemGroup>
+
 </Project>

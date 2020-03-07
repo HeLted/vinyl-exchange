@@ -1,32 +1,30 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using VinylExchange.Data.Common.Enumerations;
-
-namespace VinylExchange.Data.Models
+﻿namespace VinylExchange.Data.Models
 {
-    public class CollectionItem
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    using VinylExchange.Data.Common.Enumerations;
+    using VinylExchange.Data.Common.Models;
+
+    public class CollectionItem : BaseModel
     {
-
-        public CollectionItem()
-        {
-            this.Id = Guid.NewGuid();
-        }
-
-        public Guid Id { get; set; }
-        [Required]
-        public Condition VinylGrade { get; set; }
-        [Required]
-        public Condition SleeveGrade{ get; set; }
         [Required]
         public string Description { get; set; }
 
-        [Required]
-        public Guid ReleaseId { get; set; }
         public Release Release { get; set; }
 
         [Required]
-        public Guid UserId { get; set; }
+        public Guid ReleaseId { get; set; }
+
+        [Required]
+        public Condition SleeveGrade { get; set; }
+
         public VinylExchangeUser User { get; set; }
 
+        [Required]
+        public Guid UserId { get; set; }
+
+        [Required]
+        public Condition VinylGrade { get; set; }
     }
 }

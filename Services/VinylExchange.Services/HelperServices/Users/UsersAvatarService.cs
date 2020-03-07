@@ -1,16 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using VinylExchange.Data;
-using VinylExchange.Data.Models;
-using VinylExchange.Models.ResourceModels.UsersAvatar;
-using VinylExchange.Services.Mapping;
-
-namespace VinylExchange.Services.Data.HelperServices.Users
+﻿namespace VinylExchange.Services.Data.HelperServices.Users
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.EntityFrameworkCore;
+
+    using VinylExchange.Data;
+    using VinylExchange.Data.Models;
+    using VinylExchange.Models.ResourceModels.UsersAvatar;
+    using VinylExchange.Services.Mapping;
+
     public class UsersAvatarService : IUsersAvatarService
     {
         private readonly VinylExchangeDbContext dbContext;
@@ -20,17 +22,9 @@ namespace VinylExchange.Services.Data.HelperServices.Users
             this.dbContext = dbContext;
         }
 
-        public async Task<GetUserAvatarResourceModel> GetUserAvatar(Guid userId)
-        => await dbContext.Users
-                .Where(u => u.Id == userId)
-                .To<GetUserAvatarResourceModel>()
-                .FirstOrDefaultAsync();
-
-
         public async Task<VinylExchangeUser> ChangeUserAvatar(IFormFile avatar, Guid userId)
         {
-
-            var imageByteArray = new byte[1];
+            byte[] imageByteArray = new byte[1];
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -38,11 +32,9 @@ namespace VinylExchange.Services.Data.HelperServices.Users
                 imageByteArray = ms.ToArray();
             }
 
-           var user = await dbContext.Users
-                .Where(u => u.Id == userId)
-                .FirstOrDefaultAsync();
+            VinylExchangeUser user = await this.dbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
 
-            if(user == null)
+            if (user == null)
             {
                 throw new NullReferenceException("User with this Id not found");
             }
@@ -54,5 +46,10 @@ namespace VinylExchange.Services.Data.HelperServices.Users
             return user;
         }
 
+        public async Task<GetUserAvatarResourceModel> GetUserAvatar(Guid userId)
+        {
+            return await this.dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
+                       .FirstOrDefaultAsync();
+        }
     }
 }

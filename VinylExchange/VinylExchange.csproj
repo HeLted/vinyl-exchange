@@ -12,10 +12,9 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
 
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.1" />
@@ -41,8 +40,7 @@
     <ProjectReference Include="..\Data\VinylExchange.Data\VinylExchange.Data.csproj" />
     <ProjectReference Include="..\Services\VinylExchange.Services.Authentication\VinylExchange.Services.Authentication.csproj" />
     <ProjectReference Include="..\Services\VinylExchange.Services.EmailSender\VinylExchange.Services.EmailSender.csproj" />
-    <ProjectReference Include="..\Services\VinylExchange.Services.EmaiSender\VinylExchange.Services.EmailSender.csproj" />
-    <ProjectReference Include="..\Services\VinylExchange.Services.Logging\VinylExchange.Services.Logging.csproj" />
+       <ProjectReference Include="..\Services\VinylExchange.Services.Logging\VinylExchange.Services.Logging.csproj" />
     <ProjectReference Include="..\Services\VinylExchange.Services\VinylExchange.Services.Data.csproj" />
   </ItemGroup>
 

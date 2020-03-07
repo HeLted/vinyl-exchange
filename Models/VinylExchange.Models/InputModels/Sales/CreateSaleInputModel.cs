@@ -1,31 +1,30 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using VinylExchange.Data.Common.Enumerations;
-using VinylExchange.Data.Models;
-using VinylExchange.Services.Mapping;
-
-namespace VinylExchange.Models.InputModels.Sales
+﻿namespace VinylExchange.Models.InputModels.Sales
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    using VinylExchange.Data.Common.Enumerations;
+    using VinylExchange.Data.Models;
+    using VinylExchange.Services.Mapping;
+
     public class CreateSaleInputModel : IMapTo<Sale>
     {
         [Required]
-        public Guid ReleaseId { get; set; }
+        public string Description { get; set; }
 
-                       
-        public Nullable<Guid> ShopId { get; set; }
-               
         [Required]
-       
+
         public decimal Price { get; set; }
 
         [Required]
-        public Condition VinylGrade { get; set; }
+        public Guid ReleaseId { get; set; }
+
+        public Guid? ShopId { get; set; }
 
         [Required]
         public Condition SleeveGrade { get; set; }
 
         [Required]
-        public string Description { get; set; }
-        
+        public Condition VinylGrade { get; set; }
     }
 }

@@ -1,24 +1,43 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using VinylExchange.Services.MainServices;
-using VinylExchange.Services.MainServices.Styles;
-
-namespace VinylExchange.Controllers
+﻿namespace VinylExchange.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Mvc;
+
+    using VinylExchange.Models.ResourceModels.Styles;
+    using VinylExchange.Services.Logging;
+    using VinylExchange.Services.MainServices.Styles;
+
     public class StylesController : ApiController
     {
+        private readonly ILoggerService loggerService;
+
         private readonly IStylesService styleService;
-        public StylesController(IStylesService styleService)
+
+        public StylesController(IStylesService styleService, ILoggerService loggerService)
         {
             this.styleService = styleService;
+            this.loggerService = loggerService;
         }
 
         [HttpGet]
         [Route("GetAllStylesForGenre")]
         public async Task<IActionResult> GetAllStylesForGenre(int genreId)
         {
-            var styles = await this.styleService.GetAllStylesForGenre(genreId);
-            return Ok(styles);
+            try
+            {
+                IEnumerable<GetAllStylesResourceModel> styles =
+                    await this.styleService.GetAllStylesForGenre(genreId);
+
+                return this.Ok(styles);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
         }
     }
 }

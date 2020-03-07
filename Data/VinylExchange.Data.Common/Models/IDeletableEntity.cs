@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VinylExchange.Data.Common.Models
+﻿namespace VinylExchange.Data.Common.Models
 {
+    using System;
+
     public interface IDeletableEntity
     {
-        bool IsDeleted { get; set; }
         DateTime? DeletedOn { get; set; }
+
+        bool IsDeleted { get; set; }
     }
 }

@@ -1,23 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using VinylExchange.Services.MainServices.Genres;
-
-namespace VinylExchange.Controllers
+﻿namespace VinylExchange.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Mvc;
+
+    using VinylExchange.Models.ResourceModels.Genres;
+    using VinylExchange.Services.Logging;
+    using VinylExchange.Services.MainServices.Genres;
+
     public class GenresController : ApiController
     {
-
         private readonly IGenresService genreService;
-        public  GenresController(IGenresService genreService)
+
+        private readonly ILoggerService loggerService;
+
+        public GenresController(IGenresService genreService, ILoggerService loggerService)
         {
             this.genreService = genreService;
+            this.loggerService = loggerService;
         }
 
-        [HttpGet]        
+        [HttpGet]
         public async Task<IActionResult> GetAllGenres()
         {
-            var genres = await this.genreService.GetAllGenres();
-            return Ok(genres);
+            try
+            {
+                IEnumerable<GetAllGenresResourceModel> genres =
+                    await this.genreService.GetAllGenres();
+
+                return this.Ok(genres);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
         }
     }
 }

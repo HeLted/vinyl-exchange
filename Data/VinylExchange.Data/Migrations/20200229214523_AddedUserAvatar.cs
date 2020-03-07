@@ -1,10 +1,14 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace VinylExchange.Data.Migrations
+﻿namespace VinylExchange.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddedUserAvatar : Migration
     {
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropColumn(name: "Avatar", table: "AspNetUsers");
+        }
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<byte[]>(
@@ -12,14 +16,7 @@ namespace VinylExchange.Data.Migrations
                 table: "AspNetUsers",
                 maxLength: 10000000,
                 nullable: false,
-                defaultValue: new byte[] {  });
-        }
-
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "Avatar",
-                table: "AspNetUsers");
+                defaultValue: new byte[] { });
         }
     }
 }

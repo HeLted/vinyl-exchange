@@ -1,16 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using VinylExchange.Data;
-using VinylExchange.Models.ResourceModels.Styles;
-using VinylExchange.Services.Mapping;
-
-namespace VinylExchange.Services.MainServices.Styles
+﻿namespace VinylExchange.Services.MainServices.Styles
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using VinylExchange.Data;
+    using VinylExchange.Models.ResourceModels.Styles;
+    using VinylExchange.Services.Mapping;
+
     public class StylesService : IStylesService
     {
         private readonly VinylExchangeDbContext dbContext;
+
         public StylesService(VinylExchangeDbContext dbContext)
         {
             this.dbContext = dbContext;
@@ -18,10 +21,8 @@ namespace VinylExchange.Services.MainServices.Styles
 
         public async Task<IEnumerable<GetAllStylesResourceModel>> GetAllStylesForGenre(int genreId)
         {
-            return await dbContext.Styles
-                .Where(x => x.GenreId == genreId).To<GetAllStylesResourceModel>()
-                .ToArrayAsync();
+            return await this.dbContext.Styles.Where(x => x.GenreId == genreId).To<GetAllStylesResourceModel>()
+                       .ToArrayAsync();
         }
-
     }
 }

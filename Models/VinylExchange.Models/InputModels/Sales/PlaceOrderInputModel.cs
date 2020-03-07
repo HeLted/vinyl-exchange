@@ -1,16 +1,14 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace VinylExchange.Models.InputModels.Sales
+﻿namespace VinylExchange.Models.InputModels.Sales
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class PlaceOrderInputModel
     {
-      
         [Required]
-        public Nullable<Guid> SaleId { get; set; }
+        public Guid? AddressId { get; set; }
 
         [Required]
-        public Nullable<Guid> AddressId { get; set; }
-
+        public Guid? SaleId { get; set; }
     }
 }

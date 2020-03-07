@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VinylExchange.Data.Common.Models
+﻿namespace VinylExchange.Data.Common.Models
 {
-    public abstract class BaseDeletableModel<TKey> : BaseModel<TKey>, IDeletableEntity
-    {
-        public bool IsDeleted { get; set; }
+    using System;
 
+    public abstract class BaseDeletableModel : BaseAuditModel, IDeletableEntity
+    {
         public DateTime? DeletedOn { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

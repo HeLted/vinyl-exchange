@@ -1,15 +1,14 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace VinylExchange.Models.InputModels.Sales
+﻿namespace VinylExchange.Models.InputModels.Sales
 {
-    public  class SetShippingPriceInputModel
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    public class SetShippingPriceInputModel
     {
         [Required]
-        public Nullable<Guid> SaleId { get; set; }
+        public Guid? SaleId { get; set; }
 
         [Required]
         public decimal ShippingPrice { get; set; }
-
     }
 }

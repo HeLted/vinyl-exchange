@@ -1,54 +1,82 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using VinylExchange.Models.Utility;
-using VinylExchange.Services.MemoryCache;
-
-namespace VinylExchange.Controllers
+﻿namespace VinylExchange.Controllers
 {
+    using System;
+
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+
+    using VinylExchange.Models.ResourceModels.File;
+    using VinylExchange.Models.Utility;
+    using VinylExchange.Services.Logging;
+    using VinylExchange.Services.MemoryCache;
+
     public class FilesController : ApiController
     {
+        private readonly ILoggerService loggerService;
+
         private readonly IMemoryCacheFileSevice memoryCacheFileSevice;
 
-        public FilesController(IMemoryCacheFileSevice memoryCacheFileSevice)
+        public FilesController(IMemoryCacheFileSevice memoryCacheFileSevice, ILoggerService loggerService)
         {
             this.memoryCacheFileSevice = memoryCacheFileSevice;
-        }
-
-        [HttpDelete]
-        [Route("{id}")]
-      
-        public IActionResult DeleteFile(Guid id, Guid formSessionId)
-        {
-
-            var returnObj = this.memoryCacheFileSevice.RemoveFile(formSessionId, id);
-
-            return Ok(returnObj);
-
+            this.loggerService = loggerService;
         }
 
         [HttpDelete]
         [Route("DeleteAll")]
         public IActionResult DeleteAllFiles(Guid formSessionId)
         {
-            this.memoryCacheFileSevice.RemoveAllFilesForFormSession(formSessionId);
+            try
+            {
+                this.memoryCacheFileSevice.RemoveAllFilesForFormSession(formSessionId);
 
-            return Ok();
-            
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+
+                return this.BadRequest();
+            }
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult DeleteFile(Guid id, Guid formSessionId)
+        {
+            try
+            {
+                DeleteFileResourceModel deletedFileResourceModel =
+                    this.memoryCacheFileSevice.RemoveFile(formSessionId, id);
 
-        [HttpPost]        
+                return this.Ok(deletedFileResourceModel);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPost]
         public IActionResult UploadFile(IFormFile file, Guid formSessionId)
         {
-           
-            UploadFileUtilityModel fileModel = new UploadFileUtilityModel(file);
+            try
+            {
+                UploadFileUtilityModel fileModel = new UploadFileUtilityModel(file);
 
-            var returnObj = this.memoryCacheFileSevice.AddFile(fileModel, formSessionId);
+                UploadFileResourceModel uploadedFileResourceModel =
+                    this.memoryCacheFileSevice.AddFile(fileModel, formSessionId);
 
-            return Ok(returnObj);
+                return this.Ok(uploadedFileResourceModel);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+
+                return this.BadRequest();
+            }
         }
-
-
     }
 }

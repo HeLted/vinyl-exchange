@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VinylExchange.Models.ResourceModels.File
+﻿namespace VinylExchange.Models.ResourceModels.File
 {
+    using System;
+
     public class UploadFileResourceModel
     {
         public Guid FileId { get; set; }

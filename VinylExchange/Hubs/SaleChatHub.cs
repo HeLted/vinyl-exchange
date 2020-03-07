@@ -1,17 +1,23 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Threading.Tasks;
-using VinylExchange.Services.Data.HelperServices.Sales;
-using VinylExchange.Services.Data.MainServices.Sales;
-
-namespace VinylExchange.Hubs
+﻿namespace VinylExchange.Hubs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.SignalR;
+
+    using VinylExchange.Models.ResourceModels.SaleMessages;
+    using VinylExchange.Models.Utility;
+    using VinylExchange.Services.Data.HelperServices.Sales;
+    using VinylExchange.Services.Data.MainServices.Sales;
+
     [Authorize]
     public class SaleChatHub : Hub
     {
-        private readonly ISalesService salesService;
         private readonly ISaleMessagesService saleMessagesService;
+
+        private readonly ISalesService salesService;
 
         public SaleChatHub(ISalesService salesService, ISaleMessagesService saleMessagesService)
         {
@@ -21,54 +27,54 @@ namespace VinylExchange.Hubs
 
         public async Task JoinRoom(Guid saleId)
         {
-            var roomName = saleId.ToString();
+            string roomName = saleId.ToString();
 
-            var sale = await salesService.GetSaleInfo(saleId);
+            GetSaleInfoUtilityModel sale = await this.salesService.GetSaleInfo(saleId);
 
-            var userId = Guid.Parse(this.GetUserId());
+            Guid userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
             {
                 if (sale.SellerId == userId || sale.BuyerId == userId)
                 {
-                    await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+                    await this.Groups.AddToGroupAsync(this.Context.ConnectionId, roomName);
                 }
             }
         }
 
-
         public async Task LeaveRoom(string roomName)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
-        }
-
-        public async Task SendMessage(Guid saleId, string messageContent)
-        {
-            var roomName = saleId.ToString();
-
-            var userId = Guid.Parse(this.GetUserId());
-
-            var message = await this.saleMessagesService.AddMessageToSale(saleId,userId, messageContent);
-
-            await this.Clients.Group(roomName).SendAsync("NewMessage", message);
+            await this.Groups.RemoveFromGroupAsync(this.Context.ConnectionId, roomName);
         }
 
         public async Task LoadMessageHistory(Guid saleId)
         {
-            var sale = await salesService.GetSaleInfo(saleId);
+            GetSaleInfoUtilityModel sale = await this.salesService.GetSaleInfo(saleId);
 
-            var userId = Guid.Parse(this.GetUserId());
+            Guid userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
             {
                 if (sale.SellerId == userId || sale.BuyerId == userId)
                 {
-                    var messages = await this.saleMessagesService.GetMessagesForSale(saleId);
+                    IEnumerable<GetMessagesForSaleResourceModel> messages =
+                        await this.saleMessagesService.GetMessagesForSale(saleId);
 
                     await this.Clients.Caller.SendAsync("LoadMessageHistory", messages);
                 }
             }
-            
+        }
+
+        public async Task SendMessage(Guid saleId, string messageContent)
+        {
+            string roomName = saleId.ToString();
+
+            Guid userId = Guid.Parse(this.GetUserId());
+
+            AddMessageToSaleResourceModel message =
+                await this.saleMessagesService.AddMessageToSale(saleId, userId, messageContent);
+
+            await this.Clients.Group(roomName).SendAsync("NewMessage", message);
         }
 
         private string GetUserId()

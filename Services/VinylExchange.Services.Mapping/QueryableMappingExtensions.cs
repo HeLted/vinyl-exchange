@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using AutoMapper.QueryableExtensions;
-
-namespace VinylExchange.Services.Mapping
+﻿namespace VinylExchange.Services.Mapping
 {
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
+
+    using AutoMapper.QueryableExtensions;
 
     public static class QueryableMappingExtensions
     {
@@ -20,9 +20,7 @@ namespace VinylExchange.Services.Mapping
             return source.ProjectTo(AutoMapperConfig.MapperInstance.ConfigurationProvider, null, membersToExpand);
         }
 
-        public static IQueryable<TDestination> To<TDestination>(
-            this IQueryable source,
-            object parameters)
+        public static IQueryable<TDestination> To<TDestination>(this IQueryable source, object parameters)
         {
             if (source == null)
             {
@@ -31,7 +29,5 @@ namespace VinylExchange.Services.Mapping
 
             return source.ProjectTo<TDestination>(AutoMapperConfig.MapperInstance.ConfigurationProvider, parameters);
         }
-
-       
     }
 }

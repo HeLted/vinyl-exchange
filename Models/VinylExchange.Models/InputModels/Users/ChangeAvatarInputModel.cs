@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
-
-namespace VinylExchange.Models.InputModels.Users
+﻿namespace VinylExchange.Models.InputModels.Users
 {
+    using System.ComponentModel.DataAnnotations;
+
+    using Microsoft.AspNetCore.Http;
+
     public class ChangeAvatarInputModel
     {
         [Required]

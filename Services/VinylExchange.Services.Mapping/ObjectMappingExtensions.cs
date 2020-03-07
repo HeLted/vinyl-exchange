@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VinylExchange.Services.Mapping
+﻿namespace VinylExchange.Services.Mapping
 {
+    using System;
+
     public static class ObjectMappingExtensions
     {
-        public static TDestination To<TDestination>(this object source )
+        public static TDestination To<TDestination>(this object source)
         {
             if (source == null)
             {

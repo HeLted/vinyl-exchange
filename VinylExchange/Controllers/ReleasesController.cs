@@ -1,44 +1,46 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using VinylExchange.Models.InputModels.Releases;
-using VinylExchange.Services.Logging;
-using VinylExchange.Services.MainServices.Releases;
-
-namespace VinylExchange.Controllers
+﻿namespace VinylExchange.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
+    using VinylExchange.Data.Models;
+    using VinylExchange.Models.InputModels.Releases;
+    using VinylExchange.Models.ResourceModels.Releases;
+    using VinylExchange.Services.Logging;
+    using VinylExchange.Services.MainServices.Releases;
+
     public class ReleasesController : ApiController
     {
-
-        private readonly IReleasesService releasesService;
         private readonly ILoggerService loggerService;
 
-        public ReleasesController(IReleasesService releasesService,ILoggerService loggerService)
+        private readonly IReleasesService releasesService;
+
+        public ReleasesController(IReleasesService releasesService, ILoggerService loggerService)
         {
             this.releasesService = releasesService;
-            this.loggerService = loggerService;          
+            this.loggerService = loggerService;
         }
 
-       
-        [HttpGet]
-        [Route("GetReleases")]
-        public async Task<IActionResult> GetReleases(string searchTerm , [FromQuery(Name="styleIds")] List<int> styleIds , int releasesToSkip)
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Create(CreateReleaseInputModel inputModel, Guid formSessionId)
         {
-            
             try
             {
-                var releases = await this.releasesService.GetReleases(searchTerm, styleIds, releasesToSkip);
-                return Ok(releases);
+                Release release = await this.releasesService.CreateRelease(inputModel, formSessionId);
+
+                return this.StatusCode(HttpStatusCode.Created, release.Id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return NotFound();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
-           
-                     
         }
 
         [HttpGet("{id}")]
@@ -46,40 +48,41 @@ namespace VinylExchange.Controllers
         {
             try
             {
-                var release = await this.releasesService.GetRelease(id);
+                GetReleaseResourceModel release =
+                    await this.releasesService.GetRelease(id);
 
                 if (release == null)
                 {
-                    return NotFound();
+                    return this.NotFound();
                 }
 
-                return Ok(release);
-            }
-            catch(Exception ex)
-            {
-                loggerService.LogException(ex);
-                return BadRequest();
-            }
-            
-        }
-
-        [HttpPost]        
-        public async Task<IActionResult> Create(CreateReleaseInputModel inputModel,Guid formSessionId)
-        {
-            try
-            {
-                var release = await releasesService.CreateRelease(inputModel, formSessionId);
-
-                return CreatedAtRoute("Default", new { id = release.Id});
+                return this.Ok(release);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
-
-
         }
 
+        [HttpGet]
+        [Route("GetReleases")]
+        public async Task<IActionResult> GetReleases(
+            string searchTerm,
+            [FromQuery(Name = "styleIds")] List<int> styleIds,
+            int releasesToSkip)
+        {
+            try
+            {
+                IEnumerable<GetReleasesResourceModel> releases =
+                    await this.releasesService.GetReleases(searchTerm, styleIds, releasesToSkip);
+                return this.Ok(releases);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.NotFound();
+            }
+        }
     }
 }

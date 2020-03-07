@@ -1,40 +1,40 @@
-﻿using Microsoft.Extensions.Configuration;
-using SendGrid;
-using SendGrid.Helpers.Mail;
-using System;
-using System.Threading.Tasks;
-
-namespace VinylExchange.Services.EmaiSender
+﻿namespace VinylExchange.Services.EmaiSender
 {
+    using System.Threading.Tasks;
+
+    using SendGrid;
+    using SendGrid.Helpers.Mail;
+
     public class EmailSender : IEmailSender
     {
-        private const string SENDER_EMAIL = "no-reply@.com";
-        private const string NAME_OF_THE_SENDER = "Vinyl Exchange";  
+        private const string SenderEmail = "no-reply@vinylexchange.com";
+
+        private const string NameOfTheSender = "Vinyl Exchange Support";
 
         public EmailSender(string sendGridId)
         {
-            this.SendGridKey = sendGridId;    
+            this.SendGridKey = sendGridId;
         }
-
-        public string SendGridUser { get; set; }
 
         public string SendGridKey { get; set; }
 
-        public Task SendEmailAsync(string email, string subject, string message)
+        public string SendGridUser { get; set; }
+
+        public async Task Execute(string apiKey, string subject, string message, string email)
         {
-            return Execute(this.SendGridKey, subject, message, email);
+            SendGridClient client = new SendGridClient(apiKey);
+            EmailAddress from = new EmailAddress(SenderEmail, NameOfTheSender);
+
+            EmailAddress to = new EmailAddress(email);
+            string plainTextContent = string.Empty;
+            string htmlContent = message;
+            SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            await client.SendEmailAsync(msg);
         }
 
-        public async  Task Execute(string apiKey, string subject, string message, string email)
-        {          
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("no-reply@vinylexchange.com", "VinylExchangeAdmin");
-           
-            var to = new EmailAddress(email, "Example User");
-            var plainTextContent = String.Empty;
-            var htmlContent = message;
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            await client.SendEmailAsync(msg);
+        public Task SendEmailAsync(string email, string subject, string message)
+        {
+            return this.Execute(this.SendGridKey, subject, message, email);
         }
     }
 }

@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using VinylExchange.Data.Models;
-
-namespace VinylExchange.Roles
+﻿namespace VinylExchange.Roles
 {
-    public  class RoleSeeder
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Identity;
+
+    using VinylExchange.Data.Models;
+
+    public class RoleSeeder
     {
-        private readonly UserManager<VinylExchangeUser> userManager;
         private readonly RoleManager<VinylExchangeRole> roleManager;
+
+        private readonly UserManager<VinylExchangeUser> userManager;
 
         public RoleSeeder(UserManager<VinylExchangeUser> userManager, RoleManager<VinylExchangeRole> roleManager)
         {
@@ -21,25 +20,23 @@ namespace VinylExchange.Roles
 
         public async Task SeedRoles()
         {
-     
             bool adminRoleExists = await this.roleManager.RoleExistsAsync("Admin");
             if (!adminRoleExists)
-            {               
+            {
                 await this.roleManager.CreateAsync(new VinylExchangeRole("Admin"));
             }
-            
+
             bool userRoleExists = await this.roleManager.RoleExistsAsync("User");
 
             if (!userRoleExists)
-            {                
+            {
                 await this.roleManager.CreateAsync(new VinylExchangeRole("User"));
             }
 
-
-            VinylExchangeUser user = await userManager.FindByNameAsync("sysadmin");
-            if (!await userManager.IsInRoleAsync(user, "Admin"))
+            VinylExchangeUser user = await this.userManager.FindByNameAsync("sysadmin");
+            if (!await this.userManager.IsInRoleAsync(user, "Admin"))
             {
-                await userManager.AddToRoleAsync(user, "Admin");
+                await this.userManager.AddToRoleAsync(user, "Admin");
             }
         }
     }

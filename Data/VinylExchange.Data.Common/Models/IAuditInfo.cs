@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace VinylExchange.Data.Common.Models
+﻿namespace VinylExchange.Data.Common.Models
 {
+    using System;
+
     public interface IAuditInfo
     {
         DateTime CreatedOn { get; set; }
