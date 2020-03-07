@@ -1,14 +1,12 @@
 ﻿namespace VinylExchange.Services.MainServices.Styles
 {
+    using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.EntityFrameworkCore;
-
     using VinylExchange.Data;
-    using VinylExchange.Models.ResourceModels.Styles;
     using VinylExchange.Services.Mapping;
+    using VinylExchange.Web.Models.ResourceModels.Styles;
 
     public class StylesService : IStylesService
     {

@@ -1,20 +1,18 @@
 ﻿namespace VinylExchange.Services.MainServices.Collections
 {
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.InputModels.Collections;
-    using VinylExchange.Models.ResourceModels.Collections;
-    using VinylExchange.Models.Utility;
     using VinylExchange.Services.HelperServices.Releases;
     using VinylExchange.Services.Mapping;
+    using VinylExchange.Web.Models.InputModels.Collections;
+    using VinylExchange.Web.Models.ResourceModels.Collections;
+    using VinylExchange.Web.Models.Utility;
 
     public class CollectionsService : ICollectionsService
     {

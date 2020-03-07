@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
 
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.ResourceModels.ReleaseFiles;
+    using VinylExchange.Web.Models.ResourceModels.ReleaseFiles;
 
     public interface IReleaseFilesService
     {

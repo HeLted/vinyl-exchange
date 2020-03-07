@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange", "VinylExchange\VinylExchange.csproj", "{A3CAD0FD-885B-4AD6-9EDE-81E2E38ACD23}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Mapping", "Services\VinylExchange.Services.Mapping\VinylExchange.Services.Mapping.csproj", "{0AF57DB3-899E-47C9-8C87-DB73D06BF886}"
@@ -19,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Data", "Data\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Data.Models", "Data\VinylExchange.Data.Models\VinylExchange.Data.Models.csproj", "{06FF31B6-031E-48DD-8CF9-75C24355611B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{5458B1B8-B097-42B1-91AD-F79F451EAFAC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.MemoryCache", "Services\VinylExchange.Services.MemoryCache\VinylExchange.Services.MemoryCache.csproj", "{DC26C154-9AE1-4762-B489-C555D25576CD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Data.Common", "Data\VinylExchange.Data.Common\VinylExchange.Data.Common.csproj", "{C9B9D1E9-B202-43B8-8A8E-817ED0DD6E7D}"
@@ -29,13 +25,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E9897B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Common", "Common\VinylExchange.Common\VinylExchange.Common.csproj", "{E7F4D057-D142-4019-800E-B49B474A5963}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Models", "Models\VinylExchange.Models\VinylExchange.Models.csproj", "{12FAB19D-E098-4573-A536-69C6E6D62B35}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Logging", "Services\VinylExchange.Services.Logging\VinylExchange.Services.Logging.csproj", "{21EA526F-FE0B-42C0-A19B-04E671F21B6D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Authentication", "Services\VinylExchange.Services.Authentication\VinylExchange.Services.Authentication.csproj", "{599DE079-92B2-4A21-89BB-5784D4DEABF2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.EmailSender", "Services\VinylExchange.Services.EmailSender\VinylExchange.Services.EmailSender.csproj", "{DB5EE662-8EA8-439C-B3FC-4A18276CE271}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{6A46031E-D657-499F-B25A-75C04033DCAF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Web", "Web\VinylExchange.Web\VinylExchange.Web.csproj", "{077C4B5E-281B-491D-916C-EB6CD2E75E84}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Web.Models", "Web\VinylExchange.Web.Models\VinylExchange.Web.Models.csproj", "{7564B373-DF79-4325-A377-1C794ACAA9BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +43,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A3CAD0FD-885B-4AD6-9EDE-81E2E38ACD23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3CAD0FD-885B-4AD6-9EDE-81E2E38ACD23}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3CAD0FD-885B-4AD6-9EDE-81E2E38ACD23}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3CAD0FD-885B-4AD6-9EDE-81E2E38ACD23}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0AF57DB3-899E-47C9-8C87-DB73D06BF886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0AF57DB3-899E-47C9-8C87-DB73D06BF886}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AF57DB3-899E-47C9-8C87-DB73D06BF886}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -79,10 +75,6 @@ Global
 		{E7F4D057-D142-4019-800E-B49B474A5963}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7F4D057-D142-4019-800E-B49B474A5963}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7F4D057-D142-4019-800E-B49B474A5963}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12FAB19D-E098-4573-A536-69C6E6D62B35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12FAB19D-E098-4573-A536-69C6E6D62B35}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12FAB19D-E098-4573-A536-69C6E6D62B35}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12FAB19D-E098-4573-A536-69C6E6D62B35}.Release|Any CPU.Build.0 = Release|Any CPU
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -95,6 +87,14 @@ Global
 		{DB5EE662-8EA8-439C-B3FC-4A18276CE271}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB5EE662-8EA8-439C-B3FC-4A18276CE271}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB5EE662-8EA8-439C-B3FC-4A18276CE271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{077C4B5E-281B-491D-916C-EB6CD2E75E84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{077C4B5E-281B-491D-916C-EB6CD2E75E84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{077C4B5E-281B-491D-916C-EB6CD2E75E84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{077C4B5E-281B-491D-916C-EB6CD2E75E84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7564B373-DF79-4325-A377-1C794ACAA9BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7564B373-DF79-4325-A377-1C794ACAA9BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7564B373-DF79-4325-A377-1C794ACAA9BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7564B373-DF79-4325-A377-1C794ACAA9BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,10 +108,11 @@ Global
 		{DC26C154-9AE1-4762-B489-C555D25576CD} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
 		{C9B9D1E9-B202-43B8-8A8E-817ED0DD6E7D} = {F179BE77-4DF4-435B-BCE5-C8DC2F39C236}
 		{E7F4D057-D142-4019-800E-B49B474A5963} = {E9897BC8-8857-4187-B534-484854FD4A27}
-		{12FAB19D-E098-4573-A536-69C6E6D62B35} = {5458B1B8-B097-42B1-91AD-F79F451EAFAC}
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
 		{599DE079-92B2-4A21-89BB-5784D4DEABF2} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
 		{DB5EE662-8EA8-439C-B3FC-4A18276CE271} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
+		{077C4B5E-281B-491D-916C-EB6CD2E75E84} = {6A46031E-D657-499F-B25A-75C04033DCAF}
+		{7564B373-DF79-4325-A377-1C794ACAA9BD} = {6A46031E-D657-499F-B25A-75C04033DCAF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D615B1D1-B2B9-425C-B0C3-87C0763326B3}

@@ -1,21 +1,19 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Sales
 {
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-
     using VinylExchange.Data;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.InputModels.Sales;
-    using VinylExchange.Models.ResourceModels.Sales;
-    using VinylExchange.Models.Utility;
     using VinylExchange.Services.HelperServices.Releases;
     using VinylExchange.Services.Mapping;
+    using VinylExchange.Web.Models.InputModels.Sales;
+    using VinylExchange.Web.Models.ResourceModels.Sales;
+    using VinylExchange.Web.Models.Utility;
 
     public class SalesService : ISalesService
     {

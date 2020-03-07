@@ -5,8 +5,8 @@
     using System.Threading.Tasks;
 
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.InputModels.Releases;
-    using VinylExchange.Models.ResourceModels.Releases;
+    using VinylExchange.Web.Models.InputModels.Releases;
+    using VinylExchange.Web.Models.ResourceModels.Releases;
 
     public interface IReleasesService
     {

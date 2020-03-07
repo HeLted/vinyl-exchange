@@ -1,19 +1,17 @@
 ﻿namespace VinylExchange.Services.MainServices.Releases
 {
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.InputModels.Releases;
-    using VinylExchange.Models.ResourceModels.Releases;
     using VinylExchange.Services.HelperServices.Releases;
     using VinylExchange.Services.Mapping;
+    using VinylExchange.Web.Models.InputModels.Releases;
+    using VinylExchange.Web.Models.ResourceModels.Releases;
 
     public class ReleasesService : IReleasesService
     {

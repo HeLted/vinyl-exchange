@@ -1,0 +1,40 @@
+﻿namespace VinylExchange.Web.Controllers
+{
+    using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using VinylExchange.Services.HelperServices.Releases;
+    using VinylExchange.Services.Logging;
+    using VinylExchange.Web.Models.ResourceModels.ReleaseFiles;
+
+    public class ReleaseTracksController : ApiController
+    {
+        private readonly ILoggerService loggerService;
+
+        private readonly IReleaseFilesService releaseFilesService;
+
+        public ReleaseTracksController(IReleaseFilesService releaseFilesService, ILoggerService loggerService)
+        {
+            this.releaseFilesService = releaseFilesService;
+            this.loggerService = loggerService;
+        }
+
+        [HttpGet]
+        [Route("GetAllTracksForRelease/{id}")]
+        public async Task<IActionResult> GetAllTracksForRelease(Guid id)
+        {
+            try
+            {
+                IEnumerable<ReleaseFileResourceModel> tracks = await this.releaseFilesService.GetReleaseTracks(id);
+
+                return this.Ok(tracks);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+    }
+}

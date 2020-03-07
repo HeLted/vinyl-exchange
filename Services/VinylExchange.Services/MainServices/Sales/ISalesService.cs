@@ -5,9 +5,9 @@
     using System.Threading.Tasks;
 
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.InputModels.Sales;
-    using VinylExchange.Models.ResourceModels.Sales;
-    using VinylExchange.Models.Utility;
+    using VinylExchange.Web.Models.InputModels.Sales;
+    using VinylExchange.Web.Models.ResourceModels.Sales;
+    using VinylExchange.Web.Models.Utility;
 
     public interface ISalesService
     {

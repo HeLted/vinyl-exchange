@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    using VinylExchange.Models.ResourceModels.Styles;
+    
+    using VinylExchange.Web.Models.ResourceModels.Styles;
 
     public interface IStylesService
     {

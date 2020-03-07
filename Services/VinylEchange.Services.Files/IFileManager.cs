@@ -2,8 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
-    using VinylExchange.Models.Utility;
+    using VinylExchange.Web.Models.Utility;
 
     public interface IFileManager
     {

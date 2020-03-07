@@ -1,12 +1,10 @@
 ﻿namespace VinylExchange.Services.Data.HelperServices.Users
 {
+    using Microsoft.AspNetCore.Http;
     using System;
     using System.Threading.Tasks;
-
-    using Microsoft.AspNetCore.Http;
-
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.ResourceModels.UsersAvatar;
+    using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
 
     public interface IUsersAvatarService
     {

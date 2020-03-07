@@ -5,9 +5,9 @@
     using System.Threading.Tasks;
 
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.InputModels.Collections;
-    using VinylExchange.Models.ResourceModels.Collections;
-    using VinylExchange.Models.Utility;
+    using VinylExchange.Web.Models.InputModels.Collections;
+    using VinylExchange.Web.Models.ResourceModels.Collections;
+    using VinylExchange.Web.Models.Utility;
 
     public interface ICollectionsService
     {

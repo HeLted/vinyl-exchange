@@ -3,9 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using VinylExchange.Models.ResourceModels.File;
-    using VinylExchange.Models.Utility;
+    using VinylExchange.Web.Models.ResourceModels.File;
+    using VinylExchange.Web.Models.Utility;
 
     public class MemoryCacheFileService : IMemoryCacheFileSevice
     {

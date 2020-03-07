@@ -6,8 +6,8 @@
     using System.Linq;
 
     using VinylExchange.Common.Enumerations;
-    using VinylExchange.Models.Utility;
     using VinylExchange.Services.MemoryCache;
+    using VinylExchange.Web.Models.Utility;
 
     public class FileManager : IFileManager
     {

@@ -5,9 +5,9 @@
     using System.Threading.Tasks;
 
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.InputModels.Addresses;
-    using VinylExchange.Models.ResourceModels.Addresses;
-    using VinylExchange.Models.Utility;
+    using VinylExchange.Web.Models.InputModels.Addresses;
+    using VinylExchange.Web.Models.ResourceModels.Addresses;
+    using VinylExchange.Web.Models.Utility;
 
     public interface IAddressesService
     {

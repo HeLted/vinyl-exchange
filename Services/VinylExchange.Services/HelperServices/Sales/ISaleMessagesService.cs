@@ -3,8 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    using VinylExchange.Models.ResourceModels.SaleMessages;
+    using VinylExchange.Web.Models.ResourceModels.SaleMessages;
 
     public interface ISaleMessagesService
     {

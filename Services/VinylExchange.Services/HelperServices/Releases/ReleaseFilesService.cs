@@ -1,19 +1,17 @@
 ﻿namespace VinylExchange.Services.HelperServices.Releases
 {
+    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.EntityFrameworkCore;
-
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.ResourceModels.ReleaseFiles;
-    using VinylExchange.Models.Utility;
     using VinylExchange.Services.Files;
     using VinylExchange.Services.Mapping;
+    using VinylExchange.Web.Models.ResourceModels.ReleaseFiles;
+    using VinylExchange.Web.Models.Utility;
 
     public class ReleaseFilesService : IReleaseFilesService
     {

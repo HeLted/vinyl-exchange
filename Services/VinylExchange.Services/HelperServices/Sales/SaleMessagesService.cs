@@ -1,16 +1,14 @@
 ﻿namespace VinylExchange.Services.Data.HelperServices.Sales
 {
+    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.EntityFrameworkCore;
-
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.ResourceModels.SaleMessages;
     using VinylExchange.Services.Mapping;
+    using VinylExchange.Web.Models.ResourceModels.SaleMessages;
 
     public class SaleMessagesService : ISaleMessagesService
     {
