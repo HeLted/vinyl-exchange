@@ -103,7 +103,10 @@ namespace VinylExchange
             app.UseAuthorization();
             app.UseEndpoints(
                 endpoints =>
-                    {                      
+                    {
+                        endpoints.MapControllerRoute(
+                            "Default",
+                            "api/{controller}/{id}");
                         endpoints.MapHub<SaleChatHub>("/sale/chathub");
                     });
 
@@ -116,7 +119,9 @@ namespace VinylExchange
                                 path,
                                 "/Authentication/Logout-Callback",
                                 StringComparison.OrdinalIgnoreCase))
-                        {                         
+                        {
+                            // The request token can be sent as a JavaScript-readable cookie, 
+                            // and Angular uses it by default.
                             AntiforgeryTokenSet tokens = antiforgery.GetAndStoreTokens(context);
                             context.Response.Cookies.Append(
                                 "XSRF-TOKEN",
