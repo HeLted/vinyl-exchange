@@ -17,6 +17,8 @@
         [Required]
         public string Description { get; set; }
 
+        public ICollection<SaleLog> Logs { get; set; } = new HashSet<SaleLog>();
+
         public ICollection<SaleMessage> Messages { get; set; } = new HashSet<SaleMessage>();
 
         public string OrderId { get; set; }

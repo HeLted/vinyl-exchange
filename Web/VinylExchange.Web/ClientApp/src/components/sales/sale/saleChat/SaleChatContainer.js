@@ -23,7 +23,7 @@ class SaleChatContainer extends Component {
     this.setState({ isLoading: true });
 
     this.connection = new SignalR.HubConnectionBuilder()
-      .withUrl("/sale/chathub")
+      .withUrl("/Sale/ChatHub")
       .build();
 
     this.connection.on("NewMessage", this.recieveMessage);
@@ -33,7 +33,7 @@ class SaleChatContainer extends Component {
       .start()
       .then(() => {
         this.context.handleAppNotification(
-          "Established connection with chatHub",
+          "Established connection with Chat Hub",
           5
         );
         this.joinRoom().then(() => {

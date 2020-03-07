@@ -5,8 +5,8 @@
 
     using Microsoft.AspNetCore.Http;
 
-    using VinylExchange.Common.Enumerations;
     using VinylExchange.Common.Constants;
+    using VinylExchange.Common.Enumerations;
 
     public class UploadFileUtilityModel
     {

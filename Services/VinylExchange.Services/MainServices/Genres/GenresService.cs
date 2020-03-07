@@ -1,8 +1,10 @@
 ﻿namespace VinylExchange.Services.MainServices.Genres
 {
-    using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+
     using VinylExchange.Data;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.Genres;

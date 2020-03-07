@@ -7,9 +7,9 @@
 
     public class EmailSender : IEmailSender
     {
-        private const string SenderEmail = "no-reply@vinylexchange.com";
-
         private const string NameOfTheSender = "Vinyl Exchange Support";
+
+        private const string SenderEmail = "no-reply@vinylexchange.com";
 
         public EmailSender(string sendGridId)
         {

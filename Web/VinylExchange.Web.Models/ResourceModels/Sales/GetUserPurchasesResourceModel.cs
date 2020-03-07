@@ -1,7 +1,9 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.Sales
 {
-    using AutoMapper;
     using System;
+
+    using AutoMapper;
+
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;

@@ -1,11 +1,13 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Addresses;
     using VinylExchange.Services.Logging;
@@ -31,9 +33,7 @@
         {
             try
             {
-                Address address = await this.addressesService.AddAddress(
-                                      inputModel,
-                                      this.GetUserId(this.User));
+                Address address = await this.addressesService.AddAddress(inputModel, this.GetUserId(this.User));
 
                 return this.StatusCode(HttpStatusCode.Created, address.Id);
             }
@@ -50,7 +50,7 @@
         {
             try
             {
-                IEnumerable<GetUserAddressesResourceModel> addresses = 
+                IEnumerable<GetUserAddressesResourceModel> addresses =
                     await this.addressesService.GetUserAddresses(this.GetUserId(this.User));
 
                 return this.Ok(addresses);
@@ -68,8 +68,7 @@
         {
             try
             {
-                GetAddressInfoUtilityModel addressInfoModel =
-                    await this.addressesService.GetAddressInfo(id);
+                GetAddressInfoUtilityModel addressInfoModel = await this.addressesService.GetAddressInfo(id);
 
                 if (addressInfoModel == null)
                 {

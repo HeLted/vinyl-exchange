@@ -16,13 +16,13 @@
 
     public class UsersService : IUsersService
     {
-        private readonly SignInManager<VinylExchangeUser> signInManager;
-
-        private readonly UserManager<VinylExchangeUser> userManager;
-
         private readonly IHttpContextAccessor contextAccessor;
 
         private readonly IEmailSender emailSender;
+
+        private readonly SignInManager<VinylExchangeUser> signInManager;
+
+        private readonly UserManager<VinylExchangeUser> userManager;
 
         public UsersService(
             UserManager<VinylExchangeUser> userManager,

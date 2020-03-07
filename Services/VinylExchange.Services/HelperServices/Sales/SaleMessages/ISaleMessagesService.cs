@@ -1,8 +1,9 @@
-﻿namespace VinylExchange.Services.Data.HelperServices.Sales
+﻿namespace VinylExchange.Services.Data.HelperServices.Sales.SaleMessages
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using VinylExchange.Web.Models.ResourceModels.SaleMessages;
 
     public interface ISaleMessagesService

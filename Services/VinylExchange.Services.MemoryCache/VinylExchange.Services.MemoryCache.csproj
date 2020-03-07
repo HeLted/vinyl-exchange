@@ -10,8 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Models\VinylExchange.Models\VinylExchange.Models.csproj" />
-    <ProjectReference Include="..\..\Web\VinylExchange.Web.Models\VinylExchange.Web.Models.csproj" />
+      <ProjectReference Include="..\..\Web\VinylExchange.Web.Models\VinylExchange.Web.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,11 +1,13 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MainServices.Collections;
@@ -31,8 +33,10 @@
         {
             try
             {
-                CollectionItem collectionItem =
-                    await this.collectionsService.AddToCollection(inputModel, releaseId, this.GetUserId(this.User));
+                CollectionItem collectionItem = await this.collectionsService.AddToCollection(
+                                                    inputModel,
+                                                    releaseId,
+                                                    this.GetUserId(this.User));
 
                 return this.StatusCode(HttpStatusCode.Created, collectionItem.Id);
             }
@@ -68,8 +72,7 @@
         {
             try
             {
-                GetCollectionItemResourceModel collectionItem =
-                    await this.collectionsService.GetCollectionItem(id);
+                GetCollectionItemResourceModel collectionItem = await this.collectionsService.GetCollectionItem(id);
 
                 if (collectionItem == null)
                 {
@@ -91,7 +94,7 @@
         {
             try
             {
-                IEnumerable<GetUserCollectionResourceModel> userCollection = 
+                IEnumerable<GetUserCollectionResourceModel> userCollection =
                     await this.collectionsService.GetUserCollection(this.GetUserId(this.User));
 
                 return this.Ok(userCollection);

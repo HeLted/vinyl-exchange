@@ -1,17 +1,20 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Threading.Tasks;
+
     using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Services.Authentication;
     using VinylExchange.Services.Data.HelperServices.Users;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
+
     using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
     public class UsersController : ApiController
@@ -80,8 +83,7 @@
         [Route("GetUserAvatar/{id}")]
         public async Task<IActionResult> GetUserAvatar(Guid id)
         {
-            GetUserAvatarResourceModel userAvatar =
-                await this.usersAvatarService.GetUserAvatar(id);
+            GetUserAvatarResourceModel userAvatar = await this.usersAvatarService.GetUserAvatar(id);
 
             if (userAvatar == null)
             {
@@ -115,8 +117,7 @@
 
             try
             {
-                SignInResult registerUserIdentityResult =
-                    await this.userService.LoginUser(inputModel);
+                SignInResult registerUserIdentityResult = await this.userService.LoginUser(inputModel);
 
                 if (registerUserIdentityResult.Succeeded)
                 {

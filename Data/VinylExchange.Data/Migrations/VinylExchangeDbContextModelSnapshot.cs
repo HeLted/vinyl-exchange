@@ -335,6 +335,27 @@ namespace VinylExchange.Data.Migrations
                     });
 
             modelBuilder.Entity(
+                "VinylExchange.Data.Models.SaleLog",
+                b =>
+                    {
+                        b.Property<Guid>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
+
+                        b.Property<string>("Content").IsRequired().HasColumnType("nvarchar(max)");
+
+                        b.Property<DateTime>("CreatedOn").HasColumnType("datetime2");
+
+                        b.Property<DateTime?>("ModifiedOn").HasColumnType("datetime2");
+
+                        b.Property<Guid>("SaleId").HasColumnType("uniqueidentifier");
+
+                        b.HasKey("Id");
+
+                        b.HasIndex("SaleId");
+
+                        b.ToTable("SaleLogs");
+                    });
+
+            modelBuilder.Entity(
                 "VinylExchange.Data.Models.SaleMessage",
                 b =>
                     {
@@ -558,6 +579,14 @@ namespace VinylExchange.Data.Migrations
 
                         b.HasOne("VinylExchange.Data.Models.VinylExchangeUser", "Seller").WithMany("Sales")
                             .HasForeignKey("SellerId").OnDelete(DeleteBehavior.Restrict);
+                    });
+
+            modelBuilder.Entity(
+                "VinylExchange.Data.Models.SaleLog",
+                b =>
+                    {
+                        b.HasOne("VinylExchange.Data.Models.Sale", "Sale").WithMany("Logs").HasForeignKey("SaleId")
+                            .OnDelete(DeleteBehavior.Cascade).IsRequired();
                     });
 
             modelBuilder.Entity(

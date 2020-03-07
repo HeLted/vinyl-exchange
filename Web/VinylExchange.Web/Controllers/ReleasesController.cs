@@ -1,11 +1,13 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MainServices.Releases;
@@ -46,8 +48,7 @@
         {
             try
             {
-                GetReleaseResourceModel release =
-                    await this.releasesService.GetRelease(id);
+                GetReleaseResourceModel release = await this.releasesService.GetRelease(id);
 
                 if (release == null)
                 {

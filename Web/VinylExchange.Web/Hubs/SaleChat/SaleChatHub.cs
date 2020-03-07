@@ -1,17 +1,16 @@
-﻿namespace VinylExchange.Web.Hubs
+﻿namespace VinylExchange.Web.Hubs.SaleChat
 {
+    using System;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using VinylExchange.Services.Data.HelperServices.Sales;
+    using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.MainServices.Sales;
-    using VinylExchange.Web.Models.ResourceModels.SaleMessages;
     using VinylExchange.Web.Models.Utility;
 
     [Authorize]
-    public class SaleChatHub : BaseHub
+    public class SaleChatHub : Hub<ISaleChatClient>
     {
         private readonly ISaleMessagesService saleMessagesService;
 
@@ -55,26 +54,27 @@
             {
                 if (sale.SellerId == userId || sale.BuyerId == userId)
                 {
-                    IEnumerable<GetMessagesForSaleResourceModel> messages =
-                        await this.saleMessagesService.GetMessagesForSale(saleId);
+                    var messages = await this.saleMessagesService.GetMessagesForSale(saleId);
 
-                    await this.Clients.Caller.SendAsync("LoadMessageHistory", messages);
+                    await this.Clients.Caller.LoadMessageHistory(messages);
                 }
             }
         }
 
         public async Task SendMessage(Guid saleId, string messageContent)
         {
-            string roomName = saleId.ToString();
+            var roomName = saleId.ToString();
 
-            Guid userId = Guid.Parse(this.GetUserId());
+            var userId = Guid.Parse(this.GetUserId());
 
-            AddMessageToSaleResourceModel message =
-                await this.saleMessagesService.AddMessageToSale(saleId, userId, messageContent);
+            var message = await this.saleMessagesService.AddMessageToSale(saleId, userId, messageContent);
 
-            await this.Clients.Group(roomName).SendAsync("NewMessage", message);
+            await this.Clients.Group(roomName).NewMessage(message);
         }
 
-     
+        private string GetUserId()
+        {
+            return this.Context.User.FindFirst("sub").Value;
+        }
     }
 }

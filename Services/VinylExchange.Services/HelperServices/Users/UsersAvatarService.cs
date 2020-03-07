@@ -1,11 +1,13 @@
 ﻿namespace VinylExchange.Services.Data.HelperServices.Users
 {
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.EntityFrameworkCore;
     using System;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.EntityFrameworkCore;
+
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;

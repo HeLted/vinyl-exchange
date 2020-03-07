@@ -1,5 +1,5 @@
-﻿namespace VinylExchange.Web.Models 
-{ 
+﻿namespace VinylExchange.Web.Models
+{
     public class ModelGetAssemblyClass
     {
     }

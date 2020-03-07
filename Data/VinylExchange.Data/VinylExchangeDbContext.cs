@@ -28,6 +28,8 @@
 
         public DbSet<Release> Releases { get; set; }
 
+        public DbSet<SaleLog> SaleLogs { get; set; }
+
         public DbSet<SaleMessage> SaleMessages { get; set; }
 
         public DbSet<Sale> Sales { get; set; }

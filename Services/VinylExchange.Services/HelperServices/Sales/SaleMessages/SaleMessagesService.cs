@@ -1,10 +1,12 @@
-﻿namespace VinylExchange.Services.Data.HelperServices.Sales
+﻿namespace VinylExchange.Services.Data.HelperServices.Sales.SaleMessages
 {
-    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;

@@ -1,9 +1,11 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Mvc;
+
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MainServices.Styles;
     using VinylExchange.Web.Models.ResourceModels.Styles;
@@ -26,8 +28,7 @@
         {
             try
             {
-                IEnumerable<GetAllStylesResourceModel> styles =
-                    await this.styleService.GetAllStylesForGenre(genreId);
+                IEnumerable<GetAllStylesResourceModel> styles = await this.styleService.GetAllStylesForGenre(genreId);
 
                 return this.Ok(styles);
             }

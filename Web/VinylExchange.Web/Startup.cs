@@ -1,5 +1,9 @@
 namespace VinylExchange.Web
 {
+    using System;
+    using System.IO;
+    using System.Reflection;
+
     using Microsoft.AspNetCore.Antiforgery;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Builder;
@@ -13,14 +17,13 @@ namespace VinylExchange.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
-    using System;
-    using System.IO;
-    using System.Reflection;
+
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Data.Seeding;
     using VinylExchange.Services.Authentication;
-    using VinylExchange.Services.Data.HelperServices.Sales;
+    using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
+    using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.HelperServices.Users;
     using VinylExchange.Services.Data.MainServices.Addresses;
     using VinylExchange.Services.Data.MainServices.Sales;
@@ -34,7 +37,8 @@ namespace VinylExchange.Web
     using VinylExchange.Services.MainServices.Styles;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Services.MemoryCache;
-    using VinylExchange.Web.Hubs;
+    using VinylExchange.Web.Hubs.SaleChat;
+    using VinylExchange.Web.Hubs.SaleLog;
     using VinylExchange.Web.Models;
 
     public class Startup
@@ -102,11 +106,9 @@ namespace VinylExchange.Web
             app.UseEndpoints(
                 endpoints =>
                     {
-                        endpoints.MapControllerRoute(
-                            "Default",
-                            "api/{controller}/{id}");
+                        endpoints.MapControllerRoute("Default", "api/{controller}/{id}");
                         endpoints.MapHub<SaleChatHub>("/Sale/Chathub");
-                        endpoints.MapHub<SaleLogHub>("/Sale/LogHub");
+                        endpoints.MapHub<SaleLogsHub>("/Sale/LogHub");
                     });
 
             app.Use(
@@ -197,17 +199,18 @@ namespace VinylExchange.Web
             services.AddTransient<IStylesService, StylesService>();
             services.AddTransient<IReleaseFilesService, ReleaseFilesService>();
             services.AddTransient<ICollectionsService, CollectionsService>();
-            services.AddTransient<ISalesService, SalesService>();
             services.AddTransient<IAddressesService, AddressesService>();
             services.AddTransient<IUsersAvatarService, UsersAvatarService>();
+            services.AddTransient<ISalesService, SalesService>();
             services.AddTransient<ISaleMessagesService, SaleMessagesService>();
+            services.AddTransient<ISaleLogsService, SaleLogsService>();
 
             // Tool Services
             services.AddTransient<MemoryCacheManager>();
             services.AddTransient<IMemoryCacheFileSevice, MemoryCacheFileService>();
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<ILoggerService, LoggerService>();
-            services.AddTransient<IUsersService, UsersService>();            
+            services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<RoleSeeder>();
             services.AddTransient<UserSeeder>();
             services.AddSingleton<IEmailSender>(

@@ -1,9 +1,11 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Mvc;
+
     using VinylExchange.Services.HelperServices.Releases;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.ResourceModels.ReleaseFiles;
@@ -26,7 +28,8 @@
         {
             try
             {
-                IEnumerable<ReleaseFileResourceModel> releaseImages = await this.releaseFilesService.GetReleaseImages(releaseId);
+                IEnumerable<ReleaseFileResourceModel> releaseImages =
+                    await this.releaseFilesService.GetReleaseImages(releaseId);
 
                 return this.Ok(releaseImages);
             }
@@ -44,8 +47,7 @@
         {
             try
             {
-                ReleaseFileResourceModel releaseCoverArt =
-                    await this.releaseFilesService.GetReleaseCoverArt(releaseId);
+                ReleaseFileResourceModel releaseCoverArt = await this.releaseFilesService.GetReleaseCoverArt(releaseId);
 
                 return this.Ok(releaseCoverArt);
             }

@@ -7,7 +7,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\VinylExchange.Common\VinylExchange.Common.csproj" />
     <ProjectReference Include="..\..\Data\VinylExchange.Data\VinylExchange.Data.csproj" />
-    <ProjectReference Include="..\..\Models\VinylExchange.Models\VinylExchange.Models.csproj" />
     <ProjectReference Include="..\..\Web\VinylExchange.Web.Models\VinylExchange.Web.Models.csproj" />
     <ProjectReference Include="..\VinylEchange.Services.Files\VinylExchange.Services.Files.csproj" />
   </ItemGroup>

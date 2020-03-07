@@ -1,15 +1,19 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR;
+
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Logging;
+    using VinylExchange.Web.Hubs.SaleLog;
     using VinylExchange.Web.Models.InputModels.Sales;
     using VinylExchange.Web.Models.ResourceModels.Sales;
     using VinylExchange.Web.Models.Utility;
@@ -19,12 +23,18 @@
     {
         private readonly ILoggerService loggerService;
 
+        private readonly IHubContext<SaleLogsHub, ISaleLogsClient> saleLogHubContext;
+
         private readonly ISalesService salesService;
 
-        public SalesController(ISalesService salesService, ILoggerService loggerService)
+        public SalesController(
+            ISalesService salesService,
+            ILoggerService loggerService,
+            IHubContext<SaleLogsHub, ISaleLogsClient> saleLogHubContext)
         {
             this.salesService = salesService;
             this.loggerService = loggerService;
+            this.saleLogHubContext = saleLogHubContext;
         }
 
         [HttpPut]
@@ -33,8 +43,7 @@
         {
             try
             {
-                GetSaleInfoUtilityModel saleModel =
-                    await this.salesService.GetSaleInfo(inputModel.SaleId);
+                GetSaleInfoUtilityModel saleModel = await this.salesService.GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
@@ -128,7 +137,8 @@
         {
             try
             {
-                IEnumerable<GetUserPurchasesResourceModel> purchases = await this.salesService.GetUserPurchases(this.GetUserId(this.User));
+                IEnumerable<GetUserPurchasesResourceModel> purchases =
+                    await this.salesService.GetUserPurchases(this.GetUserId(this.User));
 
                 return this.Ok(purchases);
             }
@@ -163,8 +173,7 @@
         {
             try
             {
-                GetSaleInfoUtilityModel saleModel =
-                    await this.salesService.GetSaleInfo(inputModel.SaleId);
+                GetSaleInfoUtilityModel saleModel = await this.salesService.GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
@@ -181,6 +190,8 @@
 
                 await this.salesService.PlaceOrder(inputModel, currentUserId);
 
+                await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString()).RecieveNewLog("test");
+
                 return this.NoContent();
             }
             catch (Exception ex)
@@ -196,8 +207,7 @@
         {
             try
             {
-                GetSaleInfoUtilityModel saleModel =
-                    await this.salesService.GetSaleInfo(inputModel.SaleId);
+                GetSaleInfoUtilityModel saleModel = await this.salesService.GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {

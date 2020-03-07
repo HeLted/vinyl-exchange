@@ -1,9 +1,11 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Mvc;
+
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MainServices.Genres;
     using VinylExchange.Web.Models.ResourceModels.Genres;
@@ -25,8 +27,7 @@
         {
             try
             {
-                IEnumerable<GetAllGenresResourceModel> genres =
-                    await this.genreService.GetAllGenres();
+                IEnumerable<GetAllGenresResourceModel> genres = await this.genreService.GetAllGenres();
 
                 return this.Ok(genres);
             }

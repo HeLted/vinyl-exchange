@@ -1,8 +1,10 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
+    using System;
+
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using System;
+
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MemoryCache;
     using VinylExchange.Web.Models.ResourceModels.File;
