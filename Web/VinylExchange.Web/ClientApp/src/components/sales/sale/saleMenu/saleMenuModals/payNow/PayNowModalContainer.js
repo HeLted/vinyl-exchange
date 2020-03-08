@@ -40,7 +40,6 @@ class PayNowModalContainer extends Component {
         $(".modal").hide();
         this.setState({ isLoading: false });
         this.context.handleAppNotification("Successfull payment", 4);
-        this.props.functions.handleReLoadSale();
       })
       .catch(error => {
         this.setState({ isLoading: false });

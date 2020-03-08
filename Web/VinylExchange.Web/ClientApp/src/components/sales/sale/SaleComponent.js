@@ -20,6 +20,17 @@ function SaleComponent(props) {
           data={{ releaseId: props.data.sale.releaseId }}
         />
       </div>
+      <div className="menu-container row border justify-content-center text-center">
+        <SaleMenuContainer
+          data={{
+            sale: props.data.sale,
+            currentUserId: props.data.currentUserId
+          }}
+          functions={{
+            handleReLoadSale: props.functions.handleReLoadSale
+          }}
+        />
+      </div>
       <div className="row">
         <div className="sale-info-container col-lg-6 col-md-12 col-sm-12 border justify-content-center text-center">
           <SaleInfoContainer data={{ sale: props.data.sale }} />
@@ -48,7 +59,7 @@ function SaleComponent(props) {
             className="row border border-dark"
             style={{ backgroundColor: "black" }}
           ></div>
-          <div className="row justify-content-center vertical-center text-center">
+          <div className="row justify-content-center  text-center">
             <div className="chat-container align-content-center col-12">
               {props.data.isChatShown ? (
                 props.data.sale.buyerId !== null ? (
@@ -72,23 +83,20 @@ function SaleComponent(props) {
                 </button>
               )}
             </div>
-               
-
-            <div className="menu-container col-12 border text-center">
-                  
-
-              <SaleMenuContainer
-                data={{ sale: props.data.sale }}
-                functions={{
-                  handleReLoadSale: props.functions.handleReLoadSale
-                }}
-              />
-            </div>
           </div>
         </div>
-        <div className="menu-container col-12 border text-center">
-          <SaleLogContainer />
-        </div>
+
+        {props.data.sale.status > 1 ||
+        props.data.sale.sellerId === props.data.currentUserId ? (
+          <div className="menu-container col-12 border text-center">
+            <SaleLogContainer
+              data={{ sale: props.data.sale }}
+              functions={{
+                handleReLoadSale: props.functions.handleReLoadSale
+              }}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

@@ -23,6 +23,14 @@
 
         public async Task<AddMessageToSaleResourceModel> AddMessageToSale(Guid saleId, Guid userId, string message)
         {
+            bool isSaleExists = this.dbContext.Sales.Where(s => s.Id == saleId)
+                .FirstOrDefault() != null;
+
+            if (!isSaleExists)
+            {
+                throw new NullReferenceException("Sale with this Id doesn't exist!");
+            }
+
             AddMessageToSaleResourceModel saleMessage =
                 (await this.dbContext.SaleMessages.AddAsync(
                      new SaleMessage() { Content = message, SaleId = saleId, UserId = userId })).Entity
@@ -34,9 +42,8 @@
         }
 
         public async Task<IEnumerable<GetMessagesForSaleResourceModel>> GetMessagesForSale(Guid saleId)
-        {
-            return await this.dbContext.SaleMessages.Where(sm => sm.SaleId == saleId).OrderBy(sm => sm.CreatedOn)
+            => await this.dbContext.SaleMessages.Where(sm => sm.SaleId == saleId).OrderBy(sm => sm.CreatedOn)
                        .To<GetMessagesForSaleResourceModel>().ToListAsync();
-        }
+        
     }
 }

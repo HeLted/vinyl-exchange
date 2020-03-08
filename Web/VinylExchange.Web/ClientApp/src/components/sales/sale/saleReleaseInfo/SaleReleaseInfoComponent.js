@@ -1,8 +1,9 @@
 import React, { Fragment } from "react";
 import PlayerLoaderButton from "./../../../common/PlayerLoaderButton";
+import BorderSpinner from "./../../../common/spinners/BorderSpinner";
 
 function SaleReleaseInfoComponent(props) {
-  return (
+  return (props.data.isLoading ?(<BorderSpinner/>) : (
     <Fragment>
       <div className="col-2 ">
         <img
@@ -26,7 +27,7 @@ function SaleReleaseInfoComponent(props) {
         </div>
         <div className="row border border-dark" style={{backgroundColor:"black"}}></div>
       </div>
-    </Fragment>
+    </Fragment>)
   );
 }
 

@@ -7,30 +7,20 @@ class SaleMenuContainer extends Component {
     super();
     this.state = {
       currentUserId: "",
-      isLoading: true,
     };
   }
-
-  componentDidMount() {
-    this.setState({ isLoading: true });
-
-    authService.getUser().then(userObj => {
-      this.setState({ currentUserId: userObj.sub, isLoading: false });
-    });
-  }
-
 
   render() {
     return (
       <SaleMenuComponent
         data={{
           sale: this.props.data.sale,
-          currentUserId: this.state.currentUserId,
+          currentUserId: this.props.data.currentUserId,
           isLoading: this.state.isLoading,
         }}
         functions={{
-          handleReLoadSale: this.props.functions.handleReLoadSale,
-        }}
+                handleReLoadSale: this.props.functions.handleReLoadSale
+              }}
       />
     );
   }

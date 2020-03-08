@@ -59,6 +59,7 @@ ul {
 
 .player-row{
   margin-left: 0px;
+  margin-top: 5px;
   margin-bottom: 5px;
 }
 
@@ -75,4 +76,12 @@ ul {
 .custom-player-status{
   padding-left: 30px !important;
   padding-right:30px !important;
+}
+
+.player-title{
+  margin-bottom: 5px;
+}
+
+.release-cover-art{
+  margin-bottom:5px;
 }

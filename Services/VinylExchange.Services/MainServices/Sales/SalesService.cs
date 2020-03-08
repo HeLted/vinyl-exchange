@@ -47,6 +47,8 @@
 
             sale.SellerId = sellerId;
 
+            sale.Status = Status.Open;
+
             EntityEntry<Sale> trackedSale = await this.dbContext.Sales.AddAsync(sale);
 
             await this.dbContext.SaveChangesAsync();

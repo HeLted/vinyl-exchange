@@ -42,7 +42,6 @@ class SetShippingPriceModalContainer extends Component {
         this.setState({ isLoading: false });
         this.context.handleAppNotification("Succesfully set shiping price", 4);
         hideModal();
-        this.props.functions.handleReLoadSale();
       })
       .catch(error => {
         this.setState({ isLoading: false });

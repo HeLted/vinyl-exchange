@@ -1,4 +1,4 @@
-import React ,{Component} from "react";
+import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleDown,
@@ -36,41 +36,41 @@ class PlayerRelease extends Component {
 
     return (
       <li>
-        <div className="player-row row ">
-          <div className="col-11 sm2-row p-0">
+        <div className="player-row row text-center justify-content-center ">
+          <div className="col-lg-10 col-md-10 col-sm-10 col-xs-3 sm2-row p-0">
             <div className="sm2-col sm2-wide">
-              <div className="player-row row">
-                <div className="col-1 p-0 m-0">
+              <div className="player-row row text-center justify-content-center">
+                <div className="release-cover-art col-1">
                   <img src={this.props.image} height="38px" width="38px" />
                 </div>
-                <div className="col-11 p-0">
+                <div className="player-title col-lg-10 col-md-9 col-sm-8 col-xs-3 ">
                   <a className="releaseAnchor">
                     {this.props.artist} - {this.props.title}
                   </a>
                 </div>
+                <div className="col-lg-1 p-0">
+                  <button
+                    className="btn btn-primary w-50"
+                    onClick={this.handleOnToggle}
+                    type="button"
+                  >
+                    {icon}
+                  </button>
+                  <button
+                    className="btn btn-warning w-50"
+                    onClick={() =>
+                      this.props.handleEjectRelease(this.props.releaseId)
+                    }
+                    type="button"
+                  >
+                    <FontAwesomeIcon icon={faEject} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-          <div className="col-1 p-0">
-            <button
-              className="btn btn-primary w-50"
-              onClick={this.handleOnToggle}
-              type="button"
-            >
-              {icon}
-            </button>
-            <button
-              className="btn btn-warning w-50"
-              onClick={() =>
-                this.props.handleEjectRelease(this.props.releaseId)
-              }
-              type="button"
-            >
-              <FontAwesomeIcon icon={faEject} />
-            </button>
-          </div>
         </div>
-        <div className="player-row row bg-dark">
+        <div className="player-row row bg-dark text-center">
           <div className="col-12 p-0">
             <ul className="list-group" style={{ display: trakcsUlDisplay }}>
               {this.props.tracks.map((track, index) => {

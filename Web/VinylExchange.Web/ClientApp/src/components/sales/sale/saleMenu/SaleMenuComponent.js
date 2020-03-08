@@ -3,7 +3,7 @@ import BorderSpinner from "./../../../common/spinners/BorderSpinner";
 import PlaceOrderModalContainer from "./saleMenuModals/placeOrder/PlaceOrderModalContainer";
 import SetShippingPriceModalContainer from "./saleMenuModals/setShippingPrice/SetShippingPriceModalContainer";
 import PayNowModalContainer from "./saleMenuModals/payNow/PayNowModalContainer";
-import InfoTooltip from "./../../../common/tooltips/InfoTooltip";
+import NoActionAvailableTextBox from "./../../../common/divTextBoxes/NoActionAvailableTextBox"
 
 function SaleMenuComponent(props) {
   let component = null;
@@ -13,9 +13,6 @@ function SaleMenuComponent(props) {
   if (sale.status === 1 && currentUserId === sale.sellerId) {
     component = (
       <div>
-        <InfoTooltip
-          data={{ tooltipValue: "Waiting For potential buyer..." }}
-        />
         <button className="btn btn-danger btn-lg">Remove Sale</button>
         <button className="btn btn-primary btn-lg">Edit Sale</button>
       </div>
@@ -26,12 +23,6 @@ function SaleMenuComponent(props) {
   ) {
     component = (
       <div>
-        <InfoTooltip
-          data={{
-            tooltipValue:
-              "You can place order if you are interested in this sale."
-          }}
-        />
         <button
           className="btn btn-success btn-lg"
           data-toggle="modal"
@@ -50,7 +41,6 @@ function SaleMenuComponent(props) {
   } else if (sale.status === 2 && currentUserId === sale.sellerId) {
     component = (
       <div>
-        <InfoTooltip data={{ tooltipValue: "Please specify shipping price." }} />
         <button
           className="btn btn-success btn-lg"
           data-toggle="modal"
@@ -58,24 +48,16 @@ function SaleMenuComponent(props) {
         >
           Set Shipping Price
         </button>
-        <SetShippingPriceModalContainer
-          data={{ saleId: sale.id }}
-          functions={{
-            handleReLoadSale: props.functions.handleReLoadSale
-          }}
-        />
+        <SetShippingPriceModalContainer data={{ saleId: sale.id }} />
       </div>
     );
   } else if (sale.status === 2 && currentUserId === sale.buyerId) {
     component = (
-      <div>
-        <InfoTooltip data={{ tooltipValue: "Awaiting saller to specify shipping price..." }} />
-      </div>
+      <NoActionAvailableTextBox/>
     );
   } else if (sale.status === 3 && currentUserId === sale.buyerId) {
     component = (
       <div>
-        <InfoTooltip data={{ tooltipValue: "You can now pay for your order." }} />
         <button
           className="btn btn-success btn-lg"
           data-toggle="modal"
@@ -89,18 +71,11 @@ function SaleMenuComponent(props) {
             price: sale.price,
             shippingPrice: sale.shippingPrice
           }}
-          functions={{
-            handleReLoadSale: props.functions.handleReLoadSale
-          }}
         />
       </div>
     );
   } else if (sale.status === 3 && currentUserId === sale.sellerId) {
-    component = (
-      <div>
-        <InfoTooltip data={{ tooltipValue: "Awaiting buyer to complete payment..." }} />
-      </div>
-    );
+    component = (<NoActionAvailableTextBox/>);
   }
 
   return props.data.isLoading ? <BorderSpinner /> : component;

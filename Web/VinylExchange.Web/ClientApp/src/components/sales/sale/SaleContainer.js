@@ -29,6 +29,7 @@ class SaleContainer extends Component {
         shipsTo: "",
         shippingPrice: 0
       },
+      currentUserId:"",
       isLoading: true,
       isChatShown: false
     };
@@ -74,7 +75,12 @@ class SaleContainer extends Component {
             shipsTo: data.ShipsTo,
             shippingPrice: data.shippingPrice
           },
-          isLoading: false
+          
+        });
+      })
+      .then(() => {
+        authService.getUser().then(userObj => {
+          this.setState({ currentUserId: userObj.sub, isLoading: false });
         });
       })
       .catch(error => {
@@ -94,6 +100,7 @@ class SaleContainer extends Component {
       <SaleComponent
         data={{
           sale: this.state.sale,
+          currentUserId:this.state.currentUserId,
           isLoading: this.state.isLoading,
           isChatShown: this.state.isChatShown
         }}

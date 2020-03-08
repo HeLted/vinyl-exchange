@@ -77,7 +77,7 @@ class PlaceOrderModalContainer extends Component {
         this.setState({ isSubmitLoading: false });
         this.context.handleAppNotification("Succesfully placed order", 4);
         hideModal();
-        this.props.functions. handleReLoadSale();
+        this.props.functions.handleReLoadSale();
       })
       .catch(error => {
         this.setState({ isSubmitLoading: false });

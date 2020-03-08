@@ -288,3 +288,14 @@ hr {
   display: flex;
   align-items: center;
 }
+
+.home-container{
+  background-image: url("https://localhost:5001/img/homePageBackground.jpg");
+  height: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+  vertical-align: middle;
+  
+}

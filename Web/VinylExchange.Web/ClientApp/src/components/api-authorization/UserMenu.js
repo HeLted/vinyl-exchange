@@ -69,10 +69,10 @@ class UserMenu extends Component {
   authenticatedView(userName, profilePath, logoutPath) {
     return (
       <Fragment >
-        <li  onMouseLeave={()=>this.handleDropDownMenuToggle(false)} className="nav-item dropdown">
+        <li  onMouseLeave={()=>setTimeout(this.handleDropDownMenuToggle(false),200)} className="nav-item dropdown">
           <NavLink
             className="navbar-link btn btn-outline-light text-light"
-            onMouseEnter={()=> this.handleDropDownMenuToggle(true)}
+            onMouseOver={()=> this.handleDropDownMenuToggle(true)}
           >
             <FontAwesomeIcon icon={faUser} /> {userName}{" "}
             <FontAwesomeIcon
@@ -83,15 +83,13 @@ class UserMenu extends Component {
             className="user-dropdown dropdown-menu"
             style={{ display: this.state.isDropDownActive ? "block" : "none" }}
           >
-             <Link className="dropdown-item" to={ApplicationPaths.UserCollection}>
-              Exchanges
+            <Link className="dropdown-item" to={ApplicationPaths.Profile}>
+              Profile
             </Link>
               <Link className="dropdown-item" to={ApplicationPaths.UserCollection}>
               Collection
             </Link>
-            <Link className="dropdown-item" to={ApplicationPaths.Profile}>
-              Profile
-            </Link>
+            
           </div>
         </li>
         <NavItem>
