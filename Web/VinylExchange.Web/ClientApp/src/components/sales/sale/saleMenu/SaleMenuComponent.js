@@ -3,7 +3,9 @@ import BorderSpinner from "./../../../common/spinners/BorderSpinner";
 import PlaceOrderModalContainer from "./saleMenuModals/placeOrder/PlaceOrderModalContainer";
 import SetShippingPriceModalContainer from "./saleMenuModals/setShippingPrice/SetShippingPriceModalContainer";
 import PayNowModalContainer from "./saleMenuModals/payNow/PayNowModalContainer";
-import NoActionAvailableTextBox from "./../../../common/divTextBoxes/NoActionAvailableTextBox"
+import NoActionAvailableTextBox from "./../../../common/divTextBoxes/NoActionAvailableTextBox";
+import ConfirmItemSentContainer from "./saleMenuModals/confirmItemSent/ConfirmItemSentContainer";
+import ConfirmItemRecievedContainer from "./saleMenuModals/confirmItemRecieved/ConfirmItemRecievedContainer";
 
 function SaleMenuComponent(props) {
   let component = null;
@@ -52,9 +54,7 @@ function SaleMenuComponent(props) {
       </div>
     );
   } else if (sale.status === 2 && currentUserId === sale.buyerId) {
-    component = (
-      <NoActionAvailableTextBox/>
-    );
+    component = <NoActionAvailableTextBox />;
   } else if (sale.status === 3 && currentUserId === sale.buyerId) {
     component = (
       <div>
@@ -75,7 +75,37 @@ function SaleMenuComponent(props) {
       </div>
     );
   } else if (sale.status === 3 && currentUserId === sale.sellerId) {
-    component = (<NoActionAvailableTextBox/>);
+    component = <NoActionAvailableTextBox />;
+  } else if (sale.status === 4 && currentUserId === sale.sellerId) {
+    component = (
+      <div>
+        <button
+          className="btn btn-success btn-lg"
+          data-toggle="modal"
+          data-target="#confirmItemSentModal"
+        >
+          Confirm Item Sent To Buyer
+        </button>
+        <ConfirmItemSentContainer data={{ saleId: sale.id }} />
+      </div>
+    );
+  } else if (sale.status === 4 && currentUserId === sale.buyerId) {
+    component = <NoActionAvailableTextBox />;
+  } else if (sale.status === 5 && currentUserId === sale.buyerId) {
+    component = (
+      <div>
+        <button
+          className="btn btn-success btn-lg"
+          data-toggle="modal"
+          data-target="#confirmItemRecievedModal"
+        >
+          Confirm Item Recieved
+        </button>
+        <ConfirmItemRecievedContainer data={{ saleId: sale.id }} />
+      </div>
+    );
+  } else if (sale.status === 5 && currentUserId === sale.sellerId) {
+    component = <NoActionAvailableTextBox />;
   }
 
   return props.data.isLoading ? <BorderSpinner /> : component;

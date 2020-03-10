@@ -36,17 +36,14 @@
 
         public Status Status { get; set; }
 
-        public string StatusText { get; set; }
-
         public Condition VinylGrade { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Sale, GetSaleResourceModel>()
-                .ForMember(m => m.SellerUsername, ci => ci.MapFrom(x => x.Seller.UserName))
-                .ForMember(m => m.BuyerUsername, ci => ci.MapFrom(x => x.Buyer.UserName)).ForMember(
-                    m => m.StatusText,
-                    ci => ci.MapFrom(x => x.Status.ToString()));
+                .ForMember(m => m.SellerUsername, ci => ci.MapFrom(x => x.Seller.UserName)).ForMember(
+                    m => m.BuyerUsername,
+                    ci => ci.MapFrom(x => x.Buyer.UserName));
         }
     }
 }

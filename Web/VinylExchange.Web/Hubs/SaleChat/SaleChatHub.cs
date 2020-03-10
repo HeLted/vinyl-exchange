@@ -5,6 +5,7 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
+
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Web.Models.Utility;

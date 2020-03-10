@@ -95,7 +95,7 @@ function SaleInfoComponent(props) {
             <PriceTagBadge data={{ price: sale.shippingPrice }} />
           </h5>
         </div>
-        <div className="col-12">
+        <div className="shipping-details-container col-12">
           <div className="border border-dark">
             <h5 className="property-text-lm">
               <b>Description</b>
@@ -108,6 +108,33 @@ function SaleInfoComponent(props) {
           </h5>
           </div>
         </div>
+        <div className={(sale.shipsTo != null ? "col-6": "col-12") + " shipping-details-container"}>
+          <div className="border border-dark">
+            <h5 className="property-text-lm">
+              <b>Ships From</b>
+            </h5>
+          </div>
+          <br/>
+          <div className="border border-dark">
+          <h5 className="property-text">
+          {sale.shipsFrom}
+          </h5>
+          </div>
+        </div>
+
+        {sale.shipsTo != null && (<div className="shipping-details-container col-6">
+          <div className="border border-dark">
+            <h5 className="property-text-lm">
+              <b>Ships To</b>
+            </h5>
+          </div>
+          <br/>
+          <div className="border border-dark">
+          <h5 className="property-text">
+          {sale.shipsTo}
+          </h5>
+          </div>
+        </div>)}
       </div>
     </div>
   );

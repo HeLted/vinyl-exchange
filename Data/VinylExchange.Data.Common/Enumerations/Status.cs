@@ -13,7 +13,5 @@
         Sent = 5,
 
         Finished = 6,
-
-        Closed = 7
     }
 }

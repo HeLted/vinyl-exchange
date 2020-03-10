@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-
+import authService from "./api-authorization/AuthorizeService";
 
 export class Home extends Component {
   static displayName = Home.name;
+
+componentDidMount(){
+  authService.getUser().then(resp=>{console.log(resp);})
+}
 
   render () {
     return (

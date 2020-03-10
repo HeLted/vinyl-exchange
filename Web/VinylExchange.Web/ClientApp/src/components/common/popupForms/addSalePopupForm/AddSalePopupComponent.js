@@ -18,7 +18,8 @@ function AddSalePopupComponent(props) {
        data={{collectionItemId:props.data.collectionItemId}}
        functions={{
           handleLoadColletionItemData:
-            props.functions.handleLoadColletionItemData
+            props.functions.handleLoadColletionItemData,
+            handleLoadUserAddresses : props.functions.handleLoadUserAddresses
         }}
       />
       <AddSalePopupFormBody
@@ -28,11 +29,15 @@ function AddSalePopupComponent(props) {
           descriptionInput: props.data.descriptionInput,
           vinylGradeInput: props.data.vinylGradeInput,
           sleeveGradeInput: props.data.sleeveGradeInput,
-          priceInput: props.data.priceInput
+          priceInput: props.data.priceInput,
+          shipsFromAddressSelectInput:props.data.shipsFromAddressSelectInput,
+          userAddresses:props.data.userAddresses
         }}
         functions={{
           handleOnChange: props.functions.handleOnChange,
-          handleOnSubmit: props.functions.handleOnSubmit
+          handleOnSubmit: props.functions.handleOnSubmit,
+          handleFlushModal: props.functions.handleFlushModal
+
         }}
       />
     </Fragment>

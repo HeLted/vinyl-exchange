@@ -97,7 +97,7 @@
 
                 try
                 {
-                    using FileStream fileStream = File.OpenWrite(StorageFolderName + path + fileName);
+                    using var fileStream = File.OpenWrite(StorageFolderName + path + fileName);
                     fileStream.Write(fileContent);
                 }
                 catch

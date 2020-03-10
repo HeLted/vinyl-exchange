@@ -1,8 +1,10 @@
 import React from "react";
+import {Link} from "react-router-dom"
 import SingleSelect from "./../../inputComponents/SingleSelect";
 import Label from "./../../inputComponents/Label";
 import TextAreaInput from "./../../inputComponents/TextAreaInput";
 import MoneyInput from "./../../inputComponents/MoneyInput";
+
 
 function AddSalePopupBody(props) {
   return (
@@ -16,10 +18,7 @@ function AddSalePopupBody(props) {
             </button>
           </div>
           <div className="modal-body">
-            <form
-              id="createSaleForm"
-              onSubmit={props.functions.handleOnSubmit}
-            >
+            <form id="createSaleForm" onSubmit={props.functions.handleOnSubmit}>
               <div className="form-group">
                 <Label for="vinylGradeInput" value="Vinyl Grade" />
                 <SingleSelect
@@ -51,18 +50,45 @@ function AddSalePopupBody(props) {
                 />
               </div>
               <div className="form-group">
-              <Label for="priceInput" value="Price" />
-              <div className="input-group mb-2">
-                <div className="input-group-prepend">
-                  <div className="input-group-text">€</div>
+                <Label for="priceInput" value="Price" />
+                <div className="input-group mb-2">
+                  <div className="input-group-prepend">
+                    <div className="input-group-text">€</div>
+                  </div>
+                  <MoneyInput
+                    id="priceInput"
+                    placeholder="Price"
+                    value={props.data.priceInput}
+                    onChange={props.functions.handleOnChange}
+                  />
                 </div>
-                <MoneyInput
-                  id="priceInput"
-                  placeholder="Price"
-                  value={props.data.priceInput}
-                  onChange={props.functions.handleOnChange}
-                />
-              </div>
+                <div className="form-group">
+                  <Label for="shipsFromAddressSelectInput" value="Ships From" />
+                  {props.data.userAddresses.length > 0 ? (
+                    <SingleSelect
+                      id="shipsFromAddressSelectInput"
+                      value={props.data.shipsFromAddressSelectInput}
+                      onChange={props.functions.handleOnChange}
+                      options={props.data.userAddresses}
+                      defaultOptionLabel="--Please Select Seller Address--"
+                    />
+                  ) : (
+                    <div className="no-addresses-container border">
+                      <h6 className="property-text">
+                        You don't have any registered addresses.
+                      </h6>
+
+                      <Link
+                        onClick={props.functions.handleFlushModal}
+                        className="btn btn-primary"
+                        to="/User/Profile"
+                      >
+                        Go To Profile
+                      </Link>
+                      <br />
+                    </div>
+                  )}
+                </div>
               </div>
             </form>
           </div>

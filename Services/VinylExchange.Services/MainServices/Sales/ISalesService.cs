@@ -13,6 +13,10 @@
     {
         Task<Sale> CompletePayment(CompletePaymentInputModel inputModel);
 
+        Task<Sale> ConfirmItemRecieved(ConfirmItemRecievedInputModel inputModel);
+
+        Task<Sale> ConfirmItemSent(ConfirmItemSentInputModel inputModel);
+
         Task<Sale> CreateSale(CreateSaleInputModel inputModel, Guid sellerId);
 
         Task<IEnumerable<GetAllSalesForReleaseResouceModel>> GetAllSalesForRelease(Guid releaseId);

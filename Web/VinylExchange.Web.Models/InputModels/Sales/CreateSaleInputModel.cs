@@ -19,6 +19,9 @@
         [Required]
         public Guid ReleaseId { get; set; }
 
+        [Required]
+        public Guid? ShipsFromAddressId { get; set; }
+
         public Guid? ShopId { get; set; }
 
         [Required]

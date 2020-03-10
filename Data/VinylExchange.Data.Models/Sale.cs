@@ -38,6 +38,7 @@
         [Column(TypeName = "decimal(18,4)")]
         public decimal ShippingPrice { get; set; }
 
+        [Required]
         public string ShipsFrom { get; set; }
 
         public string ShipsTo { get; set; }

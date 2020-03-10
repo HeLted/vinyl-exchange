@@ -23,8 +23,7 @@
 
         public async Task<AddMessageToSaleResourceModel> AddMessageToSale(Guid saleId, Guid userId, string message)
         {
-            bool isSaleExists = this.dbContext.Sales.Where(s => s.Id == saleId)
-                .FirstOrDefault() != null;
+            bool isSaleExists = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault() != null;
 
             if (!isSaleExists)
             {
@@ -41,9 +40,8 @@
             return saleMessage;
         }
 
-        public async Task<IEnumerable<GetMessagesForSaleResourceModel>> GetMessagesForSale(Guid saleId)
-            => await this.dbContext.SaleMessages.Where(sm => sm.SaleId == saleId).OrderBy(sm => sm.CreatedOn)
-                       .To<GetMessagesForSaleResourceModel>().ToListAsync();
-        
+        public async Task<IEnumerable<GetMessagesForSaleResourceModel>> GetMessagesForSale(Guid saleId) =>
+            await this.dbContext.SaleMessages.Where(sm => sm.SaleId == saleId).OrderBy(sm => sm.CreatedOn)
+                .To<GetMessagesForSaleResourceModel>().ToListAsync();
     }
 }

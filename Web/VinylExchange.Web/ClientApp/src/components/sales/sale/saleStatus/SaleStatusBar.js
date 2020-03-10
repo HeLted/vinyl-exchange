@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 function SaleStatusBar(props) {
   const status = props.data.status;
@@ -11,21 +11,19 @@ function SaleStatusBar(props) {
     statusColorClass = "bg-primary";
 
     if (status === 2) {
-      statusBarLength = 15;
+      statusBarLength = 16;
     } else if (status === 3) {
-      statusBarLength = 30;
+      statusBarLength = 32;
     } else if (status === 4) {
-      statusBarLength = 45
+      statusBarLength = 64
     } else if (status === 5) {
-      statusBarLength = 60
+      statusBarLength = 80
     }
-  } else if (status === 6 || status === 7) {
+  } else if (status === 6 ) {
     statusColorClass = "bg-success";
 
     if(status === 6){
-      statusBarLength = 75
-    }else if (status ===7){
-      statusBarLength = 100;
+      statusBarLength = 100
     }
   }
 

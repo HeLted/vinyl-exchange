@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Web", "Web\Vi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Web.Models", "Web\VinylExchange.Web.Models\VinylExchange.Web.Models.csproj", "{7564B373-DF79-4325-A377-1C794ACAA9BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylExchange.Web.Infrastructure", "Web\VinylExchange.Web.Infrastructure\VinylExchange.Web.Infrastructure.csproj", "{644AB808-BABF-4965-9DE2-80EEEA655CC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{7564B373-DF79-4325-A377-1C794ACAA9BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7564B373-DF79-4325-A377-1C794ACAA9BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7564B373-DF79-4325-A377-1C794ACAA9BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{644AB808-BABF-4965-9DE2-80EEEA655CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{644AB808-BABF-4965-9DE2-80EEEA655CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{644AB808-BABF-4965-9DE2-80EEEA655CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{644AB808-BABF-4965-9DE2-80EEEA655CC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{DB5EE662-8EA8-439C-B3FC-4A18276CE271} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
 		{077C4B5E-281B-491D-916C-EB6CD2E75E84} = {6A46031E-D657-499F-B25A-75C04033DCAF}
 		{7564B373-DF79-4325-A377-1C794ACAA9BD} = {6A46031E-D657-499F-B25A-75C04033DCAF}
+		{644AB808-BABF-4965-9DE2-80EEEA655CC5} = {6A46031E-D657-499F-B25A-75C04033DCAF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D615B1D1-B2B9-425C-B0C3-87C0763326B3}

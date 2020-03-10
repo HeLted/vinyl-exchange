@@ -299,3 +299,7 @@ hr {
   vertical-align: middle;
   
 }
+
+th{
+  padding: 10px;
+}

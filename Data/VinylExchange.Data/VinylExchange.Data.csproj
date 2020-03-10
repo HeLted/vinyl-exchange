@@ -116,6 +116,10 @@
       <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
+    <Compile Update="Migrations\20200309105352_MadeSaleShipsFromFieldRequired.cs">
+      <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
   </ItemGroup>
 
 

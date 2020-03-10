@@ -2,9 +2,14 @@
 {
     public enum SaleLogs
     {
-        PlacedOrder = 1 ,
-        SettedShippingPrice = 2,
-        Paid = 3
+        PlacedOrder = 1,
 
+        SettedShippingPrice = 2,
+
+        Paid = 3,
+
+        ItemSent = 4,
+
+        ItemRecieved = 5
     }
 }

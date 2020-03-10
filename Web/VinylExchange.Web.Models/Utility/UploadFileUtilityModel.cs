@@ -34,7 +34,7 @@
 
         private byte[] ConvertIFormFileToByteArray(IFormFile file)
         {
-            using MemoryStream ms = new MemoryStream();
+            using var ms = new MemoryStream();
             file.CopyTo(ms);
             return ms.ToArray();
         }

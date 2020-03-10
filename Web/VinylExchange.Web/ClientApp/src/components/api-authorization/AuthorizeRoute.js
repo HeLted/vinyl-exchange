@@ -6,6 +6,8 @@ import {
   QueryParameterNames
 } from "./ApiAuthorizationConstants";
 import authService from "./AuthorizeService";
+import { Roles } from "./../../constants/RoleConstants";
+import PageSpinner from "./../common/spinners/PageSpinner";
 
 export default class AuthorizeRoute extends Component {
   constructor(props) {
@@ -13,15 +15,34 @@ export default class AuthorizeRoute extends Component {
 
     this.state = {
       ready: false,
-      authenticated: false
+      authenticated: false,
+      isAuthorized: false,
+      isAuthLoading:true
     };
   }
 
   componentDidMount() {
+    this.setState({isAuthLoading:true})
     this._subscription = authService.subscribe(() =>
       this.authenticationChanged()
     );
     this.populateAuthenticationState();
+
+    authService.getUser().then(userObj => {
+      const requiredRole =
+        this.props.role != undefined ? this.props.role : Roles.User;
+       
+        console.log("ewewewewe")
+      if (userObj !== null) {
+        if (requiredRole.includes(userObj.role)) {
+          this.setState({ isAuthorized: true,isAuthLoading:false });
+        } else {
+          this.setState({ isAuthorized: false,isAuthLoading:false });
+        }
+      }
+
+      this.setState({isAuthLoading:false});
+    });
   }
 
   componentWillUnmount() {
@@ -29,19 +50,29 @@ export default class AuthorizeRoute extends Component {
   }
 
   render() {
-    const { ready, authenticated } = this.state;
-    const redirectUrl = `${ApplicationPaths.Login}?${
+    const { ready, authenticated, isAuthorized ,isAuthLoading} = this.state;
+    let redirectUrl = `${ApplicationPaths.Login}?${
       QueryParameterNames.ReturnUrl
     }=${encodeURI(window.location.href)}`;
-    if (!ready) {
-      return <div></div>;
+
+    console.log("gei");
+  
+
+      
+    !isAuthorized && authenticated && (redirectUrl = "/Authorization/FailedAuthorization");
+    if (!ready || isAuthLoading) {
+      return (
+        <div>
+          <PageSpinner />
+        </div>
+      );
     } else {
       const { component: Component, ...rest } = this.props;
       return (
         <Route
           {...rest}
           render={props => {
-            if (authenticated) {
+            if (authenticated && isAuthorized) {
               return <Component {...props} />;
             } else {
               return <Redirect to={redirectUrl} />;

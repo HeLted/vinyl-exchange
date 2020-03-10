@@ -3,9 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
-    using VinylExchange.Web.Models.ResourceModels.SaleMessages;
+
     using VinylExchange.Common.Enumerations;
+    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
 
     public interface ISaleLogsService
     {

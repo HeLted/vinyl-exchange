@@ -41,9 +41,41 @@
             return sale;
         }
 
+        public async Task<Sale> ConfirmItemRecieved(ConfirmItemRecievedInputModel inputModel)
+        {
+            Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
+
+            sale.Status = Status.Finished;
+
+            await this.dbContext.SaveChangesAsync();
+
+            return sale;
+        }
+
+        public async Task<Sale> ConfirmItemSent(ConfirmItemSentInputModel inputModel)
+        {
+            Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
+
+            sale.Status = Status.Sent;
+
+            await this.dbContext.SaveChangesAsync();
+
+            return sale;
+        }
+
         public async Task<Sale> CreateSale(CreateSaleInputModel inputModel, Guid sellerId)
         {
             Sale sale = inputModel.To<Sale>();
+
+            var address = await this.dbContext.Addresses.Where(a => a.Id == inputModel.ShipsFromAddressId)
+                              .FirstOrDefaultAsync();
+
+            if (address == null)
+            {
+                throw new NullReferenceException("Address with this Id doesn't exist!");
+            }
+
+            sale.ShipsFrom = $"{address.Country} - {address.Town}";
 
             sale.SellerId = sellerId;
 
@@ -105,10 +137,9 @@
 
         public async Task<Sale> PlaceOrder(PlaceOrderInputModel inputModel, Guid? buyerId)
         {
-            Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
+            var sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
 
-            Address address = await this.dbContext.Addresses.Where(a => a.Id == inputModel.AddressId)
-                                  .FirstOrDefaultAsync();
+            var address = await this.dbContext.Addresses.Where(a => a.Id == inputModel.AddressId).FirstOrDefaultAsync();
 
             if (address == null)
             {

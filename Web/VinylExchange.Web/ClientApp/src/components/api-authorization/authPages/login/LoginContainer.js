@@ -10,6 +10,7 @@ import {NotificationContext} from "./../../../../contexts/NotificationContext"
 import authService from "./../../../api-authorization/AuthorizeService"
 import urlPathSeparator from "./../../../../functions/urlPathSeparator"
 import getAntiForgeryAxiosConfig from "./../../../../functions/getAntiForgeryAxiosConfig"
+import FacebookLogin from 'react-facebook-login';
 
 class LoginContainer extends Component {
     constructor() {
@@ -70,10 +71,11 @@ class LoginContainer extends Component {
                 this.setState({isLoading:false})
                 if(redirectUrl === ""){
                     redirectUrl = "/"
-                      this.props.history.push(redirectUrl)
+                     authService.completeSignIn(redirectUrl);
                 }else{
                  
-                    this.props.history.push(redirectUrl)
+                   
+                    authService.completeSignIn(redirectUrl);
                 }
             }
             
@@ -88,7 +90,7 @@ class LoginContainer extends Component {
       };
     
       render() {
-        return (
+        return (<div>
           <LoginComponent
             data={{
               usernameInput: this.state.usernameInput,
@@ -101,6 +103,12 @@ class LoginContainer extends Component {
               handleOnSubmit: this.handleOnSubmit
             }}
           />
+          <FacebookLogin
+    appId="231657284655493"
+    autoLoad={true}
+    fields="name,email"
+    onClick={(facebookResponse)=>{console.log(facebookResponse)}}
+    callback={()=>{}} /></div>
         );
       }
     }

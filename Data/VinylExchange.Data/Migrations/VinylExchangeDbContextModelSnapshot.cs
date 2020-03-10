@@ -313,7 +313,7 @@ namespace VinylExchange.Data.Migrations
 
                         b.Property<decimal>("ShippingPrice").HasColumnType("decimal(18,4)");
 
-                        b.Property<string>("ShipsFrom").HasColumnType("nvarchar(max)");
+                        b.Property<string>("ShipsFrom").IsRequired().HasColumnType("nvarchar(max)");
 
                         b.Property<string>("ShipsTo").HasColumnType("nvarchar(max)");
 

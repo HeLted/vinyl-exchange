@@ -24,7 +24,6 @@ class SaleContainer extends Component {
         sleeveGrade: 0,
         price: 0,
         description: "",
-        statusText: "",
         shipsFrom: "",
         shipsTo: "",
         shippingPrice: 0
@@ -70,9 +69,9 @@ class SaleContainer extends Component {
             description: data.description,
             statusText: data.statusText,
             vinylConditionText: data.vinylConditionText,
-            sleeveConditionText: data.sleeveConditionText,
+            sleeveConsditonText: data.sleeveConditionText,
             shipsFrom: data.shipsFrom,
-            shipsTo: data.ShipsTo,
+            shipsTo: data.shipsTo,
             shippingPrice: data.shippingPrice
           },
           

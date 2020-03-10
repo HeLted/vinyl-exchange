@@ -48,6 +48,7 @@
     <ProjectReference Include="..\..\Services\VinylExchange.Services.Authentication\VinylExchange.Services.Authentication.csproj" />
     <ProjectReference Include="..\..\Services\VinylExchange.Services.Logging\VinylExchange.Services.Logging.csproj" />
     <ProjectReference Include="..\..\Services\VinylExchange.Services\VinylExchange.Services.Data.csproj" />
+    <ProjectReference Include="..\VinylExchange.Web.Infrastructure\VinylExchange.Web.Infrastructure.csproj" />
       </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

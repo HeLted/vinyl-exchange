@@ -8,6 +8,7 @@ import {
 import { NotificationContext } from "./../../../../contexts/NotificationContext";
 import axios from "axios";
 import getAntiForgeryAxiosConfig from "./../../../../functions/getAntiForgeryAxiosConfig";
+import hideModal from "./../../../../functions/hideModal";
 
 class AddSalePopupContainer extends Component {
   constructor() {
@@ -18,7 +19,9 @@ class AddSalePopupContainer extends Component {
       descriptionInput: "",
       vinylGradeInput: "0",
       sleeveGradeInput: "0",
-      priceInput: 0
+      priceInput: 0,
+      userAddresses: [],
+      shipsFromAddressSelectInput: ""
     };
   }
 
@@ -29,6 +32,35 @@ class AddSalePopupContainer extends Component {
       releaseId: this.props.data.releaseId,
       collectionItemId: this.props.data.collectionItemId
     });
+  }
+
+  handleLoadUserAddresses = () =>{
+    this.setState({ isLoading: true });
+    axios
+      .get(
+        Url.api +
+          Controllers.addresses.name +
+          Controllers.addresses.actions.getUserAddresses
+      )
+      .then(response => {
+        this.setState({
+          userAddresses: response.data.map(addressObj => {
+            return {
+              id: addressObj.id,
+              name: `${addressObj.country}-${addressObj.town}-${addressObj.postalCode}-${addressObj.fullAddress}`
+            };
+          }),
+          isLoading: false
+        });
+        this.context.handleAppNotification("Loaded user addresses", 5);
+      })
+      .catch(error => {
+        this.setState({ isLoading: false });
+        this.context.handleServerNotification(
+          error.response,
+          "Failed to load user addresses!"
+        );
+      });
   }
 
   handleLoadColletionItemData = () => {
@@ -75,7 +107,8 @@ class AddSalePopupContainer extends Component {
       description: this.state.descriptionInput,
       vinylGrade: this.state.vinylGradeInput,
       sleeveGrade: this.state.sleeveGradeInput,
-      price: this.state.priceInput
+      price: this.state.priceInput,
+      shipsFromAddressId : this.state.shipsFromAddressSelectInput
     };
 
     axios
@@ -95,6 +128,11 @@ class AddSalePopupContainer extends Component {
       });
   };
 
+  handleFlushModal = () =>{
+    console.log("hidingModal");
+    hideModal();
+  }
+
   render() {
     return (
       <AddSalePopupComponent
@@ -103,12 +141,16 @@ class AddSalePopupContainer extends Component {
           descriptionInput: this.state.descriptionInput,
           vinylGradeInput: this.state.vinylGradeInput,
           sleeveGradeInput: this.state.sleeveGradeInput,
-          priceInput: this.state.priceInput
+          priceInput: this.state.priceInput,
+          userAddresses : this.state.userAddresses,
+          shipsFromAddressSelectInput:this.state.shipsFromAddressSelectInput
         }}
         functions={{
           handleOnChange: this.handleOnChange,
           handleOnSubmit: this.handleOnSubmit,
-          handleLoadColletionItemData: this.handleLoadColletionItemData
+          handleLoadColletionItemData: this.handleLoadColletionItemData,
+          handleLoadUserAddresses : this.handleLoadUserAddresses,
+          handleFlushModal:this.handleFlushModal
         }}
       />
     );

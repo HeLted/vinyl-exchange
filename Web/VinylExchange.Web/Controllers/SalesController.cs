@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
+
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
@@ -25,7 +26,9 @@
         private readonly ILoggerService loggerService;
 
         private readonly IHubContext<SaleLogsHub, ISaleLogsClient> saleLogHubContext;
+
         private readonly ISaleLogsService saleLogsService;
+
         private readonly ISalesService salesService;
 
         public SalesController(
@@ -39,7 +42,120 @@
             this.saleLogHubContext = saleLogHubContext;
             this.saleLogsService = saleLogsService;
         }
-     
+
+        [HttpPut]
+        [Route("CompletePayment")]
+        public async Task<IActionResult> CompletePayment(CompletePaymentInputModel inputModel)
+        {
+            try
+            {
+                GetSaleInfoUtilityModel saleModel = await this.GetSaleInfo(inputModel.SaleId);
+
+                if (saleModel == null)
+                {
+                    return this.BadRequest();
+                }
+
+                Guid currentUserId = this.GetUserId(this.User);
+
+                if (saleModel.BuyerId == currentUserId && saleModel.Status == Status.PaymentPending)
+                {
+                    await this.salesService.CompletePayment(inputModel);
+
+                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.Paid);
+
+                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                        .RecieveLogNotification(addedLogModel.Content);
+
+                    return this.NoContent();
+                }
+                else
+                {
+                    return this.Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("ConfirmItemRecieved")]
+        public async Task<IActionResult> ConfirmItemRecieved(ConfirmItemRecievedInputModel inputModel)
+        {
+            try
+            {
+                GetSaleInfoUtilityModel saleModel = await this.GetSaleInfo(inputModel.SaleId);
+
+                if (saleModel == null)
+                {
+                    return this.BadRequest();
+                }
+
+                Guid currentUserId = this.GetUserId(this.User);
+
+                if (saleModel.BuyerId == currentUserId && saleModel.Status == Status.Sent)
+                {
+                    await this.salesService.ConfirmItemRecieved(inputModel);
+
+                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemRecieved);
+
+                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                        .RecieveLogNotification(addedLogModel.Content);
+
+                    return this.NoContent();
+                }
+                else
+                {
+                    return this.Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("ConfirmItemSent")]
+        public async Task<IActionResult> ConfirmItemSent(ConfirmItemSentInputModel inputModel)
+        {
+            try
+            {
+                GetSaleInfoUtilityModel saleModel = await this.GetSaleInfo(inputModel.SaleId);
+
+                if (saleModel == null)
+                {
+                    return this.BadRequest();
+                }
+
+                Guid currentUserId = this.GetUserId(this.User);
+
+                if (saleModel.SellerId == currentUserId && saleModel.Status == Status.Paid)
+                {
+                    await this.salesService.ConfirmItemSent(inputModel);
+
+                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemSent);
+
+                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                        .RecieveLogNotification(addedLogModel.Content);
+
+                    return this.NoContent();
+                }
+                else
+                {
+                    return this.Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateSaleInputModel inputModel)
@@ -144,7 +260,7 @@
         {
             try
             {
-                GetSaleInfoUtilityModel saleModel = await this.salesService.GetSaleInfo(inputModel.SaleId);
+                GetSaleInfoUtilityModel saleModel = await this.GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
@@ -161,7 +277,7 @@
 
                 await this.salesService.PlaceOrder(inputModel, currentUserId);
 
-                var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id,SaleLogs.PlacedOrder);
+                var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.PlacedOrder);
 
                 await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                     .RecieveLogNotification(addedLogModel.Content);
@@ -181,7 +297,7 @@
         {
             try
             {
-                GetSaleInfoUtilityModel saleModel = await this.salesService.GetSaleInfo(inputModel.SaleId);
+                GetSaleInfoUtilityModel saleModel = await this.GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
@@ -194,7 +310,9 @@
                 {
                     await this.salesService.SetShippingPrice(inputModel);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.SettedShippingPrice);
+                    var addedLogModel = await this.saleLogsService.AddLogToSale(
+                                            saleModel.Id,
+                                            SaleLogs.SettedShippingPrice);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
@@ -213,42 +331,7 @@
             }
         }
 
-        [HttpPut]
-        [Route("CompletePayment")]
-        public async Task<IActionResult> CompletePayment(CompletePaymentInputModel inputModel)
-        {
-            try
-            {
-                GetSaleInfoUtilityModel saleModel = await this.salesService.GetSaleInfo(inputModel.SaleId);
-
-                if (saleModel == null)
-                {
-                    return this.BadRequest();
-                }
-
-                Guid currentUserId = this.GetUserId(this.User);
-
-                if (saleModel.BuyerId == currentUserId && saleModel.Status == Status.PaymentPending)
-                {
-                    await this.salesService.CompletePayment(inputModel);
-
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.Paid);
-
-                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
-                        .RecieveLogNotification(addedLogModel.Content);
-
-                    return this.NoContent();
-                }
-                else
-                {
-                    return this.Unauthorized();
-                }
-            }
-            catch (Exception ex)
-            {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
-            }
-        }
+        private async Task<GetSaleInfoUtilityModel> GetSaleInfo(Guid? saleId) =>
+            await this.salesService.GetSaleInfo(saleId);
     }
 }

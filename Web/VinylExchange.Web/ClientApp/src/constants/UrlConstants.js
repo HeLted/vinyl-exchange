@@ -66,7 +66,9 @@ export const Controllers = {
       setShippingPrice:"/SetShippingPrice",
       completePayment:"/CompletePayment",
       getUserSales:"/GetUserSales",
-      getUserPurchases:"/GetUserPurchases"
+      getUserPurchases:"/GetUserPurchases",
+      confirmItemSent:"/ConfirmItemSent",
+      confirmItemRecieved:"/ConfirmItemRecieved"
     }
   },
   users: {

@@ -39,6 +39,7 @@ namespace VinylExchange.Web
     using VinylExchange.Services.MemoryCache;
     using VinylExchange.Web.Hubs.SaleChat;
     using VinylExchange.Web.Hubs.SaleLog;
+    using VinylExchange.Web.Infrastructure.IdentityServer.Profile;
     using VinylExchange.Web.Models;
 
     public class Startup
@@ -50,6 +51,7 @@ namespace VinylExchange.Web
         }
 
         public IConfiguration Configuration { get; }
+
         public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,8 +125,7 @@ namespace VinylExchange.Web
                                 "/Authentication/Logout-Callback",
                                 StringComparison.OrdinalIgnoreCase))
                         {
-                            // The request token can be sent as a JavaScript-readable cookie, 
-                            // and Angular uses it by default.
+                           
                             AntiforgeryTokenSet tokens = antiforgery.GetAndStoreTokens(context);
                             context.Response.Cookies.Append(
                                 "XSRF-TOKEN",
@@ -149,18 +150,18 @@ namespace VinylExchange.Web
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {        
-
+        {
             services.AddDbContext<VinylExchangeDbContext>(
                 options => { options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")); });
 
-            services.AddSignalR(options =>
-            {
-                if (Environment.IsDevelopment())
-                {
-                    options.EnableDetailedErrors = true;
-                }
-            });
+            services.AddSignalR(
+                options =>
+                    {
+                        if (this.Environment.IsDevelopment())
+                        {
+                            options.EnableDetailedErrors = true;
+                        }
+                    });
 
             services.AddDefaultIdentity<VinylExchangeUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<VinylExchangeRole>().AddEntityFrameworkStores<VinylExchangeDbContext>();
@@ -177,15 +178,14 @@ namespace VinylExchange.Web
 
             services.AddAuthentication().AddIdentityServerJwt();
 
-            services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>();
-
-            // .AddProfileService<ProfileService>();
+            services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>()
+                .AddProfileService<ProfileService>();
+            
             services.AddControllers(
                 options =>
                     {
                         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 
-                        // options.Filters.Add(typeof(AntiXssAttribute));
                     }).AddNewtonsoftJson();
 
             services.AddAntiforgery(
