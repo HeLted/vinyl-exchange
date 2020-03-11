@@ -5,7 +5,7 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
 
-    public class AddAdressInputModel : IMapTo<Address>
+    public class CreateAddressInputModel : IMapTo<Address>
     {
         [Required]
         [MinLength(3, ErrorMessage = "Min length of field is 3")]

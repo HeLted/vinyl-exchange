@@ -1,4 +1,6 @@
 import React from "react";
+import AddGenresContainer from "./addGenres/AddGenresContainer";
+import RemoveGenresContainer from "./removeGenres/RemoveGenresContainer";
 
 function AdminPanelComponent() {
   return (
@@ -13,9 +15,12 @@ function AdminPanelComponent() {
               <h1 className="property-text">Genres</h1>
             </div>
             <div className="col-6">
-              <div className="row">
+              <div className="row ">
                 <div className="col-12 border">
                   <h3 className="property-text">Add Genres</h3>
+                </div>
+                <div className="col-12 border p-30">
+                  <AddGenresContainer />
                 </div>
               </div>
             </div>
@@ -23,6 +28,9 @@ function AdminPanelComponent() {
               <div className="row">
                 <div className="col-12 border">
                   <h3 className="property-text">Remove Genres</h3>
+                  <div className="col-12 border p-30">
+                    <RemoveGenresContainer />
+                  </div>
                 </div>
               </div>
             </div>

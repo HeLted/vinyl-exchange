@@ -27,7 +27,7 @@ export const Controllers = {
     name: "/Releases",
     actions: { getReleases: "/GetReleases" }
   },
-  genres: { name: "/Genres", actions: { getAllGenres: "/GetAllGenres" } },
+  genres: { name: "/Genres" },
   styles: {
     name: "/Styles",
     actions: { getAllStylesForGenre: "/GetAllStylesForGenre" }

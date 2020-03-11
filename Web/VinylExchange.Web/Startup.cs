@@ -6,6 +6,7 @@ namespace VinylExchange.Web
 
     using Microsoft.AspNetCore.Antiforgery;
     using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -124,8 +125,7 @@ namespace VinylExchange.Web
                                 path,
                                 "/Authentication/Logout-Callback",
                                 StringComparison.OrdinalIgnoreCase))
-                        {
-                           
+                        {                           
                             AntiforgeryTokenSet tokens = antiforgery.GetAndStoreTokens(context);
                             context.Response.Cookies.Append(
                                 "XSRF-TOKEN",
@@ -176,16 +176,16 @@ namespace VinylExchange.Web
                         options.User.RequireUniqueEmail = true;
                     });
 
-            services.AddAuthentication().AddIdentityServerJwt();
-
             services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>()
                 .AddProfileService<ProfileService>();
-            
+
+
+            services.AddAuthentication().AddIdentityServerJwt();
+
             services.AddControllers(
                 options =>
                     {
                         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-
                     }).AddNewtonsoftJson();
 
             services.AddAntiforgery(

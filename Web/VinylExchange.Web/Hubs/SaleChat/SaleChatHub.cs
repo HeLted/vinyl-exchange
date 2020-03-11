@@ -27,7 +27,7 @@
         {
             string roomName = saleId.ToString();
 
-            GetSaleInfoUtilityModel sale = await this.salesService.GetSaleInfo(saleId);
+            GetSaleInfoUtilityModel sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
 
             Guid userId = Guid.Parse(this.GetUserId());
 
@@ -47,7 +47,7 @@
 
         public async Task LoadMessageHistory(Guid saleId)
         {
-            GetSaleInfoUtilityModel sale = await this.salesService.GetSaleInfo(saleId);
+            GetSaleInfoUtilityModel sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
 
             Guid userId = Guid.Parse(this.GetUserId());
 

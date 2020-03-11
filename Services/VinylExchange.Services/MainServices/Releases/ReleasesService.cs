@@ -1,19 +1,16 @@
 ﻿namespace VinylExchange.Services.MainServices.Releases
 {
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.HelperServices.Releases;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Releases;
-    using VinylExchange.Web.Models.ResourceModels.Releases;
 
     public class ReleasesService : IReleasesService
     {
@@ -29,7 +26,7 @@
             this.releaseFilesService = releaseFilesService;
         }
 
-        public async Task<Release> CreateRelease(CreateReleaseInputModel inputModel, Guid formSessionId)
+        public async Task<TModel> CreateRelease<TModel>(CreateReleaseInputModel inputModel, Guid formSessionId)
         {
             Release release = inputModel.To<Release>();
 
@@ -41,25 +38,22 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            return trackedRelease.Entity;
+            return trackedRelease.Entity.To<TModel>();
         }
 
-        public async Task<GetReleaseResourceModel> GetRelease(Guid releaseId)
-        {
-            GetReleaseResourceModel release = await this.dbContext.Releases.To<GetReleaseResourceModel>()
-                                                  .SingleOrDefaultAsync(x => x.Id == releaseId);
+        public async Task<TModel> GetRelease<TModel>(Guid releaseId)
+            => await this.dbContext.Releases.Where(x => x.Id == releaseId)
+                                                  .To<TModel>()
+                                                  .FirstOrDefaultAsync();
+        
+       
 
-            release.CoverArt = await this.releaseFilesService.GetReleaseCoverArt(release.Id);
-
-            return release;
-        }
-
-        public async Task<IEnumerable<GetReleasesResourceModel>> GetReleases(
+        public async Task<List<TModel>> GetReleases<TModel>(
             string searchTerm,
             IEnumerable<int> filterStyleIds,
             int releasesToSkip)
         {
-            List<GetReleasesResourceModel> releases = null;
+            List<TModel> releases = null;
 
             IQueryable<Release> releasesQuariable = this.dbContext.Releases.AsQueryable();
 
@@ -73,10 +67,8 @@
                            .Where(
                                r => r.Styles.Any(s => filterStyleIds.Contains(s.StyleId))
                                     || filterStyleIds.Count() == 0).Skip(releasesToSkip).Take(ReleasesToTake)
-                           .To<GetReleasesResourceModel>().ToListAsync();
-
-            releases.ForEach(
-                r => { r.CoverArt = Task.Run(() => this.releaseFilesService.GetReleaseCoverArt(r.Id)).Result; });
+                           .To<TModel>().ToListAsync();
+                     
 
             return releases;
         }

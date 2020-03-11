@@ -22,5 +22,8 @@
 
         [Required]
         public Guid ReleaseId { get; set; }
+
+        [Required]
+        public bool IsPreview { get; set; }
     }
 }

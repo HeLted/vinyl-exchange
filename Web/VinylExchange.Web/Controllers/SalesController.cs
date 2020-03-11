@@ -17,6 +17,7 @@
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Hubs.SaleLog;
     using VinylExchange.Web.Models.InputModels.Sales;
+    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
     using VinylExchange.Web.Models.ResourceModels.Sales;
     using VinylExchange.Web.Models.Utility;
 
@@ -45,7 +46,7 @@
 
         [HttpPut]
         [Route("CompletePayment")]
-        public async Task<IActionResult> CompletePayment(CompletePaymentInputModel inputModel)
+        public async Task<ActionResult<SaleStatusResourceModel>> CompletePayment(CompletePaymentInputModel inputModel)
         {
             try
             {
@@ -60,14 +61,14 @@
 
                 if (saleModel.BuyerId == currentUserId && saleModel.Status == Status.PaymentPending)
                 {
-                    await this.salesService.CompletePayment(inputModel);
+                    var saleStatusModel = await this.salesService.CompletePayment<SaleStatusResourceModel>(inputModel);
 
                     var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.Paid);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
 
-                    return this.NoContent();
+                    return saleStatusModel;
                 }
                 else
                 {
@@ -83,7 +84,7 @@
 
         [HttpPut]
         [Route("ConfirmItemRecieved")]
-        public async Task<IActionResult> ConfirmItemRecieved(ConfirmItemRecievedInputModel inputModel)
+        public async Task<ActionResult<SaleStatusResourceModel>> ConfirmItemRecieved(ConfirmItemRecievedInputModel inputModel)
         {
             try
             {
@@ -98,14 +99,14 @@
 
                 if (saleModel.BuyerId == currentUserId && saleModel.Status == Status.Sent)
                 {
-                    await this.salesService.ConfirmItemRecieved(inputModel);
+                    var saleStatusModel = await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(inputModel);
 
                     var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemRecieved);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
 
-                    return this.NoContent();
+                    return saleStatusModel;
                 }
                 else
                 {
@@ -121,7 +122,7 @@
 
         [HttpPut]
         [Route("ConfirmItemSent")]
-        public async Task<IActionResult> ConfirmItemSent(ConfirmItemSentInputModel inputModel)
+        public async Task<ActionResult<SaleStatusResourceModel>> ConfirmItemSent(ConfirmItemSentInputModel inputModel)
         {
             try
             {
@@ -136,14 +137,14 @@
 
                 if (saleModel.SellerId == currentUserId && saleModel.Status == Status.Paid)
                 {
-                    await this.salesService.ConfirmItemSent(inputModel);
+                    var saleStatusModel = await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(inputModel);
 
                     var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemSent);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
 
-                    return this.NoContent();
+                    return saleStatusModel;
                 }
                 else
                 {
@@ -158,13 +159,13 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateSaleInputModel inputModel)
+        public async Task<ActionResult<CreateSaleResourceModel>> Create(CreateSaleInputModel inputModel)
         {
             try
             {
-                Sale sale = await this.salesService.CreateSale(inputModel, this.GetUserId(this.User));
+                CreateSaleResourceModel saleModel = await this.salesService.CreateSale<CreateSaleResourceModel>(inputModel, this.GetUserId(this.User));
 
-                return this.StatusCode(HttpStatusCode.Created, sale.Id);
+                return this.Created(saleModel);
             }
             catch (Exception ex)
             {
@@ -174,11 +175,11 @@
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<ActionResult<GetSaleResourceModel>> Get(Guid id)
         {
             try
             {
-                GetSaleResourceModel sale = await this.salesService.GetSale(id);
+                GetSaleResourceModel sale = await this.salesService.GetSale<GetSaleResourceModel>(id);
 
                 if (sale == null)
                 {
@@ -192,7 +193,7 @@
                     return this.Unauthorized();
                 }
 
-                return this.Ok(sale);
+                return sale;
             }
             catch (Exception ex)
             {
@@ -203,13 +204,14 @@
 
         [HttpGet]
         [Route("GetAllSalesForRelease/{id}")]
-        public async Task<IActionResult> GetAllSalesForRelease(Guid id)
+        public async Task<ActionResult<IEnumerable<GetAllSalesForReleaseResouceModel>>> GetAllSalesForRelease(Guid id)
         {
             try
             {
-                IEnumerable<GetAllSalesForReleaseResouceModel> sales = await this.salesService.GetAllSalesForRelease(id);
+                List<GetAllSalesForReleaseResouceModel> sales = 
+                    await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(id);
 
-                return this.Ok(sales);
+                return sales;
             }
             catch (Exception ex)
             {
@@ -220,14 +222,14 @@
 
         [HttpGet]
         [Route("GetUserPurchases")]
-        public async Task<IActionResult> GetUserPurchases()
+        public async Task<ActionResult<IEnumerable<GetUserPurchasesResourceModel>>> GetUserPurchases()
         {
             try
             {
-                IEnumerable<GetUserPurchasesResourceModel> purchases =
-                    await this.salesService.GetUserPurchases(this.GetUserId(this.User));
+                List<GetUserPurchasesResourceModel> purchases =
+                    await this.salesService.GetUserPurchases<GetUserPurchasesResourceModel>(this.GetUserId(this.User));
 
-                return this.Ok(purchases);
+                return purchases;
             }
             catch (Exception ex)
             {
@@ -238,14 +240,14 @@
 
         [HttpGet]
         [Route("GetUserSales")]
-        public async Task<IActionResult> GetUserSales()
+        public async Task<ActionResult<IEnumerable<GetUserSalesResourceModel>>> GetUserSales()
         {
             try
             {
-                IEnumerable<GetUserSalesResourceModel> sales =
-                    await this.salesService.GetUserSales(this.GetUserId(this.User));
+                List<GetUserSalesResourceModel> sales =
+                    await this.salesService.GetUserSales<GetUserSalesResourceModel>(this.GetUserId(this.User));
 
-                return this.Ok(sales);
+                return sales;
             }
             catch (Exception ex)
             {
@@ -275,7 +277,7 @@
                     return this.Unauthorized();
                 }
 
-                await this.salesService.PlaceOrder(inputModel, currentUserId);
+                await this.salesService.PlaceOrder<SaleStatusResourceModel>(inputModel, currentUserId);
 
                 var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.PlacedOrder);
 
@@ -293,7 +295,7 @@
 
         [HttpPut]
         [Route("SetShippingPrice")]
-        public async Task<IActionResult> SetShippingPrice(SetShippingPriceInputModel inputModel)
+        public async Task<ActionResult<SaleStatusResourceModel>> SetShippingPrice(SetShippingPriceInputModel inputModel)
         {
             try
             {
@@ -308,7 +310,7 @@
 
                 if (saleModel.SellerId == currentUserId && saleModel.Status == Status.ShippingNegotiation)
                 {
-                    await this.salesService.SetShippingPrice(inputModel);
+                    var saleStatusModel = await this.salesService.SetShippingPrice<SaleStatusResourceModel>(inputModel);
 
                     var addedLogModel = await this.saleLogsService.AddLogToSale(
                                             saleModel.Id,
@@ -317,7 +319,7 @@
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
 
-                    return this.NoContent();
+                    return saleStatusModel;
                 }
                 else
                 {
@@ -332,6 +334,6 @@
         }
 
         private async Task<GetSaleInfoUtilityModel> GetSaleInfo(Guid? saleId) =>
-            await this.salesService.GetSaleInfo(saleId);
+            await this.salesService.GetSaleInfo< GetSaleInfoUtilityModel> (saleId);
     }
 }

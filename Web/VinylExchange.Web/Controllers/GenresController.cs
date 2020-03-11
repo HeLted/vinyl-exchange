@@ -2,12 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
+    using VinylExchange.Data.Models;
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MainServices.Genres;
+    using VinylExchange.Web.Models.InputModels.Genres;
     using VinylExchange.Web.Models.ResourceModels.Genres;
 
     public class GenresController : ApiController
@@ -23,13 +25,31 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllGenres()
+        
+        public async Task<ActionResult<IEnumerable<GetAllGenresResourceModel>>> GetAllGenres()
         {
             try
             {
-                IEnumerable<GetAllGenresResourceModel> genres = await this.genreService.GetAllGenres();
+                List<GetAllGenresResourceModel> genres = await this.genreService.GetAllGenres<GetAllGenresResourceModel>();
 
-                return this.Ok(genres);
+                return genres;
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<CreateGenreResourceModel>> Create(CreateGenreInputModel inputModel)
+        {
+            try
+            {
+                CreateGenreResourceModel genreModel = await this.genreService.CreateGenre<CreateGenreResourceModel>(inputModel);
+
+                return this.Created(genreModel);
             }
             catch (Exception ex)
             {

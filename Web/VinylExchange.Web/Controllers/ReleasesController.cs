@@ -28,13 +28,14 @@
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create(CreateReleaseInputModel inputModel, Guid formSessionId)
+        public async Task<ActionResult<CreateReleaseResourceModel>> Create(CreateReleaseInputModel inputModel, Guid formSessionId)
         {
             try
             {
-                Release release = await this.releasesService.CreateRelease(inputModel, formSessionId);
+                CreateReleaseResourceModel releaseModel = 
+                    await this.releasesService.CreateRelease<CreateReleaseResourceModel>(inputModel, formSessionId);
 
-                return this.StatusCode(HttpStatusCode.Created, release.Id);
+                return releaseModel;
             }
             catch (Exception ex)
             {
@@ -44,18 +45,18 @@
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<ActionResult<GetReleaseResourceModel>> Get(Guid id)
         {
             try
             {
-                GetReleaseResourceModel release = await this.releasesService.GetRelease(id);
+                GetReleaseResourceModel release = await this.releasesService.GetRelease<GetReleaseResourceModel>(id);
 
                 if (release == null)
                 {
                     return this.NotFound();
                 }
 
-                return this.Ok(release);
+                return release;
             }
             catch (Exception ex)
             {
@@ -66,16 +67,16 @@
 
         [HttpGet]
         [Route("GetReleases")]
-        public async Task<IActionResult> GetReleases(
+        public async Task<ActionResult<IEnumerable<GetReleasesResourceModel>>> GetReleases(
             string searchTerm,
             [FromQuery(Name = "styleIds")] List<int> styleIds,
             int releasesToSkip)
         {
             try
-            {
-                IEnumerable<GetReleasesResourceModel> releases =
-                    await this.releasesService.GetReleases(searchTerm, styleIds, releasesToSkip);
-                return this.Ok(releases);
+            {                              
+               
+                return await this.releasesService
+                    .GetReleases<GetReleasesResourceModel>(searchTerm, styleIds, releasesToSkip); 
             }
             catch (Exception ex)
             {

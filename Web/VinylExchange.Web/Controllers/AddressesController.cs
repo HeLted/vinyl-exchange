@@ -2,13 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Net;
-    using System.Threading.Tasks;
+     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    using VinylExchange.Data.Models;
+   
     using VinylExchange.Services.Data.MainServices.Addresses;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.InputModels.Addresses;
@@ -29,13 +28,13 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddAdressInputModel inputModel)
+        public async Task<ActionResult<CreateAddressResourceModel>> Create(CreateAddressInputModel inputModel)
         {
             try
             {
-                Address address = await this.addressesService.AddAddress(inputModel, this.GetUserId(this.User));
+                CreateAddressResourceModel addressModel = await this.addressesService.AddAddress<CreateAddressResourceModel>(inputModel, this.GetUserId(this.User));
 
-                return this.StatusCode(HttpStatusCode.Created, address.Id);
+                return this.Created(addressModel);
             }
             catch (Exception ex)
             {
@@ -46,14 +45,14 @@
 
         [HttpGet]
         [Route("GetUserAddresses")]
-        public async Task<IActionResult> GetUserAddresses()
+        public async Task<ActionResult<IEnumerable<GetUserAddressesResourceModel>>> GetUserAddresses()
         {
             try
             {
-                IEnumerable<GetUserAddressesResourceModel> addresses =
-                    await this.addressesService.GetUserAddresses(this.GetUserId(this.User));
+                List<GetUserAddressesResourceModel> addresses =
+                    await this.addressesService.GetUserAddresses<GetUserAddressesResourceModel>(this.GetUserId(this.User));
 
-                return this.Ok(addresses);
+                return addresses;
             }
             catch (Exception ex)
             {
@@ -64,11 +63,11 @@
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> Remove(Guid id)
+        public async Task<ActionResult<RemoveAddressResourceModel>> Remove(Guid id)
         {
             try
             {
-                GetAddressInfoUtilityModel addressInfoModel = await this.addressesService.GetAddressInfo(id);
+                GetAddressInfoUtilityModel addressInfoModel = await this.addressesService.GetAddressInfo<GetAddressInfoUtilityModel>(id);
 
                 if (addressInfoModel == null)
                 {
@@ -81,9 +80,9 @@
                 }
 
                 RemoveAddressResourceModel removedAddressResourceModel =
-                    await this.addressesService.RemoveAddress(addressInfoModel.Id);
+                    await this.addressesService.RemoveAddress<RemoveAddressResourceModel>(addressInfoModel.Id);
 
-                return this.Ok(removedAddressResourceModel);
+                return removedAddressResourceModel;
             }
             catch (Exception ex)
             {

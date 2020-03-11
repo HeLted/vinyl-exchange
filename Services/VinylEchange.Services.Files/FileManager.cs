@@ -45,6 +45,8 @@
         {
             List<TModel> modelList = new List<TModel>();
 
+            bool isFist = true;
+
             foreach (UploadFileUtilityModel fileUtilityModel in uploadFileUtilityModels)
             {
                 string fileGuid = fileUtilityModel.FileGuid.ToString();
@@ -66,9 +68,21 @@
                     fileGuid + FileNameSplitter + encodedFileName + fileExtension);
                 modelType.GetProperty("FileType").SetValue(modelInstance, fileType);
                 modelType.GetProperty("CreatedOn").SetValue(modelInstance, createdOn);
+               
+                if (isFist && fileType == FileType.Image)
+                {
+                    modelType.GetProperty("IsPreview").SetValue(modelInstance, true);
+                }
+                else
+                {
+                    modelType.GetProperty("IsPreview").SetValue(modelInstance, false);
+                }
+              
                 modelType.GetProperty(entityIdPropertyName).SetValue(modelInstance, entityId);
 
                 modelList.Add(modelInstance);
+
+                isFist = false;
             }
 
             return modelList;

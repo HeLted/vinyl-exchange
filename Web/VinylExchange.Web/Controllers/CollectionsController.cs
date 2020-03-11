@@ -1,14 +1,10 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
-    using VinylExchange.Data.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MainServices.Collections;
     using VinylExchange.Web.Models.InputModels.Collections;
@@ -29,16 +25,16 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddToCollectionInputModel inputModel, Guid releaseId)
+        public async Task<ActionResult<AddToCollectionResourceModel>> Add(AddToCollectionInputModel inputModel, Guid releaseId)
         {
             try
             {
-                CollectionItem collectionItem = await this.collectionsService.AddToCollection(
+                AddToCollectionResourceModel collectionItemModel = await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
                                                     inputModel,
                                                     releaseId,
                                                     this.GetUserId(this.User));
 
-                return this.StatusCode(HttpStatusCode.Created, collectionItem.Id);
+                return this.Created(collectionItemModel);
             }
             catch (Exception ex)
             {
@@ -49,7 +45,7 @@
 
         [HttpGet]
         [Route("DoesUserCollectionContainRelease")]
-        public async Task<IActionResult> DoesUserCollectionContainRelease(Guid releaseId)
+        public async Task<ActionResult<bool>> DoesUserCollectionContainRelease(Guid releaseId)
         {
             try
             {
@@ -58,7 +54,7 @@
                         releaseId,
                         this.GetUserId(this.User));
 
-                return this.Ok(new { doesUserCollectionContainRelease });
+                return doesUserCollectionContainRelease;
             }
             catch (Exception ex)
             {
@@ -68,18 +64,18 @@
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<ActionResult<GetCollectionItemResourceModel>> Get(Guid id)
         {
             try
             {
-                GetCollectionItemResourceModel collectionItem = await this.collectionsService.GetCollectionItem(id);
+                GetCollectionItemResourceModel collectionItemModel = await this.collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(id);
 
-                if (collectionItem == null)
+                if (collectionItemModel == null)
                 {
                     return this.NotFound();
                 }
 
-                return this.Ok(collectionItem);
+                return collectionItemModel;
             }
             catch (Exception ex)
             {
@@ -90,14 +86,15 @@
 
         [HttpGet]
         [Route("GetUserCollection")]
-        public async Task<IActionResult> GetUserCollection()
+        public async Task<ActionResult<IEnumerable<GetUserCollectionResourceModel>>> GetUserCollection()
         {
             try
             {
-                IEnumerable<GetUserCollectionResourceModel> userCollection =
-                    await this.collectionsService.GetUserCollection(this.GetUserId(this.User));
+                List<GetUserCollectionResourceModel> userCollection =
+                    await this.collectionsService
+                    .GetUserCollection<GetUserCollectionResourceModel>(this.GetUserId(this.User));
 
-                return this.Ok(userCollection);
+                return userCollection;
             }
             catch (Exception ex)
             {
@@ -113,7 +110,7 @@
             try
             {
                 GetCollectionItemInfoUtilityModel collectionItemInfoModel =
-                    await this.collectionsService.GetCollectionItemInfo(id);
+                    await this.collectionsService.GetCollectionItemInfo<GetCollectionItemInfoUtilityModel>(id);
 
                 if (collectionItemInfoModel == null)
                 {
@@ -126,7 +123,7 @@
                 }
 
                 RemoveCollectionItemResourceModel collectionItemRemovedModel =
-                    await this.collectionsService.RemoveCollectionItem(collectionItemInfoModel.Id);
+                    await this.collectionsService.RemoveCollectionItem<RemoveCollectionItemResourceModel>(collectionItemInfoModel.Id);
 
                 return this.Ok(collectionItemRemovedModel);
             }

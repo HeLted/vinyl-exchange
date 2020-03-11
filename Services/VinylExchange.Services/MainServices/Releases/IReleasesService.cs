@@ -3,18 +3,15 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    using VinylExchange.Data.Models;
     using VinylExchange.Web.Models.InputModels.Releases;
-    using VinylExchange.Web.Models.ResourceModels.Releases;
 
     public interface IReleasesService
     {
-        Task<Release> CreateRelease(CreateReleaseInputModel inputModel, Guid formSessionId);
+        Task<TModel> CreateRelease<TModel>(CreateReleaseInputModel inputModel, Guid formSessionId);
 
-        Task<GetReleaseResourceModel> GetRelease(Guid releaseId);
+        Task<TModel> GetRelease<TModel>(Guid releaseId);
 
-        Task<IEnumerable<GetReleasesResourceModel>> GetReleases(
+        Task<List<TModel>> GetReleases<TModel>(
             string searchTerm,
             IEnumerable<int> filterStyleIds,
             int releasesToSkip);

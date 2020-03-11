@@ -107,6 +107,9 @@ function SaleMenuComponent(props) {
   } else if (sale.status === 5 && currentUserId === sale.sellerId) {
     component = <NoActionAvailableTextBox />;
   }
+  else if (sale.status===6){
+    component = <NoActionAvailableTextBox />;
+  }
 
   return props.data.isLoading ? <BorderSpinner /> : component;
 }

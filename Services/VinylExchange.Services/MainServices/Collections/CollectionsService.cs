@@ -1,20 +1,16 @@
 ﻿namespace VinylExchange.Services.MainServices.Collections
 {
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.HelperServices.Releases;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Collections;
-    using VinylExchange.Web.Models.ResourceModels.Collections;
-    using VinylExchange.Web.Models.Utility;
 
     public class CollectionsService : ICollectionsService
     {
@@ -28,7 +24,7 @@
             this.releaseFileService = releaseFileService;
         }
 
-        public async Task<CollectionItem> AddToCollection(
+        public async Task<TModel> AddToCollection<TModel>(
             AddToCollectionInputModel inputModel,
             Guid releaseId,
             Guid userId)
@@ -43,7 +39,7 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            return trackedCollectionItem.Entity;
+            return trackedCollectionItem.Entity.To<TModel>();
         }
 
         public async Task<bool> DoesUserCollectionContainRelease(Guid releaseId, Guid userId)
@@ -52,35 +48,26 @@
                        .CountAsync() > 0;
         }
 
-        public async Task<GetCollectionItemResourceModel> GetCollectionItem(Guid collectionItemId)
+        public async Task<TModel> GetCollectionItem<TModel>(Guid collectionItemId)
         {
             return await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId)
-                       .To<GetCollectionItemResourceModel>().FirstOrDefaultAsync();
+                       .To<TModel>().FirstOrDefaultAsync();
         }
 
-        public async Task<GetCollectionItemInfoUtilityModel> GetCollectionItemInfo(Guid collectionItemId)
+        public async Task<TModel> GetCollectionItemInfo<TModel>(Guid collectionItemId)
         {
             return await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId)
-                       .To<GetCollectionItemInfoUtilityModel>().FirstOrDefaultAsync();
+                       .To<TModel>().FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<GetUserCollectionResourceModel>> GetUserCollection(Guid userId)
-        {
-            List<GetUserCollectionResourceModel> collectionItems = await this.dbContext.Collections
-                                                                       .Where(ci => ci.UserId == userId)
-                                                                       .To<GetUserCollectionResourceModel>()
+        public async Task<List<TModel>> GetUserCollection<TModel>(Guid userId)
+            => await this.dbContext.Collections.Where(ci => ci.UserId == userId)
+                                                                       .To<TModel>()
                                                                        .ToListAsync();
 
-            collectionItems.ForEach(
-                ci =>
-                    {
-                        ci.CoverArt = this.releaseFileService.GetReleaseCoverArt(ci.ReleaseId).GetAwaiter().GetResult();
-                    });
-
-            return collectionItems;
-        }
-
-        public async Task<RemoveCollectionItemResourceModel> RemoveCollectionItem(Guid collectionItemId)
+        
+        
+        public async Task<TModel> RemoveCollectionItem<TModel>(Guid collectionItemId)
         {
             CollectionItem collectionItem =
                 await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItemId);
@@ -92,9 +79,9 @@
 
             this.dbContext.Collections.Remove(collectionItem);
             await this.dbContext.SaveChangesAsync();
-            RemoveCollectionItemResourceModel resourceModel = collectionItem.To<RemoveCollectionItemResourceModel>();
+           
 
-            return resourceModel;
+            return collectionItem.To<TModel>();
         }
     }
 }

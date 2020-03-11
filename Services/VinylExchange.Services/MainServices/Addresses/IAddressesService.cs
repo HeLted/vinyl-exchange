@@ -11,12 +11,12 @@
 
     public interface IAddressesService
     {
-        Task<Address> AddAddress(AddAdressInputModel inputModel, Guid userId);
+        Task<TModel> AddAddress<TModel>(CreateAddressInputModel inputModel, Guid userId);
 
-        Task<GetAddressInfoUtilityModel> GetAddressInfo(Guid addressId);
+        Task<TModel> GetAddressInfo<TModel>(Guid addressId);
 
-        Task<IEnumerable<GetUserAddressesResourceModel>> GetUserAddresses(Guid userId);
+        Task<List<TModel>> GetUserAddresses<TModel>(Guid userId);
 
-        Task<RemoveAddressResourceModel> RemoveAddress(Guid addressId);
+        Task<TModel> RemoveAddress<TModel>(Guid addressId);
     }
 }

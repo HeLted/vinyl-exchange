@@ -31,8 +31,7 @@ export default class AuthorizeRoute extends Component {
     authService.getUser().then(userObj => {
       const requiredRole =
         this.props.role != undefined ? this.props.role : Roles.User;
-       
-        console.log("ewewewewe")
+     
       if (userObj !== null) {
         if (requiredRole.includes(userObj.role)) {
           this.setState({ isAuthorized: true,isAuthLoading:false });
@@ -54,10 +53,6 @@ export default class AuthorizeRoute extends Component {
     let redirectUrl = `${ApplicationPaths.Login}?${
       QueryParameterNames.ReturnUrl
     }=${encodeURI(window.location.href)}`;
-
-    console.log("gei");
-  
-
       
     !isAuthorized && authenticated && (redirectUrl = "/Authorization/FailedAuthorization");
     if (!ready || isAuthLoading) {

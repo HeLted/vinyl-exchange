@@ -44,7 +44,7 @@
                 ForeignKeyForFile,
                 EntityTableName);
 
-            releaseFilesModels = this.fileManager.SaveFilesToServer<ReleaseFile>(releaseFilesModels, filesContent);
+            releaseFilesModels = this.fileManager.SaveFilesToServer(releaseFilesModels, filesContent);
 
             await this.dbContext.ReleaseFiles.AddRangeAsync(releaseFilesModels);
 

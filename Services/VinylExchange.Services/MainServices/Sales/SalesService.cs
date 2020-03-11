@@ -29,7 +29,7 @@
             this.releaseFileService = releaseFileService;
         }
 
-        public async Task<Sale> CompletePayment(CompletePaymentInputModel inputModel)
+        public async Task<TModel> CompletePayment<TModel>(CompletePaymentInputModel inputModel)
         {
             Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
 
@@ -38,10 +38,10 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            return sale;
+            return sale.To<TModel>();
         }
 
-        public async Task<Sale> ConfirmItemRecieved(ConfirmItemRecievedInputModel inputModel)
+        public async Task<TModel> ConfirmItemRecieved<TModel>(ConfirmItemRecievedInputModel inputModel)
         {
             Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
 
@@ -49,10 +49,10 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            return sale;
+            return sale.To<TModel>();
         }
 
-        public async Task<Sale> ConfirmItemSent(ConfirmItemSentInputModel inputModel)
+        public async Task<TModel> ConfirmItemSent<TModel>(ConfirmItemSentInputModel inputModel)
         {
             Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
 
@@ -60,10 +60,10 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            return sale;
+            return sale.To<TModel>();
         }
 
-        public async Task<Sale> CreateSale(CreateSaleInputModel inputModel, Guid sellerId)
+        public async Task<TModel> CreateSale<TModel>(CreateSaleInputModel inputModel, Guid sellerId)
         {
             Sale sale = inputModel.To<Sale>();
 
@@ -85,57 +85,63 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            return trackedSale.Entity;
+            return trackedSale.Entity.To<TModel>();
         }
 
-        public async Task<IEnumerable<GetAllSalesForReleaseResouceModel>> GetAllSalesForRelease(Guid releaseId)
+        public async Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid releaseId)
         {
             return await this.dbContext.Sales.Where(s => s.ReleaseId == releaseId).Where(s => s.Status == Status.Open)
-                       .To<GetAllSalesForReleaseResouceModel>().ToListAsync();
+                       .To<TModel>().ToListAsync();
         }
 
-        public async Task<GetSaleResourceModel> GetSale(Guid saleId)
+        public async Task<TModel> GetSale<TModel>(Guid saleId)
         {
-            return await this.dbContext.Sales.Where(s => s.Id == saleId).To<GetSaleResourceModel>()
+            return await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>()
                        .FirstOrDefaultAsync();
         }
 
-        public async Task<GetSaleInfoUtilityModel> GetSaleInfo(Guid? saleId)
+        public async Task<TModel> GetSaleInfo<TModel>(Guid? saleId)
         {
-            return await this.dbContext.Sales.Where(s => s.Id == saleId).To<GetSaleInfoUtilityModel>()
+            return await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>()
                        .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<GetUserPurchasesResourceModel>> GetUserPurchases(Guid buyerId)
+        public async Task<List<TModel>> GetUserPurchases<TModel>(Guid buyerId)
         {
-            List<GetUserPurchasesResourceModel> purchases = await this.dbContext.Sales
+            List<TModel> purchases = await this.dbContext.Sales
                                                                 .Where(s => s.BuyerId == buyerId)
-                                                                .To<GetUserPurchasesResourceModel>().ToListAsync();
+                                                                .To<TModel>().ToListAsync();
 
             purchases.ForEach(
                 s =>
                     {
-                        s.CoverArt = this.releaseFileService.GetReleaseCoverArt(s.ReleaseId).GetAwaiter().GetResult();
+                        var coverArtProperty = s.GetType().GetProperty("CoverArt");
+                        var releaseIdProperty = (Guid)s.GetType().GetProperty("ReleaseId").GetValue(s);
+
+                        coverArtProperty.SetValue(s, this.releaseFileService.GetReleaseCoverArt(releaseIdProperty).GetAwaiter().GetResult());
                     });
 
             return purchases;
         }
 
-        public async Task<IEnumerable<GetUserSalesResourceModel>> GetUserSales(Guid sellerId)
+        public async Task<List<TModel>> GetUserSales<TModel>(Guid sellerId)
         {
-            List<GetUserSalesResourceModel> sales = await this.dbContext.Sales.Where(s => s.SellerId == sellerId)
-                                                        .To<GetUserSalesResourceModel>().ToListAsync();
+            List<TModel> sales = await this.dbContext.Sales.Where(s => s.SellerId == sellerId)
+                                                        .To<TModel>().ToListAsync();
 
             sales.ForEach(
                 s =>
                     {
-                        s.CoverArt = this.releaseFileService.GetReleaseCoverArt(s.ReleaseId).GetAwaiter().GetResult();
+                        var coverArtProperty = s.GetType().GetProperty("CoverArt");
+                        var releaseIdProperty = (Guid)s.GetType().GetProperty("ReleaseId").GetValue(s);
+
+                        coverArtProperty.SetValue(s, this.releaseFileService.GetReleaseCoverArt(releaseIdProperty).GetAwaiter().GetResult()); 
                     });
 
             return sales;
         }
 
-        public async Task<Sale> PlaceOrder(PlaceOrderInputModel inputModel, Guid? buyerId)
+        public async Task<TModel> PlaceOrder<TModel>(PlaceOrderInputModel inputModel, Guid? buyerId)
         {
             var sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
 
@@ -152,10 +158,10 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            return sale;
+            return sale.To<TModel>();
         }
 
-        public async Task<Sale> SetShippingPrice(SetShippingPriceInputModel inputModel)
+        public async Task<TModel> SetShippingPrice<TModel>(SetShippingPriceInputModel inputModel)
         {
             Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
 
@@ -164,7 +170,7 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            return sale;
+            return sale.To<TModel>();
         }
     }
 }

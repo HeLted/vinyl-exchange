@@ -1,18 +1,21 @@
 import React, { createContext } from "react";
 import uuidv4 from "../functions/guidGenerator";
+import { withRouter } from "react-router-dom";
 export const NotificationContext = createContext();
 
-export default class NotificationContextProvider extends React.Component {
+
+ class NotificationContextProvider extends React.Component {
   state = {
     messages: [],
     severity: 0
   };
 
   handleServerNotification = (notificationObj, customMessage) => {
-    console.log(notificationObj);
     let severity = 1;
 
-   if (notificationObj.status >= 400) {
+    if(notificationObj.status === 401){
+      this.props.history.push("/Authorization/FailedAuthorization");
+    } else if (notificationObj.status >= 400) {
       const errorMessages = [];
 
       if (typeof notificationObj.data ==="object" && notificationObj.data.errors != undefined) {
@@ -93,3 +96,5 @@ export default class NotificationContextProvider extends React.Component {
     );
   }
 }
+
+export default withRouter(NotificationContextProvider);
