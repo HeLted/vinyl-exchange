@@ -3,7 +3,7 @@ namespace VinylExchange.Web
     using System;
     using System.IO;
     using System.Reflection;
-
+    using IdentityServer4.Services;
     using Microsoft.AspNetCore.Antiforgery;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -176,11 +176,10 @@ namespace VinylExchange.Web
                         options.User.RequireUniqueEmail = true;
                     });
 
-            services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>()
-                .AddProfileService<ProfileService>();
-
-
             services.AddAuthentication().AddIdentityServerJwt();
+
+            services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>().AddProfileService<ProfileService>();
+
 
             services.AddControllers(
                 options =>
@@ -195,8 +194,7 @@ namespace VinylExchange.Web
                         options.SuppressXFrameOptionsHeader = false;
                     });
 
-            // services.AddControllersWithViews();
-            // services.AddRazorPages();
+
             services.AddDistributedMemoryCache();
 
             // In production, the React files will be served from this directory
@@ -224,6 +222,7 @@ namespace VinylExchange.Web
             services.AddTransient<UserSeeder>();
             services.AddSingleton<IEmailSender>(
                 new EmailSender("SG.LtntWeJrTD - 310jTquhuBA.M5rZlCNcnuM7U7xYTT4w25vcaevdykIY1flFZV - Shec"));
+        
         }
     }
 }

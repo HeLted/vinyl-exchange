@@ -1,14 +1,10 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
-    using VinylExchange.Data.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MainServices.Releases;
     using VinylExchange.Web.Models.InputModels.Releases;
@@ -27,7 +23,7 @@
         }
 
         [HttpPost]
-        [Authorize]
+        
         public async Task<ActionResult<CreateReleaseResourceModel>> Create(CreateReleaseInputModel inputModel, Guid formSessionId)
         {
             try

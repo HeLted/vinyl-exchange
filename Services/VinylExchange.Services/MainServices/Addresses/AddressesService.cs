@@ -55,12 +55,10 @@
                 throw new NullReferenceException("Address with this Id doesn't exist");
             }
 
-            this.dbContext.Addresses.Remove(address);
+            var removedAddress = this.dbContext.Addresses.Remove(address).Entity;
             await this.dbContext.SaveChangesAsync();
-
-            RemoveAddressResourceModel resourceModel = address.To<RemoveAddressResourceModel>();
-
-            return resourceModel.To<TModel>();
+                      
+            return removedAddress.To<TModel>();
         }
     }
 }

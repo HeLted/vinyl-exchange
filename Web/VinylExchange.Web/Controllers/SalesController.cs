@@ -1,23 +1,18 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
-
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data.Common.Enumerations;
-    using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Hubs.SaleLog;
     using VinylExchange.Web.Models.InputModels.Sales;
-    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
     using VinylExchange.Web.Models.ResourceModels.Sales;
     using VinylExchange.Web.Models.Utility;
 
@@ -72,7 +67,7 @@
                 }
                 else
                 {
-                    return this.Unauthorized();
+                    return this.Forbid();
                 }
             }
             catch (Exception ex)
@@ -110,7 +105,7 @@
                 }
                 else
                 {
-                    return this.Unauthorized();
+                    return this.Forbid();
                 }
             }
             catch (Exception ex)
@@ -148,7 +143,7 @@
                 }
                 else
                 {
-                    return this.Unauthorized();
+                    return this.Forbid();
                 }
             }
             catch (Exception ex)
@@ -162,10 +157,9 @@
         public async Task<ActionResult<CreateSaleResourceModel>> Create(CreateSaleInputModel inputModel)
         {
             try
-            {
-                CreateSaleResourceModel saleModel = await this.salesService.CreateSale<CreateSaleResourceModel>(inputModel, this.GetUserId(this.User));
-
-                return this.Created(saleModel);
+            {           
+                return this.Created(await this.salesService
+                    .CreateSale<CreateSaleResourceModel>(inputModel, this.GetUserId(this.User)));
             }
             catch (Exception ex)
             {
@@ -190,7 +184,7 @@
 
                 if ((sale.BuyerId != currentUserId && sale.SellerId != currentUserId) && sale.Status != Status.Open)
                 {
-                    return this.Unauthorized();
+                    return this.Forbid();
                 }
 
                 return sale;
@@ -226,10 +220,8 @@
         {
             try
             {
-                List<GetUserPurchasesResourceModel> purchases =
-                    await this.salesService.GetUserPurchases<GetUserPurchasesResourceModel>(this.GetUserId(this.User));
-
-                return purchases;
+                return await this.salesService
+                    .GetUserPurchases<GetUserPurchasesResourceModel>(this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
@@ -244,10 +236,7 @@
         {
             try
             {
-                List<GetUserSalesResourceModel> sales =
-                    await this.salesService.GetUserSales<GetUserSalesResourceModel>(this.GetUserId(this.User));
-
-                return sales;
+                return await this.salesService.GetUserSales<GetUserSalesResourceModel>(this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
@@ -274,7 +263,7 @@
                 if (saleModel.SellerId == currentUserId || saleModel.BuyerId == currentUserId
                                                         || saleModel.Status != Status.Open)
                 {
-                    return this.Unauthorized();
+                    return this.Forbid();
                 }
 
                 await this.salesService.PlaceOrder<SaleStatusResourceModel>(inputModel, currentUserId);
@@ -323,7 +312,7 @@
                 }
                 else
                 {
-                    return this.Unauthorized();
+                    return this.Forbid();
                 }
             }
             catch (Exception ex)

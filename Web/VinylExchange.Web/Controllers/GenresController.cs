@@ -1,26 +1,25 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using VinylExchange.Data.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MainServices.Genres;
     using VinylExchange.Web.Models.InputModels.Genres;
     using VinylExchange.Web.Models.ResourceModels.Genres;
+    using static VinylExchange.Common.Constants.RolesConstants;
 
     public class GenresController : ApiController
     {
-        private readonly IGenresService genreService;
+        private readonly IGenresService genresService;
 
         private readonly ILoggerService loggerService;
 
-        public GenresController(IGenresService genreService, ILoggerService loggerService)
+        public GenresController(IGenresService genresService, ILoggerService loggerService)
         {
-            this.genreService = genreService;
+            this.genresService = genresService;
             this.loggerService = loggerService;
         }
 
@@ -29,10 +28,8 @@
         public async Task<ActionResult<IEnumerable<GetAllGenresResourceModel>>> GetAllGenres()
         {
             try
-            {
-                List<GetAllGenresResourceModel> genres = await this.genreService.GetAllGenres<GetAllGenresResourceModel>();
-
-                return genres;
+            {               
+                return await this.genresService.GetAllGenres<GetAllGenresResourceModel>();
             }
             catch (Exception ex)
             {
@@ -42,14 +39,28 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Admin)]
         public async Task<ActionResult<CreateGenreResourceModel>> Create(CreateGenreInputModel inputModel)
         {
             try
+            {                 
+                return this.Created(await this.genresService.CreateGenre<CreateGenreResourceModel>(inputModel));
+            }
+            catch (Exception ex)
             {
-                CreateGenreResourceModel genreModel = await this.genreService.CreateGenre<CreateGenreResourceModel>(inputModel);
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
 
-                return this.Created(genreModel);
+        [HttpDelete]
+        [Route("{id}")]
+        [Authorize(Roles = Admin)]
+        public async Task<ActionResult<RemoveGenreResourceModel>> Remove(int id)
+        {
+            try
+            {                
+                return await this.genresService.RemoveGenre<RemoveGenreResourceModel>(id);
             }
             catch (Exception ex)
             {

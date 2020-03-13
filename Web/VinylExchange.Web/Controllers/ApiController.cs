@@ -9,7 +9,6 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize("Bearer")]
     public class ApiController : ControllerBase
     {
         protected Guid GetUserId(ClaimsPrincipal user)

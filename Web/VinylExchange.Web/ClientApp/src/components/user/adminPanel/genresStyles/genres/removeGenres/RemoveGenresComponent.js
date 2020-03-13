@@ -6,7 +6,7 @@ function RemoveGenresComponent(props) {
   const rows = props.data.genres.map(genreObj => {
     return (
       <tr className="border" key={genreObj.id}>
-        <td>{genreObj.name}</td>
+        <td className="property-text">{genreObj.name}</td>
         <td>
           <button
             className="btn btn-danger"
@@ -20,9 +20,11 @@ function RemoveGenresComponent(props) {
   });
 
   return (
-    <table>
-      <tbody className="p-30">{rows}</tbody>
-    </table>
+    <div class="admin-remove-table table-responsive table-responsive-sm">
+      <table className=" table">
+        <tbody className="p-30">{rows}</tbody>
+      </table>
+    </div>
   );
 }
 

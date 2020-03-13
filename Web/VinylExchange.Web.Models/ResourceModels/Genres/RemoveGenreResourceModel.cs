@@ -3,10 +3,9 @@ using VinylExchange.Services.Mapping;
 
 namespace VinylExchange.Web.Models.ResourceModels.Genres
 {
-    public class CreateGenreResourceModel : IMapFrom<Genre>
+    public class RemoveGenreResourceModel : IMapFrom<Genre>
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import TextInput from "./../../../common/inputComponents/TextInput";
-import Label from "./../../../common/inputComponents/Label";
+import TextInput from "../../../../../common/inputComponents/TextInput";
+import Label from "../../../../../common/inputComponents/Label";
 
 function AddGenresComponent(props) {
   return (

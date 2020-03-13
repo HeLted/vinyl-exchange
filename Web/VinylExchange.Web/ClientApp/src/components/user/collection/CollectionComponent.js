@@ -10,7 +10,7 @@ import AddSalePopupContainer from "./../../common/popupForms/addSalePopupForm/Ad
 function CollectionCoponent(props) {
   return (
     <div className="col-3">
-      <div className="card" style={{ width: "18rem" }}>
+      <div className="card" >
         <img
           className="card-img-top"
           src={props.data.coverArt}
@@ -40,7 +40,8 @@ function CollectionCoponent(props) {
                 : props.data.description}
             </p>
           </div>
-          <div className="btn-group" role="group">
+          <div className="row">
+          <div className="col-3">
             <button
               type="button"
               className="btn-spr btn btn-danger"
@@ -62,6 +63,7 @@ function CollectionCoponent(props) {
               }}
             />
             <GoToReleaseButton data={{ releaseId: props.data.releaseId }} />
+          </div>
           </div>
         </div>
       </div>

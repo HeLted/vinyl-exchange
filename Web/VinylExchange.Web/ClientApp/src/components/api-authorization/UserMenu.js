@@ -36,10 +36,12 @@ class UserMenu extends Component {
       authService.isAuthenticated(),
       authService.getUser()
     ]);
+    console.log(user);
     this.setState({
       isAuthenticated,
       userName: user && user.name
     });
+    
   }
 
 

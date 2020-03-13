@@ -94,7 +94,12 @@ class CollectionContainer extends Component {
 
     return (
       <div className="collection-container container-fluid">
-        <div className="row">{this.state.isLoading ? loader : collectionComponents}</div>
+        <div className="row border text-center">
+          <div className="col-12">
+            <h2 className="property-text">User Collection</h2>
+            </div>
+          </div>
+        <div className="row border justify" style={{padding:"100px"}}>{this.state.isLoading ? loader : collectionComponents}</div>
       </div>
     );
   }

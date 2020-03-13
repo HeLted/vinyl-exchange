@@ -31,10 +31,9 @@
         public async Task<ActionResult<CreateAddressResourceModel>> Create(CreateAddressInputModel inputModel)
         {
             try
-            {
-                CreateAddressResourceModel addressModel = await this.addressesService.AddAddress<CreateAddressResourceModel>(inputModel, this.GetUserId(this.User));
-
-                return this.Created(addressModel);
+            {               
+                return this.Created(await this.addressesService
+                    .AddAddress<CreateAddressResourceModel>(inputModel, this.GetUserId(this.User)));
             }
             catch (Exception ex)
             {
@@ -49,10 +48,8 @@
         {
             try
             {
-                List<GetUserAddressesResourceModel> addresses =
-                    await this.addressesService.GetUserAddresses<GetUserAddressesResourceModel>(this.GetUserId(this.User));
-
-                return addresses;
+                return await this.addressesService
+                    .GetUserAddresses<GetUserAddressesResourceModel>(this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
@@ -76,13 +73,10 @@
 
                 if (addressInfoModel.UserId != this.GetUserId(this.User))
                 {
-                    return this.Unauthorized();
+                    return this.Forbid();
                 }
-
-                RemoveAddressResourceModel removedAddressResourceModel =
-                    await this.addressesService.RemoveAddress<RemoveAddressResourceModel>(addressInfoModel.Id);
-
-                return removedAddressResourceModel;
+                
+                return await this.addressesService.RemoveAddress<RemoveAddressResourceModel>(addressInfoModel.Id);
             }
             catch (Exception ex)
             {

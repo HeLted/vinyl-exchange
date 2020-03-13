@@ -2,12 +2,14 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Genres;
+    using static IdentityServer4.Models.IdentityResources;
 
     public class GenresService : IGenresService
     {
@@ -32,6 +34,21 @@
         public async Task<List<TModel>> GetAllGenres<TModel>()
         {
             return await this.dbContext.Genres.To<TModel>().ToListAsync();
+        }
+
+        public async Task<TModel> RemoveGenre<TModel>(int genreId)
+        {
+            Genre genre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+
+            if (genre == null)
+            {
+                throw new NullReferenceException("Address with this Id doesn't exist");
+            }
+
+            var removedGenre = this.dbContext.Genres.Remove(genre).Entity;
+            await this.dbContext.SaveChangesAsync();
+                       
+            return removedGenre.To<TModel>();
         }
     }
 }
