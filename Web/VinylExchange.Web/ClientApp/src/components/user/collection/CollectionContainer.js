@@ -99,7 +99,7 @@ class CollectionContainer extends Component {
             <h2 className="property-text">User Collection</h2>
             </div>
           </div>
-        <div className="row border justify" style={{padding:"100px"}}>{this.state.isLoading ? loader : collectionComponents}</div>
+        <div className="row border justify" style={{padding:"100px",height:"900px",overflowY:"scroll"}}>{this.state.isLoading ? loader : collectionComponents}</div>
       </div>
     );
   }

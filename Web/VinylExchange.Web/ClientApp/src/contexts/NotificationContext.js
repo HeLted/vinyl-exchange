@@ -13,7 +13,7 @@ export const NotificationContext = createContext();
   handleServerNotification = (notificationObj, customMessage) => {
     let severity = 1;
 
-    if(notificationObj.status === 401){
+    if(notificationObj.status === 403){
       this.props.history.push("/Authorization/FailedAuthorization");
     } else if (notificationObj.status >= 400) {
       const errorMessages = [];

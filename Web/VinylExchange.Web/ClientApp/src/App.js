@@ -87,7 +87,7 @@ export default class App extends Component {
           exact
           path="/User/AdminPanel"
           component={AdminPanelContainer}
-          role={Roles.Admin}
+          role={MultiRoles.UserAdmin}
         />
         <Route
           path={ApplicationPaths.ApiAuthorizationPrefix}

@@ -9,39 +9,38 @@ import AddSalePopupContainer from "./../../common/popupForms/addSalePopupForm/Ad
 
 function CollectionCoponent(props) {
   return (
-    <div className="col-3">
-      <div className="card" >
+    <div className="col-4">
+      <div className="row border text-center justify-content-center" style={{padding:"30px",height:"500px"}}>
+      
         <img
           className="card-img-top"
           src={props.data.coverArt}
           alt="Card image cap"
         />
-        <div className="card-body">
-          <p className="card-title">
-            {props.data.artist} - {props.data.title}
-          </p>
-          <div className="collection-item-info">
-            <h6>
+        <div >
+       <br/>
+          <div className="col-12 border">
+          <h6>
               Vinyl:
               <span className="grade-badge badge badge-primary">
                 {props.data.vinylGrade}
               </span>
             </h6>
+            </div>
+            <br/>
+            <div className="col-12 border">
             <h6>
+      
+             
               Sleeve:
               <span className="grade-badge badge badge-primary">
                 {props.data.sleeveGrade}
               </span>
             </h6>
-            <p className="card-text">
-              Description:
-              {props.data.description == ""
-                ? "No description"
-                : props.data.description}
-            </p>
-          </div>
-          <div className="row">
-          <div className="col-3">
+            </div>
+         <br/>
+          <div className="col-12 text-center">
+            <div class="btn-group" role="group" aria-label="Basic example"></div>
             <button
               type="button"
               className="btn-spr btn btn-danger"
@@ -49,7 +48,7 @@ function CollectionCoponent(props) {
                 props.functions.handleRemoveFromCollection(props.data.id)
               }
             >
-              Remove From Collection <FontAwesomeIcon icon={faTimes} />
+              <FontAwesomeIcon icon={faTimes} />
             </button>
 
             <PlayerLoaderButton data={{ releaseId: props.data.releaseId }} />
@@ -63,10 +62,11 @@ function CollectionCoponent(props) {
               }}
             />
             <GoToReleaseButton data={{ releaseId: props.data.releaseId }} />
-          </div>
+          
           </div>
         </div>
       </div>
+   
     </div>
   );
 }

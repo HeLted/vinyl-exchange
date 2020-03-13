@@ -42,6 +42,12 @@ namespace VinylExchange.Web
     using VinylExchange.Web.Hubs.SaleLog;
     using VinylExchange.Web.Infrastructure.IdentityServer.Profile;
     using VinylExchange.Web.Models;
+    using IdentityServer4.Configuration;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+    using IdentityServer4.AccessTokenValidation;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Collections.Generic;
 
     public class Startup
     {
@@ -176,7 +182,22 @@ namespace VinylExchange.Web
                         options.User.RequireUniqueEmail = true;
                     });
 
-            services.AddAuthentication().AddIdentityServerJwt();
+            services.AddAuthentication(options =>
+            {
+                // ...
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
+                }
+            ).AddJwtBearer(options =>
+            {
+                // ...
+                options.SecurityTokenValidators.Clear();
+                options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler
+                {
+                    // Disable the built-in JWT claims mapping feature.
+                    InboundClaimTypeMap = new Dictionary<string, string>()
+                });
+            }).AddIdentityServerJwt();
 
             services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>().AddProfileService<ProfileService>();
 
