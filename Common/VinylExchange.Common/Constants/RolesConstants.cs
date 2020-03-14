@@ -4,7 +4,7 @@
     {
         public const string Admin = "Admin";
 
-        public const string Chushka = "Cshuska";
+        public const string AdminUser = "Admin,User";
 
         public const string User = "User";
     }

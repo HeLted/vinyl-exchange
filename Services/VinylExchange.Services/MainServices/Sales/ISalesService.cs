@@ -28,5 +28,7 @@
         Task<TModel> PlaceOrder<TModel>(PlaceOrderInputModel inputModel, Guid? buyerId);
 
         Task<TModel> SetShippingPrice<TModel>(SetShippingPriceInputModel inputModel);
+
+        Task<TModel> EditSale<TModel>(EditSaleInputModel inputModel);
     }
 }

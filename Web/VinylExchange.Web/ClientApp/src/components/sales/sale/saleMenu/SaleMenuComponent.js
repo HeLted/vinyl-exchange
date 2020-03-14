@@ -4,8 +4,10 @@ import PlaceOrderModalContainer from "./saleMenuModals/placeOrder/PlaceOrderModa
 import SetShippingPriceModalContainer from "./saleMenuModals/setShippingPrice/SetShippingPriceModalContainer";
 import PayNowModalContainer from "./saleMenuModals/payNow/PayNowModalContainer";
 import NoActionAvailableTextBox from "./../../../common/divTextBoxes/NoActionAvailableTextBox";
-import ConfirmItemSentContainer from "./saleMenuModals/confirmItemSent/ConfirmItemSentContainer";
-import ConfirmItemRecievedContainer from "./saleMenuModals/confirmItemRecieved/ConfirmItemRecievedContainer";
+import ConfirmItemSentModalContainer from "./saleMenuModals/confirmItemSent/ConfirmItemSentModalContainer";
+import ConfirmItemRecievedModalContainer from "./saleMenuModals/confirmItemRecieved/ConfirmItemRecievedModalContainer";
+import EditSaleModalContainer from "./saleMenuModals/editSale/EditSaleModalContainer";
+
 
 function SaleMenuComponent(props) {
   let component = null;
@@ -16,7 +18,14 @@ function SaleMenuComponent(props) {
     component = (
       <div>
         <button className="btn btn-danger btn-lg">Remove Sale</button>
-        <button className="btn btn-primary btn-lg">Edit Sale</button>
+        <button
+          className="btn btn-primary btn-lg"
+          data-toggle="modal"
+          data-target="#editSaleModal"
+        >
+          Edit Sale
+        </button>
+        <EditSaleModalContainer data={{ sale: sale }} />
       </div>
     );
   } else if (
@@ -86,7 +95,7 @@ function SaleMenuComponent(props) {
         >
           Confirm Item Sent To Buyer
         </button>
-        <ConfirmItemSentContainer data={{ saleId: sale.id }} />
+        <ConfirmItemSentModalContainer data={{ saleId: sale.id }} />
       </div>
     );
   } else if (sale.status === 4 && currentUserId === sale.buyerId) {
@@ -101,13 +110,12 @@ function SaleMenuComponent(props) {
         >
           Confirm Item Recieved
         </button>
-        <ConfirmItemRecievedContainer data={{ saleId: sale.id }} />
+        <ConfirmItemRecievedModalContainer data={{ saleId: sale.id }} />
       </div>
     );
   } else if (sale.status === 5 && currentUserId === sale.sellerId) {
     component = <NoActionAvailableTextBox />;
-  }
-  else if (sale.status===6){
+  } else if (sale.status === 6) {
     component = <NoActionAvailableTextBox />;
   }
 

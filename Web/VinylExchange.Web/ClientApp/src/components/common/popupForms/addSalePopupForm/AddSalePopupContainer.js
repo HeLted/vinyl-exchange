@@ -9,6 +9,7 @@ import { NotificationContext } from "./../../../../contexts/NotificationContext"
 import axios from "axios";
 import getAntiForgeryAxiosConfig from "./../../../../functions/getAntiForgeryAxiosConfig";
 import hideModal from "./../../../../functions/hideModal";
+import {withRouter} from "react-router-dom"
 
 class AddSalePopupContainer extends Component {
   constructor() {
@@ -119,6 +120,8 @@ class AddSalePopupContainer extends Component {
       )
       .then(response => {
         this.context.handleAppNotification("Sucessfully created sale", 4);
+        hideModal();
+        this.props.history.push(`/Sale/${response.data.id}`);
       })
       .catch(error => {
         this.context.handleServerNotification(
@@ -129,7 +132,6 @@ class AddSalePopupContainer extends Component {
   };
 
   handleFlushModal = () =>{
-    console.log("hidingModal");
     hideModal();
   }
 
@@ -157,4 +159,4 @@ class AddSalePopupContainer extends Component {
   }
 }
 
-export default AddSalePopupContainer;
+export default withRouter(AddSalePopupContainer);

@@ -24,9 +24,9 @@
 
         public async Task<AddLogToSaleResourceModel> AddLogToSale(Guid saleId, SaleLogs logType)
         {
-            bool isSaleExists = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault() != null;
+            Sale sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
 
-            if (!isSaleExists)
+            if (sale == null)
             {
                 throw new NullReferenceException("Sale with this Id doesn't exist!");
             }
@@ -49,6 +49,9 @@
                     break;
                 case SaleLogs.ItemRecieved:
                     logMessage = "Item Recieved.Sale Complete!";
+                    break;
+                         case SaleLogs.SaleEdit:
+                    logMessage = "Seller edited sale.";
                     break;
             }
 

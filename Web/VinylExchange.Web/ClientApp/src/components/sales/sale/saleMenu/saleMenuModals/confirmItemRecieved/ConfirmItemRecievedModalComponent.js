@@ -2,11 +2,12 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
 
-function ConfirmItemSentComponent(props) {
+
+function ConfirmItemRecievedModalContainer(props) {
   return (
     <div
       className="modal"
-      id="confirmItemSentModal"
+      id="confirmItemRecievedModal"
       tabIndex="-1"
       role="dialog"
     >
@@ -14,19 +15,19 @@ function ConfirmItemSentComponent(props) {
         <div className="modal-content text-center">
           <div className="modal-header text-center">
             <h5 className="property-text-nm modal-title">
-              Confirm Item Sent To Buyer{" "}
+              Confirm Item Recieved{" "}
               {props.data.isSubmitLoading && (
                 <FontAwesomeIcon icon={faSync} spin />
               )}
             </h5>
           </div>
+          <br />
           <div className="address-modal-body modal-body">
             <div className="row text-center justify-content-center">
               <h5 className="property-text-nm modal-title">
-                Do you confirm that you sent out item to buyer ?
+                Do you confirm that you recieved the desired item ?
               </h5>
             </div>
-            <br />
             <div className="row justify-content-center">
               <button
                 type="button"
@@ -36,8 +37,8 @@ function ConfirmItemSentComponent(props) {
                 Yes
               </button>
               <button
-                type=" button"
-                className="prompt-btn  btn btn-danger btn-lg"
+                type="button"
+                className="prompt-btn btn btn-danger btn-lg"
                 data-dismiss="modal"
               >
                 No
@@ -50,4 +51,4 @@ function ConfirmItemSentComponent(props) {
   );
 }
 
-export default ConfirmItemSentComponent;
+export default ConfirmItemRecievedModalContainer;

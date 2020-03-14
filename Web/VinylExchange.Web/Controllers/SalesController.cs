@@ -15,8 +15,9 @@
     using VinylExchange.Web.Models.InputModels.Sales;
     using VinylExchange.Web.Models.ResourceModels.Sales;
     using VinylExchange.Web.Models.Utility;
+    using static VinylExchange.Common.Constants.RolesConstants;
 
-    [Authorize]
+    [Authorize(Roles= AdminUser)]
     public class SalesController : ApiController
     {
         private readonly ILoggerService loggerService;
@@ -25,7 +26,7 @@
 
         private readonly ISaleLogsService saleLogsService;
 
-        private readonly ISalesService salesService;
+        private readonly ISalesService salesService;               
 
         public SalesController(
             ISalesService salesService,
@@ -35,8 +36,9 @@
         {
             this.salesService = salesService;
             this.loggerService = loggerService;
-            this.saleLogHubContext = saleLogHubContext;
+            this.saleLogHubContext = saleLogHubContext;           
             this.saleLogsService = saleLogsService;
+           
         }
 
         [HttpPut]
@@ -49,7 +51,7 @@
 
                 if (saleModel == null)
                 {
-                    return this.BadRequest();
+                    return this.NotFound();
                 }
 
                 Guid currentUserId = this.GetUserId(this.User);
@@ -87,7 +89,7 @@
 
                 if (saleModel == null)
                 {
-                    return this.BadRequest();
+                    return this.NotFound();
                 }
 
                 Guid currentUserId = this.GetUserId(this.User);
@@ -125,7 +127,7 @@
 
                 if (saleModel == null)
                 {
-                    return this.BadRequest();
+                    return this.NotFound();
                 }
 
                 Guid currentUserId = this.GetUserId(this.User);
@@ -168,26 +170,67 @@
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<GetSaleResourceModel>> Get(Guid id)
+        [HttpPut]
+        public async Task<ActionResult<EditSaleResourceModel>> Update(EditSaleInputModel inputModel)
         {
             try
             {
-                GetSaleResourceModel sale = await this.salesService.GetSale<GetSaleResourceModel>(id);
+                GetSaleInfoUtilityModel saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
 
-                if (sale == null)
+                if (saleInfoModel == null)
                 {
                     return this.NotFound();
                 }
 
                 Guid currentUserId = this.GetUserId(this.User);
 
-                if ((sale.BuyerId != currentUserId && sale.SellerId != currentUserId) && sale.Status != Status.Open)
+                if (saleInfoModel.SellerId == currentUserId && saleInfoModel.Status == Status.Open)
+                {
+
+                    EditSaleResourceModel saleModel = await this.salesService.EditSale<EditSaleResourceModel>(inputModel);
+                    
+                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.SaleEdit);
+
+                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                        .RecieveLogNotification(addedLogModel.Content);
+
+                    return saleModel;
+                }
+                else
                 {
                     return this.Forbid();
                 }
 
-                return sale;
+
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetSaleResourceModel>> Get(Guid id)
+        {
+            try
+            {
+                GetSaleResourceModel saleInfoModel = await this.salesService.GetSale<GetSaleResourceModel>(id);
+
+                if (saleInfoModel == null)
+                {
+                    return this.NotFound();
+                }
+
+                Guid currentUserId = this.GetUserId(this.User);
+
+                if ((saleInfoModel.BuyerId != currentUserId && saleInfoModel.SellerId != currentUserId)
+                    && saleInfoModel.Status != Status.Open)
+                {
+                    return this.Forbid();
+                }
+
+                return saleInfoModel;
             }
             catch (Exception ex)
             {
@@ -201,11 +244,8 @@
         public async Task<ActionResult<IEnumerable<GetAllSalesForReleaseResouceModel>>> GetAllSalesForRelease(Guid id)
         {
             try
-            {
-                List<GetAllSalesForReleaseResouceModel> sales = 
-                    await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(id);
-
-                return sales;
+            {                               
+                return await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(id);
             }
             catch (Exception ex)
             {
@@ -247,33 +287,33 @@
 
         [HttpPut]
         [Route("PlaceOrder")]
-        public async Task<IActionResult> PlaceOrder(PlaceOrderInputModel inputModel)
+        public async Task<ActionResult<GetSaleInfoUtilityModel>> PlaceOrder(PlaceOrderInputModel inputModel)
         {
             try
             {
-                GetSaleInfoUtilityModel saleModel = await this.GetSaleInfo(inputModel.SaleId);
+                GetSaleInfoUtilityModel saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
 
-                if (saleModel == null)
+                if (saleInfoModel == null)
                 {
-                    return this.BadRequest();
+                    return this.NotFound();
                 }
 
                 Guid currentUserId = this.GetUserId(this.User);
 
-                if (saleModel.SellerId == currentUserId || saleModel.BuyerId == currentUserId
-                                                        || saleModel.Status != Status.Open)
+                if (saleInfoModel.SellerId == currentUserId || saleInfoModel.BuyerId == currentUserId
+                                                        || saleInfoModel.Status != Status.Open)
                 {
                     return this.Forbid();
                 }
 
                 await this.salesService.PlaceOrder<SaleStatusResourceModel>(inputModel, currentUserId);
 
-                var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.PlacedOrder);
+                var addedLogModel = await this.saleLogsService.AddLogToSale(saleInfoModel.Id, SaleLogs.PlacedOrder);
 
-                await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                await this.saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
                     .RecieveLogNotification(addedLogModel.Content);
 
-                return this.NoContent();
+                return saleInfoModel;
             }
             catch (Exception ex)
             {
@@ -288,24 +328,24 @@
         {
             try
             {
-                GetSaleInfoUtilityModel saleModel = await this.GetSaleInfo(inputModel.SaleId);
+                GetSaleInfoUtilityModel saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
 
-                if (saleModel == null)
+                if (saleInfoModel == null)
                 {
                     return this.BadRequest();
                 }
 
                 Guid currentUserId = this.GetUserId(this.User);
 
-                if (saleModel.SellerId == currentUserId && saleModel.Status == Status.ShippingNegotiation)
+                if (saleInfoModel.SellerId == currentUserId && saleInfoModel.Status == Status.ShippingNegotiation)
                 {
                     var saleStatusModel = await this.salesService.SetShippingPrice<SaleStatusResourceModel>(inputModel);
 
                     var addedLogModel = await this.saleLogsService.AddLogToSale(
-                                            saleModel.Id,
+                                             saleInfoModel.Id,
                                             SaleLogs.SettedShippingPrice);
 
-                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                    await this.saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
 
                     return saleStatusModel;

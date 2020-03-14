@@ -88,6 +88,46 @@
             return trackedSale.Entity.To<TModel>();
         }
 
+        public async Task<TModel> EditSale<TModel>(EditSaleInputModel inputModel)
+        {
+
+            Sale sale = this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefault();
+
+            if (sale == null)
+            {
+                throw new NullReferenceException("Sale with this Id doesn't exist!");
+            }
+
+
+            var address = await this.dbContext.Addresses.Where(a => a.Id == inputModel.ShipsFromAddressId)
+                              .FirstOrDefaultAsync();
+
+            if (address == null)
+            {
+                throw new NullReferenceException("Address with this Id doesn't exist!");
+            }
+
+
+            sale.Price = inputModel.Price;
+
+            sale.SleeveGrade = inputModel.SleeveGrade;
+
+            sale.VinylGrade = inputModel.VinylGrade;
+
+            sale.Description = inputModel.Description;
+
+            sale.ShipsFrom = $"{address.Country} - {address.Town}";
+
+            sale.Status = Status.Open;
+
+            sale.ModifiedOn = DateTime.UtcNow;
+
+            await this.dbContext.SaveChangesAsync();
+
+            return sale.To<TModel>();
+        }
+
+
         public async Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid releaseId)
         {
             return await this.dbContext.Sales.Where(s => s.ReleaseId == releaseId).Where(s => s.Status == Status.Open)
@@ -135,7 +175,7 @@
                         var coverArtProperty = s.GetType().GetProperty("CoverArt");
                         var releaseIdProperty = (Guid)s.GetType().GetProperty("ReleaseId").GetValue(s);
 
-                        coverArtProperty.SetValue(s, this.releaseFileService.GetReleaseCoverArt(releaseIdProperty).GetAwaiter().GetResult()); 
+                        coverArtProperty.SetValue(s, this.releaseFileService.GetReleaseCoverArt(releaseIdProperty).GetAwaiter().GetResult());
                     });
 
             return sales;

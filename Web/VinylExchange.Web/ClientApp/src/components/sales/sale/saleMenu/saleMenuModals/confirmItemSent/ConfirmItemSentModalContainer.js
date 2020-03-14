@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ConfirmItemSentComponent from "./ConfirmItemSentComponent";
+import ConfirmItemSentModalComponent from "./ConfirmItemSentModalComponent";
 import hideModal from "./../../../../../../functions/hideModal";
 import getAntiForgeryAxiosConfig from "./../../../../../../functions/getAntiForgeryAxiosConfig";
 import {Url,Controllers} from "./../../../../../../constants/UrlConstants";
@@ -7,7 +7,7 @@ import axios from "axios";
 import {NotificationContext} from "./../../../../../../contexts/NotificationContext";
 
 
-class ConfirmItemSentContainer extends Component {
+class ConfirmItemSentModalContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {isSubmitLoading:false};
@@ -44,7 +44,7 @@ class ConfirmItemSentContainer extends Component {
 
   render() {
     return (
-      <ConfirmItemSentComponent
+      <ConfirmItemSentModalComponent
         functions={{ handleOnSubmit: this.handleOnSubmit }}
         data={{isSubmitLoading:this.state.isSubmitLoading}}
       />
@@ -52,4 +52,4 @@ class ConfirmItemSentContainer extends Component {
   }
 }
 
-export default ConfirmItemSentContainer;
+export default ConfirmItemSentModalContainer;

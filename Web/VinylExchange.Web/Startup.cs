@@ -97,6 +97,7 @@ namespace VinylExchange.Web
             }
 
             app.UseHttpsRedirection();
+            app.UseCors();
             app.UseStaticFiles();
             app.UseFileServer(
                 new FileServerOptions
@@ -220,6 +221,8 @@ namespace VinylExchange.Web
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
+
+            services.AddCors();
 
             // Enitity Services
             services.AddTransient<IReleasesService, ReleasesService>();

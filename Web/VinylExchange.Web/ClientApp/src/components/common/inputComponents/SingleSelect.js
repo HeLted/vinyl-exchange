@@ -1,10 +1,12 @@
 import React from "react";
 
  function SingleSelect(props) {
-  const options = props.options.map(optionsObj => {
+
+   
+  const options = props.options != undefined && ( props.options.map(optionsObj => {
     return <option key={optionsObj.id} value={optionsObj.id}>{optionsObj.name}</option>;
     //mapping requires to have name and id in props passed object
-  });
+  }));
 
   const defaultOptionDisplay = props.value === "" ? "block" : "none";
 

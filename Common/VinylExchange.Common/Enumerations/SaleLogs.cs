@@ -10,6 +10,8 @@
 
         ItemSent = 4,
 
-        ItemRecieved = 5
+        ItemRecieved = 5,
+
+        SaleEdit = 6
     }
 }

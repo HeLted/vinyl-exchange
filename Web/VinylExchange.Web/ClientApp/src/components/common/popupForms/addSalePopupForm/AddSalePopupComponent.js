@@ -1,15 +1,9 @@
 import React, { Component,Fragment } from "react";
 import AddSalePopupFormBody from "./AddSalePopupFormBody";
 import AddSalePopupFormButton from "./AddSalePopupFormButton";
+import {GradeOptions} from "./../../../../constants/GradeOptions";
 
-const gradeOptions = [
-  { id: 6, name: "Mint" },
-  { id: 5, name: "Near Mint" },
-  { id: 4, name: "Very Good" },
-  { id: 3, name: "Good" },
-  { id: 2, name: "Fair" },
-  { id: 1, name: "Poor" }
-];
+
 
 function AddSalePopupComponent(props) {
   return (
@@ -25,7 +19,7 @@ function AddSalePopupComponent(props) {
       <AddSalePopupFormBody
         data={{
           collectionItemId:props.data.collectionItemId,
-          gradeOptions: gradeOptions,
+          gradeOptions: GradeOptions,
           descriptionInput: props.data.descriptionInput,
           vinylGradeInput: props.data.vinylGradeInput,
           sleeveGradeInput: props.data.sleeveGradeInput,

@@ -34,13 +34,6 @@
                 await this.roleManager.CreateAsync(new VinylExchangeRole(User));
             }
 
-            bool chuskaRoleExists = await this.roleManager.RoleExistsAsync(Chushka);
-
-            if (!userRoleExists)
-            {
-                await this.roleManager.CreateAsync(new VinylExchangeRole(Chushka));
-            }
-
             VinylExchangeUser user = await this.userManager.FindByNameAsync("sysadmin");
 
             if (!await this.userManager.IsInRoleAsync(user, Admin))
