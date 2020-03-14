@@ -16,7 +16,7 @@ class GoToReleaseButton extends Component {
 
   render() {
     return (
-      <button type="button"  className="btn btn-primary" onClick={()=> this.handleToRelease()}>
+      <button type="button"  className="btn-spr btn btn-primary" onClick={()=> this.handleToRelease()}>
         <FontAwesomeIcon icon={faArrowRight} />
       </button>
     );

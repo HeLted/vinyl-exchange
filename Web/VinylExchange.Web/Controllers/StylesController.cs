@@ -26,7 +26,7 @@
 
         [HttpGet]
         [Route("GetAllStylesForGenre")]
-        public async Task<ActionResult<IEnumerable<GetAllStylesResourceModel>>> GetAllStylesForGenre(int genreId)
+        public async Task<ActionResult<IEnumerable<GetAllStylesResourceModel>>> GetAllStylesForGenre(int? genreId)
         {
             try
             {

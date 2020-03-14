@@ -26,7 +26,7 @@ import React from "react";
       value={props.value}
       onChange={props.onChange}
     >
-      {defaultOption}
+      {props.defaultOptionLabel != undefined && defaultOption}
       {options}
     </select>
   );

@@ -74,6 +74,7 @@ class UserMenu extends Component {
         <li  onMouseLeave={()=>setTimeout(this.handleDropDownMenuToggle(false),200)} className="nav-item dropdown">
           <NavLink
             className="navbar-link btn btn-outline-light text-light"
+            style={{whiteSpace:"nowrap"}}
             onMouseOver={()=> this.handleDropDownMenuToggle(true)}
           >
             <FontAwesomeIcon icon={faUser} /> {userName}{" "}

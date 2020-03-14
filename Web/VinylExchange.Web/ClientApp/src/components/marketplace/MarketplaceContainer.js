@@ -6,7 +6,8 @@ class MarketplaceContainer extends Component {
     super();
     this.state = {
       searchValue: "",
-      filterStyleIds: []
+      filterStyleIds: [],
+      filterGenreId:""
     };
   }
 
@@ -16,15 +17,17 @@ class MarketplaceContainer extends Component {
     }
   };
 
-  onUpdateFilterValue = styleIds => {
+  onUpdateFilterValue = (styleIds,genreId) => {
     console.log(this.state.filterStyleIds)
-    console.log(styleIds);
+    console.log(genreId)
+    
     
     if (
       JSON.stringify(this.state.filterStyleIds) !== JSON.stringify(styleIds)
+      || this.state.filterGenreId !== genreId
     ) {
-      console.log("updating");
-      this.setState({ filterStyleIds: styleIds });
+      
+      this.setState({ filterStyleIds: styleIds,filterGenreId:genreId });
     }
   };
 
@@ -37,7 +40,8 @@ class MarketplaceContainer extends Component {
         }}
         data={{
           searchValue: this.state.searchValue,
-          filterStyleIds: this.state.filterStyleIds
+          filterStyleIds: this.state.filterStyleIds,
+          filterGenreId:this.state.filterGenreId
         }}
       />
     );

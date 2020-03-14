@@ -1,6 +1,7 @@
 import React, { createContext } from "react";
 import uuidv4 from "../functions/guidGenerator";
 import { withRouter } from "react-router-dom";
+import hideModal from "./../functions/hideModal";
 export const NotificationContext = createContext();
 
 
@@ -14,6 +15,7 @@ export const NotificationContext = createContext();
     let severity = 1;
 
     if(notificationObj.status === 403){
+      hideModal();
       this.props.history.push("/Authorization/FailedAuthorization");
     } else if (notificationObj.status >= 400) {
       const errorMessages = [];

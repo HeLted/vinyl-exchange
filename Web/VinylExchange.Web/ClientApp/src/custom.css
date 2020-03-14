@@ -107,7 +107,9 @@ td {
 }
 
 .btn-spr {
-  margin-right: 10px;
+  margin: 5px;
+  width: 42px;
+  height: 38px;
 }
 
 .full {

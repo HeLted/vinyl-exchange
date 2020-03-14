@@ -50,6 +50,7 @@
 
         public async Task<List<TModel>> GetReleases<TModel>(
             string searchTerm,
+            int? filterGenreId,
             IEnumerable<int> filterStyleIds,
             int releasesToSkip)
         {
@@ -63,12 +64,29 @@
                     releasesQuariable.Where(r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm));
             }
 
-            releases = await releasesQuariable
-                           .Where(
-                               r => r.Styles.Any(s => filterStyleIds.Contains(s.StyleId))
-                                    || filterStyleIds.Count() == 0).Skip(releasesToSkip).Take(ReleasesToTake)
-                           .To<TModel>().ToListAsync();
-                     
+            if(filterGenreId != null)
+            {
+
+                if(filterStyleIds.Count() == 0)
+                {
+                    releasesQuariable = releasesQuariable
+                       .Where(
+                           r => r.Styles.Any(s => s.Style.GenreId == filterGenreId)
+                           );
+                }
+                else
+                {
+                    releasesQuariable = releasesQuariable
+                         .Where(
+                             r => r.Styles.Any(s => filterStyleIds.Contains(s.StyleId)));
+                }
+                
+            }
+            
+
+            releases = await releasesQuariable.Skip(releasesToSkip).Take(ReleasesToTake)
+                         .To<TModel>().ToListAsync();
+
 
             return releases;
         }

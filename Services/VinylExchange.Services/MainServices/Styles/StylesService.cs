@@ -21,9 +21,17 @@
         }
 
 
-        public async Task<List<TModel>> GetAllStylesForGenre<TModel>(int genreId)
+        public async Task<List<TModel>> GetAllStylesForGenre<TModel>(int? genreId)
         {
-            return await this.dbContext.Styles.Where(x => x.GenreId == genreId).To<TModel>()
+
+            IQueryable<Style> stylesQueriable = this.dbContext.Styles.AsQueryable();
+
+            if(genreId != null)
+            {
+                stylesQueriable = stylesQueriable.Where(x => x.GenreId == genreId);
+            }
+           
+            return await stylesQueriable.To<TModel>()
                        .ToListAsync();
         }
 

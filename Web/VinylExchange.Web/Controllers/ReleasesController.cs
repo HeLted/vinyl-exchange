@@ -65,6 +65,7 @@
         [Route("GetReleases")]
         public async Task<ActionResult<IEnumerable<GetReleasesResourceModel>>> GetReleases(
             string searchTerm,
+            int? filterGenreId,
             [FromQuery(Name = "styleIds")] List<int> styleIds,
             int releasesToSkip)
         {
@@ -72,7 +73,7 @@
             {                              
                
                 return await this.releasesService
-                    .GetReleases<GetReleasesResourceModel>(searchTerm, styleIds, releasesToSkip); 
+                    .GetReleases<GetReleasesResourceModel>(searchTerm, filterGenreId ,styleIds, releasesToSkip); 
             }
             catch (Exception ex)
             {

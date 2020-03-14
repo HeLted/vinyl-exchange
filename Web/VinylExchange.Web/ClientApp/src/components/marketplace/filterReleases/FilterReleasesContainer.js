@@ -21,7 +21,11 @@ class FilterReleaseContainer extends Component {
       .get(Url.api + Controllers.genres.name + Url.slash)
       .then(response => {
         this.context.handleAppNotification("Loaded Genres", 5);
-        this.setState({ genres: response.data });
+        const genres = response.data;
+        console.log("debugging")
+        genres.unshift({id:"",name:"All"})
+      
+        this.setState({ genres: genres});
       })
       .catch(error => {
         this.context.handleServerNotification(error.response);
@@ -60,6 +64,11 @@ class FilterReleaseContainer extends Component {
   handleOnChange = event => {
     const { value, name } = event.target;
     this.setState({ [name]: value });
+
+   
+    this.setState({styleMultiSelectInput:[]})
+    this.props.functions.onUpdateFilterValue([],value) 
+
   };
 
   handleOnChangeMultiSelect = value => {
@@ -71,7 +80,7 @@ class FilterReleaseContainer extends Component {
         return styleObj.value;
       });
   
-      this.props.functions.onUpdateFilterValue(styleIds) 
+      this.props.functions.onUpdateFilterValue(styleIds,this.state.genreSelectInput) 
       this.setState({ styleMultiSelectInput: value });
     }
 

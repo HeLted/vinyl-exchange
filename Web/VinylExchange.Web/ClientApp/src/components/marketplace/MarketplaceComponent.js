@@ -32,7 +32,8 @@ function MarketplaceComponent(props) {
           <ReleasesContainerWrapper
             data={{
               searchValue: props.data.searchValue,
-              filterStyleIds: props.data.filterStyleIds
+              filterStyleIds: props.data.filterStyleIds,
+              filterGenreId:props.data.filterGenreId
             }}
           />
         </div>

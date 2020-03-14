@@ -11,7 +11,6 @@ function GenreFilterComponent(props) {
         value={props.data.genreSelectInput}
         onChange={props.functions.handleOnChange}
         options={props.data.genres}
-        defaultOptionLabel="--Please Select Genre--"
       />
     </div>
   );

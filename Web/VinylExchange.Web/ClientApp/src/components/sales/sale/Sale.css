@@ -16,7 +16,7 @@
 
 .chat {
     overflow-x: hidden !important;
-    height: 300px;
+    height: 450px;
     overflow: scroll;
     padding: 10px;
   }

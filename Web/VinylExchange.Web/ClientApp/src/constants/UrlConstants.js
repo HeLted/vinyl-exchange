@@ -17,7 +17,8 @@ export const Queries = {
   shopsToSkip: "shopsToSkip",
   styleIds: "styleIds",
   returnUrl: "returnUrl",
-  cofirmToken: "cofirmToken"
+  cofirmToken: "cofirmToken",
+  filterGenreId:"filterGenreId"
 };
 
 export const Headers = { requestVerificationToken: "RequestVerificationToken" };

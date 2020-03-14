@@ -30,7 +30,6 @@ class SaleContainer extends Component {
       },
       currentUserId:"",
       isLoading: true,
-      isChatShown: false
     };
   }
 
@@ -86,12 +85,6 @@ class SaleContainer extends Component {
         this.setState({ isLoading: false });
         this.context.handleServerNotification(error.response);
       });
-  };
-
-  handleToggleChat = () => {
-    this.setState(prevState => {
-      return { isChatShown: prevState.isChatShown ? false : true };
-    });
   };
 
   render() {

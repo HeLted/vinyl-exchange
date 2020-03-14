@@ -13,6 +13,7 @@
 
         Task<List<TModel>> GetReleases<TModel>(
             string searchTerm,
+            int? filterGenreId,
             IEnumerable<int> filterStyleIds,
             int releasesToSkip);
     }

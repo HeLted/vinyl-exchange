@@ -7,7 +7,8 @@ import {
 } from "./../../../../constants/UrlConstants";
 import { NotificationContext } from "./../../../../contexts/NotificationContext";
 import axios from "axios";
-import getAntiForgeryAxiosConfig  from "./../../../../functions/getAntiForgeryAxiosConfig"
+import getAntiForgeryAxiosConfig  from "./../../../../functions/getAntiForgeryAxiosConfig";
+import hideModal from "./../../../../functions/hideModal";
 
 class AddtoColletionPopupFormContainer extends Component {
   constructor() {
@@ -80,6 +81,7 @@ class AddtoColletionPopupFormContainer extends Component {
           4
         );
         this.setState({ isReleaseAlreadyInUserCollection: true });
+        hideModal();
       })
       .catch(error => {
         self.context.handleServerNotification(error.response);
