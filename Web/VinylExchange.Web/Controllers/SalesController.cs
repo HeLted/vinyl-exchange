@@ -285,6 +285,37 @@
             }
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<RemoveSaleResourceModel>> Remove(Guid id)
+        {
+            try
+            {
+                GetSaleInfoUtilityModel saleInfoModel = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(id);
+
+                if (saleInfoModel == null)
+                {
+                    return this.NotFound();
+                }
+
+                if (saleInfoModel.SellerId == this.GetUserId(this.User))
+                {
+
+                    return await this.salesService.RemoveSale<RemoveSaleResourceModel>(saleInfoModel.Id);
+                }
+                else
+                {
+                    return this.Forbid();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
         [HttpPut]
         [Route("PlaceOrder")]
         public async Task<ActionResult<GetSaleInfoUtilityModel>> PlaceOrder(PlaceOrderInputModel inputModel)

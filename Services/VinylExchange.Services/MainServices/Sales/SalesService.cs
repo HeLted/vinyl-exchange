@@ -1,21 +1,18 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Sales
 {
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-
     using VinylExchange.Data;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.HelperServices.Releases;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Sales;
-    using VinylExchange.Web.Models.ResourceModels.Sales;
-    using VinylExchange.Web.Models.Utility;
+    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
     public class SalesService : ISalesService
     {
@@ -31,7 +28,7 @@
 
         public async Task<TModel> CompletePayment<TModel>(CompletePaymentInputModel inputModel)
         {
-            Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
+            Sale sale = await this.GetSale(inputModel.SaleId);
 
             sale.Status = Status.Paid;
             sale.OrderId = inputModel.OrderId;
@@ -43,7 +40,7 @@
 
         public async Task<TModel> ConfirmItemRecieved<TModel>(ConfirmItemRecievedInputModel inputModel)
         {
-            Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
+            Sale sale = await this.GetSale(inputModel.SaleId);
 
             sale.Status = Status.Finished;
 
@@ -54,7 +51,7 @@
 
         public async Task<TModel> ConfirmItemSent<TModel>(ConfirmItemSentInputModel inputModel)
         {
-            Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
+            Sale sale = await this.GetSale(inputModel.SaleId);
 
             sale.Status = Status.Sent;
 
@@ -67,12 +64,11 @@
         {
             Sale sale = inputModel.To<Sale>();
 
-            var address = await this.dbContext.Addresses.Where(a => a.Id == inputModel.ShipsFromAddressId)
-                              .FirstOrDefaultAsync();
+            var address = await this.GetAddress(inputModel.ShipsFromAddressId);
 
             if (address == null)
             {
-                throw new NullReferenceException("Address with this Id doesn't exist!");
+                throw new NullReferenceException(AddressNotFound);
             }
 
             sale.ShipsFrom = $"{address.Country} - {address.Town}";
@@ -91,11 +87,11 @@
         public async Task<TModel> EditSale<TModel>(EditSaleInputModel inputModel)
         {
 
-            Sale sale = this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefault();
+            Sale sale = await this.GetSale(inputModel.SaleId);
 
             if (sale == null)
             {
-                throw new NullReferenceException("Sale with this Id doesn't exist!");
+                throw new NullReferenceException(SaleNotFound);
             }
 
 
@@ -104,7 +100,7 @@
 
             if (address == null)
             {
-                throw new NullReferenceException("Address with this Id doesn't exist!");
+                throw new NullReferenceException(AddressNotFound);
             }
 
 
@@ -183,13 +179,13 @@
 
         public async Task<TModel> PlaceOrder<TModel>(PlaceOrderInputModel inputModel, Guid? buyerId)
         {
-            var sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
+            Sale sale = await this.GetSale(inputModel.SaleId);
 
-            var address = await this.dbContext.Addresses.Where(a => a.Id == inputModel.AddressId).FirstOrDefaultAsync();
+            var address = await this.GetAddress(inputModel.AddressId);
 
             if (address == null)
             {
-                throw new NullReferenceException("Address with this Id doesn't exist!");
+                throw new NullReferenceException(AddressNotFound);
             }
 
             sale.BuyerId = buyerId;
@@ -203,7 +199,7 @@
 
         public async Task<TModel> SetShippingPrice<TModel>(SetShippingPriceInputModel inputModel)
         {
-            Sale sale = await this.dbContext.Sales.Where(s => s.Id == inputModel.SaleId).FirstOrDefaultAsync();
+            Sale sale = await this.GetSale(inputModel.SaleId);
 
             sale.ShippingPrice = inputModel.ShippingPrice;
             sale.Status = Status.PaymentPending;
@@ -212,5 +208,26 @@
 
             return sale.To<TModel>();
         }
+
+        public async Task<TModel> RemoveSale<TModel>(Guid saleId)
+        {
+            Sale sale = await this.GetSale(saleId);
+
+            if (sale == null)
+            {
+                throw new NullReferenceException(SaleNotFound);
+            }
+
+            var removedAddress = this.dbContext.Sales.Remove(sale).Entity;
+            await this.dbContext.SaveChangesAsync();
+
+            return removedAddress.To<TModel>();
+        }
+
+        private async Task<Sale> GetSale(Guid? saleId) => 
+            await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == saleId);
+
+        private async Task<Address> GetAddress(Guid? addressId) =>
+        await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
     }
 }

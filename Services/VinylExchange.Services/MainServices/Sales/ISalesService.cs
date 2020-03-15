@@ -30,5 +30,7 @@
         Task<TModel> SetShippingPrice<TModel>(SetShippingPriceInputModel inputModel);
 
         Task<TModel> EditSale<TModel>(EditSaleInputModel inputModel);
+
+        Task<TModel> RemoveSale<TModel>(Guid saleId);
     }
 }

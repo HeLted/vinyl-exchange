@@ -7,6 +7,7 @@ import NoActionAvailableTextBox from "./../../../common/divTextBoxes/NoActionAva
 import ConfirmItemSentModalContainer from "./saleMenuModals/confirmItemSent/ConfirmItemSentModalContainer";
 import ConfirmItemRecievedModalContainer from "./saleMenuModals/confirmItemRecieved/ConfirmItemRecievedModalContainer";
 import EditSaleModalContainer from "./saleMenuModals/editSale/EditSaleModalContainer";
+import RemoveSaleModalContainer from "./saleMenuModals/removeSale/RemoveSaleModalContainer";
 
 
 function SaleMenuComponent(props) {
@@ -17,7 +18,14 @@ function SaleMenuComponent(props) {
   if (sale.status === 1 && currentUserId === sale.sellerId) {
     component = (
       <div>
-        <button className="btn btn-danger btn-lg">Remove Sale</button>
+      <button
+          className="btn btn-danger btn-lg"
+          data-toggle="modal"
+          data-target="#removeSaleModal"
+        >
+          Remove Sale
+        </button>
+        <RemoveSaleModalContainer data={{saleId:sale.id}}/>
         <button
           className="btn btn-primary btn-lg"
           data-toggle="modal"

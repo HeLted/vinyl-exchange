@@ -1,9 +1,5 @@
 namespace VinylExchange.Web
 {
-    using System;
-    using System.IO;
-    using System.Reflection;
-    using IdentityServer4.Services;
     using Microsoft.AspNetCore.Antiforgery;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,7 +14,11 @@ namespace VinylExchange.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
-
+    using System;
+    using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.IO;
+    using System.Reflection;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Data.Seeding;
@@ -42,12 +42,6 @@ namespace VinylExchange.Web
     using VinylExchange.Web.Hubs.SaleLog;
     using VinylExchange.Web.Infrastructure.IdentityServer.Profile;
     using VinylExchange.Web.Models;
-    using IdentityServer4.Configuration;
-    using Microsoft.AspNetCore.Authentication.Cookies;
-    using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-    using IdentityServer4.AccessTokenValidation;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Collections.Generic;
 
     public class Startup
     {

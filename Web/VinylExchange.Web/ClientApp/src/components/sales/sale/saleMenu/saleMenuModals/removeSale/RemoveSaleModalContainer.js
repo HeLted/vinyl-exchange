@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import ConfirmItemSentModalComponent from "./ConfirmItemSentModalComponent";
+import RemoveSaleModalComponent from "./RemoveSaleModalComponent";
 import hideModal from "./../../../../../../functions/hideModal";
 import getAntiForgeryAxiosConfig from "./../../../../../../functions/getAntiForgeryAxiosConfig";
 import { Url, Controllers } from "./../../../../../../constants/UrlConstants";
 import axios from "axios";
 import { NotificationContext } from "./../../../../../../contexts/NotificationContext";
+import {withRouter} from "react-router-dom";
 
-class ConfirmItemSentModalContainer extends Component {
+class RemoveSaleModalContainer extends Component {
   constructor(props) {
     super(props);
     this.state = { isSubmitLoading: false };
@@ -17,35 +18,30 @@ class ConfirmItemSentModalContainer extends Component {
   handleOnSubmit = () => {
     this.setState({ isSubmitLoading: true });
 
-    const submitObj = {
-      saleId: this.props.data.saleId
-    };
-
     axios
-      .put(
-        Url.api +
-          Controllers.sales.name +
-          Controllers.sales.actions.confirmItemSent,
-        submitObj,
+      .delete(
+        Url.api + Controllers.sales.name + Url.slash+this.props.data.saleId,
+
         getAntiForgeryAxiosConfig()
       )
       .then(response => {
         this.setState({ isSubmitLoading: false });
-        this.context.handleAppNotification(
-          "Succesfully marked item as sent",
-          4
-        );
+        this.context.handleAppNotification("Succesfully deleted sale", 4);
         hideModal();
+        this.props.history.push("/Marketplace");
       })
       .catch(error => {
         this.setState({ isSubmitLoading: false });
-        this.context.handleServerNotification(error.response, "Failed action!");
+        this.context.handleServerNotification(
+          error.response,
+          "Failed to delete sale!"
+        );
       });
   };
 
   render() {
     return (
-      <ConfirmItemSentModalComponent
+      <RemoveSaleModalComponent
         data={{ isSubmitLoading: this.state.isSubmitLoading }}
         functions={{ handleOnSubmit: this.handleOnSubmit }}
       />
@@ -53,4 +49,4 @@ class ConfirmItemSentModalContainer extends Component {
   }
 }
 
-export default ConfirmItemSentModalContainer;
+export default withRouter(RemoveSaleModalContainer);
