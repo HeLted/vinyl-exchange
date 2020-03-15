@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route } from "react-router";
+import { Route, Switch } from "react-router";
 import { Layout } from "./components/Layout";
 import { Home } from "./components/Home";
 import { Roles, MultiRoles } from "./constants/RoleConstants";
@@ -19,6 +19,8 @@ import LogoutContainer from "./components/api-authorization/authPages/logout/Log
 import LogoutCallbackContainer from "./components/api-authorization/authPages/logout/LogoutCallbackContainer";
 import FailedAuthorizationContainer from "./components/api-authorization/authPages/failedAuthorization/FailedAuthorizationContainer";
 import AdminPanelContainer from "./components/user/adminPanel/AdminPanelContainer";
+import PageNotFoundContainer from "./components/common/pages/pageNotFound/PageNotFoundContainer";
+import ServerErrorContainer from "./components/common/pages/serverError/ServerErrorContainer";
 
 import "./custom.css";
 
@@ -28,71 +30,83 @@ export default class App extends Component {
   render() {
     return (
       <Layout>
-        <Route exact path="/" component={Home} />
-        <Route path="/Marketplace" component={MarketplaceContainer} />
-        <Route
-          exact
-          path="/Authentication/Register"
-          component={RegisterContainer}
-        />
-        <Route
-          exact
-          path="/Authentication/Logout"
-          component={LogoutContainer}
-        />
-        <Route
-          exact
-          path="/Authentication/Logout-Callback"
-          component={LogoutCallbackContainer}
-        />
-        <Route exact path="/Authentication/Login" component={LoginContainer} />
-        <Route
-          exact
-          path="/Authentication/EmailConfirm"
-          component={EmailConfirmContainer}
-        />
-        <Route
-          exact
-          path="/Authorization/FailedAuthorization"
-          component={FailedAuthorizationContainer}
-        />
-        <AuthorizeRoute
-          path="/Releases/AddRelease"
-          component={AddReleaseContainer}
-          role={MultiRoles.UserAdmin}
-        />
-        <AuthorizeRoute
-          path="/Sale"
-          component={SaleContainer}
-          role={MultiRoles.UserAdmin}
-        />
-        <AuthorizeRoute
-          path="/Release"
-          component={ReleaseContainer}
-          role={MultiRoles.UserAdmin}
-        />
-        <AuthorizeRoute
-          exact
-          path="/User/Collection"
-          component={CollectionContainer}
-          role={MultiRoles.UserAdmin}
-        />
-        <AuthorizeRoute
-          exact
-          path="/User/Profile"
-          component={ProfileContainer}
-          role={MultiRoles.UserAdmin}
-        />
-         <AuthorizeRoute
-          exact
-          path="/User/AdminPanel"
-          component={AdminPanelContainer}
-          role={Roles.Admin}
-        />
-        <Route
-          path={ApplicationPaths.ApiAuthorizationPrefix}
-          component={ApiAuthorizationRoutes}
-        />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/Marketplace" component={MarketplaceContainer} />
+          <Route
+            exact
+            path="/Authentication/Register"
+            component={RegisterContainer}
+          />
+          <Route
+            exact
+            path="/Authentication/Logout"
+            component={LogoutContainer}
+          />
+          <Route
+            exact
+            path="/Authentication/Logout-Callback"
+            component={LogoutCallbackContainer}
+          />
+          <Route
+            exact
+            path="/Authentication/Login"
+            component={LoginContainer}
+          />
+          <Route
+            exact
+            path="/Authentication/EmailConfirm"
+            component={EmailConfirmContainer}
+          />
+          <Route
+            exact
+            path="/Error/FailedAuthorization"
+            component={FailedAuthorizationContainer}
+          />
+          <Route
+            exact
+            path="/Error/ServerError"
+            component={ServerErrorContainer}
+          />
+          <AuthorizeRoute
+            path="/Releases/AddRelease"
+            component={AddReleaseContainer}
+            role={MultiRoles.UserAdmin}
+          />
+          <AuthorizeRoute
+            path="/Sale"
+            component={SaleContainer}
+            role={MultiRoles.UserAdmin}
+          />
+          <AuthorizeRoute
+            path="/Release"
+            component={ReleaseContainer}
+            role={MultiRoles.UserAdmin}
+          />
+          <AuthorizeRoute
+            exact
+            path="/User/Collection"
+            component={CollectionContainer}
+            role={MultiRoles.UserAdmin}
+          />
+          <AuthorizeRoute
+            exact
+            path="/User/Profile"
+            component={ProfileContainer}
+            role={MultiRoles.UserAdmin}
+          />
+          <AuthorizeRoute
+            exact
+            path="/User/AdminPanel"
+            component={AdminPanelContainer}
+            role={Roles.Admin}
+          />
+          <Route
+            path={ApplicationPaths.ApiAuthorizationPrefix}
+            component={ApiAuthorizationRoutes}
+          />
+          <Route component={PageNotFoundContainer} /> // without path
+        </Switch>
       </Layout>
     );
   }

@@ -4,8 +4,7 @@ import { withRouter } from "react-router-dom";
 import hideModal from "./../functions/hideModal";
 export const NotificationContext = createContext();
 
-
- class NotificationContextProvider extends React.Component {
+class NotificationContextProvider extends React.Component {
   state = {
     messages: [],
     severity: 0
@@ -14,13 +13,16 @@ export const NotificationContext = createContext();
   handleServerNotification = (notificationObj, customMessage) => {
     let severity = 1;
 
-    if(notificationObj.status === 403){
-      hideModal();
-      this.props.history.push("/Authorization/FailedAuthorization");
-    } else if (notificationObj.status >= 400) {
+    if (notificationObj.status >= 400) {
+
+      this.responseRedirect(notificationObj.status);
+
       const errorMessages = [];
 
-      if (typeof notificationObj.data ==="object" && notificationObj.data.errors != undefined) {
+      if (
+        typeof notificationObj.data === "object" &&
+        notificationObj.data.errors != undefined
+      ) {
         const errors = notificationObj.data.errors;
 
         Object.keys(errors).forEach(function(field) {
@@ -29,9 +31,9 @@ export const NotificationContext = createContext();
             id: uuidv4()
           });
         });
-      }else if ((Array.isArray(notificationObj.data))) {
+      } else if (Array.isArray(notificationObj.data)) {
         severity = 2;
-        notificationObj.data.forEach(warn=>{
+        notificationObj.data.forEach(warn => {
           errorMessages.push({
             messageText: warn.description,
             id: uuidv4()
@@ -56,6 +58,7 @@ export const NotificationContext = createContext();
         messages: errorMessages,
         severity
       });
+    
     } else {
       const successMessages = [];
       if (customMessage != undefined) {
@@ -74,6 +77,19 @@ export const NotificationContext = createContext();
         messages: successMessages,
         severity: 3
       });
+    }
+  };
+
+  responseRedirect = statusCode => {
+    
+    hideModal();
+    
+    if (statusCode === 500) {
+      this.props.history.push("/Error/ServerError");
+    } else if (statusCode === 403) {
+      this.props.history.push("/Error/FailedAuthorization");
+    } else if (statusCode === 404) {
+      this.props.history.push("/Error/NotFound");
     }
   };
 
