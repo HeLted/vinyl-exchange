@@ -33,12 +33,12 @@
             return new UploadFileResourceModel { FileId = file.FileGuid, FileName = file.FileName };
         }
 
-        public IEnumerable<UploadFileUtilityModel> GetAllFilesForFormSession(Guid formSessionId)
+        public List<UploadFileUtilityModel> GetAllFilesForFormSession(Guid formSessionId)
         {
             return this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId.ToString(), null);
         }
 
-        public IEnumerable<UploadFileUtilityModel> RemoveAllFilesForFormSession(Guid formSessionId)
+        public List<UploadFileUtilityModel> RemoveAllFilesForFormSession(Guid formSessionId)
         {
             string formSessionIdAsString = formSessionId.ToString();
 
@@ -61,7 +61,7 @@
             }
             else
             {
-                throw new NullReferenceException();
+                throw new NullReferenceException("Session with this key is not set!");
             }
         }
 
@@ -84,7 +84,7 @@
             }
             else
             {
-                throw new NullReferenceException();
+                throw new NullReferenceException("Session with this key is not set!");
             }
         }
     }

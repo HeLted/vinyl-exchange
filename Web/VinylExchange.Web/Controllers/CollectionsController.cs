@@ -29,12 +29,10 @@
         {
             try
             {
-                AddToCollectionResourceModel collectionItemModel = await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                                                    inputModel,
-                                                    releaseId,
-                                                    this.GetUserId(this.User));
-
-                return this.Created(collectionItemModel);
+               return await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
+                                                                 inputModel,
+                                                                 releaseId,
+                                                                 this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
@@ -49,12 +47,9 @@
         {
             try
             {
-                bool doesUserCollectionContainRelease =
-                    await this.collectionsService.DoesUserCollectionContainRelease(
+                return await this.collectionsService.DoesUserCollectionContainRelease(
                         releaseId,
                         this.GetUserId(this.User));
-
-                return doesUserCollectionContainRelease;
             }
             catch (Exception ex)
             {
@@ -90,11 +85,8 @@
         {
             try
             {
-                List<GetUserCollectionResourceModel> userCollection =
-                    await this.collectionsService
-                    .GetUserCollection<GetUserCollectionResourceModel>(this.GetUserId(this.User));
 
-                return userCollection;
+                return await this.collectionsService.GetUserCollection<GetUserCollectionResourceModel>(this.GetUserId(this.User));
             }
             catch (Exception ex)
             {

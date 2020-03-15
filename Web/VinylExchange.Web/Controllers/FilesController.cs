@@ -1,7 +1,8 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
     using System;
-
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
@@ -24,13 +25,11 @@
 
         [HttpDelete]
         [Route("DeleteAll")]
-        public IActionResult DeleteAllFiles(Guid formSessionId)
+        public ActionResult<IEnumerable<UploadFileUtilityModel>> DeleteAllFiles(Guid formSessionId)
         {
             try
-            {
-                this.memoryCacheFileSevice.RemoveAllFilesForFormSession(formSessionId);
-
-                return this.Ok();
+            {                
+                return this.memoryCacheFileSevice.RemoveAllFilesForFormSession(formSessionId);
             }
             catch (Exception ex)
             {
@@ -42,14 +41,11 @@
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult DeleteFile(Guid id, Guid formSessionId)
+        public ActionResult<DeleteFileResourceModel> DeleteFile(Guid id, Guid formSessionId)
         {
             try
-            {
-                DeleteFileResourceModel deletedFileResourceModel =
-                    this.memoryCacheFileSevice.RemoveFile(formSessionId, id);
-
-                return this.Ok(deletedFileResourceModel);
+            {                
+                return this.memoryCacheFileSevice.RemoveFile(formSessionId, id);
             }
             catch (Exception ex)
             {
@@ -60,16 +56,13 @@
         }
 
         [HttpPost]
-        public IActionResult UploadFile(IFormFile file, Guid formSessionId)
+        public ActionResult<UploadFileResourceModel>  UploadFile(IFormFile file, Guid formSessionId)
         {
             try
             {
-                UploadFileUtilityModel fileModel = new UploadFileUtilityModel(file);
+                UploadFileUtilityModel fileModel = new UploadFileUtilityModel(file);                        
 
-                UploadFileResourceModel uploadedFileResourceModel =
-                    this.memoryCacheFileSevice.AddFile(fileModel, formSessionId);
-
-                return this.Ok(uploadedFileResourceModel);
+                return this.memoryCacheFileSevice.AddFile(fileModel, formSessionId);
             }
             catch (Exception ex)
             {

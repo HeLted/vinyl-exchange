@@ -24,13 +24,11 @@
 
         [HttpGet]
         [Route("GetAllTracksForRelease/{id}")]
-        public async Task<IActionResult> GetAllTracksForRelease(Guid id)
+        public async Task<ActionResult<IEnumerable<ReleaseFileResourceModel>>> GetAllTracksForRelease(Guid id)
         {
             try
             {
-                IEnumerable<ReleaseFileResourceModel> tracks = await this.releaseFilesService.GetReleaseTracks(id);
-
-                return this.Ok(tracks);
+                return await this.releaseFilesService.GetReleaseTracks(id);
             }
             catch (Exception ex)
             {

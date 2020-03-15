@@ -22,16 +22,12 @@
             this.loggerService = loggerService;
         }
 
-        [HttpPost]
-        
+        [HttpPost]        
         public async Task<ActionResult<CreateReleaseResourceModel>> Create(CreateReleaseInputModel inputModel, Guid formSessionId)
         {
             try
-            {
-                CreateReleaseResourceModel releaseModel = 
-                    await this.releasesService.CreateRelease<CreateReleaseResourceModel>(inputModel, formSessionId);
-
-                return releaseModel;
+            {     
+                return await this.releasesService.CreateRelease<CreateReleaseResourceModel>(inputModel, formSessionId);
             }
             catch (Exception ex)
             {

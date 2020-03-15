@@ -24,14 +24,11 @@
 
         [HttpGet]
         [Route("GetAllImagesForRelease")]
-        public async Task<IActionResult> GetAllImagesForRelease(Guid releaseId)
+        public async Task<ActionResult<IEnumerable<ReleaseFileResourceModel>>> GetAllImagesForRelease(Guid releaseId)
         {
             try
             {
-                IEnumerable<ReleaseFileResourceModel> releaseImages =
-                    await this.releaseFilesService.GetReleaseImages(releaseId);
-
-                return this.Ok(releaseImages);
+                return await this.releaseFilesService.GetReleaseImages(releaseId);
             }
             catch (Exception ex)
             {
@@ -43,13 +40,11 @@
 
         [HttpGet]
         [Route("GetCoverArtForRelease")]
-        public async Task<IActionResult> GetCoverArtForRelease(Guid releaseId)
+        public async Task<ActionResult<ReleaseFileResourceModel>> GetCoverArtForRelease(Guid releaseId)
         {
             try
-            {
-                ReleaseFileResourceModel releaseCoverArt = await this.releaseFilesService.GetReleaseCoverArt(releaseId);
-
-                return this.Ok(releaseCoverArt);
+            {              
+                return await this.releaseFilesService.GetReleaseCoverArt(releaseId);
             }
             catch (Exception ex)
             {

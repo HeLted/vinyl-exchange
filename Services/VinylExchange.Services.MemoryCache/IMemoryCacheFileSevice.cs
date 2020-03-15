@@ -10,9 +10,9 @@
     {
         UploadFileResourceModel AddFile(UploadFileUtilityModel file, Guid formSessionId);
 
-        IEnumerable<UploadFileUtilityModel> GetAllFilesForFormSession(Guid formSessionId);
+        List<UploadFileUtilityModel> GetAllFilesForFormSession(Guid formSessionId);
 
-        IEnumerable<UploadFileUtilityModel> RemoveAllFilesForFormSession(Guid formSessionId);
+        List<UploadFileUtilityModel> RemoveAllFilesForFormSession(Guid formSessionId);
 
         DeleteFileResourceModel RemoveFile(Guid formSessionId, Guid fileGuid);
     }

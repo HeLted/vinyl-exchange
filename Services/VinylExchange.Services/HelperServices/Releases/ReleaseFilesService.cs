@@ -31,20 +31,20 @@
             this.fileManager = fileManager;
         }
 
-        public async Task<IEnumerable<ReleaseFile>> AddFilesForRelease(Guid releaseId, Guid formSessionId)
+        public async Task<List<ReleaseFile>> AddFilesForRelease(Guid releaseId, Guid formSessionId)
         {
             IEnumerable<UploadFileUtilityModel> uploadFileUtilityModels =
                 this.fileManager.RetrieveFilesFromCache(formSessionId);
 
             IEnumerable<byte[]> filesContent = this.fileManager.GetFilesByteContent(uploadFileUtilityModels);
 
-            IEnumerable<ReleaseFile> releaseFilesModels = this.fileManager.MapFilesToDbObjects<ReleaseFile>(
+            List<ReleaseFile> releaseFilesModels = this.fileManager.MapFilesToDbObjects<ReleaseFile>(
                 uploadFileUtilityModels,
                 releaseId,
                 ForeignKeyForFile,
-                EntityTableName);
+                EntityTableName).ToList();
 
-            releaseFilesModels = this.fileManager.SaveFilesToServer(releaseFilesModels, filesContent);
+            releaseFilesModels = this.fileManager.SaveFilesToServer(releaseFilesModels, filesContent).ToList();
 
             await this.dbContext.ReleaseFiles.AddRangeAsync(releaseFilesModels);
 
@@ -52,24 +52,20 @@
         }
 
         public async Task<ReleaseFileResourceModel> GetReleaseCoverArt(Guid releaseId)
-        {
-            return await this.dbContext.ReleaseFiles
+          => await this.dbContext.ReleaseFiles
                        .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
                        .OrderBy(rf => rf.CreatedOn).To<ReleaseFileResourceModel>().FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<ReleaseFileResourceModel>> GetReleaseImages(Guid releaseId)
-        {
-            return await this.dbContext.ReleaseFiles
+        
+        public async Task<List<ReleaseFileResourceModel>> GetReleaseImages(Guid releaseId)
+          => await this.dbContext.ReleaseFiles
                        .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
                        .OrderBy(rf => rf.CreatedOn).To<ReleaseFileResourceModel>().ToListAsync();
-        }
+       
 
-        public async Task<IEnumerable<ReleaseFileResourceModel>> GetReleaseTracks(Guid releaseId)
-        {
-            return await this.dbContext.ReleaseFiles
+        public async Task<List<ReleaseFileResourceModel>> GetReleaseTracks(Guid releaseId)
+          => await this.dbContext.ReleaseFiles
                        .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Audio)
                        .OrderBy(rf => rf.CreatedOn).To<ReleaseFileResourceModel>().ToListAsync();
-        }
+        
     }
 }

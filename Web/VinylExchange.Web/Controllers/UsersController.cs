@@ -38,7 +38,7 @@
         [HttpPut]
         [Authorize]
         [Route("ChangeUserAvatar")]
-        public async Task<IActionResult> ChangeUserAvatar(IFormFile avatar)
+        public async Task<ActionResult> ChangeUserAvatar(IFormFile avatar)
         {
             try
             {
@@ -56,7 +56,7 @@
         [HttpPost]
         [Authorize]
         [Route("ConfirmEmail")]
-        public async Task<IActionResult> ConfirmEmail(ConfirmEmailInputModel inputModel)
+        public async Task<ActionResult> ConfirmEmail(ConfirmEmailInputModel inputModel)
         {
             try
             {
@@ -81,37 +81,37 @@
         [HttpGet]
         [Authorize]
         [Route("GetUserAvatar/{id}")]
-        public async Task<IActionResult> GetUserAvatar(Guid id)
+        public async Task<ActionResult<GetUserAvatarResourceModel>> GetUserAvatar(Guid id)
         {
-            GetUserAvatarResourceModel userAvatar = await this.usersAvatarService.GetUserAvatar(id);
+            GetUserAvatarResourceModel userAvatarModel = await this.usersAvatarService.GetUserAvatar(id);
 
-            if (userAvatar == null)
+            if (userAvatarModel == null)
             {
                 return this.NotFound();
             }
 
-            return this.Ok(userAvatar);
+            return userAvatarModel;
         }
 
         [HttpGet]
         [Authorize]
         [Route("GetCurrentUserAvatar")]
-        public async Task<IActionResult> GetUserAvatar()
+        public async Task<ActionResult<GetUserAvatarResourceModel>> GetUserAvatar()
         {
-            GetUserAvatarResourceModel userAvatar =
+            GetUserAvatarResourceModel userAvatarModel =
                 await this.usersAvatarService.GetUserAvatar(this.GetUserId(this.User));
 
-            if (userAvatar == null)
+            if (userAvatarModel == null)
             {
                 return this.NotFound();
             }
 
-            return this.Ok(userAvatar);
+            return userAvatarModel;
         }
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login(LoginUserInputModel inputModel)
+        public async Task<ActionResult> Login(LoginUserInputModel inputModel)
         {
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
@@ -137,7 +137,7 @@
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register(RegisterUserInputModel inputModel)
+        public async Task<ActionResult> Register(RegisterUserInputModel inputModel)
         {
             try
             {
