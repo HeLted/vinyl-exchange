@@ -1,16 +1,13 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Net;
     using System.Security.Claims;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
- 
+
 
     [Route("api/[controller]")]
-    [ApiController]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [ApiController]   
     public class ApiController : ControllerBase
     {
         protected Guid GetUserId(ClaimsPrincipal user)

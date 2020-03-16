@@ -79,7 +79,6 @@
         }
 
         [HttpGet]
-        [Authorize]
         [Route("GetUserAvatar/{id}")]
         public async Task<ActionResult<GetUserAvatarResourceModel>> GetUserAvatar(Guid id)
         {

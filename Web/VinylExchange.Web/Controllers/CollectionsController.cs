@@ -42,7 +42,7 @@
         }
 
         [HttpGet]
-        [Route("DoesUserCollectionContainRelease")]
+        [Route("DoesUserCollectionContainRelease")]      
         public async Task<ActionResult<bool>> DoesUserCollectionContainRelease(Guid releaseId)
         {
             try

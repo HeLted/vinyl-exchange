@@ -9,17 +9,17 @@ function SaleLogComponent(props) {
       <li key={logObj.id}>
         <div className="row">
           <div className="col-3">
-            <div class="alert alert-secondary" role="alert">
+            <div className="alert alert-secondary" role="alert">
               {new Date(logObj.createdOn).toLocaleString()}
             </div>
           </div>
           <div className="col-1">
-            <div class="alert alert-outline-primary" role="alert">
+            <div className="alert alert-outline-primary" role="alert">
               <FontAwesomeIcon icon={faArrowRight} />
             </div>
           </div>
           <div className="col-8">
-            <div class="alert alert-primary" role="alert">
+            <div className="alert alert-primary" role="alert">
               {logObj.logContent}
             </div>
           </div>

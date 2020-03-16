@@ -9,7 +9,7 @@ import { NotificationContext } from "./../../../../contexts/NotificationContext"
 import axios from "axios";
 import getAntiForgeryAxiosConfig from "./../../../../functions/getAntiForgeryAxiosConfig";
 import hideModal from "./../../../../functions/hideModal";
-import {withRouter} from "react-router-dom"
+import { withRouter } from "react-router-dom";
 
 class AddSalePopupContainer extends Component {
   constructor() {
@@ -35,7 +35,7 @@ class AddSalePopupContainer extends Component {
     });
   }
 
-  handleLoadUserAddresses = () =>{
+  handleLoadUserAddresses = () => {
     this.setState({ isLoading: true });
     axios
       .get(
@@ -62,36 +62,36 @@ class AddSalePopupContainer extends Component {
           "Failed to load user addresses!"
         );
       });
-  }
+  };
 
   handleLoadColletionItemData = () => {
-    if(this.state.collectionItemId != undefined){
+    if (this.state.collectionItemId != undefined) {
       axios
-      .get(
-        Url.api +
-          Controllers.collections.name +
-          Url.slash +
-          this.state.collectionItemId
-      )
-      .then(response => {
-        const data = response.data;
-        this.setState({
-          descriptionInput: data.description,
-          vinylGradeInput: data.vinylGrade.toString(),
-          sleeveGradeInput: data.sleeveGrade.toString(),
-          priceInput: 0 // on every add sale modal expand setting price to 0
+        .get(
+          Url.api +
+            Controllers.collections.name +
+            Url.slash +
+            this.state.collectionItemId
+        )
+        .then(response => {
+          const data = response.data;
+          this.setState({
+            descriptionInput: data.description,
+            vinylGradeInput: data.vinylGrade.toString(),
+            sleeveGradeInput: data.sleeveGrade.toString(),
+            priceInput: 0 // on every add sale modal expand setting price to 0
+          });
+          this.context.handleAppNotification(
+            "Loaded collection item data into form",
+            5
+          );
+        })
+        .catch(error => {
+          this.context.handleServerNotification(
+            error.response,
+            "Failed to load collection item info"
+          );
         });
-        this.context.handleAppNotification(
-          "Loaded collection item data into form",
-          5
-        );
-      })
-      .catch(error => {
-        this.context.handleServerNotification(
-          error.response,
-          "Failed to load collection item info"
-        );
-      });
     }
   };
 
@@ -109,7 +109,7 @@ class AddSalePopupContainer extends Component {
       vinylGrade: this.state.vinylGradeInput,
       sleeveGrade: this.state.sleeveGradeInput,
       price: this.state.priceInput,
-      shipsFromAddressId : this.state.shipsFromAddressSelectInput
+      shipsFromAddressId: this.state.shipsFromAddressSelectInput
     };
 
     axios
@@ -131,32 +131,41 @@ class AddSalePopupContainer extends Component {
       });
   };
 
-  handleFlushModal = () =>{
+  handleFlushModal = () => {
     hideModal();
-  }
+  };
 
   render() {
     return (
       <AddSalePopupComponent
+        key={this.state.collectionItemId}
         data={{
-          collectionItemId: this.state.collectionItemId,
+          collectionItemId:
+            this.state.collectionItemId === ""
+              ? Math.random()
+              : this.state.collectionItemId,
           descriptionInput: this.state.descriptionInput,
           vinylGradeInput: this.state.vinylGradeInput,
           sleeveGradeInput: this.state.sleeveGradeInput,
           priceInput: this.state.priceInput,
-          userAddresses : this.state.userAddresses,
-          shipsFromAddressSelectInput:this.state.shipsFromAddressSelectInput
+          userAddresses: this.state.userAddresses,
+          shipsFromAddressSelectInput: this.state.shipsFromAddressSelectInput
         }}
         functions={{
           handleOnChange: this.handleOnChange,
           handleOnSubmit: this.handleOnSubmit,
           handleLoadColletionItemData: this.handleLoadColletionItemData,
-          handleLoadUserAddresses : this.handleLoadUserAddresses,
-          handleFlushModal:this.handleFlushModal
+          handleLoadUserAddresses: this.handleLoadUserAddresses,
+          handleFlushModal: this.handleFlushModal
         }}
       />
     );
   }
 }
 
-export default withRouter(AddSalePopupContainer);
+
+function AddSalePopupContainerWrapper(props){
+  return(<AddSalePopupContainer {...props}/>)
+}
+
+export default withRouter(AddSalePopupContainerWrapper);

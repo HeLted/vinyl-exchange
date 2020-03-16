@@ -1,11 +1,9 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-
+    using System;
+    using System.Collections.Generic;
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MemoryCache;
     using VinylExchange.Web.Models.ResourceModels.File;

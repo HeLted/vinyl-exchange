@@ -66,8 +66,7 @@
             int releasesToSkip)
         {
             try
-            {                              
-               
+            {
                 return await this.releasesService
                     .GetReleases<GetReleasesResourceModel>(searchTerm, filterGenreId ,styleIds, releasesToSkip); 
             }

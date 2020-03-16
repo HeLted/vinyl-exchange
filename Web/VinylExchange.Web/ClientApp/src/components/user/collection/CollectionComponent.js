@@ -16,7 +16,7 @@ function CollectionCoponent(props) {
       >
         <div className="col-12 ">
           <img
-            class="img-thumbnail"
+            className="img-thumbnail"
             src={props.data.coverArt}
             height="150px"
             width="150px"
@@ -47,7 +47,7 @@ function CollectionCoponent(props) {
           <div className="row text-center justify-content-center border-left border-right border-top border-bottom">
             <div className="col-6 border-right p-0">
               <div
-                class="btn-group"
+                className="btn-group"
                 role="group"
                 aria-label="Basic example"
               ></div>

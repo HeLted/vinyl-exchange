@@ -14,7 +14,7 @@ function AddSalePopupFormButton(props) {
         );
         props.functions.handleLoadUserAddresses();
       }}
-      data-target="#addSaleModal"
+      data-target={"#addSaleModal" + props.data.collectionItemId}
     >
       <FontAwesomeIcon icon={faMoneyCheck} />
     </button>

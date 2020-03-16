@@ -37,7 +37,7 @@ function UserSalesComponent(props) {
   });
 
   return (
-    <div class="table-responsive-md table-responsive-sm">
+    <div className="table-responsive-md table-responsive-sm">
     <table className="table-hover text-center" style={{ width: "100%" }}>
       <thead className="border property-text-nm">
         <tr>

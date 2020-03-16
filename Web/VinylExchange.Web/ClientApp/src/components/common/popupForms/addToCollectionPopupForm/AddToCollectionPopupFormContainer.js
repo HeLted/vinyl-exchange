@@ -40,7 +40,7 @@ class AddtoColletionPopupFormContainer extends Component {
         this.setState({
           releaseId: this.props.data.releaseId,
           isReleaseAlreadyInUserCollection:
-            response.data.doesUserCollectionContainRelease
+            response.data
         });
       })
       .catch(error => {

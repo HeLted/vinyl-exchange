@@ -15,9 +15,9 @@
     using VinylExchange.Web.Models.InputModels.Sales;
     using VinylExchange.Web.Models.ResourceModels.Sales;
     using VinylExchange.Web.Models.Utility;
-    using static VinylExchange.Common.Constants.RolesConstants;
 
-    [Authorize(Roles= AdminUser)]
+
+    [Authorize]
     public class SalesController : ApiController
     {
         private readonly ILoggerService loggerService;
@@ -241,6 +241,7 @@
 
         [HttpGet]
         [Route("GetAllSalesForRelease/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<GetAllSalesForReleaseResouceModel>>> GetAllSalesForRelease(Guid id)
         {
             try

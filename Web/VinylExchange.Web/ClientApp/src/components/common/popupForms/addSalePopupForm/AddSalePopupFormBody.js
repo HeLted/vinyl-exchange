@@ -8,7 +8,7 @@ import MoneyInput from "./../../inputComponents/MoneyInput";
 
 function AddSalePopupBody(props) {
   return (
-    <div className="modal fade" tabIndex="-1" id="addSaleModal" role="dialog">
+    <div className="modal fade" tabIndex="-1" id={"addSaleModal" + props.data.collectionItemId} role="dialog">
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header">

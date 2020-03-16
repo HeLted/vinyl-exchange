@@ -21,7 +21,6 @@ class RemoveSaleModalContainer extends Component {
     axios
       .delete(
         Url.api + Controllers.sales.name + Url.slash+this.props.data.saleId,
-
         getAntiForgeryAxiosConfig()
       )
       .then(response => {

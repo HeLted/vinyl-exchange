@@ -91,7 +91,7 @@ class CollectionContainer extends Component {
     return this.state.isLoading ? (
       <PageSpinner />
     ) : (
-      <div className="collection-container container-fluid">
+      <div className="collection-container container-fluid" style={{padding:"40px"}}>
         <div className="row border text-center">
           <div className="col-12">
             <h2 className="property-text">User Collection</h2>
@@ -99,7 +99,7 @@ class CollectionContainer extends Component {
         </div>
         <div
           className="row border justify"
-          style={{ padding: "100px", height: "900px", overflowY: "scroll" }}
+          style={{ padding: "100px", height: "1200px", overflowY: "scroll" }}
         >
           {collectionComponents}
         </div>
