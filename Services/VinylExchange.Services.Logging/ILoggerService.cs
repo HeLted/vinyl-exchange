@@ -1,7 +1,11 @@
 ﻿namespace VinylExchange.Services.Logging
 {
+    #region
+
     using System;
     using System.Runtime.CompilerServices;
+
+    #endregion
 
     public interface ILoggerService
     {

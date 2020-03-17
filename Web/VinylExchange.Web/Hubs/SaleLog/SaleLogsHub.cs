@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Web.Hubs.SaleLog
 {
+    #region
+
     using System;
     using System.Threading.Tasks;
 
@@ -9,6 +11,8 @@
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Web.Models.Utility;
+
+    #endregion
 
     [Authorize]
     public class SaleLogsHub : Hub<ISaleLogsClient>
@@ -25,9 +29,9 @@
 
         public async Task LoadLogHistory(Guid saleId)
         {
-            GetSaleInfoUtilityModel sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
+            var sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
 
-            Guid userId = Guid.Parse(this.GetUserId());
+            var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
             {
@@ -44,9 +48,9 @@
         {
             var subscriberGroupName = saleId.ToString();
 
-            GetSaleInfoUtilityModel sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
+            var sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
 
-            Guid userId = Guid.Parse(this.GetUserId());
+            var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
             {

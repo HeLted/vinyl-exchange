@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Data
 {
+    #region
+
     using System;
 
     using IdentityServer4.EntityFramework.Options;
@@ -9,6 +11,8 @@
 
     using VinylExchange.Data.Models;
 
+    #endregion
+
     public class VinylExchangeDbContext : KeyApiAuthorizationDbContext<VinylExchangeUser, VinylExchangeRole, Guid>
     {
         public VinylExchangeDbContext(
@@ -17,8 +21,6 @@
             : base(options, operationalStoreOptions)
         {
         }
-
-      
 
         public DbSet<Address> Addresses { get; set; }
 

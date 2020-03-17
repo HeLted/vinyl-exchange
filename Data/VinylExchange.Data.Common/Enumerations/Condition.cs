@@ -14,6 +14,6 @@
 
         NearMint = 5,
 
-        Mint = 6,
+        Mint = 6
     }
 }

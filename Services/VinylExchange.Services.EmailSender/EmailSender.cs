@@ -1,9 +1,13 @@
 ﻿namespace VinylExchange.Services.EmaiSender
 {
+    #region
+
     using System.Threading.Tasks;
 
     using SendGrid;
     using SendGrid.Helpers.Mail;
+
+    #endregion
 
     public class EmailSender : IEmailSender
     {
@@ -22,13 +26,13 @@
 
         public async Task Execute(string apiKey, string subject, string message, string email)
         {
-            SendGridClient client = new SendGridClient(apiKey);
-            EmailAddress from = new EmailAddress(SenderEmail, NameOfTheSender);
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress(SenderEmail, NameOfTheSender);
 
-            EmailAddress to = new EmailAddress(email);
-            string plainTextContent = string.Empty;
-            string htmlContent = message;
-            SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var to = new EmailAddress(email);
+            var plainTextContent = string.Empty;
+            var htmlContent = message;
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             await client.SendEmailAsync(msg);
         }
 

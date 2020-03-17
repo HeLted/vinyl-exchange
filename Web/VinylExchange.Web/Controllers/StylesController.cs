@@ -1,16 +1,21 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using VinylExchange.Common.Constants;
+    using VinylExchange.Services.Data.MainServices.Styles;
     using VinylExchange.Services.Logging;
-    using VinylExchange.Services.MainServices.Styles;
     using VinylExchange.Web.Models.InputModels.Styles;
     using VinylExchange.Web.Models.ResourceModels.Styles;
-    using static VinylExchange.Common.Constants.RolesConstants;
+
+    #endregion
 
     public class StylesController : ApiController
     {
@@ -22,6 +27,21 @@
         {
             this.stylesService = stylesService;
             this.loggerService = loggerService;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
+        public async Task<ActionResult<CreateStyleResourceModel>> Create(CreateStyleInputModel inputModel)
+        {
+            try
+            {
+                return this.Created(await this.stylesService.CreateStyle<CreateStyleResourceModel>(inputModel));
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
         }
 
         [HttpGet]
@@ -39,24 +59,9 @@
             }
         }
 
-        [HttpPost]
-        [Authorize(Roles = Admin)]
-        public async Task<ActionResult<CreateStyleResourceModel>> Create(CreateStyleInputModel inputModel)
-        {
-            try
-            {
-                return this.Created(await this.stylesService.CreateStyle<CreateStyleResourceModel>(inputModel));
-            }
-            catch (Exception ex)
-            {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
-            }
-        }
-
         [HttpDelete]
         [Route("{id}")]
-        [Authorize(Roles = Admin)]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult<RemoveStyleResourceModel>> Remove(int id)
         {
             try

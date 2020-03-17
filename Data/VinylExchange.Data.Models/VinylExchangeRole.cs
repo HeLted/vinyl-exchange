@@ -1,10 +1,14 @@
 ﻿namespace VinylExchange.Data.Models
 {
+    #region
+
     using System;
 
     using Microsoft.AspNetCore.Identity;
 
     using VinylExchange.Data.Common.Models;
+
+    #endregion
 
     public class VinylExchangeRole : IdentityRole<Guid>, IAuditInfo, IDeletableEntity
     {

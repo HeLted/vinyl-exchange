@@ -1,9 +1,13 @@
 ﻿namespace VinylExchange.Services.Logging
 {
+    #region
+
     using System;
     using System.Runtime.CompilerServices;
 
     using Microsoft.Extensions.Logging;
+
+    #endregion
 
     public class LoggerService : ILoggerService
     {
@@ -20,7 +24,7 @@
             [CallerMemberName] string callerMemberName = null)
         {
             this.logger.LogError(
-                $"{DateTime.Now} -- Unhandled Exception at {callerFilePath}--{callerMemberName}  --> {ex.ToString()}");
+                $"{DateTime.Now} -- Unhandled Exception at {callerFilePath}--{callerMemberName}  --> {ex}");
         }
     }
 }

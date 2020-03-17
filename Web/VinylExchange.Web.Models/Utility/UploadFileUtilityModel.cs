@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Web.Models.Utility
 {
+    #region
+
     using System;
     using System.IO;
 
@@ -7,6 +9,8 @@
 
     using VinylExchange.Common.Constants;
     using VinylExchange.Common.Enumerations;
+
+    #endregion
 
     public class UploadFileUtilityModel
     {

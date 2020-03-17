@@ -1,10 +1,14 @@
 ﻿namespace VinylExchange.Web.Models.Utility
 {
+    #region
+
     using System;
 
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
+
+    #endregion
 
     public class GetSaleInfoUtilityModel : IMapFrom<Sale>
     {

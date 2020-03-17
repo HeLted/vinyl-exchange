@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Services.Authentication
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -9,12 +11,13 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
 
+    using VinylExchange.Common.Constants;
     using VinylExchange.Data.Models;
     using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Services.EmaiSender;
     using VinylExchange.Services.Mapping;
-    using static VinylExchange.Common.Constants.RolesConstants;
-    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
+
+    #endregion
 
     public class UsersService : IUsersService
     {
@@ -42,15 +45,14 @@
 
         public async Task<IdentityResult> ConfirmUserEmail(ConfirmEmailInputModel inputModel)
         {
-            VinylExchangeUser user = await this.userManager.FindByIdAsync(inputModel.UserId.ToString());
+            var user = await this.userManager.FindByIdAsync(inputModel.UserId.ToString());
 
             if (user == null)
             {
-                throw new NullReferenceException(UserCannotBeNull);
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
             }
 
-            IdentityResult identityResult =
-                await this.userManager.ConfirmEmailAsync(user, inputModel.EmailConfirmToken);
+            var identityResult = await this.userManager.ConfirmEmailAsync(user, inputModel.EmailConfirmToken);
 
             return identityResult;
         }
@@ -59,53 +61,54 @@
         {
             this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            SignInResult identityResult = await this.signInManager.PasswordSignInAsync(
-                                              inputModel.Username,
-                                              inputModel.Password,
-                                              inputModel.RememberMe,
-                                              lockoutOnFailure: false);
+            var identityResult = await this.signInManager.PasswordSignInAsync(
+                                     inputModel.Username,
+                                     inputModel.Password,
+                                     inputModel.RememberMe,
+                                     lockoutOnFailure: false);
 
             return identityResult;
         }
 
         public async Task<IdentityResult> RegisterUser(RegisterUserInputModel inputModel)
         {
-            VinylExchangeUser user = inputModel.To<VinylExchangeUser>();
+            var user = inputModel.To<VinylExchangeUser>();
 
             user.PasswordHash = this.userManager.PasswordHasher.HashPassword(user, inputModel.Password);
 
-            IdentityResult identityResult = await this.userManager.CreateAsync(user);
+            var identityResult = await this.userManager.CreateAsync(user);
 
-            await this.userManager.AddToRoleAsync(user, User);
-
+            await this.userManager.AddToRoleAsync(user, Roles.User);
 
             return identityResult;
         }
 
         public async Task SendConfirmEmail(Guid userId)
         {
-            VinylExchangeUser user = await this.userManager.FindByIdAsync(userId.ToString());
+            var user = await this.userManager.FindByIdAsync(userId.ToString());
 
             if (user == null)
             {
-                throw new NullReferenceException(UserCannotBeNull);
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
             }
 
-            await this.ConstructConfirmationEmailContent(user);
+            var emailContent = await this.ConstructConfirmationEmailContent(user);
+
+            await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Confirmation Email", emailContent);
         }
 
         private async Task<string> ConstructConfirmationEmailContent(VinylExchangeUser user)
         {
-            string emailConfirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+            var emailConfirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            HttpRequest request = this.contextAccessor.HttpContext.Request;
+            var request = this.contextAccessor.HttpContext.Request;
 
-            string emailConfirmationUrl = request.Scheme + "://" + request.Host
-                + $"/Authentication/EmailConfirm?cofirmToken={emailConfirmationToken}&userId={user.Id}";
+            var emailConfirmationUrl = request.Scheme + "://" + request.Host
+                                       + $"/Authentication/EmailConfirm?cofirmToken={emailConfirmationToken}&userId={user.Id}";
 
-            string confirmEmailHtmlContent =
+            var confirmEmailHtmlContent =
                 $@"<h1>Confirm Your Vinyl Exchange Account</h1>.Follow This <a href=""{emailConfirmationUrl}"">Link</a>";
-            
+
             return confirmEmailHtmlContent;
         }
     }

@@ -1,13 +1,19 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
+    #region
+
     using System;
     using System.Collections.Generic;
+
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MemoryCache;
     using VinylExchange.Web.Models.ResourceModels.File;
     using VinylExchange.Web.Models.Utility;
+
+    #endregion
 
     public class FilesController : ApiController
     {
@@ -26,7 +32,7 @@
         public ActionResult<IEnumerable<UploadFileUtilityModel>> DeleteAllFiles(Guid formSessionId)
         {
             try
-            {                
+            {
                 return this.memoryCacheFileSevice.RemoveAllFilesForFormSession(formSessionId);
             }
             catch (Exception ex)
@@ -42,7 +48,7 @@
         public ActionResult<DeleteFileResourceModel> DeleteFile(Guid id, Guid formSessionId)
         {
             try
-            {                
+            {
                 return this.memoryCacheFileSevice.RemoveFile(formSessionId, id);
             }
             catch (Exception ex)
@@ -54,11 +60,11 @@
         }
 
         [HttpPost]
-        public ActionResult<UploadFileResourceModel>  UploadFile(IFormFile file, Guid formSessionId)
+        public ActionResult<UploadFileResourceModel> UploadFile(IFormFile file, Guid formSessionId)
         {
             try
             {
-                UploadFileUtilityModel fileModel = new UploadFileUtilityModel(file);                        
+                var fileModel = new UploadFileUtilityModel(file);
 
                 return this.memoryCacheFileSevice.AddFile(fileModel, formSessionId);
             }

@@ -1,9 +1,14 @@
-﻿namespace VinylExchange.Services.MainServices.Releases
+﻿namespace VinylExchange.Services.Data.MainServices.Releases
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using VinylExchange.Web.Models.InputModels.Releases;
+
+    #endregion
 
     public interface IReleasesService
     {

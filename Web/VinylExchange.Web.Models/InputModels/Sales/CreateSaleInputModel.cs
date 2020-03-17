@@ -1,11 +1,15 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Sales
 {
+    #region
+
     using System;
     using System.ComponentModel.DataAnnotations;
 
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
+
+    #endregion
 
     public class CreateSaleInputModel : IMapTo<Sale>
     {
@@ -21,7 +25,7 @@
 
         [Required]
         public Guid? ShipsFromAddressId { get; set; }
-     
+
         [Required]
         public Condition SleeveGrade { get; set; }
 

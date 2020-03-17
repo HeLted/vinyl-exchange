@@ -1,10 +1,14 @@
 ﻿namespace VinylExchange.Services.MemoryCache
 {
+    #region
+
     using System;
     using System.Collections.Generic;
 
     using VinylExchange.Web.Models.ResourceModels.File;
     using VinylExchange.Web.Models.Utility;
+
+    #endregion
 
     public interface IMemoryCacheFileSevice
     {

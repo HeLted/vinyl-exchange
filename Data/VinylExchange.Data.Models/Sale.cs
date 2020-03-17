@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Data.Models
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -7,6 +9,8 @@
 
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Common.Models;
+
+    #endregion
 
     public class Sale : BaseDeletableModel
     {

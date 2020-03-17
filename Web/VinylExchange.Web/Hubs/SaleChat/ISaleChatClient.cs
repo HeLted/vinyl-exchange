@@ -1,9 +1,13 @@
 ﻿namespace VinylExchange.Web.Hubs.SaleChat
 {
+    #region
+
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using VinylExchange.Web.Models.ResourceModels.SaleMessages;
+
+    #endregion
 
     public interface ISaleChatClient
     {

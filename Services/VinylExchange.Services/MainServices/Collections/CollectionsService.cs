@@ -1,27 +1,28 @@
-﻿namespace VinylExchange.Services.MainServices.Collections
+﻿namespace VinylExchange.Services.Data.MainServices.Collections
 {
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.HelperServices.Releases;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Collections;
+
+    #endregion
 
     public class CollectionsService : ICollectionsService
     {
         private readonly VinylExchangeDbContext dbContext;
 
-        private readonly IReleaseFilesService releaseFileService;
-
-        public CollectionsService(VinylExchangeDbContext dbContext, IReleaseFilesService releaseFileService)
+        public CollectionsService(VinylExchangeDbContext dbContext)
         {
             this.dbContext = dbContext;
-            this.releaseFileService = releaseFileService;
         }
 
         public async Task<TModel> AddToCollection<TModel>(
@@ -29,48 +30,34 @@
             Guid releaseId,
             Guid userId)
         {
-            CollectionItem collectionItem = inputModel.To<CollectionItem>();
+            var collectionItem = inputModel.To<CollectionItem>();
 
             collectionItem.ReleaseId = releaseId;
             collectionItem.UserId = userId;
 
-            EntityEntry<CollectionItem> trackedCollectionItem =
-                await this.dbContext.Collections.AddAsync(collectionItem);
+            var trackedCollectionItem = await this.dbContext.Collections.AddAsync(collectionItem);
 
             await this.dbContext.SaveChangesAsync();
 
             return trackedCollectionItem.Entity.To<TModel>();
         }
 
-        public async Task<bool> DoesUserCollectionContainRelease(Guid releaseId, Guid userId)
-        {
-            return await this.dbContext.Collections.Where(ci => ci.ReleaseId == releaseId && ci.UserId == userId)
-                       .CountAsync() > 0;
-        }
+        public async Task<bool> DoesUserCollectionContainRelease(Guid releaseId, Guid userId) =>
+            await this.dbContext.Collections.Where(ci => ci.ReleaseId == releaseId && ci.UserId == userId).CountAsync()
+            > 0;
 
-        public async Task<TModel> GetCollectionItem<TModel>(Guid collectionItemId)
-        {
-            return await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId)
-                       .To<TModel>().FirstOrDefaultAsync();
-        }
+        public async Task<TModel> GetCollectionItem<TModel>(Guid collectionItemId) =>
+            await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId).To<TModel>().FirstOrDefaultAsync();
 
-        public async Task<TModel> GetCollectionItemInfo<TModel>(Guid collectionItemId)
-        {
-            return await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId)
-                       .To<TModel>().FirstOrDefaultAsync();
-        }
+        public async Task<TModel> GetCollectionItemInfo<TModel>(Guid collectionItemId) =>
+            await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId).To<TModel>().FirstOrDefaultAsync();
 
-        public async Task<List<TModel>> GetUserCollection<TModel>(Guid userId)
-            => await this.dbContext.Collections.Where(ci => ci.UserId == userId)
-                                                                       .To<TModel>()
-                                                                       .ToListAsync();
+        public async Task<List<TModel>> GetUserCollection<TModel>(Guid userId) =>
+            await this.dbContext.Collections.Where(ci => ci.UserId == userId).To<TModel>().ToListAsync();
 
-        
-        
         public async Task<TModel> RemoveCollectionItem<TModel>(Guid collectionItemId)
         {
-            CollectionItem collectionItem =
-                await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItemId);
+            var collectionItem = await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItemId);
 
             if (collectionItem == null)
             {
@@ -79,7 +66,6 @@
 
             this.dbContext.Collections.Remove(collectionItem);
             await this.dbContext.SaveChangesAsync();
-           
 
             return collectionItem.To<TModel>();
         }

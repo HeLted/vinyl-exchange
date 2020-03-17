@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Services.Data.HelperServices.Sales.SaleLogs
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -13,6 +15,8 @@
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.SaleLogs;
 
+    #endregion
+
     public class SaleLogsService : ISaleLogsService
     {
         private readonly VinylExchangeDbContext dbContext;
@@ -24,7 +28,7 @@
 
         public async Task<AddLogToSaleResourceModel> AddLogToSale(Guid saleId, SaleLogs logType)
         {
-            Sale sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
+            var sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
 
             if (sale == null)
             {
@@ -50,13 +54,13 @@
                 case SaleLogs.ItemRecieved:
                     logMessage = "Item Recieved.Sale Complete!";
                     break;
-                         case SaleLogs.SaleEdit:
+                case SaleLogs.SaleEdit:
                     logMessage = "Seller edited sale.";
                     break;
             }
 
-            AddLogToSaleResourceModel saleLog =
-                (await this.dbContext.SaleLogs.AddAsync(new SaleLog() { Content = logMessage, SaleId = saleId })).Entity
+            var saleLog =
+                (await this.dbContext.SaleLogs.AddAsync(new SaleLog { Content = logMessage, SaleId = saleId })).Entity
                 .To<AddLogToSaleResourceModel>();
 
             await this.dbContext.SaveChangesAsync();

@@ -1,6 +1,10 @@
 ﻿namespace VinylExchange.Models.InputModels.Users
 {
+    #region
+
     using System.ComponentModel.DataAnnotations;
+
+    #endregion
 
     public class LoginUserInputModel
     {

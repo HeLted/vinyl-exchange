@@ -1,8 +1,12 @@
 ﻿namespace VinylExchange.Data.Migrations
 {
+    #region
+
     using System;
 
     using Microsoft.EntityFrameworkCore.Migrations;
+
+    #endregion
 
     public partial class RemovedShops : Migration
     {
@@ -20,15 +24,15 @@
                 name: "Shops",
                 columns: table => new
                                       {
-                                          Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                                          Id = table.Column<Guid>(type: "uniqueidentifier"),
                                           Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                                           Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                                          CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                                          CreatedOn = table.Column<DateTime>(type: "datetime2"),
                                           DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                                          IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                                          IsDeleted = table.Column<bool>(type: "bit"),
                                           ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                                          Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                                          ShopType = table.Column<int>(type: "int", nullable: false),
+                                          Name = table.Column<string>(type: "nvarchar(max)"),
+                                          ShopType = table.Column<int>(type: "int"),
                                           Town = table.Column<string>(type: "nvarchar(max)", nullable: true),
                                           WebAddress = table.Column<string>(type: "nvarchar(max)", nullable: true)
                                       },
@@ -38,12 +42,12 @@
                 name: "ShopFiles",
                 columns: table => new
                                       {
-                                          Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                                          CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                                          FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                                          FileType = table.Column<int>(type: "int", nullable: false),
-                                          Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                                          ShopId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                                          Id = table.Column<Guid>(type: "uniqueidentifier"),
+                                          CreatedOn = table.Column<DateTime>(type: "datetime2"),
+                                          FileName = table.Column<string>(type: "nvarchar(max)"),
+                                          FileType = table.Column<int>(type: "int"),
+                                          Path = table.Column<string>(type: "nvarchar(max)"),
+                                          ShopId = table.Column<Guid>(type: "uniqueidentifier")
                                       },
                 constraints: table =>
                     {

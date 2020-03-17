@@ -1,6 +1,10 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.File
 {
+    #region
+
     using System;
+
+    #endregion
 
     public class DeleteFileResourceModel
     {

@@ -1,10 +1,14 @@
 ﻿namespace VinylExchange.Data.Seeding
 {
+    #region
+
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
 
     using VinylExchange.Data.Models;
+
+    #endregion
 
     public class UserSeeder
     {
@@ -19,10 +23,7 @@
         {
             if (await this.userManager.FindByNameAsync("sysadmin") == null)
             {
-                VinylExchangeUser admin = new VinylExchangeUser()
-                                              {
-                                                  UserName = "sysadmin", Email = "sysadmin@vinylexchange.com",
-                                              };
+                var admin = new VinylExchangeUser { UserName = "sysadmin", Email = "sysadmin@vinylexchange.com" };
 
                 admin.PasswordHash = this.userManager.PasswordHasher.HashPassword(admin, "aphextwindrukqs22");
 

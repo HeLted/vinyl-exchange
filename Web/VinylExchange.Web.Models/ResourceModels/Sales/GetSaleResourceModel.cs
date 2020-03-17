@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.Sales
 {
+    #region
+
     using System;
 
     using AutoMapper;
@@ -7,6 +9,8 @@
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
+
+    #endregion
 
     public class GetSaleResourceModel : IMapFrom<Sale>, IHaveCustomMappings
     {

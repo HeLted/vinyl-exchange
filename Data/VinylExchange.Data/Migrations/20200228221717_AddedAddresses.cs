@@ -1,8 +1,12 @@
 ﻿namespace VinylExchange.Data.Migrations
 {
+    #region
+
     using System;
 
     using Microsoft.EntityFrameworkCore.Migrations;
+
+    #endregion
 
     public partial class AddedAddresses : Migration
     {
@@ -98,12 +102,12 @@
                 name: "Addresses",
                 columns: table => new
                                       {
-                                          Id = table.Column<Guid>(nullable: false),
-                                          Country = table.Column<string>(maxLength: 40, nullable: false),
-                                          Town = table.Column<string>(maxLength: 40, nullable: false),
-                                          PostalCode = table.Column<string>(maxLength: 40, nullable: false),
-                                          FullAddress = table.Column<string>(maxLength: 300, nullable: false),
-                                          UserId = table.Column<Guid>(nullable: false)
+                                          Id = table.Column<Guid>(),
+                                          Country = table.Column<string>(maxLength: 40),
+                                          Town = table.Column<string>(maxLength: 40),
+                                          PostalCode = table.Column<string>(maxLength: 40),
+                                          FullAddress = table.Column<string>(maxLength: 300),
+                                          UserId = table.Column<Guid>()
                                       },
                 constraints: table =>
                     {

@@ -1,8 +1,12 @@
 ﻿namespace VinylExchange.Data.Migrations
 {
+    #region
+
     using System;
 
     using Microsoft.EntityFrameworkCore.Migrations;
+
+    #endregion
 
     public partial class AddedSaleMessages : Migration
     {
@@ -17,11 +21,11 @@
                 name: "SaleMessages",
                 columns: table => new
                                       {
-                                          Id = table.Column<Guid>(nullable: false),
-                                          Content = table.Column<string>(maxLength: 150, nullable: false),
-                                          SaleId = table.Column<Guid>(nullable: false),
-                                          UserId = table.Column<Guid>(nullable: false),
-                                          CreatedOn = table.Column<DateTime>(nullable: false),
+                                          Id = table.Column<Guid>(),
+                                          Content = table.Column<string>(maxLength: 150),
+                                          SaleId = table.Column<Guid>(),
+                                          UserId = table.Column<Guid>(),
+                                          CreatedOn = table.Column<DateTime>(),
                                           ModifiedOn = table.Column<DateTime>(nullable: true)
                                       },
                 constraints: table =>

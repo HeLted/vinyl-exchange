@@ -1,8 +1,12 @@
 ﻿namespace VinylExchange.Data.Migrations
 {
+    #region
+
     using System;
 
     using Microsoft.EntityFrameworkCore.Migrations;
+
+    #endregion
 
     public partial class AddedSalesAndShops : Migration
     {
@@ -45,16 +49,16 @@
                 name: "Shops",
                 columns: table => new
                                       {
-                                          Id = table.Column<Guid>(nullable: false),
-                                          Name = table.Column<string>(nullable: false),
-                                          ShopType = table.Column<int>(nullable: false),
+                                          Id = table.Column<Guid>(),
+                                          Name = table.Column<string>(),
+                                          ShopType = table.Column<int>(),
                                           WebAddress = table.Column<string>(nullable: true),
                                           Country = table.Column<string>(nullable: true),
                                           Town = table.Column<string>(nullable: true),
                                           Address = table.Column<string>(nullable: true),
-                                          CreatedOn = table.Column<DateTime>(nullable: false),
+                                          CreatedOn = table.Column<DateTime>(),
                                           ModifiedOn = table.Column<DateTime>(nullable: true),
-                                          IsDeleted = table.Column<bool>(nullable: false),
+                                          IsDeleted = table.Column<bool>(),
                                           DeletedOn = table.Column<DateTime>(nullable: true)
                                       },
                 constraints: table => { table.PrimaryKey("PK_Shops", x => x.Id); });
@@ -63,19 +67,19 @@
                 name: "Sales",
                 columns: table => new
                                       {
-                                          Id = table.Column<Guid>(nullable: false),
+                                          Id = table.Column<Guid>(),
                                           SellerId = table.Column<Guid>(nullable: true),
                                           BuyerId = table.Column<Guid>(nullable: true),
                                           ShopId = table.Column<Guid>(nullable: true),
                                           ReleaseId = table.Column<Guid>(nullable: true),
-                                          Status = table.Column<int>(nullable: false),
-                                          Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
-                                          VinylCondition = table.Column<int>(nullable: false),
-                                          SleeveCondition = table.Column<int>(nullable: false),
-                                          Description = table.Column<string>(nullable: false),
-                                          CreatedOn = table.Column<DateTime>(nullable: false),
+                                          Status = table.Column<int>(),
+                                          Price = table.Column<decimal>(type: "decimal(18,4)"),
+                                          VinylCondition = table.Column<int>(),
+                                          SleeveCondition = table.Column<int>(),
+                                          Description = table.Column<string>(),
+                                          CreatedOn = table.Column<DateTime>(),
                                           ModifiedOn = table.Column<DateTime>(nullable: true),
-                                          IsDeleted = table.Column<bool>(nullable: false),
+                                          IsDeleted = table.Column<bool>(),
                                           DeletedOn = table.Column<DateTime>(nullable: true)
                                       },
                 constraints: table =>
@@ -111,12 +115,12 @@
                 name: "ShopFiles",
                 columns: table => new
                                       {
-                                          Id = table.Column<Guid>(nullable: false),
-                                          Path = table.Column<string>(nullable: false),
-                                          FileName = table.Column<string>(nullable: false),
-                                          FileType = table.Column<int>(nullable: false),
-                                          CreatedOn = table.Column<DateTime>(nullable: false),
-                                          ShopId = table.Column<Guid>(nullable: false)
+                                          Id = table.Column<Guid>(),
+                                          Path = table.Column<string>(),
+                                          FileName = table.Column<string>(),
+                                          FileType = table.Column<int>(),
+                                          CreatedOn = table.Column<DateTime>(),
+                                          ShopId = table.Column<Guid>()
                                       },
                 constraints: table =>
                     {

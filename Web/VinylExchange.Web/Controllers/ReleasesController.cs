@@ -1,14 +1,18 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Services.MainServices.Releases;
+
+    using Microsoft.AspNetCore.Mvc;
+    using VinylExchange.Services.Data.MainServices.Releases;
+    using VinylExchange.Services.Logging;    
     using VinylExchange.Web.Models.InputModels.Releases;
     using VinylExchange.Web.Models.ResourceModels.Releases;
+
+    #endregion
 
     public class ReleasesController : ApiController
     {
@@ -22,11 +26,13 @@
             this.loggerService = loggerService;
         }
 
-        [HttpPost]        
-        public async Task<ActionResult<CreateReleaseResourceModel>> Create(CreateReleaseInputModel inputModel, Guid formSessionId)
+        [HttpPost]
+        public async Task<ActionResult<CreateReleaseResourceModel>> Create(
+            CreateReleaseInputModel inputModel,
+            Guid formSessionId)
         {
             try
-            {     
+            {
                 return await this.releasesService.CreateRelease<CreateReleaseResourceModel>(inputModel, formSessionId);
             }
             catch (Exception ex)
@@ -41,7 +47,7 @@
         {
             try
             {
-                GetReleaseResourceModel release = await this.releasesService.GetRelease<GetReleaseResourceModel>(id);
+                var release = await this.releasesService.GetRelease<GetReleaseResourceModel>(id);
 
                 if (release == null)
                 {
@@ -67,8 +73,11 @@
         {
             try
             {
-                return await this.releasesService
-                    .GetReleases<GetReleasesResourceModel>(searchTerm, filterGenreId ,styleIds, releasesToSkip); 
+                return await this.releasesService.GetReleases<GetReleasesResourceModel>(
+                           searchTerm,
+                           filterGenreId,
+                           styleIds,
+                           releasesToSkip);
             }
             catch (Exception ex)
             {

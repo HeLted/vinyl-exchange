@@ -1,11 +1,15 @@
 ﻿namespace VinylExchange.Services.Authentication
 {
+    #region
+
     using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
 
     using VinylExchange.Models.InputModels.Users;
+
+    #endregion
 
     public interface IUsersService
     {

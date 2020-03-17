@@ -1,9 +1,13 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.SaleLogs
 {
+    #region
+
     using System;
 
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
+
+    #endregion
 
     public class AddLogToSaleResourceModel : IMapFrom<SaleLog>
     {

@@ -1,6 +1,10 @@
 ﻿namespace VinylExchange.Services.Mapping
 {
+    #region
+
     using System;
+
+    #endregion
 
     public static class ObjectMappingExtensions
     {

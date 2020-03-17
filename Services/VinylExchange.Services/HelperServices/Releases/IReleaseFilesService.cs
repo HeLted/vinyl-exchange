@@ -1,11 +1,15 @@
-﻿namespace VinylExchange.Services.HelperServices.Releases
+﻿namespace VinylExchange.Services.Data.HelperServices.Releases
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using VinylExchange.Data.Models;
     using VinylExchange.Web.Models.ResourceModels.ReleaseFiles;
+
+    #endregion
 
     public interface IReleaseFilesService
     {

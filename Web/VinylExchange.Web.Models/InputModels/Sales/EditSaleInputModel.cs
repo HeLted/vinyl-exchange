@@ -1,12 +1,17 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using VinylExchange.Data.Common.Enumerations;
-using VinylExchange.Data.Models;
-using VinylExchange.Services.Mapping;
-
-namespace VinylExchange.Web.Models.InputModels.Sales
+﻿namespace VinylExchange.Web.Models.InputModels.Sales
 {
-    public  class EditSaleInputModel : IMapTo<Sale>
+    #region
+
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    using VinylExchange.Data.Common.Enumerations;
+    using VinylExchange.Data.Models;
+    using VinylExchange.Services.Mapping;
+
+    #endregion
+
+    public class EditSaleInputModel : IMapTo<Sale>
     {
         [Required]
         public string Description { get; set; }

@@ -1,7 +1,11 @@
 ﻿namespace VinylExchange.Data.Models
 {
+    #region
+
     using System;
     using System.ComponentModel.DataAnnotations;
+
+    #endregion
 
     public class StyleRelease
     {

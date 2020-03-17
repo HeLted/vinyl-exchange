@@ -1,9 +1,13 @@
 ﻿namespace VinylExchange.Data.Models
 {
+    #region
+
     using System;
     using System.ComponentModel.DataAnnotations;
 
     using VinylExchange.Data.Common.Models;
+
+    #endregion
 
     public class Address : BaseModel
     {

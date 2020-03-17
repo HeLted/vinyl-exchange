@@ -1,9 +1,13 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Addresses
 {
+    #region
+
     using System.ComponentModel.DataAnnotations;
 
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
+
+    #endregion
 
     public class CreateAddressInputModel : IMapTo<Address>
     {

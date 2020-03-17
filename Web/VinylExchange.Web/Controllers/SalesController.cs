@@ -1,11 +1,15 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.SignalR;
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR;
+
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
@@ -16,6 +20,7 @@
     using VinylExchange.Web.Models.ResourceModels.Sales;
     using VinylExchange.Web.Models.Utility;
 
+    #endregion
 
     [Authorize]
     public class SalesController : ApiController
@@ -26,7 +31,7 @@
 
         private readonly ISaleLogsService saleLogsService;
 
-        private readonly ISalesService salesService;               
+        private readonly ISalesService salesService;
 
         public SalesController(
             ISalesService salesService,
@@ -36,9 +41,8 @@
         {
             this.salesService = salesService;
             this.loggerService = loggerService;
-            this.saleLogHubContext = saleLogHubContext;           
+            this.saleLogHubContext = saleLogHubContext;
             this.saleLogsService = saleLogsService;
-           
         }
 
         [HttpPut]
@@ -47,14 +51,14 @@
         {
             try
             {
-                GetSaleInfoUtilityModel saleModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
                     return this.NotFound();
                 }
 
-                Guid currentUserId = this.GetUserId(this.User);
+                var currentUserId = this.GetUserId(this.User);
 
                 if (saleModel.BuyerId == currentUserId && saleModel.Status == Status.PaymentPending)
                 {
@@ -67,10 +71,8 @@
 
                     return saleStatusModel;
                 }
-                else
-                {
-                    return this.Forbid();
-                }
+
+                return this.Forbid();
             }
             catch (Exception ex)
             {
@@ -81,22 +83,24 @@
 
         [HttpPut]
         [Route("ConfirmItemRecieved")]
-        public async Task<ActionResult<SaleStatusResourceModel>> ConfirmItemRecieved(ConfirmItemRecievedInputModel inputModel)
+        public async Task<ActionResult<SaleStatusResourceModel>> ConfirmItemRecieved(
+            ConfirmItemRecievedInputModel inputModel)
         {
             try
             {
-                GetSaleInfoUtilityModel saleModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
                     return this.NotFound();
                 }
 
-                Guid currentUserId = this.GetUserId(this.User);
+                var currentUserId = this.GetUserId(this.User);
 
                 if (saleModel.BuyerId == currentUserId && saleModel.Status == Status.Sent)
                 {
-                    var saleStatusModel = await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(inputModel);
+                    var saleStatusModel =
+                        await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(inputModel);
 
                     var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemRecieved);
 
@@ -105,10 +109,8 @@
 
                     return saleStatusModel;
                 }
-                else
-                {
-                    return this.Forbid();
-                }
+
+                return this.Forbid();
             }
             catch (Exception ex)
             {
@@ -123,14 +125,14 @@
         {
             try
             {
-                GetSaleInfoUtilityModel saleModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
                     return this.NotFound();
                 }
 
-                Guid currentUserId = this.GetUserId(this.User);
+                var currentUserId = this.GetUserId(this.User);
 
                 if (saleModel.SellerId == currentUserId && saleModel.Status == Status.Paid)
                 {
@@ -143,10 +145,8 @@
 
                     return saleStatusModel;
                 }
-                else
-                {
-                    return this.Forbid();
-                }
+
+                return this.Forbid();
             }
             catch (Exception ex)
             {
@@ -159,49 +159,9 @@
         public async Task<ActionResult<CreateSaleResourceModel>> Create(CreateSaleInputModel inputModel)
         {
             try
-            {           
-                return this.Created(await this.salesService
-                    .CreateSale<CreateSaleResourceModel>(inputModel, this.GetUserId(this.User)));
-            }
-            catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
-            }
-        }
-
-        [HttpPut]
-        public async Task<ActionResult<EditSaleResourceModel>> Update(EditSaleInputModel inputModel)
-        {
-            try
-            {
-                GetSaleInfoUtilityModel saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
-
-                if (saleInfoModel == null)
-                {
-                    return this.NotFound();
-                }
-
-                Guid currentUserId = this.GetUserId(this.User);
-
-                if (saleInfoModel.SellerId == currentUserId && saleInfoModel.Status == Status.Open)
-                {
-
-                    EditSaleResourceModel saleModel = await this.salesService.EditSale<EditSaleResourceModel>(inputModel);
-                    
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.SaleEdit);
-
-                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
-                        .RecieveLogNotification(addedLogModel.Content);
-
-                    return saleModel;
-                }
-                else
-                {
-                    return this.Forbid();
-                }
-
-
+                return this.Created(
+                    await this.salesService.CreateSale<CreateSaleResourceModel>(inputModel, this.GetUserId(this.User)));
             }
             catch (Exception ex)
             {
@@ -215,14 +175,14 @@
         {
             try
             {
-                GetSaleResourceModel saleInfoModel = await this.salesService.GetSale<GetSaleResourceModel>(id);
+                var saleInfoModel = await this.salesService.GetSale<GetSaleResourceModel>(id);
 
                 if (saleInfoModel == null)
                 {
                     return this.NotFound();
                 }
 
-                Guid currentUserId = this.GetUserId(this.User);
+                var currentUserId = this.GetUserId(this.User);
 
                 if ((saleInfoModel.BuyerId != currentUserId && saleInfoModel.SellerId != currentUserId)
                     && saleInfoModel.Status != Status.Open)
@@ -245,7 +205,7 @@
         public async Task<ActionResult<IEnumerable<GetAllSalesForReleaseResouceModel>>> GetAllSalesForRelease(Guid id)
         {
             try
-            {                               
+            {
                 return await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(id);
             }
             catch (Exception ex)
@@ -261,8 +221,8 @@
         {
             try
             {
-                return await this.salesService
-                    .GetUserPurchases<GetUserPurchasesResourceModel>(this.GetUserId(this.User));
+                return await this.salesService.GetUserPurchases<GetUserPurchasesResourceModel>(
+                           this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
@@ -286,54 +246,23 @@
             }
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<ActionResult<RemoveSaleResourceModel>> Remove(Guid id)
-        {
-            try
-            {
-                GetSaleInfoUtilityModel saleInfoModel = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(id);
-
-                if (saleInfoModel == null)
-                {
-                    return this.NotFound();
-                }
-
-                if (saleInfoModel.SellerId == this.GetUserId(this.User))
-                {
-
-                    return await this.salesService.RemoveSale<RemoveSaleResourceModel>(saleInfoModel.Id);
-                }
-                else
-                {
-                    return this.Forbid();
-                }
-
-            }
-            catch (Exception ex)
-            {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
-            }
-        }
-
         [HttpPut]
         [Route("PlaceOrder")]
         public async Task<ActionResult<GetSaleInfoUtilityModel>> PlaceOrder(PlaceOrderInputModel inputModel)
         {
             try
             {
-                GetSaleInfoUtilityModel saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
 
                 if (saleInfoModel == null)
                 {
                     return this.NotFound();
                 }
 
-                Guid currentUserId = this.GetUserId(this.User);
+                var currentUserId = this.GetUserId(this.User);
 
                 if (saleInfoModel.SellerId == currentUserId || saleInfoModel.BuyerId == currentUserId
-                                                        || saleInfoModel.Status != Status.Open)
+                                                            || saleInfoModel.Status != Status.Open)
                 {
                     return this.Forbid();
                 }
@@ -354,27 +283,54 @@
             }
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<RemoveSaleResourceModel>> Remove(Guid id)
+        {
+            try
+            {
+                var saleInfoModel = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(id);
+
+                if (saleInfoModel == null)
+                {
+                    return this.NotFound();
+                }
+
+                if (saleInfoModel.SellerId == this.GetUserId(this.User))
+                {
+                    return await this.salesService.RemoveSale<RemoveSaleResourceModel>(saleInfoModel.Id);
+                }
+
+                return this.Forbid();
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
         [HttpPut]
         [Route("SetShippingPrice")]
         public async Task<ActionResult<SaleStatusResourceModel>> SetShippingPrice(SetShippingPriceInputModel inputModel)
         {
             try
             {
-                GetSaleInfoUtilityModel saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
 
                 if (saleInfoModel == null)
                 {
                     return this.BadRequest();
                 }
 
-                Guid currentUserId = this.GetUserId(this.User);
+                var currentUserId = this.GetUserId(this.User);
 
                 if (saleInfoModel.SellerId == currentUserId && saleInfoModel.Status == Status.ShippingNegotiation)
                 {
                     var saleStatusModel = await this.salesService.SetShippingPrice<SaleStatusResourceModel>(inputModel);
 
                     var addedLogModel = await this.saleLogsService.AddLogToSale(
-                                             saleInfoModel.Id,
+                                            saleInfoModel.Id,
                                             SaleLogs.SettedShippingPrice);
 
                     await this.saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
@@ -382,10 +338,43 @@
 
                     return saleStatusModel;
                 }
-                else
+
+                return this.Forbid();
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<EditSaleResourceModel>> Update(EditSaleInputModel inputModel)
+        {
+            try
+            {
+                var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
+
+                if (saleInfoModel == null)
                 {
-                    return this.Forbid();
+                    return this.NotFound();
                 }
+
+                var currentUserId = this.GetUserId(this.User);
+
+                if (saleInfoModel.SellerId == currentUserId && saleInfoModel.Status == Status.Open)
+                {
+                    var saleModel = await this.salesService.EditSale<EditSaleResourceModel>(inputModel);
+
+                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.SaleEdit);
+
+                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                        .RecieveLogNotification(addedLogModel.Content);
+
+                    return saleModel;
+                }
+
+                return this.Forbid();
             }
             catch (Exception ex)
             {
@@ -395,6 +384,6 @@
         }
 
         private async Task<GetSaleInfoUtilityModel> GetSaleInfo(Guid? saleId) =>
-            await this.salesService.GetSaleInfo< GetSaleInfoUtilityModel> (saleId);
+            await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
     }
 }

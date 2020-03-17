@@ -1,15 +1,20 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Services.MainServices.Collections;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using VinylExchange.Services.Data.MainServices.Collections;
+    using VinylExchange.Services.Logging;  
     using VinylExchange.Web.Models.InputModels.Collections;
     using VinylExchange.Web.Models.ResourceModels.Collections;
     using VinylExchange.Web.Models.Utility;
+
+    #endregion
 
     [Authorize]
     public class CollectionsController : ApiController
@@ -25,14 +30,16 @@
         }
 
         [HttpPost]
-        public async Task<ActionResult<AddToCollectionResourceModel>> Add(AddToCollectionInputModel inputModel, Guid releaseId)
+        public async Task<ActionResult<AddToCollectionResourceModel>> Add(
+            AddToCollectionInputModel inputModel,
+            Guid releaseId)
         {
             try
             {
-               return await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                                                                 inputModel,
-                                                                 releaseId,
-                                                                 this.GetUserId(this.User));
+                return await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
+                           inputModel,
+                           releaseId,
+                           this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
@@ -42,14 +49,14 @@
         }
 
         [HttpGet]
-        [Route("DoesUserCollectionContainRelease")]      
+        [Route("DoesUserCollectionContainRelease")]
         public async Task<ActionResult<bool>> DoesUserCollectionContainRelease(Guid releaseId)
         {
             try
             {
                 return await this.collectionsService.DoesUserCollectionContainRelease(
-                        releaseId,
-                        this.GetUserId(this.User));
+                           releaseId,
+                           this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
@@ -63,7 +70,8 @@
         {
             try
             {
-                GetCollectionItemResourceModel collectionItemModel = await this.collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(id);
+                var collectionItemModel =
+                    await this.collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(id);
 
                 if (collectionItemModel == null)
                 {
@@ -85,8 +93,8 @@
         {
             try
             {
-
-                return await this.collectionsService.GetUserCollection<GetUserCollectionResourceModel>(this.GetUserId(this.User));
+                return await this.collectionsService.GetUserCollection<GetUserCollectionResourceModel>(
+                           this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
@@ -101,7 +109,7 @@
         {
             try
             {
-                GetCollectionItemInfoUtilityModel collectionItemInfoModel =
+                var collectionItemInfoModel =
                     await this.collectionsService.GetCollectionItemInfo<GetCollectionItemInfoUtilityModel>(id);
 
                 if (collectionItemInfoModel == null)
@@ -114,8 +122,9 @@
                     return this.Unauthorized();
                 }
 
-                RemoveCollectionItemResourceModel collectionItemRemovedModel =
-                    await this.collectionsService.RemoveCollectionItem<RemoveCollectionItemResourceModel>(collectionItemInfoModel.Id);
+                var collectionItemRemovedModel =
+                    await this.collectionsService.RemoveCollectionItem<RemoveCollectionItemResourceModel>(
+                        collectionItemInfoModel.Id);
 
                 return this.Ok(collectionItemRemovedModel);
             }

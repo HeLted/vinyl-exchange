@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Services.Data.HelperServices.Users
 {
+    #region
+
     using System;
     using System.Threading.Tasks;
 
@@ -7,6 +9,8 @@
 
     using VinylExchange.Data.Models;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
+
+    #endregion
 
     public interface IUsersAvatarService
     {

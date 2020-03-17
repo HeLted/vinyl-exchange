@@ -1,10 +1,14 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Collections
 {
+    #region
+
     using System.ComponentModel.DataAnnotations;
 
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
+
+    #endregion
 
     public class AddToCollectionInputModel : IMapTo<CollectionItem>
     {

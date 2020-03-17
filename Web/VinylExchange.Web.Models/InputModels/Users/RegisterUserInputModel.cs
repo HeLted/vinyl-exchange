@@ -1,9 +1,13 @@
 ﻿namespace VinylExchange.Models.InputModels.Users
 {
+    #region
+
     using System.ComponentModel.DataAnnotations;
 
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
+
+    #endregion
 
     public class RegisterUserInputModel : IMapTo<VinylExchangeUser>
     {

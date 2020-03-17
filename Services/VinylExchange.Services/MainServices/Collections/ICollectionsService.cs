@@ -1,13 +1,14 @@
-﻿namespace VinylExchange.Services.MainServices.Collections
+﻿namespace VinylExchange.Services.Data.MainServices.Collections
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using VinylExchange.Data.Models;
     using VinylExchange.Web.Models.InputModels.Collections;
-    using VinylExchange.Web.Models.ResourceModels.Collections;
-    using VinylExchange.Web.Models.Utility;
+
+    #endregion
 
     public interface ICollectionsService
     {

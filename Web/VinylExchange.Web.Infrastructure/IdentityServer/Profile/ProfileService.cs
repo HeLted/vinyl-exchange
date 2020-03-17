@@ -1,18 +1,26 @@
 ﻿namespace VinylExchange.Web.Infrastructure.IdentityServer.Profile
 {
-    using IdentityModel;
-    using IdentityServer4.Models;
-    using IdentityServer4.Services;
-    using Microsoft.AspNetCore.Identity;
+    #region
+
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
+
+    using IdentityModel;
+
+    using IdentityServer4.Models;
+    using IdentityServer4.Services;
+
+    using Microsoft.AspNetCore.Identity;
+
     using VinylExchange.Data.Models;
+
+    #endregion
 
     public class ProfileService : IProfileService
     {
-        private UserManager<VinylExchangeUser> userManager;
+        private readonly UserManager<VinylExchangeUser> userManager;
 
         public ProfileService(UserManager<VinylExchangeUser> userManager)
         {
@@ -24,11 +32,11 @@
             var user = await this.userManager.GetUserAsync(context.Subject);
             var roles = await this.userManager.GetRolesAsync(user);
             var claims = new List<Claim>
-                             {new Claim(JwtClaimTypes.Name,user.UserName),
-                             new Claim(JwtClaimTypes.EmailVerified,user.EmailConfirmed.ToString().ToLower()),
+                             {
+                                 new Claim(JwtClaimTypes.Name, user.UserName),
+                                 new Claim(JwtClaimTypes.EmailVerified, user.EmailConfirmed.ToString().ToLower()),
                                  new Claim(JwtClaimTypes.Role, roles.Any() ? roles.First() : "User"),
                                  new Claim(JwtClaimTypes.Role, roles.Any() ? roles.First() : "Admin")
-
                              };
 
             context.IssuedClaims.AddRange(claims);

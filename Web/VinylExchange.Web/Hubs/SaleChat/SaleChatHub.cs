@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Web.Hubs.SaleChat
 {
+    #region
+
     using System;
     using System.Threading.Tasks;
 
@@ -9,6 +11,8 @@
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Web.Models.Utility;
+
+    #endregion
 
     [Authorize]
     public class SaleChatHub : Hub<ISaleChatClient>
@@ -25,11 +29,11 @@
 
         public async Task JoinRoom(Guid saleId)
         {
-            string roomName = saleId.ToString();
+            var roomName = saleId.ToString();
 
-            GetSaleInfoUtilityModel sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
+            var sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
 
-            Guid userId = Guid.Parse(this.GetUserId());
+            var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
             {
@@ -47,9 +51,9 @@
 
         public async Task LoadMessageHistory(Guid saleId)
         {
-            GetSaleInfoUtilityModel sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
+            var sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
 
-            Guid userId = Guid.Parse(this.GetUserId());
+            var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
             {

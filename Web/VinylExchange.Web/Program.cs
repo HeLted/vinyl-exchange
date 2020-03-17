@@ -1,7 +1,11 @@
 namespace VinylExchange.Web
 {
+    #region
+
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
+
+    #endregion
 
     public class Program
     {

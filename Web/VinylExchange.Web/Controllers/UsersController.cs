@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
+    #region
+
     using System;
     using System.Threading.Tasks;
 
@@ -15,7 +17,7 @@
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
 
-    using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+    #endregion
 
     public class UsersController : ApiController
     {
@@ -60,35 +62,14 @@
         {
             try
             {
-                IdentityResult confirmEmailIdentityResult = await this.userService.ConfirmUserEmail(inputModel);
+                var confirmEmailIdentityResult = await this.userService.ConfirmUserEmail(inputModel);
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
                     return this.Ok();
                 }
-                else
-                {
-                    return this.BadRequest(confirmEmailIdentityResult.Errors);
-                }
-            }
-            catch (Exception ex)
-            {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
-            }
-        }
 
-        [HttpPost]
-        [Authorize]
-        [Route("SendConfirmEmail")]
-        public async Task<ActionResult> SendConfirmEmail()
-        {
-            try
-            {
-                await this.userService.SendConfirmEmail(this.GetUserId(this.User));
-              
-                return this.Ok();
-             
+                return this.BadRequest(confirmEmailIdentityResult.Errors);
             }
             catch (Exception ex)
             {
@@ -101,7 +82,7 @@
         [Route("GetUserAvatar/{id}")]
         public async Task<ActionResult<GetUserAvatarResourceModel>> GetUserAvatar(Guid id)
         {
-            GetUserAvatarResourceModel userAvatarModel = await this.usersAvatarService.GetUserAvatar(id);
+            var userAvatarModel = await this.usersAvatarService.GetUserAvatar(id);
 
             if (userAvatarModel == null)
             {
@@ -116,8 +97,7 @@
         [Route("GetCurrentUserAvatar")]
         public async Task<ActionResult<GetUserAvatarResourceModel>> GetUserAvatar()
         {
-            GetUserAvatarResourceModel userAvatarModel =
-                await this.usersAvatarService.GetUserAvatar(this.GetUserId(this.User));
+            var userAvatarModel = await this.usersAvatarService.GetUserAvatar(this.GetUserId(this.User));
 
             if (userAvatarModel == null)
             {
@@ -135,16 +115,14 @@
 
             try
             {
-                SignInResult registerUserIdentityResult = await this.userService.LoginUser(inputModel);
+                var registerUserIdentityResult = await this.userService.LoginUser(inputModel);
 
                 if (registerUserIdentityResult.Succeeded)
                 {
                     return this.Ok();
                 }
-                else
-                {
-                    return this.Unauthorized();
-                }
+
+                return this.Unauthorized();
             }
             catch (Exception ex)
             {
@@ -159,16 +137,32 @@
         {
             try
             {
-                IdentityResult registerUserIdentityResult = await this.userService.RegisterUser(inputModel);
+                var registerUserIdentityResult = await this.userService.RegisterUser(inputModel);
 
                 if (registerUserIdentityResult.Succeeded)
                 {
                     return this.Ok();
                 }
-                else
-                {
-                    return this.BadRequest(registerUserIdentityResult.Errors);
-                }
+
+                return this.BadRequest(registerUserIdentityResult.Errors);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("SendConfirmEmail")]
+        public async Task<ActionResult> SendConfirmEmail()
+        {
+            try
+            {
+                await this.userService.SendConfirmEmail(this.GetUserId(this.User));
+
+                return this.Ok();
             }
             catch (Exception ex)
             {

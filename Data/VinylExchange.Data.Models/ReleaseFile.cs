@@ -1,10 +1,14 @@
 ﻿namespace VinylExchange.Data.Models
 {
+    #region
+
     using System;
     using System.ComponentModel.DataAnnotations;
 
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data.Common.Models;
+
+    #endregion
 
     public class ReleaseFile : BaseDeletableModel
     {
@@ -15,6 +19,9 @@
         public FileType FileType { get; set; }
 
         [Required]
+        public bool IsPreview { get; set; }
+
+        [Required]
         public string Path { get; set; }
 
         [Required]
@@ -22,8 +29,5 @@
 
         [Required]
         public Guid ReleaseId { get; set; }
-
-        [Required]
-        public bool IsPreview { get; set; }
     }
 }

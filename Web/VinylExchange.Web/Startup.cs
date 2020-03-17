@@ -1,5 +1,13 @@
 namespace VinylExchange.Web
 {
+    #region
+
+    using System;
+    using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.IO;
+    using System.Reflection;
+
     using Microsoft.AspNetCore.Antiforgery;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,34 +22,32 @@ namespace VinylExchange.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
-    using System;
-    using System.Collections.Generic;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.IO;
-    using System.Reflection;
+
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Data.Seeding;
     using VinylExchange.Services.Authentication;
+    using VinylExchange.Services.Data.HelperServices.Releases;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.HelperServices.Users;
     using VinylExchange.Services.Data.MainServices.Addresses;
+    using VinylExchange.Services.Data.MainServices.Collections;
+    using VinylExchange.Services.Data.MainServices.Genres;
+    using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Services.Data.MainServices.Styles;
     using VinylExchange.Services.EmaiSender;
-    using VinylExchange.Services.Files;
-    using VinylExchange.Services.HelperServices.Releases;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Services.MainServices.Collections;
-    using VinylExchange.Services.MainServices.Genres;
-    using VinylExchange.Services.MainServices.Releases;
-    using VinylExchange.Services.MainServices.Styles;
+    using VinylExchange.Services.Files;    
+    using VinylExchange.Services.Logging;  
     using VinylExchange.Services.Mapping;
     using VinylExchange.Services.MemoryCache;
     using VinylExchange.Web.Hubs.SaleChat;
     using VinylExchange.Web.Hubs.SaleLog;
     using VinylExchange.Web.Infrastructure.IdentityServer.Profile;
     using VinylExchange.Web.Models;
+
+    #endregion
 
     public class Startup
     {
@@ -58,11 +64,9 @@ namespace VinylExchange.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAntiforgery antiforgery)
         {
-            using (IServiceScope serviceScope =
-                app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                VinylExchangeDbContext dbContext =
-                    serviceScope.ServiceProvider.GetRequiredService<VinylExchangeDbContext>();
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<VinylExchangeDbContext>();
 
                 if (env.IsDevelopment())
                 {
@@ -120,18 +124,18 @@ namespace VinylExchange.Web
             app.Use(
                 next => context =>
                     {
-                        string path = context.Request.Path.Value;
+                        var path = context.Request.Path.Value;
 
                         if (string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) || string.Equals(
                                 path,
                                 "/Authentication/Logout-Callback",
                                 StringComparison.OrdinalIgnoreCase))
-                        {                           
-                            AntiforgeryTokenSet tokens = antiforgery.GetAndStoreTokens(context);
+                        {
+                            var tokens = antiforgery.GetAndStoreTokens(context);
                             context.Response.Cookies.Append(
                                 "XSRF-TOKEN",
                                 tokens.RequestToken,
-                                new CookieOptions() { HttpOnly = false });
+                                new CookieOptions { HttpOnly = false });
                         }
 
                         return next(context);
@@ -177,32 +181,30 @@ namespace VinylExchange.Web
                         options.User.RequireUniqueEmail = true;
                     });
 
-        
-            services.AddAuthentication(options =>
-            {
-                // ...
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
-                }
-            ).AddJwtBearer(options =>
-            {
-                // ...
-                options.SecurityTokenValidators.Clear();
-                options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler
-                {
-                    // Disable the built-in JWT claims mapping feature.
-                    InboundClaimTypeMap = new Dictionary<string, string>()
-                });
-            }).AddIdentityServerJwt();
-
-            services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>().AddProfileService<ProfileService>();
-
-
-            services.AddControllers(
+            services.AddAuthentication(
                 options =>
                     {
-                        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                    }).AddNewtonsoftJson();
+                        // ...
+                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                        options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
+                    }).AddJwtBearer(
+                options =>
+                    {
+                        // ...
+                        options.SecurityTokenValidators.Clear();
+                        options.SecurityTokenValidators.Add(
+                            new JwtSecurityTokenHandler
+                                {
+                                    // Disable the built-in JWT claims mapping feature.
+                                    InboundClaimTypeMap = new Dictionary<string, string>()
+                                });
+                    }).AddIdentityServerJwt();
+
+            services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>()
+                .AddProfileService<ProfileService>();
+
+            services.AddControllers(options => { options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); })
+                .AddNewtonsoftJson();
 
             services.AddAntiforgery(
                 options =>
@@ -210,7 +212,6 @@ namespace VinylExchange.Web
                         options.HeaderName = "RequestVerificationToken";
                         options.SuppressXFrameOptionsHeader = false;
                     });
-
 
             services.AddDistributedMemoryCache();
 
@@ -239,9 +240,7 @@ namespace VinylExchange.Web
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<RoleSeeder>();
             services.AddTransient<UserSeeder>();
-            services.AddSingleton<IEmailSender>(
-                new EmailSender(Configuration["SendGridKey"]));
-        
+            services.AddSingleton<IEmailSender>(new EmailSender(this.Configuration["SendGridKey"]));
         }
     }
 }

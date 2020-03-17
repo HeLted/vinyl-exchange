@@ -1,10 +1,14 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.Collections
 {
+    #region
+
     using System;
 
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
+
+    #endregion
 
     public class GetCollectionItemResourceModel : IMapFrom<CollectionItem>
     {

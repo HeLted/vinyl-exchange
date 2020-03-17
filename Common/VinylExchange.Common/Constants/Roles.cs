@@ -1,6 +1,6 @@
 ﻿namespace VinylExchange.Common.Constants
 {
-    public class RolesConstants
+    public class Roles
     {
         public const string Admin = "Admin";
 

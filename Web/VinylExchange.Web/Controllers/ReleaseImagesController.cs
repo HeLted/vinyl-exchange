@@ -1,14 +1,17 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
-
-    using VinylExchange.Services.HelperServices.Releases;
+    using VinylExchange.Services.Data.HelperServices.Releases;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.ResourceModels.ReleaseFiles;
+
+    #endregion
 
     public class ReleaseImagesController : ApiController
     {
@@ -43,7 +46,7 @@
         public async Task<ActionResult<ReleaseFileResourceModel>> GetCoverArtForRelease(Guid releaseId)
         {
             try
-            {              
+            {
                 return await this.releaseFilesService.GetReleaseCoverArt(releaseId);
             }
             catch (Exception ex)

@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Services.Data.HelperServices.Users
 {
+    #region
+
     using System;
     using System.IO;
     using System.Linq;
@@ -13,6 +15,8 @@
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
 
+    #endregion
+
     public class UsersAvatarService : IUsersAvatarService
     {
         private readonly VinylExchangeDbContext dbContext;
@@ -24,15 +28,15 @@
 
         public async Task<VinylExchangeUser> ChangeUserAvatar(IFormFile avatar, Guid userId)
         {
-            byte[] imageByteArray = new byte[1];
+            var imageByteArray = new byte[1];
 
-            using (MemoryStream ms = new MemoryStream())
+            using (var ms = new MemoryStream())
             {
                 avatar.CopyTo(ms);
                 imageByteArray = ms.ToArray();
             }
 
-            VinylExchangeUser user = await this.dbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+            var user = await this.dbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
 
             if (user == null)
             {

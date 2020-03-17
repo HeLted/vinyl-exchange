@@ -1,6 +1,10 @@
 ﻿namespace VinylExchange.Models.InputModels.Users
 {
+    #region
+
     using System;
+
+    #endregion
 
     public class ConfirmEmailInputModel
     {

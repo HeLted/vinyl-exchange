@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Services.Files
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -8,6 +10,8 @@
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Services.MemoryCache;
     using VinylExchange.Web.Models.Utility;
+
+    #endregion
 
     public class FileManager : IFileManager
     {
@@ -28,8 +32,8 @@
 
         public IEnumerable<byte[]> GetFilesByteContent(IEnumerable<UploadFileUtilityModel> uploadFileUtilityModels)
         {
-            List<byte[]> filesContent = new List<byte[]>();
-            foreach (UploadFileUtilityModel fileUtilityModel in uploadFileUtilityModels)
+            var filesContent = new List<byte[]>();
+            foreach (var fileUtilityModel in uploadFileUtilityModels)
             {
                 filesContent.Add(fileUtilityModel.FileByteContent);
             }
@@ -43,24 +47,24 @@
             string entityIdPropertyName,
             string subFolderName)
         {
-            List<TModel> modelList = new List<TModel>();
+            var modelList = new List<TModel>();
 
-            bool isFist = true;
+            var isFist = true;
 
-            foreach (UploadFileUtilityModel fileUtilityModel in uploadFileUtilityModels)
+            foreach (var fileUtilityModel in uploadFileUtilityModels)
             {
-                string fileGuid = fileUtilityModel.FileGuid.ToString();
-                string encodedFileName = this.ConvertFileNameToBase64(fileUtilityModel.FileName);
-                string fileExtension = fileUtilityModel.FileExtension;
-                FileType fileType = fileUtilityModel.FileType;
-                DateTime createdOn = fileUtilityModel.CreatedOn;
+                var fileGuid = fileUtilityModel.FileGuid.ToString();
+                var encodedFileName = this.ConvertFileNameToBase64(fileUtilityModel.FileName);
+                var fileExtension = fileUtilityModel.FileExtension;
+                var fileType = fileUtilityModel.FileType;
+                var createdOn = fileUtilityModel.CreatedOn;
 
-                string contentFolderName = fileType == FileType.Audio ? AudioPath : ImagePath;
-                string path = "\\" + subFolderName + contentFolderName + "\\";
+                var contentFolderName = fileType == FileType.Audio ? AudioPath : ImagePath;
+                var path = "\\" + subFolderName + contentFolderName + "\\";
 
-                TModel modelInstance = (TModel)Activator.CreateInstance(typeof(TModel));
+                var modelInstance = (TModel)Activator.CreateInstance(typeof(TModel));
 
-                Type modelType = typeof(TModel);
+                var modelType = typeof(TModel);
 
                 modelType.GetProperty("Path").SetValue(modelInstance, path);
                 modelType.GetProperty("FileName").SetValue(
@@ -68,7 +72,7 @@
                     fileGuid + FileNameSplitter + encodedFileName + fileExtension);
                 modelType.GetProperty("FileType").SetValue(modelInstance, fileType);
                 modelType.GetProperty("CreatedOn").SetValue(modelInstance, createdOn);
-               
+
                 if (isFist && fileType == FileType.Image)
                 {
                     modelType.GetProperty("IsPreview").SetValue(modelInstance, true);
@@ -77,7 +81,7 @@
                 {
                     modelType.GetProperty("IsPreview").SetValue(modelInstance, false);
                 }
-              
+
                 modelType.GetProperty(entityIdPropertyName).SetValue(modelInstance, entityId);
 
                 modelList.Add(modelInstance);
@@ -97,17 +101,17 @@
             IEnumerable<TModel> fileModels,
             IEnumerable<byte[]> filesContent)
         {
-            Type modelType = typeof(TModel);
-            List<TModel> fileModelsList = fileModels.ToList();
-            byte[][] filesContentArray = filesContent.ToArray();
+            var modelType = typeof(TModel);
+            var fileModelsList = fileModels.ToList();
+            var filesContentArray = filesContent.ToArray();
 
-            for (int i = 0; i < fileModelsList.Count; i++)
+            for (var i = 0; i < fileModelsList.Count; i++)
             {
-                TModel fileModel = fileModelsList[i];
-                byte[] fileContent = filesContentArray[i];
+                var fileModel = fileModelsList[i];
+                var fileContent = filesContentArray[i];
 
-                object path = modelType.GetProperty("Path").GetValue(fileModel);
-                object fileName = modelType.GetProperty("FileName").GetValue(fileModel);
+                var path = modelType.GetProperty("Path").GetValue(fileModel);
+                var fileName = modelType.GetProperty("FileName").GetValue(fileModel);
 
                 try
                 {
@@ -125,7 +129,7 @@
 
         private string ConvertFileNameToBase64(string fileName)
         {
-            byte[] fileNameBytes = System.Text.Encoding.UTF8.GetBytes(fileName);
+            var fileNameBytes = System.Text.Encoding.UTF8.GetBytes(fileName);
             return Convert.ToBase64String(fileNameBytes);
         }
     }

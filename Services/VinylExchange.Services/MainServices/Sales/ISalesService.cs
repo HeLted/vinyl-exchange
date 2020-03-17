@@ -1,9 +1,14 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Sales
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using VinylExchange.Web.Models.InputModels.Sales;
+
+    #endregion
 
     public interface ISalesService
     {
@@ -14,6 +19,8 @@
         Task<TModel> ConfirmItemSent<TModel>(ConfirmItemSentInputModel inputModel);
 
         Task<TModel> CreateSale<TModel>(CreateSaleInputModel inputModel, Guid sellerId);
+
+        Task<TModel> EditSale<TModel>(EditSaleInputModel inputModel);
 
         Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid releaseId);
 
@@ -27,10 +34,8 @@
 
         Task<TModel> PlaceOrder<TModel>(PlaceOrderInputModel inputModel, Guid? buyerId);
 
-        Task<TModel> SetShippingPrice<TModel>(SetShippingPriceInputModel inputModel);
-
-        Task<TModel> EditSale<TModel>(EditSaleInputModel inputModel);
-
         Task<TModel> RemoveSale<TModel>(Guid saleId);
+
+        Task<TModel> SetShippingPrice<TModel>(SetShippingPriceInputModel inputModel);
     }
 }

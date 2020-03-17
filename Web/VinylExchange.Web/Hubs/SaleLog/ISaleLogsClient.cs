@@ -1,9 +1,13 @@
 ﻿namespace VinylExchange.Web.Hubs.SaleLog
 {
+    #region
+
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using VinylExchange.Web.Models.ResourceModels.SaleLogs;
+
+    #endregion
 
     public interface ISaleLogsClient
     {

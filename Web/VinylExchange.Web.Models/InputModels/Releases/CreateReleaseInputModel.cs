@@ -1,10 +1,14 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Releases
 {
+    #region
+
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
+
+    #endregion
 
     public class CreateReleaseInputModel : IMapTo<Release>
     {

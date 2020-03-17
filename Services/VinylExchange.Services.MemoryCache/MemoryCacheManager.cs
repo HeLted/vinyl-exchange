@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Services.MemoryCache
 {
+    #region
+
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
@@ -8,6 +10,8 @@
 
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Primitives;
+
+    #endregion
 
     public class MemoryCacheManager
     {
@@ -75,7 +79,7 @@
             }
 
             // or create it using passed function
-            T result = acquire();
+            var result = acquire();
 
             // and set in cache (if cache time is defined)
             if ((cacheTime ?? NopCachingDefaults.CacheTime) > 0)
@@ -98,7 +102,7 @@
         /// <returns>True if item already is in cache; otherwise false</returns>
         public virtual bool IsSet(string key)
         {
-            return this._cache.TryGetValue(key, out object _);
+            return this._cache.TryGetValue(key, out _);
         }
 
         /// <summary>
@@ -175,7 +179,7 @@
         /// <param name="cacheTime">Cache time</param>
         protected MemoryCacheEntryOptions GetMemoryCacheEntryOptions(TimeSpan cacheTime)
         {
-            MemoryCacheEntryOptions options = new MemoryCacheEntryOptions()
+            var options = new MemoryCacheEntryOptions()
 
                 // add cancellation token for clear cache
                 .AddExpirationToken(new CancellationChangeToken(this._cancellationTokenSource.Token))
@@ -219,7 +223,7 @@
         /// </summary>
         private void ClearKeys()
         {
-            foreach (string key in _allKeys.Where(p => !p.Value).Select(p => p.Key).ToList())
+            foreach (var key in _allKeys.Where(p => !p.Value).Select(p => p.Key).ToList())
             {
                 this.RemoveKey(key);
             }
@@ -249,7 +253,7 @@
     }
 }
 
-public static partial class NopCachingDefaults
+public static class NopCachingDefaults
 {
     /// <summary>
     /// Gets the default cache time in minutes

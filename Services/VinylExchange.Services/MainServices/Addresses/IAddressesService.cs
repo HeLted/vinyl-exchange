@@ -1,9 +1,14 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Addresses
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using VinylExchange.Web.Models.InputModels.Addresses;
+
+    #endregion
 
     public interface IAddressesService
     {

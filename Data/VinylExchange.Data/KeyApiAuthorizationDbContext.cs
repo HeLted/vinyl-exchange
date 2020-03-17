@@ -1,5 +1,7 @@
 ﻿namespace VinylExchange.Data
 {
+    #region
+
     using System;
     using System.Threading.Tasks;
 
@@ -12,6 +14,8 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
+
+    #endregion
 
     /// <summary>
     /// Database abstraction for a combined <see cref="DbContext"/> using ASP.NET Identity and Identity Server.
@@ -58,7 +62,7 @@
         {
             base.OnModelCreating(builder);
 
-            if(this._operationalStoreOptions != null)
+            if (this._operationalStoreOptions != null)
             {
                 builder.ConfigurePersistedGrantContext(this._operationalStoreOptions.Value);
             }
@@ -67,7 +71,6 @@
                 builder.Entity<DeviceFlowCodes>().HasNoKey();
                 builder.Entity<PersistedGrant>().HasNoKey();
             }
-
         }
     }
 

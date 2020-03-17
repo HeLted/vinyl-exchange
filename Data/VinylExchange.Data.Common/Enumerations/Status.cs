@@ -12,6 +12,6 @@
 
         Sent = 5,
 
-        Finished = 6,
+        Finished = 6
     }
 }
