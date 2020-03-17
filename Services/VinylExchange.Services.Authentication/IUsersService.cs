@@ -1,5 +1,6 @@
 ﻿namespace VinylExchange.Services.Authentication
 {
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
@@ -13,5 +14,7 @@
         Task<SignInResult> LoginUser(LoginUserInputModel inputModel);
 
         Task<IdentityResult> RegisterUser(RegisterUserInputModel inputModel);
+
+        Task SendConfirmEmail(Guid userId);
     }
 }

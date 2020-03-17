@@ -78,6 +78,25 @@
             }
         }
 
+        [HttpPost]
+        [Authorize]
+        [Route("SendConfirmEmail")]
+        public async Task<ActionResult> SendConfirmEmail()
+        {
+            try
+            {
+                await this.userService.SendConfirmEmail(this.GetUserId(this.User));
+              
+                return this.Ok();
+             
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
         [HttpGet]
         [Route("GetUserAvatar/{id}")]
         public async Task<ActionResult<GetUserAvatarResourceModel>> GetUserAvatar(Guid id)

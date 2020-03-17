@@ -13,6 +13,8 @@
     using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Services.EmaiSender;
     using VinylExchange.Services.Mapping;
+    using static VinylExchange.Common.Constants.RolesConstants;
+    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
     public class UsersService : IUsersService
     {
@@ -44,7 +46,7 @@
 
             if (user == null)
             {
-                throw new NullReferenceException("Confirming Email Failed.User Cannot Be Null!");
+                throw new NullReferenceException(UserCannotBeNull);
             }
 
             IdentityResult identityResult =
@@ -74,29 +76,37 @@
 
             IdentityResult identityResult = await this.userManager.CreateAsync(user);
 
-            await this.userManager.AddToRoleAsync(user, "User");
+            await this.userManager.AddToRoleAsync(user, User);
 
-            if (identityResult.Succeeded)
-            {
-                await this.SendConfirmationEmail(user);
-            }
 
             return identityResult;
         }
 
-        private async Task SendConfirmationEmail(VinylExchangeUser user)
+        public async Task SendConfirmEmail(Guid userId)
+        {
+            VinylExchangeUser user = await this.userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                throw new NullReferenceException(UserCannotBeNull);
+            }
+
+            await this.ConstructConfirmationEmailContent(user);
+        }
+
+        private async Task<string> ConstructConfirmationEmailContent(VinylExchangeUser user)
         {
             string emailConfirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            string emailConfirmationUrl = this.contextAccessor.HttpContext.Request.Scheme + "://"
-                                                                                          + this.contextAccessor
-                                                                                              .HttpContext.Request.Host
-                                                                                          + $"/Authentication/EmailConfirm?cofirmToken={emailConfirmationToken}&userId={user.Id}";
+            HttpRequest request = this.contextAccessor.HttpContext.Request;
 
-            await this.emailSender.SendEmailAsync(
-                user.Email,
-                "Vinyl Exchange Confirm Email",
-                $@"<h1>Confirm Your Vinyl Exchange Account</h1>.Follow This <a href=""{emailConfirmationUrl}"">Link</a>");
+            string emailConfirmationUrl = request.Scheme + "://" + request.Host
+                + $"/Authentication/EmailConfirm?cofirmToken={emailConfirmationToken}&userId={user.Id}";
+
+            string confirmEmailHtmlContent =
+                $@"<h1>Confirm Your Vinyl Exchange Account</h1>.Follow This <a href=""{emailConfirmationUrl}"">Link</a>";
+            
+            return confirmEmailHtmlContent;
         }
     }
 }

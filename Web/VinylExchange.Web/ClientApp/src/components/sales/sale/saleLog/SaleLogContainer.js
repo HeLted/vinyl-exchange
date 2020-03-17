@@ -20,8 +20,6 @@ class SaleLogContainer extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    console.log("mounting");
-
     this.connection = new SignalR.HubConnectionBuilder()
       .withUrl("/Sale/LogHub")
       .build();
@@ -94,8 +92,8 @@ class SaleLogContainer extends Component {
     
   };
 
-  mapLog = logObj=>{
-    
+  componentWillUnmount(){
+    this.connection.stop();
   }
 
   render() {

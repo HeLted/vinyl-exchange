@@ -7,22 +7,13 @@ function SaleLogComponent(props) {
   const listItems = props.data.logs.map(logObj => {
     return (
       <li key={logObj.id}>
-        <div className="row">
-          <div className="col-3">
+        <div className="row text-left">
+          <div className="col-lg-12 col-sm-12">
             <div className="alert alert-secondary" role="alert">
-              {new Date(logObj.createdOn).toLocaleString()}
+              {new Date(logObj.createdOn).toLocaleString() + " "}   <FontAwesomeIcon icon={faArrowRight} /> { " " + logObj.logContent }
             </div>
           </div>
-          <div className="col-1">
-            <div className="alert alert-outline-primary" role="alert">
-              <FontAwesomeIcon icon={faArrowRight} />
-            </div>
-          </div>
-          <div className="col-8">
-            <div className="alert alert-primary" role="alert">
-              {logObj.logContent}
-            </div>
-          </div>
+          
         </div>
       </li>
     );

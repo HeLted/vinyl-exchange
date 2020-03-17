@@ -9,6 +9,10 @@ import "./../authForm.css";
 function LoginComponent(props) {
   return (
     <div className="container-fluid">
+      <div className="row justify-content-center border">
+        <h3 className="property-text">Login</h3>
+      </div>
+      <br/>
       <div className="row justify-content-center">
         <div className="auth-form col-4 border">
           <form onSubmit={props.functions.handleOnSubmit}>

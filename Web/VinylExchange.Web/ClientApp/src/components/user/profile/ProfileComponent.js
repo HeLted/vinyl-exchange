@@ -5,6 +5,7 @@ import ChangeAvatarModalContainer from "./userModals/changeAvatar/ChangeAvatarMo
 import UserAvatarContainer from "./userAvatar/UserAvatarContainer";
 import UserPurchasesContainer from "./userPurchases/UserPurchasesContainer";
 import UserSalesContainer from "./userSales/UserSalesContainer";
+import ConfirmEmailContainer from "./userModals/confirmEmail/ConfirmEmailModalContainer";
 
 function ProfileComponent(props) {
   return (
@@ -44,9 +45,14 @@ function ProfileComponent(props) {
           <AddressManagerModalContainer />
         </div>
         <div className="col-2">
-          <button className="profile-menu-button btn btn-outline-primary btn-lg">
+        <button
+            className="profile-menu-button btn btn-outline-primary btn-lg"
+            data-toggle="modal"
+            data-target="#confirmEmailModal"
+          >
             Confirm Email
           </button>
+          <ConfirmEmailContainer />
         </div>
       </div>
       <br />

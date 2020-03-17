@@ -177,6 +177,7 @@ namespace VinylExchange.Web
                         options.User.RequireUniqueEmail = true;
                     });
 
+        
             services.AddAuthentication(options =>
             {
                 // ...
@@ -239,7 +240,7 @@ namespace VinylExchange.Web
             services.AddTransient<RoleSeeder>();
             services.AddTransient<UserSeeder>();
             services.AddSingleton<IEmailSender>(
-                new EmailSender("SG.LtntWeJrTD - 310jTquhuBA.M5rZlCNcnuM7U7xYTT4w25vcaevdykIY1flFZV - Shec"));
+                new EmailSender(Configuration["SendGridKey"]));
         
         }
     }

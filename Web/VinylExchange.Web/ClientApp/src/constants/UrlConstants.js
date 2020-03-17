@@ -80,7 +80,8 @@ export const Controllers = {
       confirmEmail: "/ConfirmEmail",
       changeUserAvatar: "/ChangeUserAvatar",
       getCurrentUserAvatar: "/GetCurrentUserAvatar",
-      getUserAvatar: "/GetUserAvatar"
+      getUserAvatar: "/GetUserAvatar",
+      sendConfirmEmail:"/SendConfirmEmail"
     }
   },
   addresses: {
