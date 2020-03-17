@@ -5,7 +5,7 @@ import Label from "../../../../../common/inputComponents/Label";
 function AddGenresComponent(props) {
   return (
     <div className="form-group">
-      <Label for="genreNameInput" value="Genre Name" />
+      <Label htlmFor="genreNameInput" value="Genre Name" />
       <TextInput
         id="genreNameInput"
         placeholder="Genre Name..."
@@ -14,7 +14,7 @@ function AddGenresComponent(props) {
       />
       <br />
       <button
-        class="btn btn-success btn-lg w-100"
+        className="btn btn-success btn-lg w-100"
         onClick={props.functions.handleOnSubmit}
       >
         Add Genre

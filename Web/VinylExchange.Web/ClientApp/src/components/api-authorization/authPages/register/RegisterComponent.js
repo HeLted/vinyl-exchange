@@ -17,7 +17,7 @@ function RegisterComponent(props) {
       <div className="row justify-content-center">
         <div className="auth-form col-4 border">
           <form onSubmit={props.functions.handleOnSubmit}>
-            <div class="form-group">
+            <div className="form-group">
               <Label for="usernameInput" value="Username" />
               <TextInput
                 id="usernameInput"
@@ -26,7 +26,7 @@ function RegisterComponent(props) {
                 onChange={props.functions.handleOnChange}
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <Label for="emailInput" value="E-Mail" />
               <EmailInput
                 id="emailInput"
@@ -35,7 +35,7 @@ function RegisterComponent(props) {
                 onChange={props.functions.handleOnChange}
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <Label for="passwordInput" value="Password" />
               <PasswordInput
                 id="passwordInput"
@@ -44,7 +44,7 @@ function RegisterComponent(props) {
                 onChange={props.functions.handleOnChange}
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <Label for="confirmPasswordInput" value="Confirm Password" />
               <PasswordInput
                 id="confirmPasswordInput"
@@ -55,11 +55,11 @@ function RegisterComponent(props) {
             </div>
             <div className="text-center">
               {props.data.isLoading ? (
-                <button class="btn btn-primary" disabled>
+                <button className="btn btn-primary" disabled>
                   <FontAwesomeIcon icon={faSync} spin />
                 </button>
               ) : (
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" className="btn btn-primary">
                   Submit
                 </button>
               )}

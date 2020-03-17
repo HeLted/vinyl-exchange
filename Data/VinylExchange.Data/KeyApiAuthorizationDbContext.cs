@@ -57,7 +57,17 @@
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.ConfigurePersistedGrantContext(this._operationalStoreOptions.Value);
+
+            if(this._operationalStoreOptions != null)
+            {
+                builder.ConfigurePersistedGrantContext(this._operationalStoreOptions.Value);
+            }
+            else
+            {
+                builder.Entity<DeviceFlowCodes>().HasNoKey();
+                builder.Entity<PersistedGrant>().HasNoKey();
+            }
+
         }
     }
 

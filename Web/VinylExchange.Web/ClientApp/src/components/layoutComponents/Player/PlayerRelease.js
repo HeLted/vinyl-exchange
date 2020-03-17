@@ -40,7 +40,7 @@ class PlayerRelease extends Component {
           <div className="col-lg-10 col-md-10 col-sm-10 col-xs-3 sm2-row p-0">
             <div className="sm2-col sm2-wide">
               <div className="player-row row text-center justify-content-center">
-                <div className="release-cover-art col-1">
+                <div className="release-cover-art col-1 p-0">
                   <img src={this.props.image} height="38px" width="38px" />
                 </div>
                 <div className="player-title col-lg-10 col-md-9 col-sm-8 col-xs-3 ">

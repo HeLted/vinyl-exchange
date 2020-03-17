@@ -18,6 +18,8 @@
         {
         }
 
+      
+
         public DbSet<Address> Addresses { get; set; }
 
         public DbSet<CollectionItem> Collections { get; set; }

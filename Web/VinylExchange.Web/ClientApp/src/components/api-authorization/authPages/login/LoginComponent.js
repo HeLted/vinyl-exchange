@@ -16,7 +16,7 @@ function LoginComponent(props) {
       <div className="row justify-content-center">
         <div className="auth-form col-4 border">
           <form onSubmit={props.functions.handleOnSubmit}>
-            <div class="form-group">
+            <div className="form-group">
               <Label for="usernameInput" value="Username" />
               <TextInput
                 id="usernameInput"
@@ -26,7 +26,7 @@ function LoginComponent(props) {
               />
             </div>
 
-            <div class="form-group">
+            <div className="form-group">
               <Label for="passwordInput" value="Password" />
               <PasswordInput
                 id="passwordInput"
@@ -36,9 +36,9 @@ function LoginComponent(props) {
               />
             </div>
 
-            <div class="form-group">
-              <div class="form-check text-center">
-                <div class="custom-control custom-checkbox">
+            <div className="form-group">
+              <div className="form-check text-center">
+                <div className="custom-control custom-checkbox">
                   <input
                     type="checkbox"
                     className="custom-control-input"

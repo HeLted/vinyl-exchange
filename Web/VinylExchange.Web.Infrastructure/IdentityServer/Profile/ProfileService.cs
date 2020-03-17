@@ -25,9 +25,10 @@
             var roles = await this.userManager.GetRolesAsync(user);
             var claims = new List<Claim>
                              {new Claim(JwtClaimTypes.Name,user.UserName),
+                             new Claim(JwtClaimTypes.EmailVerified,user.EmailConfirmed.ToString().ToLower()),
                                  new Claim(JwtClaimTypes.Role, roles.Any() ? roles.First() : "User"),
                                  new Claim(JwtClaimTypes.Role, roles.Any() ? roles.First() : "Admin")
-                                 
+
                              };
 
             context.IssuedClaims.AddRange(claims);

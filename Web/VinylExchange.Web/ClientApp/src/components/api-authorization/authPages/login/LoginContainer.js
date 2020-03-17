@@ -1,116 +1,111 @@
-import React, { Component } from 'react';
-import LoginComponent from "./LoginComponent"
+import React, { Component } from "react";
+import LoginComponent from "./LoginComponent";
 import {
   Url,
   Controllers,
   Queries
 } from "./../../../../constants/UrlConstants";
 import axios from "axios";
-import {NotificationContext} from "./../../../../contexts/NotificationContext"
-import authService from "./../../../api-authorization/AuthorizeService"
-import urlPathSeparator from "./../../../../functions/urlPathSeparator"
-import getAntiForgeryAxiosConfig from "./../../../../functions/getAntiForgeryAxiosConfig"
-import FacebookLogin from 'react-facebook-login';
+import { NotificationContext } from "./../../../../contexts/NotificationContext";
+import authService from "./../../../api-authorization/AuthorizeService";
+import urlPathSeparator from "./../../../../functions/urlPathSeparator";
+import getAntiForgeryAxiosConfig from "./../../../../functions/getAntiForgeryAxiosConfig";
+import FacebookLogin from "react-facebook-login";
 
 class LoginContainer extends Component {
-    constructor() {
-        super();
-        this.state = {
-          usernameInput: "",
-          passwordInput: "",
-          rememberMeInput:false,
-          isLoading:false
-        };
-      }
-    
-      static contextType = NotificationContext;
-    
-      handleOnChange = event => {
+  constructor() {
+    super();
+    this.state = {
+      usernameInput: "",
+      passwordInput: "",
+      rememberMeInput: false,
+      isLoading: false
+    };
+  }
 
-        if(event.target.type ==="checkbox"){
-          const { value, name } = event.target;
-          this.setState(prevstate =>{
-            
-            return{ rememberMeInput : prevstate.rememberMeInput ? false: true }
-          
-          });
-        }else{
-          const { value, name } = event.target;
-          this.setState({ [name]: value });
+  static contextType = NotificationContext;
+
+  handleOnChange = event => {
+    if (event.target.type === "checkbox") {
+      const { value, name } = event.target;
+      this.setState(prevstate => {
+        return { rememberMeInput: prevstate.rememberMeInput ? false : true };
+      });
+    } else {
+      const { value, name } = event.target;
+      this.setState({ [name]: value });
+    }
+  };
+
+  handleOnSubmit = event => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const submitFormObj = {
+      username: this.state.usernameInput,
+      password: this.state.passwordInput,
+      rememberMe: this.state.rememberMeInput
+    };
+
+    this.setState({ isLoading: true });
+    axios
+      .post(
+        Url.api + Controllers.users.name + Controllers.users.actions.login,
+        submitFormObj,
+        getAntiForgeryAxiosConfig()
+      )
+      .then(async response => {
+        if (response.status === 200) {
+          let redirectUrl = this.props.location.search.replace(
+            Url.queryStart + Queries.returnUrl + Url.equal,
+            ""
+          );
+          redirectUrl = urlPathSeparator(redirectUrl);
+          const state = { returnUrl: redirectUrl };
+          await authService.signIn(state);
+          this.context.handleAppNotification("Succesfully logged in", 4);
+          this.setState({ isLoading: false });
+          if (redirectUrl === "") {
+            redirectUrl = "/";
+            authService.completeSignIn(redirectUrl);
+          } else {
+            authService.completeSignIn(redirectUrl);
+          }
         }
-        
-      };
-    
-      handleOnSubmit = event => {
-        event.preventDefault();
-        event.stopPropagation();
-    
-        const submitFormObj = {
-          username: this.state.usernameInput,
-          password: this.state.passwordInput,
-          rememberMe:this.state.rememberMeInput
-        };
-    
-        this.setState({isLoading:true})
-        axios
-          .post(
-            Url.api +
-              Controllers.users.name +
-              Controllers.users.actions.login,
-            submitFormObj,
-            getAntiForgeryAxiosConfig()
-          )
-          .then(async(response) => {
-            if(response.status === 200){
+      })
+      .catch(error => {
+        this.setState({ isLoading: false });
+        this.context.handleServerNotification(
+          error.response,
+          error.response.status === 401
+            ? "Invalid credentials!"
+            : "There was an error in logging you in!"
+        );
+      });
+  };
 
-                let redirectUrl = this.props.location.search.replace(Url.queryStart + Queries.returnUrl + Url.equal,"");
-                redirectUrl = urlPathSeparator(redirectUrl);
-                const state = { returnUrl:redirectUrl };
-                await authService.signIn(state);
-                this.context.handleAppNotification("Succesfully logged in", 4);
-                this.setState({isLoading:false})
-                if(redirectUrl === ""){
-                    redirectUrl = "/"
-                     authService.completeSignIn(redirectUrl);
-                }else{
-                 
-                   
-                    authService.completeSignIn(redirectUrl);
-                }
-            }
-            
-          })
-          .catch(error => {
-            this.setState({isLoading:false})
-            this.context.handleServerNotification(
-              error.response, error.response.status === 401 ?"Invalid credentials!" :
-              "There was an error in logging you in!"
-            );
-          });
-      };
-    
-      render() {
-        return (<div>
-          <LoginComponent
-            data={{
-              usernameInput: this.state.usernameInput,
-              passwordInput: this.state.passwordInput,
-              rememberMeInput: this.state.rememberMeInput,
-              isLoading : this.state.isLoading
-            }}
-            functions={{
-              handleOnChange: this.handleOnChange,
-              handleOnSubmit: this.handleOnSubmit
-            }}
-          />
-          <FacebookLogin
+  render() {
+    return (
+      <LoginComponent
+        data={{
+          usernameInput: this.state.usernameInput,
+          passwordInput: this.state.passwordInput,
+          rememberMeInput: this.state.rememberMeInput,
+          isLoading: this.state.isLoading
+        }}
+        functions={{
+          handleOnChange: this.handleOnChange,
+          handleOnSubmit: this.handleOnSubmit
+        }}
+      />
+      /* <FacebookLogin
     appId="231657284655493"
     autoLoad={true}
     fields="name,email"
     onClick={(facebookResponse)=>{console.log(facebookResponse)}}
-    callback={()=>{}} /></div>
-        );
-      }
-    }
- 
+    callback={()=>{}} /></div> */
+    );
+  }
+}
+
 export default LoginContainer;

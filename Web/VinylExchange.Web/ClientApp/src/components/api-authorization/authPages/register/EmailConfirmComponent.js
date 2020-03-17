@@ -7,7 +7,7 @@ function EmailConfirmContainer(props) {
     <div className="container-fluid d-flex justify-content-center">
       <div className="col-5 d-flex justify-content-center">
         {props.data.isLoading ? (
-          <button class="btn btn-primary">
+          <button className="btn btn-primary">
             <FontAwesomeIcon icon={faSync} spin />
           </button>
         ) : (

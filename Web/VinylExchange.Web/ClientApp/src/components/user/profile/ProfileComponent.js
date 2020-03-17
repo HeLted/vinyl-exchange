@@ -6,9 +6,14 @@ import UserAvatarContainer from "./userAvatar/UserAvatarContainer";
 import UserPurchasesContainer from "./userPurchases/UserPurchasesContainer";
 import UserSalesContainer from "./userSales/UserSalesContainer";
 import ConfirmEmailContainer from "./userModals/confirmEmail/ConfirmEmailModalContainer";
+import PageSpinner from "./../../common/spinners/PageSpinner";
+import { Roles } from "./../../../constants/RoleConstants";
+import { Link } from "react-router-dom";
 
 function ProfileComponent(props) {
-  return (
+  return props.data.isLoading ? (
+    <PageSpinner />
+  ) : (
     <div className="container-fluid">
       <div className="row justify-content-center">
         <div className="profile-avatar-container col-3 border">
@@ -18,61 +23,95 @@ function ProfileComponent(props) {
         </div>
       </div>
       <br />
-      <div className=" profile-menu-container row border justify-content-center">
-        <div className="col-2">
-          <button
-            className="profile-menu-button btn btn-outline-primary btn-lg"
-            data-toggle="modal"
-            data-target="#changeAvatarModal"
-          >
-            Change Avatar
-          </button>
-          <ChangeAvatarModalContainer
-            functions={{
-              handleShouldAvatarUpdate: props.functions.handleShouldAvatarUpdate
-            }}
-          />
-        </div>
 
-        <div className="col-2">
-          <button
-            className="profile-menu-button btn btn-outline-primary btn-lg"
-            data-toggle="modal"
-            data-target="#addressManagerModal"
+      <div className="accordion filter-collapse" id="filterCollapse">
+        <div className="card">
+          <div className="card-header" id="headingOne">
+            <h2 className="mb-0">
+              <button
+                className="filter-collapse-btn btn btn-outline-primary"
+                type="button"
+                data-toggle="collapse"
+                data-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                User Menu
+              </button>
+            </h2>
+          </div>
+
+          <div
+            id="collapseOne"
+            className="collapse show"
+            aria-labelledby="headingOne"
+            data-parent="#filterCollapse"
           >
-            Address Manager
-          </button>
-          <AddressManagerModalContainer />
-        </div>
-        <div className="col-2">
-        <button
-            className="profile-menu-button btn btn-outline-primary btn-lg"
-            data-toggle="modal"
-            data-target="#confirmEmailModal"
-          >
-            Confirm Email
-          </button>
-          <ConfirmEmailContainer />
+            <div className="card-body">
+              <div className="  row text-center justify-content-center">
+                <div className="col-12">
+                  <button
+                    className="profile-menu-button btn btn-outline-primary btn-lg"
+                    data-toggle="modal"
+                    data-target="#changeAvatarModal"
+                  >
+                    Change Avatar
+                  </button>
+                  <ChangeAvatarModalContainer
+                    functions={{
+                      handleShouldAvatarUpdate:
+                        props.functions.handleShouldAvatarUpdate
+                    }}
+                  />
+                </div>
+
+                <div className="col-12">
+                  <button
+                    className="profile-menu-button btn btn-outline-primary btn-lg"
+                    data-toggle="modal"
+                    data-target="#addressManagerModal"
+                  >
+                    Address Manager
+                  </button>
+                  <AddressManagerModalContainer />
+                </div>
+                <br />
+                {props.data.user.email_verified === "false" && (
+                  <div className="col-12">
+                    <button
+                      className="profile-menu-button btn btn-outline-primary btn-lg"
+                      data-toggle="modal"
+                      data-target="#confirmEmailModal"
+                    >
+                      Confirm Email
+                    </button>
+                    <ConfirmEmailContainer />
+                  </div>
+                )}
+              </div>
+
+              <div className="row  justify-content-center  text-center">
+                <div className=" col-12">
+                  <button className="profile-menu-button btn btn-outline-primary btn-lg">
+                    Change Email
+                  </button>
+                  <br />
+                </div>
+
+                <div className=" col-12">
+                  <button className="profile-menu-button btn btn-outline-primary btn-lg">
+                    Change Password
+                  </button>
+                  <br />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
       <br />
-      <div className="row border  profile-menu-container justify-content-center">
-        <div className=" col-2">
-          <button className="profile-menu-button btn btn-outline-primary btn-lg">
-            Change Email
-          </button>
-        </div>
-        <div className=" col-2">
-          <button className="profile-menu-button btn btn-outline-primary btn-lg">
-            Change Password
-          </button>
-        </div>
-        <div className=" col-2">
-          <button className="profile-menu-button btn btn-outline-primary btn-lg">
-            Administration Panel
-          </button>
-        </div>
-      </div>
+
       <br />
       <div className="row ">
         <div className="col-12 border p-0" style={{ marginBottom: "30px" }}>
