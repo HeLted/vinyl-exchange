@@ -90,7 +90,7 @@
         }
 
         [Fact]
-        public async Task RemoveGenreShouldThrowNullReferenceExceptionIfProvidedAddressIdDoesntBelongToAnyAddress()
+        public async Task RemoveGenreShouldThrowNullReferenceExceptionIfProvidedGenreIdIsNotInDb()
         {
             Random rnd = new Random();
 

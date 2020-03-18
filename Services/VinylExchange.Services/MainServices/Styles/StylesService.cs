@@ -8,7 +8,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-
+    using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
@@ -54,10 +54,11 @@
 
             if (style == null)
             {
-                throw new NullReferenceException("Address with this Id doesn't exist");
+                throw new NullReferenceException(NullReferenceExceptionsConstants.StyleNotFound);
             }
 
             var removedStyle = this.dbContext.Styles.Remove(style).Entity;
+
             await this.dbContext.SaveChangesAsync();
 
             return removedStyle.To<TModel>();

@@ -7,7 +7,7 @@
 
     #endregion
 
-    public class GetAllStylesResourceModel : IMapFrom<Style>
+    public class GetAllStylesForGenreResourceModel : IMapFrom<Style>
     {
         public int Id { get; set; }
 

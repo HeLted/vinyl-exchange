@@ -46,11 +46,11 @@
 
         [HttpGet]
         [Route("GetAllStylesForGenre")]
-        public async Task<ActionResult<IEnumerable<GetAllStylesResourceModel>>> GetAllStylesForGenre(int? genreId)
+        public async Task<ActionResult<IEnumerable<GetAllStylesForGenreResourceModel>>> GetAllStylesForGenre(int? genreId)
         {
             try
             {
-                return await this.stylesService.GetAllStylesForGenre<GetAllStylesResourceModel>(genreId);
+                return await this.stylesService.GetAllStylesForGenre<GetAllStylesForGenreResourceModel>(genreId);
             }
             catch (Exception ex)
             {
