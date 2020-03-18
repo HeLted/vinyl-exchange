@@ -36,7 +36,7 @@
             try
             {
                 return this.Created(
-                    await this.addressesService.AddAddress<CreateAddressResourceModel>(
+                    await this.addressesService.CreateAddress<CreateAddressResourceModel>(
                         inputModel,
                         this.GetUserId(this.User)));
             }

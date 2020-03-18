@@ -8,7 +8,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-
+    using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
@@ -25,7 +25,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<TModel> AddAddress<TModel>(CreateAddressInputModel inputModel, Guid userId)
+        public async Task<TModel> CreateAddress<TModel>(CreateAddressInputModel inputModel, Guid userId)
         {
             var address = inputModel.To<Address>();
 
@@ -54,13 +54,13 @@
 
             if (address == null)
             {
-                throw new NullReferenceException("Address with this Id doesn't exist");
+                throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
             }
 
             var removedAddress = this.dbContext.Addresses.Remove(address).Entity;
             await this.dbContext.SaveChangesAsync();
 
             return removedAddress.To<TModel>();
-        }
+        }     
     }
 }

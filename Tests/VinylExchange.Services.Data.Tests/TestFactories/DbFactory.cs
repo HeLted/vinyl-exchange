@@ -1,20 +1,14 @@
-﻿namespace VinylExchange.Services.Data.Tests.Fixtures
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System;
+using System.Reflection;
+using VinylExchange.Data;
+
+namespace VinylExchange.Services.Data.Tests.TestFactories
 {
-    #region
-
-    using System;
-    using System.Reflection;
-
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-
-    using VinylExchange.Data;
-
-    #endregion
-
-    public class DatabaseFixture : IDisposable
+    public  static class DbFactory 
     {
-        public DatabaseFixture()
+        public static VinylExchangeDbContext CreateVinylExchangeDbContext()
         {
             var options = new DbContextOptionsBuilder<VinylExchangeDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
@@ -29,14 +23,8 @@
 
             onModelCreatingMethod.Invoke(dbContext, new object[] { modelBuilder });
 
-            this.DbContext = dbContext;
+            return dbContext;
         }
-
-        public VinylExchangeDbContext DbContext { get; }
-
-        public void Dispose()
-        {
-            this.DbContext.Dispose();
-        }
+        
     }
 }
