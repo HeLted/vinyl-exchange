@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-
+    using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
@@ -46,7 +46,7 @@
 
             if (genre == null)
             {
-                throw new NullReferenceException("Address with this Id doesn't exist");
+                throw new NullReferenceException(NullReferenceExceptionsConstants.GenreNotFound);
             }
 
             var removedGenre = this.dbContext.Genres.Remove(genre).Entity;

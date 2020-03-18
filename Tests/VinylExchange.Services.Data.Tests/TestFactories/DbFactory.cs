@@ -1,12 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using System;
-using System.Reflection;
-using VinylExchange.Data;
-
-namespace VinylExchange.Services.Data.Tests.TestFactories
+﻿namespace VinylExchange.Services.Data.Tests.TestFactories
 {
-    public  static class DbFactory 
+    #region
+
+    using System;
+    using System.Reflection;
+
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+
+    using VinylExchange.Data;
+
+    #endregion
+
+    public static class DbFactory
     {
         public static VinylExchangeDbContext CreateVinylExchangeDbContext()
         {
@@ -25,6 +31,5 @@ namespace VinylExchange.Services.Data.Tests.TestFactories
 
             return dbContext;
         }
-        
     }
 }
