@@ -10,12 +10,12 @@
     {
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(name: "OrderId", table: "Sales");
+            migrationBuilder.DropColumn("OrderId", "Sales");
         }
 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(name: "OrderId", table: "Sales", nullable: true);
+            migrationBuilder.AddColumn<string>("OrderId", "Sales", nullable: true);
         }
     }
 }

@@ -16,13 +16,13 @@
     public class MemoryCacheManager
     {
         /// <summary>
-        /// All keys of cache
+        ///     All keys of cache
         /// </summary>
-        /// <remarks>Dictionary value indicating whether a key still exists in cache</remarks> 
+        /// <remarks>Dictionary value indicating whether a key still exists in cache</remarks>
         protected static readonly ConcurrentDictionary<string, bool> _allKeys;
 
         /// <summary>
-        /// Cancellation token for clear cache
+        ///     Cancellation token for clear cache
         /// </summary>
         protected CancellationTokenSource _cancellationTokenSource;
 
@@ -40,7 +40,7 @@
         }
 
         /// <summary>
-        /// Clear all cache data
+        ///     Clear all cache data
         /// </summary>
         public virtual void Clear()
         {
@@ -55,7 +55,7 @@
         }
 
         /// <summary>
-        /// Dispose cache manager
+        ///     Dispose cache manager
         /// </summary>
         public virtual void Dispose()
         {
@@ -63,7 +63,7 @@
         }
 
         /// <summary>
-        /// Get a cached item. If it's not in the cache yet, then load and cache it
+        ///     Get a cached item. If it's not in the cache yet, then load and cache it
         /// </summary>
         /// <typeparam name="T">Type of cached item</typeparam>
         /// <param name="key">Cache key</param>
@@ -73,19 +73,14 @@
         public virtual T Get<T>(string key, Func<T> acquire, int? cacheTime = null)
         {
             // item already is in cache, so return it
-            if (this._cache.TryGetValue(key, out T value))
-            {
-                return value;
-            }
+            if (this._cache.TryGetValue(key, out T value)) return value;
 
             // or create it using passed function
             var result = acquire();
 
             // and set in cache (if cache time is defined)
             if ((cacheTime ?? NopCachingDefaults.CacheTime) > 0)
-            {
                 this.Set(key, result, cacheTime ?? NopCachingDefaults.CacheTime);
-            }
 
             return result;
         }
@@ -96,7 +91,7 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether the value associated with the specified key is cached
+        ///     Gets a value indicating whether the value associated with the specified key is cached
         /// </summary>
         /// <param name="key">Key of cached item</param>
         /// <returns>True if item already is in cache; otherwise false</returns>
@@ -106,7 +101,7 @@
         }
 
         /// <summary>
-        /// Perform some action with exclusive in-memory lock
+        ///     Perform some action with exclusive in-memory lock
         /// </summary>
         /// <param name="key">The key we are locking on</param>
         /// <param name="expirationTime">The time after which the lock will automatically be expired</param>
@@ -115,10 +110,7 @@
         public bool PerformActionWithLock(string key, TimeSpan expirationTime, Action action)
         {
             // ensure that lock is acquired
-            if (!_allKeys.TryAdd(key, true))
-            {
-                return false;
-            }
+            if (!_allKeys.TryAdd(key, true)) return false;
 
             try
             {
@@ -137,7 +129,7 @@
         }
 
         /// <summary>
-        /// Removes the value with the specified key from the cache
+        ///     Removes the value with the specified key from the cache
         /// </summary>
         /// <param name="key">Key of cached item</param>
         public virtual void Remove(string key)
@@ -146,7 +138,7 @@
         }
 
         /// <summary>
-        /// Adds the specified key and object to the cache
+        ///     Adds the specified key and object to the cache
         /// </summary>
         /// <param name="key">Key of cached item</param>
         /// <param name="data">Value for caching</param>
@@ -154,16 +146,14 @@
         public virtual void Set(string key, object data, int cacheTime)
         {
             if (data != null)
-            {
                 this._cache.Set(
                     this.AddKey(key),
                     data,
                     this.GetMemoryCacheEntryOptions(TimeSpan.FromMinutes(cacheTime)));
-            }
         }
 
         /// <summary>
-        /// Add key to dictionary
+        ///     Add key to dictionary
         /// </summary>
         /// <param name="key">Key of cached item</param>
         /// <returns>Itself key</returns>
@@ -174,7 +164,7 @@
         }
 
         /// <summary>
-        /// Create entry options to item of memory cache
+        ///     Create entry options to item of memory cache
         /// </summary>
         /// <param name="cacheTime">Cache time</param>
         protected MemoryCacheEntryOptions GetMemoryCacheEntryOptions(TimeSpan cacheTime)
@@ -194,7 +184,7 @@
         }
 
         /// <summary>
-        /// Remove key from dictionary
+        ///     Remove key from dictionary
         /// </summary>
         /// <param name="key">Key of cached item</param>
         /// <returns>Itself key</returns>
@@ -205,32 +195,28 @@
         }
 
         /// <summary>
-        /// Try to remove a key from dictionary, or mark a key as not existing in cache
+        ///     Try to remove a key from dictionary, or mark a key as not existing in cache
         /// </summary>
         /// <param name="key">Key of cached item</param>
         protected void TryRemoveKey(string key)
         {
             // try to remove key from dictionary
             if (!_allKeys.TryRemove(key, out _))
-            {
+
                 // if not possible to remove key from dictionary, then try to mark key as not existing in cache
                 _allKeys.TryUpdate(key, false, true);
-            }
         }
 
         /// <summary>
-        /// Remove all keys marked as not existing
+        ///     Remove all keys marked as not existing
         /// </summary>
         private void ClearKeys()
         {
-            foreach (var key in _allKeys.Where(p => !p.Value).Select(p => p.Key).ToList())
-            {
-                this.RemoveKey(key);
-            }
+            foreach (var key in _allKeys.Where(p => !p.Value).Select(p => p.Key).ToList()) this.RemoveKey(key);
         }
 
         /// <summary>
-        /// Post eviction (срабытывает тогда когда ключ key инвалидируется)
+        ///     Post eviction (срабытывает тогда когда ключ key инвалидируется)
         /// </summary>
         /// <param name="key">Key of cached item</param>
         /// <param name="value">Value of cached item</param>
@@ -239,10 +225,7 @@
         private void PostEviction(object key, object value, EvictionReason reason, object state)
         {
             // if cached item just change, then nothing doing
-            if (reason == EvictionReason.Replaced)
-            {
-                return;
-            }
+            if (reason == EvictionReason.Replaced) return;
 
             // try to remove all keys marked as not existing
             this.ClearKeys();
@@ -256,12 +239,13 @@
 public static class NopCachingDefaults
 {
     /// <summary>
-    /// Gets the default cache time in minutes
+    ///     Gets the default cache time in minutes
     /// </summary>
     public static int CacheTime => 60;
 
     /// <summary>
-    /// Gets the key used to store the protection key list to Redis (used with the PersistDataProtectionKeysToRedis option enabled)
+    ///     Gets the key used to store the protection key list to Redis (used with the PersistDataProtectionKeysToRedis option
+    ///     enabled)
     /// </summary>
     public static string RedisDataProtectionKey => "Nop.DataProtectionKeys";
 }

@@ -38,8 +38,8 @@ namespace VinylExchange.Web
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Data.MainServices.Styles;
     using VinylExchange.Services.EmaiSender;
-    using VinylExchange.Services.Files;    
-    using VinylExchange.Services.Logging;  
+    using VinylExchange.Services.Files;
+    using VinylExchange.Services.Logging;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Services.MemoryCache;
     using VinylExchange.Web.Hubs.SaleChat;
@@ -60,17 +60,14 @@ namespace VinylExchange.Web
         public IConfiguration Configuration { get; }
 
         public IWebHostEnvironment Environment { get; }
-       
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAntiforgery antiforgery)
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<VinylExchangeDbContext>();
 
-                if (env.IsDevelopment())
-                {
-                    dbContext.Database.Migrate();
-                }
+                if (env.IsDevelopment()) dbContext.Database.Migrate();
 
                 serviceScope.ServiceProvider.GetRequiredService<UserManager<VinylExchangeUser>>();
                 serviceScope.ServiceProvider.GetRequiredService<RoleManager<VinylExchangeRole>>();
@@ -88,7 +85,7 @@ namespace VinylExchange.Web
             else
             {
                 app.UseExceptionHandler("/Error");
-                
+
                 app.UseHsts();
             }
 
@@ -144,10 +141,7 @@ namespace VinylExchange.Web
                     {
                         spa.Options.SourcePath = "ClientApp";
 
-                        if (env.IsDevelopment())
-                        {
-                            spa.UseReactDevelopmentServer(npmScript: "start");
-                        }
+                        if (env.IsDevelopment()) spa.UseReactDevelopmentServer("start");
                     });
         }
 
@@ -160,10 +154,7 @@ namespace VinylExchange.Web
             services.AddSignalR(
                 options =>
                     {
-                        if (this.Environment.IsDevelopment())
-                        {
-                            options.EnableDetailedErrors = true;
-                        }
+                        if (this.Environment.IsDevelopment()) options.EnableDetailedErrors = true;
                     });
 
             services.AddDefaultIdentity<VinylExchangeUser>(options => options.SignIn.RequireConfirmedAccount = true)

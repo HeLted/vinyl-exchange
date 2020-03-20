@@ -30,12 +30,9 @@
 
         private readonly CreateAddressInputModel testCreateAddressInputModel =
             new CreateAddressInputModel
-            {
-                Country = "Bulgaria",
-                Town = "Sofia",
-                PostalCode = "1612",
-                FullAddress = "Test"
-            };
+                {
+                    Country = "Bulgaria", Town = "Sofia", PostalCode = "1612", FullAddress = "Test"
+                };
 
         public AddressesServiceTests()
         {
@@ -47,14 +44,15 @@
         public async Task CreateAddressShouldCreateAddress()
         {
             var createdAddressModel = await this.addressesService.CreateAddress<CreateAddressResourceModel>(
-                                   this.testCreateAddressInputModel,
-                                   Guid.NewGuid());
+                                          this.testCreateAddressInputModel,
+                                          Guid.NewGuid());
 
             await this.dbContext.SaveChangesAsync();
 
-            var createdAddress = await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == createdAddressModel.Id);
+            var createdAddress =
+                await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == createdAddressModel.Id);
 
-            Assert.True(createdAddress != null);
+            Assert.NotNull(createdAddress);
         }
 
         [Fact]
@@ -89,14 +87,39 @@
         }
 
         [Fact]
+        public async Task GetAddressInfoShouldReturnNullIfProvidedAddressIdIsNotExistingInDb()
+        {
+            var address = (await this.dbContext.Addresses.AddAsync(new Address())).Entity;
+
+            await this.dbContext.SaveChangesAsync();
+
+            var returnedAddressModel =
+                await this.addressesService.GetAddressInfo<GetAddressInfoUtilityModel>(Guid.NewGuid());
+
+            Assert.Null(returnedAddressModel);
+        }
+
+        [Fact]
+        public async Task GetUserAddressesShouldReturnEmptyListWhenANonExistingUserIdIsProvided()
+        {
+            var userId = Guid.NewGuid();
+
+            for (var i = 0; i < 3; i++) await this.dbContext.Addresses.AddAsync(new Address { UserId = userId });
+
+            await this.dbContext.SaveChangesAsync();
+
+            var userAddressesModels =
+                await this.addressesService.GetUserAddresses<GetAddressInfoUtilityModel>(Guid.NewGuid());
+
+            Assert.True(userAddressesModels.Count == 0);
+        }
+
+        [Fact]
         public async Task GetUserAddressesShouldReturnUserAddresses()
         {
             var userId = Guid.NewGuid();
 
-            for (int i = 0; i < 3; i++)
-            {
-                await this.dbContext.Addresses.AddAsync(new Address { UserId = userId });
-            }
+            for (var i = 0; i < 3; i++) await this.dbContext.Addresses.AddAsync(new Address { UserId = userId });
 
             await this.dbContext.SaveChangesAsync();
 
@@ -114,7 +137,7 @@
 
             await this.addressesService.RemoveAddress<RemoveAddressResourceModel>(address.Id);
 
-            var removedAddress = await this.dbContext.Addresses.FirstOrDefaultAsync(a=> a.Id == address.Id);
+            var removedAddress = await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == address.Id);
 
             Assert.Null(removedAddress);
         }

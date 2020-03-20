@@ -30,10 +30,7 @@
         {
             var sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
 
-            if (sale == null)
-            {
-                throw new NullReferenceException("Sale with this Id doesn't exist!");
-            }
+            if (sale == null) throw new NullReferenceException("Sale with this Id doesn't exist!");
 
             string logMessage = null;
 
@@ -68,8 +65,10 @@
             return saleLog;
         }
 
-        public async Task<IEnumerable<GetLogsForSaleResourceModel>> GetLogsForSale(Guid saleId) =>
-            await this.dbContext.SaleLogs.Where(sl => sl.SaleId == saleId).OrderBy(sl => sl.CreatedOn)
-                .To<GetLogsForSaleResourceModel>().ToListAsync();
+        public async Task<IEnumerable<GetLogsForSaleResourceModel>> GetLogsForSale(Guid saleId)
+        {
+            return await this.dbContext.SaleLogs.Where(sl => sl.SaleId == saleId).OrderBy(sl => sl.CreatedOn)
+                       .To<GetLogsForSaleResourceModel>().ToListAsync();
+        }
     }
 }

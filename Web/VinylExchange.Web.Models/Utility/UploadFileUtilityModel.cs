@@ -3,7 +3,6 @@
     #region
 
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
 
     using Microsoft.AspNetCore.Http;
@@ -36,9 +35,9 @@
         public string FileName { get; set; }
 
         public FileType FileType { get; set; }
-   
+
         private byte[] ConvertIFormFileToByteArray(IFormFile file)
-        {            
+        {
             using var ms = new MemoryStream();
             file.CopyTo(ms);
             return ms.ToArray();

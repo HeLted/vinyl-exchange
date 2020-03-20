@@ -1,7 +1,7 @@
 ﻿namespace VinylExchange.Data.Common.Enumerations
 {
     public enum Condition
-    {    
+    {
         Poor = 1,
 
         Fair = 2,

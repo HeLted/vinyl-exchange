@@ -42,27 +42,34 @@
             return trackedCollectionItem.Entity.To<TModel>();
         }
 
-        public async Task<bool> DoesUserCollectionContainRelease(Guid releaseId, Guid userId) =>
-            await this.dbContext.Collections.Where(ci => ci.ReleaseId == releaseId && ci.UserId == userId).CountAsync()
-            > 0;
+        public async Task<bool> DoesUserCollectionContainRelease(Guid releaseId, Guid userId)
+        {
+            return await this.dbContext.Collections.Where(ci => ci.ReleaseId == releaseId && ci.UserId == userId)
+                       .CountAsync() > 0;
+        }
 
-        public async Task<TModel> GetCollectionItem<TModel>(Guid collectionItemId) =>
-            await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId).To<TModel>().FirstOrDefaultAsync();
+        public async Task<TModel> GetCollectionItem<TModel>(Guid collectionItemId)
+        {
+            return await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId).To<TModel>()
+                       .FirstOrDefaultAsync();
+        }
 
-        public async Task<TModel> GetCollectionItemInfo<TModel>(Guid collectionItemId) =>
-            await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId).To<TModel>().FirstOrDefaultAsync();
+        public async Task<TModel> GetCollectionItemInfo<TModel>(Guid collectionItemId)
+        {
+            return await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId).To<TModel>()
+                       .FirstOrDefaultAsync();
+        }
 
-        public async Task<List<TModel>> GetUserCollection<TModel>(Guid userId) =>
-            await this.dbContext.Collections.Where(ci => ci.UserId == userId).To<TModel>().ToListAsync();
+        public async Task<List<TModel>> GetUserCollection<TModel>(Guid userId)
+        {
+            return await this.dbContext.Collections.Where(ci => ci.UserId == userId).To<TModel>().ToListAsync();
+        }
 
         public async Task<TModel> RemoveCollectionItem<TModel>(Guid collectionItemId)
         {
             var collectionItem = await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItemId);
 
-            if (collectionItem == null)
-            {
-                throw new NullReferenceException("Collection item with this Id doesn't exist");
-            }
+            if (collectionItem == null) throw new NullReferenceException("Collection item with this Id doesn't exist");
 
             this.dbContext.Collections.Remove(collectionItem);
             await this.dbContext.SaveChangesAsync();

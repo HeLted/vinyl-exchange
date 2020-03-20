@@ -16,13 +16,13 @@
 
     public class GetReleasesResourceModel : IMapFrom<Release>, IHaveCustomMappings
     {
-        public Guid Id { get; set; }
-
         public string Artist { get; set; }
 
         public ReleaseFileResourceModel CoverArt { get; set; }
 
-        public string Format { get; set; }           
+        public string Format { get; set; }
+
+        public Guid Id { get; set; }
 
         public string Label { get; set; }
 

@@ -6,6 +6,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
 
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Services.MemoryCache;
@@ -34,9 +35,7 @@
         {
             var filesContent = new List<byte[]>();
             foreach (var fileUtilityModel in uploadFileUtilityModels)
-            {
                 filesContent.Add(fileUtilityModel.FileByteContent);
-            }
 
             return filesContent;
         }
@@ -74,13 +73,8 @@
                 modelType.GetProperty("CreatedOn").SetValue(modelInstance, createdOn);
 
                 if (isFist && fileType == FileType.Image)
-                {
                     modelType.GetProperty("IsPreview").SetValue(modelInstance, true);
-                }
-                else
-                {
-                    modelType.GetProperty("IsPreview").SetValue(modelInstance, false);
-                }
+                else modelType.GetProperty("IsPreview").SetValue(modelInstance, false);
 
                 modelType.GetProperty(entityIdPropertyName).SetValue(modelInstance, entityId);
 
@@ -129,7 +123,7 @@
 
         private string ConvertFileNameToBase64(string fileName)
         {
-            var fileNameBytes = System.Text.Encoding.UTF8.GetBytes(fileName);
+            var fileNameBytes = Encoding.UTF8.GetBytes(fileName);
             return Convert.ToBase64String(fileNameBytes);
         }
     }

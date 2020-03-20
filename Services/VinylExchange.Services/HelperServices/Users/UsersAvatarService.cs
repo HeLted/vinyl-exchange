@@ -38,10 +38,7 @@
 
             var user = await this.dbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
 
-            if (user == null)
-            {
-                throw new NullReferenceException("User with this Id not found");
-            }
+            if (user == null) throw new NullReferenceException("User with this Id not found");
 
             user.Avatar = imageByteArray;
 

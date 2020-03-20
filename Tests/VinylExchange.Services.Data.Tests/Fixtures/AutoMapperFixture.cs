@@ -19,8 +19,10 @@
             this.ConfigureAutoMapper();
         }
 
-        private void ConfigureAutoMapper() =>
+        private void ConfigureAutoMapper()
+        {
             AutoMapperConfig.RegisterMappings(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly);
+        }
     }
 
     [SuppressMessage(

@@ -36,12 +36,8 @@
             var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
-            {
                 if (sale.SellerId == userId || sale.BuyerId == userId)
-                {
                     await this.Groups.AddToGroupAsync(this.Context.ConnectionId, roomName);
-                }
-            }
         }
 
         public async Task LeaveRoom(string roomName)
@@ -56,14 +52,12 @@
             var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
-            {
                 if (sale.SellerId == userId || sale.BuyerId == userId)
                 {
                     var messages = await this.saleMessagesService.GetMessagesForSale(saleId);
 
                     await this.Clients.Caller.LoadMessageHistory(messages);
                 }
-            }
         }
 
         public async Task SendMessage(Guid saleId, string messageContent)

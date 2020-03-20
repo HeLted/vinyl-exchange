@@ -71,10 +71,7 @@
 
             var address = await this.GetAddress(inputModel.ShipsFromAddressId);
 
-            if (address == null)
-            {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
-            }
+            if (address == null) throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
 
             sale.ShipsFrom = $"{address.Country} - {address.Town}";
 
@@ -93,18 +90,12 @@
         {
             var sale = await this.GetSale(inputModel.SaleId);
 
-            if (sale == null)
-            {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.SaleNotFound);
-            }
+            if (sale == null) throw new NullReferenceException(NullReferenceExceptionsConstants.SaleNotFound);
 
             var address = await this.dbContext.Addresses.Where(a => a.Id == inputModel.ShipsFromAddressId)
                               .FirstOrDefaultAsync();
 
-            if (address == null)
-            {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
-            }
+            if (address == null) throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
 
             sale.Price = inputModel.Price;
 
@@ -183,10 +174,7 @@
 
             var address = await this.GetAddress(inputModel.AddressId);
 
-            if (address == null)
-            {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
-            }
+            if (address == null) throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
 
             sale.BuyerId = buyerId;
             sale.Status = Status.ShippingNegotiation;
@@ -201,10 +189,7 @@
         {
             var sale = await this.GetSale(saleId);
 
-            if (sale == null)
-            {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.SaleNotFound);
-            }
+            if (sale == null) throw new NullReferenceException(NullReferenceExceptionsConstants.SaleNotFound);
 
             var removedAddress = this.dbContext.Sales.Remove(sale).Entity;
             await this.dbContext.SaveChangesAsync();
@@ -224,10 +209,14 @@
             return sale.To<TModel>();
         }
 
-        private async Task<Address> GetAddress(Guid? addressId) =>
-            await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
+        private async Task<Address> GetAddress(Guid? addressId)
+        {
+            return await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
+        }
 
-        private async Task<Sale> GetSale(Guid? saleId) =>
-            await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == saleId);
+        private async Task<Sale> GetSale(Guid? saleId)
+        {
+            return await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == saleId);
+        }
     }
 }

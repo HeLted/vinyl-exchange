@@ -10,34 +10,24 @@
     {
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(name: "SleeveGrade", table: "Sales");
+            migrationBuilder.DropColumn("SleeveGrade", "Sales");
 
-            migrationBuilder.DropColumn(name: "VinylGrade", table: "Sales");
+            migrationBuilder.DropColumn("VinylGrade", "Sales");
 
-            migrationBuilder.AddColumn<int>(
-                name: "SleeveCondition",
-                table: "Sales",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+            migrationBuilder.AddColumn<int>("SleeveCondition", "Sales", "int", nullable: false, defaultValue: 0);
 
-            migrationBuilder.AddColumn<int>(
-                name: "VinylCondition",
-                table: "Sales",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+            migrationBuilder.AddColumn<int>("VinylCondition", "Sales", "int", nullable: false, defaultValue: 0);
         }
 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(name: "SleeveCondition", table: "Sales");
+            migrationBuilder.DropColumn("SleeveCondition", "Sales");
 
-            migrationBuilder.DropColumn(name: "VinylCondition", table: "Sales");
+            migrationBuilder.DropColumn("VinylCondition", "Sales");
 
-            migrationBuilder.AddColumn<int>(name: "SleeveGrade", table: "Sales", nullable: false, defaultValue: 0);
+            migrationBuilder.AddColumn<int>("SleeveGrade", "Sales", nullable: false, defaultValue: 0);
 
-            migrationBuilder.AddColumn<int>(name: "VinylGrade", table: "Sales", nullable: false, defaultValue: 0);
+            migrationBuilder.AddColumn<int>("VinylGrade", "Sales", nullable: false, defaultValue: 0);
         }
     }
 }

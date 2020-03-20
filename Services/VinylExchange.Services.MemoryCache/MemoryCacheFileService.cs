@@ -25,9 +25,7 @@
             var formSessionIdAsString = formSessionId.ToString();
 
             if (!this.cacheManager.IsSet(formSessionIdAsString))
-            {
                 this.cacheManager.Set(formSessionIdAsString, new List<UploadFileUtilityModel>(), 1800);
-            }
 
             var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionIdAsString, null);
 
@@ -38,7 +36,14 @@
 
         public List<UploadFileUtilityModel> GetAllFilesForFormSession(Guid formSessionId)
         {
-            return this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId.ToString(), null);
+            try
+            {
+                return this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId.ToString(), null);
+            }
+            catch
+            {
+                return new List<UploadFileUtilityModel>();
+            }
         }
 
         public List<UploadFileUtilityModel> RemoveAllFilesForFormSession(Guid formSessionId)

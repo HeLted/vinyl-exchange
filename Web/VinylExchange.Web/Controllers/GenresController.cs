@@ -11,7 +11,7 @@
 
     using VinylExchange.Common.Constants;
     using VinylExchange.Services.Data.MainServices.Genres;
-    using VinylExchange.Services.Logging;    
+    using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.InputModels.Genres;
     using VinylExchange.Web.Models.ResourceModels.Genres;
 

@@ -10,14 +10,14 @@
     {
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(name: "Avatar", table: "AspNetUsers");
+            migrationBuilder.DropColumn("Avatar", "AspNetUsers");
         }
 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<byte[]>(
-                name: "Avatar",
-                table: "AspNetUsers",
+                "Avatar",
+                "AspNetUsers",
                 maxLength: 10000000,
                 nullable: false,
                 defaultValue: new byte[] { });

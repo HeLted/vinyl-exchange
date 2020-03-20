@@ -53,16 +53,25 @@
             return releaseFilesModels;
         }
 
-        public async Task<ReleaseFileResourceModel> GetReleaseCoverArt(Guid releaseId) =>
-            await this.dbContext.ReleaseFiles.Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
-                .OrderBy(rf => rf.CreatedOn).To<ReleaseFileResourceModel>().FirstOrDefaultAsync();
+        public async Task<ReleaseFileResourceModel> GetReleaseCoverArt(Guid releaseId)
+        {
+            return await this.dbContext.ReleaseFiles
+                       .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
+                       .OrderBy(rf => rf.CreatedOn).To<ReleaseFileResourceModel>().FirstOrDefaultAsync();
+        }
 
-        public async Task<List<ReleaseFileResourceModel>> GetReleaseImages(Guid releaseId) =>
-            await this.dbContext.ReleaseFiles.Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
-                .OrderBy(rf => rf.CreatedOn).To<ReleaseFileResourceModel>().ToListAsync();
+        public async Task<List<ReleaseFileResourceModel>> GetReleaseImages(Guid releaseId)
+        {
+            return await this.dbContext.ReleaseFiles
+                       .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
+                       .OrderBy(rf => rf.CreatedOn).To<ReleaseFileResourceModel>().ToListAsync();
+        }
 
-        public async Task<List<ReleaseFileResourceModel>> GetReleaseTracks(Guid releaseId) =>
-            await this.dbContext.ReleaseFiles.Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Audio)
-                .OrderBy(rf => rf.CreatedOn).To<ReleaseFileResourceModel>().ToListAsync();
+        public async Task<List<ReleaseFileResourceModel>> GetReleaseTracks(Guid releaseId)
+        {
+            return await this.dbContext.ReleaseFiles
+                       .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Audio)
+                       .OrderBy(rf => rf.CreatedOn).To<ReleaseFileResourceModel>().ToListAsync();
+        }
     }
 }

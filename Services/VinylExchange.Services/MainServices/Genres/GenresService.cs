@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+
     using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
@@ -44,10 +45,7 @@
         {
             var genre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
 
-            if (genre == null)
-            {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.GenreNotFound);
-            }
+            if (genre == null) throw new NullReferenceException(NullReferenceExceptionsConstants.GenreNotFound);
 
             var removedGenre = this.dbContext.Genres.Remove(genre).Entity;
             await this.dbContext.SaveChangesAsync();

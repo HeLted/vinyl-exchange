@@ -11,7 +11,7 @@
 
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.HelperServices.Releases;    
+    using VinylExchange.Services.Data.HelperServices.Releases;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Releases;
 
@@ -19,7 +19,7 @@
 
     public class ReleasesService : IReleasesService
     {
-        private const int ReleasesToTake = 6;
+        private const int ReleasesToTake = 5;
 
         private readonly VinylExchangeDbContext dbContext;
 
@@ -46,8 +46,10 @@
             return trackedRelease.Entity.To<TModel>();
         }
 
-        public async Task<TModel> GetRelease<TModel>(Guid releaseId) =>
-            await this.dbContext.Releases.Where(x => x.Id == releaseId).To<TModel>().FirstOrDefaultAsync();
+        public async Task<TModel> GetRelease<TModel>(Guid releaseId)
+        {
+            return await this.dbContext.Releases.Where(x => x.Id == releaseId).To<TModel>().FirstOrDefaultAsync();
+        }
 
         public async Task<List<TModel>> GetReleases<TModel>(
             string searchTerm,
@@ -60,23 +62,21 @@
             var releasesQuariable = this.dbContext.Releases.AsQueryable();
 
             if (searchTerm != null)
-            {
-                releasesQuariable =
-                    releasesQuariable.Where(r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm));
-            }
+                releasesQuariable = releasesQuariable.Where(
+                    r => r.Artist.Contains(searchTerm, StringComparison.InvariantCultureIgnoreCase) || r.Title.Contains(
+                             searchTerm,
+                             StringComparison.InvariantCultureIgnoreCase));
 
             if (filterGenreId != null)
             {
                 if (filterStyleIds.Count() == 0)
-                {
                     releasesQuariable =
                         releasesQuariable.Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId));
-                }
                 else
-                {
-                    releasesQuariable =
-                        releasesQuariable.Where(r => r.Styles.Any(s => filterStyleIds.Contains(s.StyleId)));
-                }
+                    releasesQuariable = releasesQuariable.Where(
+                        r => r.Styles.Any(
+                            sr => filterStyleIds.Contains(sr.StyleId)
+                                  && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)));
             }
 
             releases = await releasesQuariable.Skip(releasesToSkip).Take(ReleasesToTake).To<TModel>().ToListAsync();

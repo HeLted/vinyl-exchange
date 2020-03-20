@@ -7,8 +7,9 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
+
     using VinylExchange.Services.Data.MainServices.Releases;
-    using VinylExchange.Services.Logging;    
+    using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.InputModels.Releases;
     using VinylExchange.Web.Models.ResourceModels.Releases;
 
@@ -49,10 +50,7 @@
             {
                 var release = await this.releasesService.GetRelease<GetReleaseResourceModel>(id);
 
-                if (release == null)
-                {
-                    return this.NotFound();
-                }
+                if (release == null) return this.NotFound();
 
                 return release;
             }

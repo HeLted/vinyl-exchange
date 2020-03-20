@@ -64,10 +64,7 @@
             {
                 var confirmEmailIdentityResult = await this.userService.ConfirmUserEmail(inputModel);
 
-                if (confirmEmailIdentityResult.Succeeded)
-                {
-                    return this.Ok();
-                }
+                if (confirmEmailIdentityResult.Succeeded) return this.Ok();
 
                 return this.BadRequest(confirmEmailIdentityResult.Errors);
             }
@@ -84,10 +81,7 @@
         {
             var userAvatarModel = await this.usersAvatarService.GetUserAvatar(id);
 
-            if (userAvatarModel == null)
-            {
-                return this.NotFound();
-            }
+            if (userAvatarModel == null) return this.NotFound();
 
             return userAvatarModel;
         }
@@ -99,10 +93,7 @@
         {
             var userAvatarModel = await this.usersAvatarService.GetUserAvatar(this.GetUserId(this.User));
 
-            if (userAvatarModel == null)
-            {
-                return this.NotFound();
-            }
+            if (userAvatarModel == null) return this.NotFound();
 
             return userAvatarModel;
         }
@@ -117,10 +108,7 @@
             {
                 var registerUserIdentityResult = await this.userService.LoginUser(inputModel);
 
-                if (registerUserIdentityResult.Succeeded)
-                {
-                    return this.Ok();
-                }
+                if (registerUserIdentityResult.Succeeded) return this.Ok();
 
                 return this.Unauthorized();
             }
@@ -139,10 +127,7 @@
             {
                 var registerUserIdentityResult = await this.userService.RegisterUser(inputModel);
 
-                if (registerUserIdentityResult.Succeeded)
-                {
-                    return this.Ok();
-                }
+                if (registerUserIdentityResult.Succeeded) return this.Ok();
 
                 return this.BadRequest(registerUserIdentityResult.Errors);
             }

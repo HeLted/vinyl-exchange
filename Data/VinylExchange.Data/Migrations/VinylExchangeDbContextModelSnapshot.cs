@@ -13,7 +13,7 @@ namespace VinylExchange.Data.Migrations
     #endregion
 
     [DbContext(typeof(VinylExchangeDbContext))]
-    class VinylExchangeDbContextModelSnapshot : ModelSnapshot
+    internal class VinylExchangeDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

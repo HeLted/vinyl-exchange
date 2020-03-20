@@ -10,16 +10,12 @@
     {
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(name: "IsPreview", table: "ReleaseFiles");
+            migrationBuilder.DropColumn("IsPreview", "ReleaseFiles");
         }
 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "IsPreview",
-                table: "ReleaseFiles",
-                nullable: false,
-                defaultValue: false);
+            migrationBuilder.AddColumn<bool>("IsPreview", "ReleaseFiles", nullable: false, defaultValue: false);
         }
     }
 }

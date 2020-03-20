@@ -20,10 +20,7 @@
 
         public static void RegisterMappings(params Assembly[] assemblies)
         {
-            if (initialized)
-            {
-                return;
-            }
+            if (initialized) return;
 
             initialized = true;
 
@@ -35,22 +32,13 @@
                 configuration =>
                     {
                         // IMapFrom<>
-                        foreach (var map in GetFromMaps(types))
-                        {
-                            configuration.CreateMap(map.Source, map.Destination);
-                        }
+                        foreach (var map in GetFromMaps(types)) configuration.CreateMap(map.Source, map.Destination);
 
                         // IMapTo<>
-                        foreach (var map in GetToMaps(types))
-                        {
-                            configuration.CreateMap(map.Source, map.Destination);
-                        }
+                        foreach (var map in GetToMaps(types)) configuration.CreateMap(map.Source, map.Destination);
 
                         // IHaveCustomMappings
-                        foreach (var map in GetCustomMappings(types))
-                        {
-                            map.CreateMappings(configuration);
-                        }
+                        foreach (var map in GetCustomMappings(types)) map.CreateMappings(configuration);
                     });
 
             MapperInstance = new Mapper(new MapperConfiguration(config));

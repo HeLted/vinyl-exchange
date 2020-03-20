@@ -8,8 +8,9 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+
     using VinylExchange.Services.Data.MainServices.Collections;
-    using VinylExchange.Services.Logging;  
+    using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.InputModels.Collections;
     using VinylExchange.Web.Models.ResourceModels.Collections;
     using VinylExchange.Web.Models.Utility;
@@ -73,10 +74,7 @@
                 var collectionItemModel =
                     await this.collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(id);
 
-                if (collectionItemModel == null)
-                {
-                    return this.NotFound();
-                }
+                if (collectionItemModel == null) return this.NotFound();
 
                 return collectionItemModel;
             }
@@ -112,15 +110,9 @@
                 var collectionItemInfoModel =
                     await this.collectionsService.GetCollectionItemInfo<GetCollectionItemInfoUtilityModel>(id);
 
-                if (collectionItemInfoModel == null)
-                {
-                    return this.NotFound();
-                }
+                if (collectionItemInfoModel == null) return this.NotFound();
 
-                if (collectionItemInfoModel.UserId != this.GetUserId(this.User))
-                {
-                    return this.Unauthorized();
-                }
+                if (collectionItemInfoModel.UserId != this.GetUserId(this.User)) return this.Unauthorized();
 
                 var collectionItemRemovedModel =
                     await this.collectionsService.RemoveCollectionItem<RemoveCollectionItemResourceModel>(

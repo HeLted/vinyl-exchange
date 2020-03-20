@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
+
     using VinylExchange.Services.Data.HelperServices.Releases;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.ResourceModels.ReleaseFiles;

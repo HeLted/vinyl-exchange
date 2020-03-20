@@ -53,10 +53,7 @@
             {
                 var saleModel = await this.GetSaleInfo(inputModel.SaleId);
 
-                if (saleModel == null)
-                {
-                    return this.NotFound();
-                }
+                if (saleModel == null) return this.NotFound();
 
                 var currentUserId = this.GetUserId(this.User);
 
@@ -90,10 +87,7 @@
             {
                 var saleModel = await this.GetSaleInfo(inputModel.SaleId);
 
-                if (saleModel == null)
-                {
-                    return this.NotFound();
-                }
+                if (saleModel == null) return this.NotFound();
 
                 var currentUserId = this.GetUserId(this.User);
 
@@ -127,10 +121,7 @@
             {
                 var saleModel = await this.GetSaleInfo(inputModel.SaleId);
 
-                if (saleModel == null)
-                {
-                    return this.NotFound();
-                }
+                if (saleModel == null) return this.NotFound();
 
                 var currentUserId = this.GetUserId(this.User);
 
@@ -177,18 +168,12 @@
             {
                 var saleInfoModel = await this.salesService.GetSale<GetSaleResourceModel>(id);
 
-                if (saleInfoModel == null)
-                {
-                    return this.NotFound();
-                }
+                if (saleInfoModel == null) return this.NotFound();
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if ((saleInfoModel.BuyerId != currentUserId && saleInfoModel.SellerId != currentUserId)
-                    && saleInfoModel.Status != Status.Open)
-                {
-                    return this.Forbid();
-                }
+                if (saleInfoModel.BuyerId != currentUserId && saleInfoModel.SellerId != currentUserId
+                                                           && saleInfoModel.Status != Status.Open) return this.Forbid();
 
                 return saleInfoModel;
             }
@@ -254,18 +239,13 @@
             {
                 var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
 
-                if (saleInfoModel == null)
-                {
-                    return this.NotFound();
-                }
+                if (saleInfoModel == null) return this.NotFound();
 
                 var currentUserId = this.GetUserId(this.User);
 
                 if (saleInfoModel.SellerId == currentUserId || saleInfoModel.BuyerId == currentUserId
                                                             || saleInfoModel.Status != Status.Open)
-                {
                     return this.Forbid();
-                }
 
                 await this.salesService.PlaceOrder<SaleStatusResourceModel>(inputModel, currentUserId);
 
@@ -291,15 +271,10 @@
             {
                 var saleInfoModel = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(id);
 
-                if (saleInfoModel == null)
-                {
-                    return this.NotFound();
-                }
+                if (saleInfoModel == null) return this.NotFound();
 
                 if (saleInfoModel.SellerId == this.GetUserId(this.User))
-                {
                     return await this.salesService.RemoveSale<RemoveSaleResourceModel>(saleInfoModel.Id);
-                }
 
                 return this.Forbid();
             }
@@ -318,10 +293,7 @@
             {
                 var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
 
-                if (saleInfoModel == null)
-                {
-                    return this.BadRequest();
-                }
+                if (saleInfoModel == null) return this.BadRequest();
 
                 var currentUserId = this.GetUserId(this.User);
 
@@ -355,10 +327,7 @@
             {
                 var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
 
-                if (saleInfoModel == null)
-                {
-                    return this.NotFound();
-                }
+                if (saleInfoModel == null) return this.NotFound();
 
                 var currentUserId = this.GetUserId(this.User);
 
@@ -383,7 +352,9 @@
             }
         }
 
-        private async Task<GetSaleInfoUtilityModel> GetSaleInfo(Guid? saleId) =>
-            await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
+        private async Task<GetSaleInfoUtilityModel> GetSaleInfo(Guid? saleId)
+        {
+            return await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
+        }
     }
 }

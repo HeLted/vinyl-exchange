@@ -1,11 +1,14 @@
 ﻿namespace VinylExchange.Services.Data.Tests
 {
-    using System;
     #region
 
+    #region
+
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+
     using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
@@ -15,6 +18,8 @@
     using VinylExchange.Web.Models.ResourceModels.Genres;
 
     using Xunit;
+
+    #endregion
 
     #endregion
 
@@ -44,7 +49,7 @@
 
             var createdGenre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == createdGenreModel.Id);
 
-            Assert.True(createdGenre != null);
+            Assert.NotNull(createdGenre);
         }
 
         [Fact]
@@ -63,10 +68,7 @@
         [Fact]
         public async Task GetAllGenresShouldGetAllGenres()
         {
-            for (int i = 0; i < 3; i++)
-            {
-                await this.dbContext.Genres.AddAsync(new Genre { });
-            }
+            for (var i = 0; i < 3; i++) await this.dbContext.Genres.AddAsync(new Genre());
 
             await this.dbContext.SaveChangesAsync();
 
@@ -76,9 +78,17 @@
         }
 
         [Fact]
+        public async Task GetAllGenresShouldReturnEmptyListIfThereAreNoGenresInDb()
+        {
+            var genreModels = await this.genresService.GetAllGenres<GetAllGenresResourceModel>();
+
+            Assert.True(genreModels.Count == 0);
+        }
+
+        [Fact]
         public async Task RemoveGenreShouldRemoveGenre()
         {
-            var genre = (await this.dbContext.Genres.AddAsync(new Genre() { Id = 1 })).Entity;
+            var genre = (await this.dbContext.Genres.AddAsync(new Genre { Id = 1 })).Entity;
 
             await this.dbContext.SaveChangesAsync();
 
@@ -92,16 +102,15 @@
         [Fact]
         public async Task RemoveGenreShouldThrowNullReferenceExceptionIfProvidedGenreIdIsNotInDb()
         {
-            Random rnd = new Random();
+            var rnd = new Random();
 
-            await this.dbContext.Genres.AddAsync(new Genre() { Id = 1 });
+            await this.dbContext.Genres.AddAsync(new Genre { Id = 1 });
 
             await this.dbContext.SaveChangesAsync();
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () =>
-                                    await this.genresService.RemoveGenre<RemoveGenreResourceModel>(
-                                        rnd.Next(2, int.MaxValue)));
+                                async () => await this.genresService.RemoveGenre<RemoveGenreResourceModel>(
+                                                rnd.Next(2, int.MaxValue)));
 
             Assert.Equal(NullReferenceExceptionsConstants.GenreNotFound, exception.Message);
         }

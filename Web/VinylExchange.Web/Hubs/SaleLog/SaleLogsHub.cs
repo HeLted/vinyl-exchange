@@ -34,14 +34,12 @@
             var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
-            {
                 if (sale.SellerId == userId || sale.BuyerId == userId)
                 {
                     var logs = await this.saleLogsService.GetLogsForSale(saleId);
 
                     await this.Clients.Caller.LoadLogHistory(logs);
                 }
-            }
         }
 
         public async Task SubscribeToLog(Guid saleId)
@@ -53,12 +51,8 @@
             var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
-            {
                 if (sale.SellerId == userId || sale.BuyerId == userId)
-                {
                     await this.Groups.AddToGroupAsync(this.Context.ConnectionId, subscriberGroupName);
-                }
-            }
         }
 
         private string GetUserId()

@@ -12,88 +12,84 @@
     {
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(name: "DeletedOn", table: "ReleaseFiles");
+            migrationBuilder.DropColumn("DeletedOn", "ReleaseFiles");
 
-            migrationBuilder.DropColumn(name: "IsDeleted", table: "ReleaseFiles");
+            migrationBuilder.DropColumn("IsDeleted", "ReleaseFiles");
 
-            migrationBuilder.DropColumn(name: "ModifiedOn", table: "ReleaseFiles");
+            migrationBuilder.DropColumn("ModifiedOn", "ReleaseFiles");
 
-            migrationBuilder.AddColumn<Guid>(name: "ShopId", table: "Sales", type: "uniqueidentifier", nullable: true);
+            migrationBuilder.AddColumn<Guid>("ShopId", "Sales", "uniqueidentifier", nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "Shops",
-                columns: table => new
-                                      {
-                                          Id = table.Column<Guid>(type: "uniqueidentifier"),
-                                          Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                                          Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                                          CreatedOn = table.Column<DateTime>(type: "datetime2"),
-                                          DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                                          IsDeleted = table.Column<bool>(type: "bit"),
-                                          ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                                          Name = table.Column<string>(type: "nvarchar(max)"),
-                                          ShopType = table.Column<int>(type: "int"),
-                                          Town = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                                          WebAddress = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                                      },
+                "Shops",
+                table => new
+                             {
+                                 Id = table.Column<Guid>("uniqueidentifier"),
+                                 Address = table.Column<string>("nvarchar(max)", nullable: true),
+                                 Country = table.Column<string>("nvarchar(max)", nullable: true),
+                                 CreatedOn = table.Column<DateTime>("datetime2"),
+                                 DeletedOn = table.Column<DateTime>("datetime2", nullable: true),
+                                 IsDeleted = table.Column<bool>("bit"),
+                                 ModifiedOn = table.Column<DateTime>("datetime2", nullable: true),
+                                 Name = table.Column<string>("nvarchar(max)"),
+                                 ShopType = table.Column<int>("int"),
+                                 Town = table.Column<string>("nvarchar(max)", nullable: true),
+                                 WebAddress = table.Column<string>("nvarchar(max)", nullable: true)
+                             },
                 constraints: table => { table.PrimaryKey("PK_Shops", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "ShopFiles",
-                columns: table => new
-                                      {
-                                          Id = table.Column<Guid>(type: "uniqueidentifier"),
-                                          CreatedOn = table.Column<DateTime>(type: "datetime2"),
-                                          FileName = table.Column<string>(type: "nvarchar(max)"),
-                                          FileType = table.Column<int>(type: "int"),
-                                          Path = table.Column<string>(type: "nvarchar(max)"),
-                                          ShopId = table.Column<Guid>(type: "uniqueidentifier")
-                                      },
+                "ShopFiles",
+                table => new
+                             {
+                                 Id = table.Column<Guid>("uniqueidentifier"),
+                                 CreatedOn = table.Column<DateTime>("datetime2"),
+                                 FileName = table.Column<string>("nvarchar(max)"),
+                                 FileType = table.Column<int>("int"),
+                                 Path = table.Column<string>("nvarchar(max)"),
+                                 ShopId = table.Column<Guid>("uniqueidentifier")
+                             },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_ShopFiles", x => x.Id);
                         table.ForeignKey(
-                            name: "FK_ShopFiles_Shops_ShopId",
-                            column: x => x.ShopId,
-                            principalTable: "Shops",
-                            principalColumn: "Id",
+                            "FK_ShopFiles_Shops_ShopId",
+                            x => x.ShopId,
+                            "Shops",
+                            "Id",
                             onDelete: ReferentialAction.Cascade);
                     });
 
-            migrationBuilder.CreateIndex(name: "IX_Sales_ShopId", table: "Sales", column: "ShopId");
+            migrationBuilder.CreateIndex("IX_Sales_ShopId", "Sales", "ShopId");
 
-            migrationBuilder.CreateIndex(name: "IX_ShopFiles_ShopId", table: "ShopFiles", column: "ShopId");
+            migrationBuilder.CreateIndex("IX_ShopFiles_ShopId", "ShopFiles", "ShopId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Sales_Shops_ShopId",
-                table: "Sales",
-                column: "ShopId",
-                principalTable: "Shops",
+                "FK_Sales_Shops_ShopId",
+                "Sales",
+                "ShopId",
+                "Shops",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(name: "FK_Sales_Shops_ShopId", table: "Sales");
+            migrationBuilder.DropForeignKey("FK_Sales_Shops_ShopId", "Sales");
 
-            migrationBuilder.DropTable(name: "ShopFiles");
+            migrationBuilder.DropTable("ShopFiles");
 
-            migrationBuilder.DropTable(name: "Shops");
+            migrationBuilder.DropTable("Shops");
 
-            migrationBuilder.DropIndex(name: "IX_Sales_ShopId", table: "Sales");
+            migrationBuilder.DropIndex("IX_Sales_ShopId", "Sales");
 
-            migrationBuilder.DropColumn(name: "ShopId", table: "Sales");
+            migrationBuilder.DropColumn("ShopId", "Sales");
 
-            migrationBuilder.AddColumn<DateTime>(name: "DeletedOn", table: "ReleaseFiles", nullable: true);
+            migrationBuilder.AddColumn<DateTime>("DeletedOn", "ReleaseFiles", nullable: true);
 
-            migrationBuilder.AddColumn<bool>(
-                name: "IsDeleted",
-                table: "ReleaseFiles",
-                nullable: false,
-                defaultValue: false);
+            migrationBuilder.AddColumn<bool>("IsDeleted", "ReleaseFiles", nullable: false, defaultValue: false);
 
-            migrationBuilder.AddColumn<DateTime>(name: "ModifiedOn", table: "ReleaseFiles", nullable: true);
+            migrationBuilder.AddColumn<DateTime>("ModifiedOn", "ReleaseFiles", nullable: true);
         }
     }
 }
