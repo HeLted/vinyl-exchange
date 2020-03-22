@@ -15,15 +15,16 @@ function ConfirmEmailModalComponent(props) {
             <div className="row justify-content-center">
               {props.data.isEmailSend && (
                 
-                <div className="col-12 border">
+                <div className="col-12 border" style={{margin:"20px"}}> 
                   <h5 className="property-text">
                     Confirmation email was sent to your email address!
                   </h5>
+                     
                 </div>
              
-           
+         
               )}
-              <br/>
+             
               {props.data.isLoading ? (
                 <button type="button" className="btn btn-success">
                   <FontAwesomeIcon icon={faSync} spin />

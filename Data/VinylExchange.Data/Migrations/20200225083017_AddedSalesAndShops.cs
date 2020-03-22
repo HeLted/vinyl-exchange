@@ -44,40 +44,40 @@
             migrationBuilder.CreateTable(
                 "Shops",
                 table => new
-                             {
-                                 Id = table.Column<Guid>(),
-                                 Name = table.Column<string>(),
-                                 ShopType = table.Column<int>(),
-                                 WebAddress = table.Column<string>(nullable: true),
-                                 Country = table.Column<string>(nullable: true),
-                                 Town = table.Column<string>(nullable: true),
-                                 Address = table.Column<string>(nullable: true),
-                                 CreatedOn = table.Column<DateTime>(),
-                                 ModifiedOn = table.Column<DateTime>(nullable: true),
-                                 IsDeleted = table.Column<bool>(),
-                                 DeletedOn = table.Column<DateTime>(nullable: true)
-                             },
+                    {
+                        Id = table.Column<Guid>(),
+                        Name = table.Column<string>(),
+                        ShopType = table.Column<int>(),
+                        WebAddress = table.Column<string>(nullable: true),
+                        Country = table.Column<string>(nullable: true),
+                        Town = table.Column<string>(nullable: true),
+                        Address = table.Column<string>(nullable: true),
+                        CreatedOn = table.Column<DateTime>(),
+                        ModifiedOn = table.Column<DateTime>(nullable: true),
+                        IsDeleted = table.Column<bool>(),
+                        DeletedOn = table.Column<DateTime>(nullable: true)
+                    },
                 constraints: table => { table.PrimaryKey("PK_Shops", x => x.Id); });
 
             migrationBuilder.CreateTable(
                 "Sales",
                 table => new
-                             {
-                                 Id = table.Column<Guid>(),
-                                 SellerId = table.Column<Guid>(nullable: true),
-                                 BuyerId = table.Column<Guid>(nullable: true),
-                                 ShopId = table.Column<Guid>(nullable: true),
-                                 ReleaseId = table.Column<Guid>(nullable: true),
-                                 Status = table.Column<int>(),
-                                 Price = table.Column<decimal>("decimal(18,4)"),
-                                 VinylCondition = table.Column<int>(),
-                                 SleeveCondition = table.Column<int>(),
-                                 Description = table.Column<string>(),
-                                 CreatedOn = table.Column<DateTime>(),
-                                 ModifiedOn = table.Column<DateTime>(nullable: true),
-                                 IsDeleted = table.Column<bool>(),
-                                 DeletedOn = table.Column<DateTime>(nullable: true)
-                             },
+                    {
+                        Id = table.Column<Guid>(),
+                        SellerId = table.Column<Guid>(nullable: true),
+                        BuyerId = table.Column<Guid>(nullable: true),
+                        ShopId = table.Column<Guid>(nullable: true),
+                        ReleaseId = table.Column<Guid>(nullable: true),
+                        Status = table.Column<int>(),
+                        Price = table.Column<decimal>("decimal(18,4)"),
+                        VinylCondition = table.Column<int>(),
+                        SleeveCondition = table.Column<int>(),
+                        Description = table.Column<string>(),
+                        CreatedOn = table.Column<DateTime>(),
+                        ModifiedOn = table.Column<DateTime>(nullable: true),
+                        IsDeleted = table.Column<bool>(),
+                        DeletedOn = table.Column<DateTime>(nullable: true)
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_Sales", x => x.Id);
@@ -110,14 +110,14 @@
             migrationBuilder.CreateTable(
                 "ShopFiles",
                 table => new
-                             {
-                                 Id = table.Column<Guid>(),
-                                 Path = table.Column<string>(),
-                                 FileName = table.Column<string>(),
-                                 FileType = table.Column<int>(),
-                                 CreatedOn = table.Column<DateTime>(),
-                                 ShopId = table.Column<Guid>()
-                             },
+                    {
+                        Id = table.Column<Guid>(),
+                        Path = table.Column<string>(),
+                        FileName = table.Column<string>(),
+                        FileType = table.Column<int>(),
+                        CreatedOn = table.Column<DateTime>(),
+                        ShopId = table.Column<Guid>()
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_ShopFiles", x => x.Id);

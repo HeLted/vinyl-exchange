@@ -116,57 +116,21 @@
             return sale.To<TModel>();
         }
 
-        public async Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid releaseId)
-        {
-            return await this.dbContext.Sales.Where(s => s.ReleaseId == releaseId).Where(s => s.Status == Status.Open)
-                       .To<TModel>().ToListAsync();
-        }
+        public async Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid releaseId) =>
+            await this.dbContext.Sales.Where(s => s.ReleaseId == releaseId).Where(s => s.Status == Status.Open)
+                .To<TModel>().ToListAsync();
 
-        public async Task<TModel> GetSale<TModel>(Guid saleId)
-        {
-            return await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>().FirstOrDefaultAsync();
-        }
+        public async Task<TModel> GetSale<TModel>(Guid saleId) =>
+            await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>().FirstOrDefaultAsync();
 
-        public async Task<TModel> GetSaleInfo<TModel>(Guid? saleId)
-        {
-            return await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>().FirstOrDefaultAsync();
-        }
+        public async Task<TModel> GetSaleInfo<TModel>(Guid? saleId) =>
+            await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>().FirstOrDefaultAsync();
 
-        public async Task<List<TModel>> GetUserPurchases<TModel>(Guid buyerId)
-        {
-            var purchases = await this.dbContext.Sales.Where(s => s.BuyerId == buyerId).To<TModel>().ToListAsync();
+        public async Task<List<TModel>> GetUserPurchases<TModel>(Guid buyerId) =>
+            await this.dbContext.Sales.Where(s => s.BuyerId == buyerId).To<TModel>().ToListAsync();
 
-            purchases.ForEach(
-                s =>
-                    {
-                        var coverArtProperty = s.GetType().GetProperty("CoverArt");
-                        var releaseIdProperty = (Guid)s.GetType().GetProperty("ReleaseId").GetValue(s);
-
-                        coverArtProperty.SetValue(
-                            s,
-                            this.releaseFileService.GetReleaseCoverArt(releaseIdProperty).GetAwaiter().GetResult());
-                    });
-
-            return purchases;
-        }
-
-        public async Task<List<TModel>> GetUserSales<TModel>(Guid sellerId)
-        {
-            var sales = await this.dbContext.Sales.Where(s => s.SellerId == sellerId).To<TModel>().ToListAsync();
-
-            sales.ForEach(
-                s =>
-                    {
-                        var coverArtProperty = s.GetType().GetProperty("CoverArt");
-                        var releaseIdProperty = (Guid)s.GetType().GetProperty("ReleaseId").GetValue(s);
-
-                        coverArtProperty.SetValue(
-                            s,
-                            this.releaseFileService.GetReleaseCoverArt(releaseIdProperty).GetAwaiter().GetResult());
-                    });
-
-            return sales;
-        }
+        public async Task<List<TModel>> GetUserSales<TModel>(Guid sellerId) =>
+            await this.dbContext.Sales.Where(s => s.SellerId == sellerId).To<TModel>().ToListAsync();
 
         public async Task<TModel> PlaceOrder<TModel>(PlaceOrderInputModel inputModel, Guid? buyerId)
         {
@@ -209,14 +173,10 @@
             return sale.To<TModel>();
         }
 
-        private async Task<Address> GetAddress(Guid? addressId)
-        {
-            return await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
-        }
+        private async Task<Address> GetAddress(Guid? addressId) =>
+            await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
 
-        private async Task<Sale> GetSale(Guid? saleId)
-        {
-            return await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == saleId);
-        }
+        private async Task<Sale> GetSale(Guid? saleId) =>
+            await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == saleId);
     }
 }

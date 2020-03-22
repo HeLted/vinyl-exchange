@@ -80,7 +80,7 @@
             catch (Exception ex)
             {
                 this.loggerService.LogException(ex);
-                return this.NotFound();
+                return this.BadRequest();
             }
         }
     }

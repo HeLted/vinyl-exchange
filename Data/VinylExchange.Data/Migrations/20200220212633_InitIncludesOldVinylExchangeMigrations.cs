@@ -48,103 +48,103 @@
             migrationBuilder.CreateTable(
                 "AspNetRoles",
                 table => new
-                             {
-                                 Id = table.Column<Guid>(),
-                                 Name = table.Column<string>(maxLength: 256, nullable: true),
-                                 NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
-                                 ConcurrencyStamp = table.Column<string>(nullable: true),
-                                 CreatedOn = table.Column<DateTime>(),
-                                 ModifiedOn = table.Column<DateTime>(nullable: true),
-                                 IsDeleted = table.Column<bool>(),
-                                 DeletedOn = table.Column<DateTime>(nullable: true)
-                             },
+                    {
+                        Id = table.Column<Guid>(),
+                        Name = table.Column<string>(maxLength: 256, nullable: true),
+                        NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
+                        ConcurrencyStamp = table.Column<string>(nullable: true),
+                        CreatedOn = table.Column<DateTime>(),
+                        ModifiedOn = table.Column<DateTime>(nullable: true),
+                        IsDeleted = table.Column<bool>(),
+                        DeletedOn = table.Column<DateTime>(nullable: true)
+                    },
                 constraints: table => { table.PrimaryKey("PK_AspNetRoles", x => x.Id); });
 
             migrationBuilder.CreateTable(
                 "AspNetUsers",
                 table => new
-                             {
-                                 Id = table.Column<Guid>(),
-                                 UserName = table.Column<string>(maxLength: 256, nullable: true),
-                                 NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                                 Email = table.Column<string>(maxLength: 256, nullable: true),
-                                 NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
-                                 EmailConfirmed = table.Column<bool>(),
-                                 PasswordHash = table.Column<string>(nullable: true),
-                                 SecurityStamp = table.Column<string>(nullable: true),
-                                 ConcurrencyStamp = table.Column<string>(nullable: true),
-                                 PhoneNumber = table.Column<string>(nullable: true),
-                                 PhoneNumberConfirmed = table.Column<bool>(),
-                                 TwoFactorEnabled = table.Column<bool>(),
-                                 LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                                 LockoutEnabled = table.Column<bool>(),
-                                 AccessFailedCount = table.Column<int>(),
-                                 CreatedOn = table.Column<DateTime>(),
-                                 ModifiedOn = table.Column<DateTime>(nullable: true),
-                                 IsDeleted = table.Column<bool>(),
-                                 DeletedOn = table.Column<DateTime>(nullable: true)
-                             },
+                    {
+                        Id = table.Column<Guid>(),
+                        UserName = table.Column<string>(maxLength: 256, nullable: true),
+                        NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                        Email = table.Column<string>(maxLength: 256, nullable: true),
+                        NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                        EmailConfirmed = table.Column<bool>(),
+                        PasswordHash = table.Column<string>(nullable: true),
+                        SecurityStamp = table.Column<string>(nullable: true),
+                        ConcurrencyStamp = table.Column<string>(nullable: true),
+                        PhoneNumber = table.Column<string>(nullable: true),
+                        PhoneNumberConfirmed = table.Column<bool>(),
+                        TwoFactorEnabled = table.Column<bool>(),
+                        LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                        LockoutEnabled = table.Column<bool>(),
+                        AccessFailedCount = table.Column<int>(),
+                        CreatedOn = table.Column<DateTime>(),
+                        ModifiedOn = table.Column<DateTime>(nullable: true),
+                        IsDeleted = table.Column<bool>(),
+                        DeletedOn = table.Column<DateTime>(nullable: true)
+                    },
                 constraints: table => { table.PrimaryKey("PK_AspNetUsers", x => x.Id); });
 
             migrationBuilder.CreateTable(
                 "DeviceCodes",
                 table => new
-                             {
-                                 UserCode = table.Column<string>(maxLength: 200),
-                                 DeviceCode = table.Column<string>(maxLength: 200),
-                                 SubjectId = table.Column<string>(maxLength: 200, nullable: true),
-                                 ClientId = table.Column<string>(maxLength: 200),
-                                 CreationTime = table.Column<DateTime>(),
-                                 Expiration = table.Column<DateTime>(),
-                                 Data = table.Column<string>(maxLength: 50000)
-                             },
+                    {
+                        UserCode = table.Column<string>(maxLength: 200),
+                        DeviceCode = table.Column<string>(maxLength: 200),
+                        SubjectId = table.Column<string>(maxLength: 200, nullable: true),
+                        ClientId = table.Column<string>(maxLength: 200),
+                        CreationTime = table.Column<DateTime>(),
+                        Expiration = table.Column<DateTime>(),
+                        Data = table.Column<string>(maxLength: 50000)
+                    },
                 constraints: table => { table.PrimaryKey("PK_DeviceCodes", x => x.UserCode); });
 
             migrationBuilder.CreateTable(
                 "Genres",
                 table => new
-                             {
-                                 Id = table.Column<int>().Annotation("SqlServer:Identity", "1, 1"),
-                                 Name = table.Column<string>()
-                             },
+                    {
+                        Id = table.Column<int>().Annotation("SqlServer:Identity", "1, 1"),
+                        Name = table.Column<string>()
+                    },
                 constraints: table => { table.PrimaryKey("PK_Genres", x => x.Id); });
 
             migrationBuilder.CreateTable(
                 "PersistedGrants",
                 table => new
-                             {
-                                 Key = table.Column<string>(maxLength: 200),
-                                 Type = table.Column<string>(maxLength: 50),
-                                 SubjectId = table.Column<string>(maxLength: 200, nullable: true),
-                                 ClientId = table.Column<string>(maxLength: 200),
-                                 CreationTime = table.Column<DateTime>(),
-                                 Expiration = table.Column<DateTime>(nullable: true),
-                                 Data = table.Column<string>(maxLength: 50000)
-                             },
+                    {
+                        Key = table.Column<string>(maxLength: 200),
+                        Type = table.Column<string>(maxLength: 50),
+                        SubjectId = table.Column<string>(maxLength: 200, nullable: true),
+                        ClientId = table.Column<string>(maxLength: 200),
+                        CreationTime = table.Column<DateTime>(),
+                        Expiration = table.Column<DateTime>(nullable: true),
+                        Data = table.Column<string>(maxLength: 50000)
+                    },
                 constraints: table => { table.PrimaryKey("PK_PersistedGrants", x => x.Key); });
 
             migrationBuilder.CreateTable(
                 "Releases",
                 table => new
-                             {
-                                 Id = table.Column<Guid>(),
-                                 Artist = table.Column<string>(),
-                                 Title = table.Column<string>(),
-                                 Format = table.Column<string>(),
-                                 Year = table.Column<string>(),
-                                 Label = table.Column<string>()
-                             },
+                    {
+                        Id = table.Column<Guid>(),
+                        Artist = table.Column<string>(),
+                        Title = table.Column<string>(),
+                        Format = table.Column<string>(),
+                        Year = table.Column<string>(),
+                        Label = table.Column<string>()
+                    },
                 constraints: table => { table.PrimaryKey("PK_Releases", x => x.Id); });
 
             migrationBuilder.CreateTable(
                 "AspNetRoleClaims",
                 table => new
-                             {
-                                 Id = table.Column<int>().Annotation("SqlServer:Identity", "1, 1"),
-                                 RoleId = table.Column<Guid>(),
-                                 ClaimType = table.Column<string>(nullable: true),
-                                 ClaimValue = table.Column<string>(nullable: true)
-                             },
+                    {
+                        Id = table.Column<int>().Annotation("SqlServer:Identity", "1, 1"),
+                        RoleId = table.Column<Guid>(),
+                        ClaimType = table.Column<string>(nullable: true),
+                        ClaimValue = table.Column<string>(nullable: true)
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
@@ -159,13 +159,13 @@
             migrationBuilder.CreateTable(
                 "AspNetUserClaims",
                 table => new
-                             {
-                                 Id = table.Column<int>().Annotation("SqlServer:Identity", "1, 1"),
-                                 UserId = table.Column<Guid>(),
-                                 ClaimType = table.Column<string>(nullable: true),
-                                 ClaimValue = table.Column<string>(nullable: true),
-                                 VinylExchangeUserId = table.Column<Guid>(nullable: true)
-                             },
+                    {
+                        Id = table.Column<int>().Annotation("SqlServer:Identity", "1, 1"),
+                        UserId = table.Column<Guid>(),
+                        ClaimType = table.Column<string>(nullable: true),
+                        ClaimValue = table.Column<string>(nullable: true),
+                        VinylExchangeUserId = table.Column<Guid>(nullable: true)
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
@@ -186,13 +186,13 @@
             migrationBuilder.CreateTable(
                 "AspNetUserLogins",
                 table => new
-                             {
-                                 LoginProvider = table.Column<string>(maxLength: 128),
-                                 ProviderKey = table.Column<string>(maxLength: 128),
-                                 ProviderDisplayName = table.Column<string>(nullable: true),
-                                 UserId = table.Column<Guid>(),
-                                 VinylExchangeUserId = table.Column<Guid>(nullable: true)
-                             },
+                    {
+                        LoginProvider = table.Column<string>(maxLength: 128),
+                        ProviderKey = table.Column<string>(maxLength: 128),
+                        ProviderDisplayName = table.Column<string>(nullable: true),
+                        UserId = table.Column<Guid>(),
+                        VinylExchangeUserId = table.Column<Guid>(nullable: true)
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
@@ -213,11 +213,11 @@
             migrationBuilder.CreateTable(
                 "AspNetUserRoles",
                 table => new
-                             {
-                                 UserId = table.Column<Guid>(),
-                                 RoleId = table.Column<Guid>(),
-                                 VinylExchangeUserId = table.Column<Guid>(nullable: true)
-                             },
+                    {
+                        UserId = table.Column<Guid>(),
+                        RoleId = table.Column<Guid>(),
+                        VinylExchangeUserId = table.Column<Guid>(nullable: true)
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
@@ -244,12 +244,12 @@
             migrationBuilder.CreateTable(
                 "AspNetUserTokens",
                 table => new
-                             {
-                                 UserId = table.Column<Guid>(),
-                                 LoginProvider = table.Column<string>(maxLength: 128),
-                                 Name = table.Column<string>(maxLength: 128),
-                                 Value = table.Column<string>(nullable: true)
-                             },
+                    {
+                        UserId = table.Column<Guid>(),
+                        LoginProvider = table.Column<string>(maxLength: 128),
+                        Name = table.Column<string>(maxLength: 128),
+                        Value = table.Column<string>(nullable: true)
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
@@ -264,11 +264,11 @@
             migrationBuilder.CreateTable(
                 "Styles",
                 table => new
-                             {
-                                 Id = table.Column<int>().Annotation("SqlServer:Identity", "1, 1"),
-                                 Name = table.Column<string>(),
-                                 GenreId = table.Column<int>()
-                             },
+                    {
+                        Id = table.Column<int>().Annotation("SqlServer:Identity", "1, 1"),
+                        Name = table.Column<string>(),
+                        GenreId = table.Column<int>()
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_Styles", x => x.Id);
@@ -283,14 +283,14 @@
             migrationBuilder.CreateTable(
                 "Collections",
                 table => new
-                             {
-                                 Id = table.Column<Guid>(),
-                                 VinylGrade = table.Column<int>(),
-                                 SleeveGrade = table.Column<int>(),
-                                 Description = table.Column<string>(),
-                                 ReleaseId = table.Column<Guid>(),
-                                 UserId = table.Column<Guid>()
-                             },
+                    {
+                        Id = table.Column<Guid>(),
+                        VinylGrade = table.Column<int>(),
+                        SleeveGrade = table.Column<int>(),
+                        Description = table.Column<string>(),
+                        ReleaseId = table.Column<Guid>(),
+                        UserId = table.Column<Guid>()
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_Collections", x => x.Id);
@@ -311,14 +311,14 @@
             migrationBuilder.CreateTable(
                 "ReleaseFiles",
                 table => new
-                             {
-                                 Id = table.Column<Guid>(),
-                                 Path = table.Column<string>(),
-                                 FileName = table.Column<string>(),
-                                 FileType = table.Column<int>(),
-                                 CreatedOn = table.Column<DateTime>(),
-                                 ReleaseId = table.Column<Guid>()
-                             },
+                    {
+                        Id = table.Column<Guid>(),
+                        Path = table.Column<string>(),
+                        FileName = table.Column<string>(),
+                        FileType = table.Column<int>(),
+                        CreatedOn = table.Column<DateTime>(),
+                        ReleaseId = table.Column<Guid>()
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_ReleaseFiles", x => x.Id);

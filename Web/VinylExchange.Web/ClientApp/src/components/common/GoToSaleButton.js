@@ -9,7 +9,7 @@ class GoToSaleButton extends Component {
   }
 
   handleToRelease = () => {
-    this.props.history.push(`/Sale/${this.props.data.saleId}`, {
+    this.props.history.push(`/Sales/${this.props.data.saleId}`, {
       saleId: this.props.data.saleId
     });
   };

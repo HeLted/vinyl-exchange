@@ -121,7 +121,7 @@ class AddSalePopupContainer extends Component {
       .then(response => {
         this.context.handleAppNotification("Sucessfully created sale", 4);
         hideModal();
-        this.props.history.push(`/Sale/${response.data.id}`);
+        this.props.history.push(`/Sales/${response.data.id}`);
       })
       .catch(error => {
         this.context.handleServerNotification(

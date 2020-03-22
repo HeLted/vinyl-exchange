@@ -2,8 +2,6 @@
 {
     #region
 
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -27,8 +25,6 @@
 
     #endregion
 
-    #endregion
-
     [Collection("AutoMapperSetup")]
     public class ReleasesServiceTests
     {
@@ -38,16 +34,15 @@
 
         private readonly IReleasesService releasesService;
 
-        private readonly CreateReleaseInputModel testCreateReleaseInputModel =
-            new CreateReleaseInputModel
-                {
-                    Artist = "TestArtist",
-                    Title = "Test Title",
-                    Year = "1993",
-                    Format = "Lp",
-                    Label = "TestLabel",
-                    StyleIds = new HashSet<int> { 1, 2, 3 }
-                };
+        private readonly CreateReleaseInputModel testCreateReleaseInputModel = new CreateReleaseInputModel
+            {
+                Artist = "TestArtist",
+                Title = "Test Title",
+                Year = "1993",
+                Format = "Lp",
+                Label = "TestLabel",
+                StyleIds = new HashSet<int> { 1, 2, 3 }
+            };
 
         public ReleasesServiceTests()
         {
@@ -355,118 +350,97 @@
         private async Task AddReleasesTestData()
         {
             var releases = new List<Release>
-                               {
-                                   new Release { Artist = "Aphex Twin", Title = "Drukqs" }, // 0 Drum And Bass, IDM
-                                   new Release { Artist = "Tiesto", Title = "Traffic" }, // 1 Trance
-                                   new Release
-                                       {
-                                           Artist = "Aphex Twin", Title = "I Care Because You Do"
-                                       }, // 2 Downtempo, IDM 
-                                   new Release
-                                       {
-                                           Artist = "Squarepusher", Title = "Feed Me Weird Things"
-                                       }, // 3 Drum And Bass, IDM
-                                   new Release { Artist = "Eminem", Title = "Marshal Matters 2" }, // 4 Rap
-                                   new Release { Artist = "Eminem", Title = "8 Mile" }, // 5 Rap
-                                   new Release { Artist = "Metalica", Title = "Nothing Else Matters" }, // 6 Metal
-                                   new Release { Artist = "Aphex Twin", Title = "Selected Ambient Works" }, // 7 Ambient
-                                   new Release { Artist = "Tiesto", Title = "Just be" }, // 8 Trance
-                                   new Release { Artist = "Tiesto", Title = "Traffic" }, // 9 Trance
-                                   new Release { Artist = "Gorillaz", Title = "Demon Days" }, // 10 Alternative Rock
-                                   new Release { Artist = "Amelie Lens", Title = "Lenske" }, // 11 Techno
-                                   new Release { Artist = "Dustin Zahn", Title = "Stranger To Stability" }, // 12 Techno
-                                   new Release { Artist = "Linkin Park", Title = "Meteora" }, // 13 Nu Rock
-                                   new Release { Artist = "Armin Van Buuren", Title = "76" }, // 14 Trance
-                                   new Release
-                                       {
-                                           Artist = "Aphex Twin", Title = "Come To Daddy"
-                                       }, // 15 IDM, Drill And Bass
-                                   new Release
-                                       {
-                                           Artist = "The Chemical Brothers", Title = "Push The Button"
-                                       }, // 16 Big Beat
-                                   new Release { Artist = "The Chemical Brothers", Title = "Surrender" }, // 17 Big Beat
-                                   new Release
-                                       {
-                                           Artist = "Fatboy Slim", Title = "You've Come a Long Way, Baby"
-                                       }, // 18 Big Beat
-                                   new Release
-                                       {
-                                           Artist = "BT", Title = "This Binary Universe"
-                                       }, // 19 Downtempo, Ambient
-                                   new Release { Artist = "BT", Title = "ESCM" }, // 20 Trance 
-                                   new Release { Artist = "Paul Van Dyk", Title = "Reflections" }, // 21 Trance
-                                   new Release
-                                       {
-                                           Artist = "Squarepusher", Title = "Feed Me Weird Things"
-                                       }, // 22 Drum And Bass , Drill And Bass
-                                   new Release { Artist = "Squarepusher", Title = "Ultravisitor" }, // 23 Drum And Bass
-                                   new Release
-                                       {
-                                           Artist = "Aphex Twin", Title = "Selected Ambient Works ||"
-                                       }, // 24 Ambient
-                                   new Release { Artist = "Aphex Twin", Title = "Classics" } // 25 IDM
-                               };
+                {
+                    new Release { Artist = "Aphex Twin", Title = "Drukqs" }, // 0 Drum And Bass, IDM
+                    new Release { Artist = "Tiesto", Title = "Traffic" }, // 1 Trance
+                    new Release { Artist = "Aphex Twin", Title = "I Care Because You Do" }, // 2 Downtempo, IDM 
+                    new Release { Artist = "Squarepusher", Title = "Feed Me Weird Things" }, // 3 Drum And Bass, IDM
+                    new Release { Artist = "Eminem", Title = "Marshal Matters 2" }, // 4 Rap
+                    new Release { Artist = "Eminem", Title = "8 Mile" }, // 5 Rap
+                    new Release { Artist = "Metalica", Title = "Nothing Else Matters" }, // 6 Metal
+                    new Release { Artist = "Aphex Twin", Title = "Selected Ambient Works" }, // 7 Ambient
+                    new Release { Artist = "Tiesto", Title = "Just be" }, // 8 Trance
+                    new Release { Artist = "Tiesto", Title = "Traffic" }, // 9 Trance
+                    new Release { Artist = "Gorillaz", Title = "Demon Days" }, // 10 Alternative Rock
+                    new Release { Artist = "Amelie Lens", Title = "Lenske" }, // 11 Techno
+                    new Release { Artist = "Dustin Zahn", Title = "Stranger To Stability" }, // 12 Techno
+                    new Release { Artist = "Linkin Park", Title = "Meteora" }, // 13 Nu Rock
+                    new Release { Artist = "Armin Van Buuren", Title = "76" }, // 14 Trance
+                    new Release { Artist = "Aphex Twin", Title = "Come To Daddy" }, // 15 IDM, Drill And Bass
+                    new Release { Artist = "The Chemical Brothers", Title = "Push The Button" }, // 16 Big Beat
+                    new Release { Artist = "The Chemical Brothers", Title = "Surrender" }, // 17 Big Beat
+                    new Release { Artist = "Fatboy Slim", Title = "You've Come a Long Way, Baby" }, // 18 Big Beat
+                    new Release { Artist = "BT", Title = "This Binary Universe" }, // 19 Downtempo, Ambient
+                    new Release { Artist = "BT", Title = "ESCM" }, // 20 Trance 
+                    new Release { Artist = "Paul Van Dyk", Title = "Reflections" }, // 21 Trance
+                    new Release
+                        {
+                            Artist = "Squarepusher", Title = "Feed Me Weird Things"
+                        }, // 22 Drum And Bass , Drill And Bass
+                    new Release { Artist = "Squarepusher", Title = "Ultravisitor" }, // 23 Drum And Bass
+                    new Release { Artist = "Aphex Twin", Title = "Selected Ambient Works ||" }, // 24 Ambient
+                    new Release { Artist = "Aphex Twin", Title = "Classics" } // 25 IDM
+                };
 
             var genres = new List<Genre>
-                             {
-                                 new Genre { Id = 1, Name = "Electronic" },
-                                 new Genre { Id = 2, Name = "Rock" },
-                                 new Genre { Id = 3, Name = "Hip Hop" }
-                             };
+                {
+                    new Genre { Id = 1, Name = "Electronic" },
+                    new Genre { Id = 2, Name = "Rock" },
+                    new Genre { Id = 3, Name = "Hip Hop" }
+                };
 
             var styles = new List<Style>
-                             {
-                                 new Style { Id = 1, Name = "House", GenreId = 1 },
-                                 new Style { Id = 2, Name = "Trance", GenreId = 1 },
-                                 new Style { Id = 3, Name = "Drum And Bass", GenreId = 1 },
-                                 new Style { Id = 4, Name = "Downtempo", GenreId = 1 },
-                                 new Style { Id = 5, Name = "IDM", GenreId = 1 },
-                                 new Style { Id = 6, Name = "Ambient", GenreId = 1 },
-                                 new Style { Id = 7, Name = "Techno", GenreId = 1 },
-                                 new Style { Id = 8, Name = "Nu Rock", GenreId = 2 },
-                                 new Style { Id = 9, Name = "Metal", GenreId = 2 },
-                                 new Style { Id = 10, Name = "Alternative Rock", GenreId = 2 },
-                                 new Style { Id = 11, Name = "Rap", GenreId = 3 },
-                                 new Style { Id = 12, Name = "Big Beat", GenreId = 1 },
-                                 new Style { Id = 13, Name = "Drill and Bass", GenreId = 1 }
-                             };
+                {
+                    new Style { Id = 1, Name = "House", GenreId = 1 },
+                    new Style { Id = 2, Name = "Trance", GenreId = 1 },
+                    new Style { Id = 3, Name = "Drum And Bass", GenreId = 1 },
+                    new Style { Id = 4, Name = "Downtempo", GenreId = 1 },
+                    new Style { Id = 5, Name = "IDM", GenreId = 1 },
+                    new Style { Id = 6, Name = "Ambient", GenreId = 1 },
+                    new Style { Id = 7, Name = "Techno", GenreId = 1 },
+                    new Style { Id = 8, Name = "Nu Rock", GenreId = 2 },
+                    new Style { Id = 9, Name = "Metal", GenreId = 2 },
+                    new Style { Id = 10, Name = "Alternative Rock", GenreId = 2 },
+                    new Style { Id = 11, Name = "Rap", GenreId = 3 },
+                    new Style { Id = 12, Name = "Big Beat", GenreId = 1 },
+                    new Style { Id = 13, Name = "Drill and Bass", GenreId = 1 }
+                };
 
             var styleReleases = new List<StyleRelease>
-                                    {
-                                        new StyleRelease { ReleaseId = releases[0].Id, StyleId = 3 },
-                                        new StyleRelease { ReleaseId = releases[0].Id, StyleId = 5 },
-                                        new StyleRelease { ReleaseId = releases[1].Id, StyleId = 2 },
-                                        new StyleRelease { ReleaseId = releases[2].Id, StyleId = 4 },
-                                        new StyleRelease { ReleaseId = releases[2].Id, StyleId = 5 },
-                                        new StyleRelease { ReleaseId = releases[3].Id, StyleId = 3 },
-                                        new StyleRelease { ReleaseId = releases[3].Id, StyleId = 5 },
-                                        new StyleRelease { ReleaseId = releases[4].Id, StyleId = 11 },
-                                        new StyleRelease { ReleaseId = releases[5].Id, StyleId = 11 },
-                                        new StyleRelease { ReleaseId = releases[6].Id, StyleId = 9 },
-                                        new StyleRelease { ReleaseId = releases[7].Id, StyleId = 6 },
-                                        new StyleRelease { ReleaseId = releases[8].Id, StyleId = 2 },
-                                        new StyleRelease { ReleaseId = releases[9].Id, StyleId = 2 },
-                                        new StyleRelease { ReleaseId = releases[10].Id, StyleId = 10 },
-                                        new StyleRelease { ReleaseId = releases[11].Id, StyleId = 7 },
-                                        new StyleRelease { ReleaseId = releases[12].Id, StyleId = 7 },
-                                        new StyleRelease { ReleaseId = releases[13].Id, StyleId = 8 },
-                                        new StyleRelease { ReleaseId = releases[14].Id, StyleId = 2 },
-                                        new StyleRelease { ReleaseId = releases[15].Id, StyleId = 5 },
-                                        new StyleRelease { ReleaseId = releases[15].Id, StyleId = 13 },
-                                        new StyleRelease { ReleaseId = releases[16].Id, StyleId = 12 },
-                                        new StyleRelease { ReleaseId = releases[17].Id, StyleId = 12 },
-                                        new StyleRelease { ReleaseId = releases[18].Id, StyleId = 12 },
-                                        new StyleRelease { ReleaseId = releases[19].Id, StyleId = 4 },
-                                        new StyleRelease { ReleaseId = releases[19].Id, StyleId = 6 },
-                                        new StyleRelease { ReleaseId = releases[20].Id, StyleId = 2 },
-                                        new StyleRelease { ReleaseId = releases[21].Id, StyleId = 2 },
-                                        new StyleRelease { ReleaseId = releases[22].Id, StyleId = 3 },
-                                        new StyleRelease { ReleaseId = releases[22].Id, StyleId = 13 },
-                                        new StyleRelease { ReleaseId = releases[23].Id, StyleId = 3 },
-                                        new StyleRelease { ReleaseId = releases[24].Id, StyleId = 6 },
-                                        new StyleRelease { ReleaseId = releases[25].Id, StyleId = 5 }
-                                    };
+                {
+                    new StyleRelease { ReleaseId = releases[0].Id, StyleId = 3 },
+                    new StyleRelease { ReleaseId = releases[0].Id, StyleId = 5 },
+                    new StyleRelease { ReleaseId = releases[1].Id, StyleId = 2 },
+                    new StyleRelease { ReleaseId = releases[2].Id, StyleId = 4 },
+                    new StyleRelease { ReleaseId = releases[2].Id, StyleId = 5 },
+                    new StyleRelease { ReleaseId = releases[3].Id, StyleId = 3 },
+                    new StyleRelease { ReleaseId = releases[3].Id, StyleId = 5 },
+                    new StyleRelease { ReleaseId = releases[4].Id, StyleId = 11 },
+                    new StyleRelease { ReleaseId = releases[5].Id, StyleId = 11 },
+                    new StyleRelease { ReleaseId = releases[6].Id, StyleId = 9 },
+                    new StyleRelease { ReleaseId = releases[7].Id, StyleId = 6 },
+                    new StyleRelease { ReleaseId = releases[8].Id, StyleId = 2 },
+                    new StyleRelease { ReleaseId = releases[9].Id, StyleId = 2 },
+                    new StyleRelease { ReleaseId = releases[10].Id, StyleId = 10 },
+                    new StyleRelease { ReleaseId = releases[11].Id, StyleId = 7 },
+                    new StyleRelease { ReleaseId = releases[12].Id, StyleId = 7 },
+                    new StyleRelease { ReleaseId = releases[13].Id, StyleId = 8 },
+                    new StyleRelease { ReleaseId = releases[14].Id, StyleId = 2 },
+                    new StyleRelease { ReleaseId = releases[15].Id, StyleId = 5 },
+                    new StyleRelease { ReleaseId = releases[15].Id, StyleId = 13 },
+                    new StyleRelease { ReleaseId = releases[16].Id, StyleId = 12 },
+                    new StyleRelease { ReleaseId = releases[17].Id, StyleId = 12 },
+                    new StyleRelease { ReleaseId = releases[18].Id, StyleId = 12 },
+                    new StyleRelease { ReleaseId = releases[19].Id, StyleId = 4 },
+                    new StyleRelease { ReleaseId = releases[19].Id, StyleId = 6 },
+                    new StyleRelease { ReleaseId = releases[20].Id, StyleId = 2 },
+                    new StyleRelease { ReleaseId = releases[21].Id, StyleId = 2 },
+                    new StyleRelease { ReleaseId = releases[22].Id, StyleId = 3 },
+                    new StyleRelease { ReleaseId = releases[22].Id, StyleId = 13 },
+                    new StyleRelease { ReleaseId = releases[23].Id, StyleId = 3 },
+                    new StyleRelease { ReleaseId = releases[24].Id, StyleId = 6 },
+                    new StyleRelease { ReleaseId = releases[25].Id, StyleId = 5 }
+                };
 
             await this.dbContext.Genres.AddRangeAsync(genres);
             await this.dbContext.Styles.AddRangeAsync(styles);

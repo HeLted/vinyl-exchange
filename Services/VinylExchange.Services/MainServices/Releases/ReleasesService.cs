@@ -63,9 +63,7 @@
 
             if (searchTerm != null)
                 releasesQuariable = releasesQuariable.Where(
-                    r => r.Artist.Contains(searchTerm, StringComparison.InvariantCultureIgnoreCase) || r.Title.Contains(
-                             searchTerm,
-                             StringComparison.InvariantCultureIgnoreCase));
+                    r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm));
 
             if (filterGenreId != null)
             {

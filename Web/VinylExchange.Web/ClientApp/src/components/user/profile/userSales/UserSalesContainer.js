@@ -38,7 +38,7 @@ class UserSalesContainer extends Component {
   }
 
   handleGoToSale = saleId => {
-    this.props.history.push(`/Sale/${saleId}`);
+    this.props.history.push(`/Sales/${saleId}`);
   };
 
   render() {

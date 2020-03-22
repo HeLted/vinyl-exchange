@@ -91,17 +91,28 @@ class CollectionContainer extends Component {
     return this.state.isLoading ? (
       <PageSpinner />
     ) : (
-      <div className="collection-container container-fluid" style={{padding:"40px"}}>
+      <div
+        className="collection-container container-fluid"
+        style={{ padding: "40px" }}
+      >
         <div className="row border text-center">
           <div className="col-12">
             <h2 className="property-text">User Collection</h2>
           </div>
         </div>
         <div
-          className="row border justify"
+          className="row border justify-content-center"
           style={{ padding: "100px", height: "1200px", overflowY: "scroll" }}
         >
-          {collectionComponents}
+          {collectionComponents.length > 0 ? (
+            collectionComponents
+          ) : (
+            <div className="border text-center">
+              <h2 className="property-text">
+                There are no items in your collection
+              </h2>
+            </div>
+          )}
         </div>
       </div>
     );

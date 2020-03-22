@@ -59,7 +59,7 @@ class EmailConfirmContainer extends Component {
       .then(response => {
         this.setState({ isLoading: false });
         this.context.handleAppNotification("Email Confirmed", 4);
-        this.props.history.push("/Authentication/Login");
+        this.props.history.push("/Authentication/Logout");
       })
       .catch(error => {
         this.setState({ isLoading: false });

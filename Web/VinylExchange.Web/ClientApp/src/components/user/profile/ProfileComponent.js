@@ -43,7 +43,7 @@ function ProfileComponent(props) {
 
           <div
             id="collapseOne"
-            className="collapse show"
+            className="collapse"
             aria-labelledby="headingOne"
             data-parent="#filterCollapse"
           >

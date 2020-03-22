@@ -95,14 +95,14 @@
             migrationBuilder.CreateTable(
                 "Addresses",
                 table => new
-                             {
-                                 Id = table.Column<Guid>(),
-                                 Country = table.Column<string>(maxLength: 40),
-                                 Town = table.Column<string>(maxLength: 40),
-                                 PostalCode = table.Column<string>(maxLength: 40),
-                                 FullAddress = table.Column<string>(maxLength: 300),
-                                 UserId = table.Column<Guid>()
-                             },
+                    {
+                        Id = table.Column<Guid>(),
+                        Country = table.Column<string>(maxLength: 40),
+                        Town = table.Column<string>(maxLength: 40),
+                        PostalCode = table.Column<string>(maxLength: 40),
+                        FullAddress = table.Column<string>(maxLength: 300),
+                        UserId = table.Column<Guid>()
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_Addresses", x => x.Id);

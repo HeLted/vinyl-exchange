@@ -20,13 +20,13 @@
             migrationBuilder.CreateTable(
                 "SaleLogs",
                 table => new
-                             {
-                                 Id = table.Column<Guid>(),
-                                 CreatedOn = table.Column<DateTime>(),
-                                 ModifiedOn = table.Column<DateTime>(nullable: true),
-                                 Content = table.Column<string>(),
-                                 SaleId = table.Column<Guid>()
-                             },
+                    {
+                        Id = table.Column<Guid>(),
+                        CreatedOn = table.Column<DateTime>(),
+                        ModifiedOn = table.Column<DateTime>(nullable: true),
+                        Content = table.Column<string>(),
+                        SaleId = table.Column<Guid>()
+                    },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_SaleLogs", x => x.Id);

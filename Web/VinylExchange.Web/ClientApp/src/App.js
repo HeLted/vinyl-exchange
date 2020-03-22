@@ -74,12 +74,12 @@ export default class App extends Component {
             role={MultiRoles.UserAdmin}
           />
           <AuthorizeRoute
-            path="/Sale"
+            path="/Sales"
             component={SaleContainer}
             role={MultiRoles.UserAdmin}
           />
           <Route
-            path="/Release"
+            path="/Releases"
             component={ReleaseContainer}
         
           />

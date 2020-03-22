@@ -34,7 +34,15 @@ class GradeBadge extends Component {
     }
 
     return (
-      <span className="badge badge-secondary property-text-nm" style={{ backgroundColor: color ,padding:"10px",whiteSpace:"normal",width:"70px"}}>
+      <span
+        className="badge badge-secondary property-text-nm"
+        style={{
+          backgroundColor: color,
+          padding: "10px",
+          whiteSpace: "normal",
+          width: "80px"
+        }}
+      >
         {badgeText}
       </span>
     );
