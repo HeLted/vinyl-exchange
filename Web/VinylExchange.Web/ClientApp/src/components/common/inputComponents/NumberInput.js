@@ -1,20 +1,17 @@
-import React, { Fragment, Component } from "react";
-import uuid4 from "./../../../functions/guidGenerator";
+import React, { Component } from "react";
 import InputValidationMessage from "./../clienSideValidation/InputValidationMessage";
+import uuid4 from "./../../../functions/guidGenerator";
 
-const alphaNumericRegex = new RegExp("^[A-Za-z0-9-() ]*$");
+const numbericRegex = new RegExp("^[0-9]*$");
 
-class TextInput extends Component {
+class NumberInput extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       validationRules: {
         isRequired: false,
-        isAlphaNumeric:false,
-        isValidateLength: false,
-        minLength: 0,
-        maxLength: 0
+        minNumber: 0,
+        maxNumber: 1000000
       },
       validationMessages: []
     };
@@ -29,25 +26,23 @@ class TextInput extends Component {
       });
     }
 
-    if (this.props.validateLength === true) {
+    if (this.props.minNumber != undefined) {
       this.setState(prevState => {
         return {
           validationRules: {
             ...prevState.validationRules,
-            isValidateLength: true,
-            minLength: this.props.minLength,
-            maxLength: this.props.maxLength
+            minNumber: this.props.minNumber
           }
         };
       });
     }
 
-    if (this.props.alphanumeric=== true) {
+    if (this.props.maxNumber != undefined) {
       this.setState(prevState => {
         return {
           validationRules: {
             ...prevState.validationRules,
-            isAlphaNumeric:true
+            maxNumber: this.props.maxNumber
           }
         };
       });
@@ -70,23 +65,19 @@ class TextInput extends Component {
       }
     }
 
-    if (validationRules.isValidateLength) {
-      if (
-        value.length < validationRules.minLength ||
-        value.length > validationRules.maxLength
-      ) {
-        updatedValidationMessages.push(
-          `You must enter between ${validationRules.minLength} and ${validationRules.maxLength} characters!`
-        );
-      }
+    if (
+      value < validationRules.minNumber ||
+      value > validationRules.maxNumber
+    ) {
+      updatedValidationMessages.push(
+        `Field must be in range between ${validationRules.minNumber} and ${validationRules.maxNumber}!`
+      );
     }
 
-    if(validationRules.isAlphaNumeric){
-        if(!alphaNumericRegex.test(value)){
-          updatedValidationMessages.push(
-            `Allowed characters are (A-Z,a-z,0-9,(,),-,whitespace)!`
-          );
-        }
+    if (!numbericRegex.test(value)) {
+      updatedValidationMessages.push(
+        "Field must contain only numeric (integer) characters!"
+      );
     }
 
     this.setState({ validationMessages: updatedValidationMessages });
@@ -100,15 +91,14 @@ class TextInput extends Component {
 
     const validationMessages = this.state.validationMessages.map(
       validationMsg => {
-        return (
-         <InputValidationMessage message={validationMsg} key={uuid4()}/>
-        );
+        return <InputValidationMessage message={validationMsg} key={uuid4()} />;
       }
     );
+
     return (
       <div className="text-left">
         <input
-          type="text"
+          type="number"
           className={"form-control" + extraClasses}
           id={this.props.id}
           value={this.props.value}
@@ -125,4 +115,4 @@ class TextInput extends Component {
   }
 }
 
-export default TextInput;
+export default NumberInput;
