@@ -27,7 +27,7 @@ class MarketplaceContainer extends Component {
       || this.state.filterGenreId !== genreId
     ) {
       
-      this.setState({ filterStyleIds: styleIds,filterGenreId:genreId });
+      this.setState({ filterStyleIds: styleIds,filterGenreId:genreId != undefined ? genreId : "" });
     }
   };
 

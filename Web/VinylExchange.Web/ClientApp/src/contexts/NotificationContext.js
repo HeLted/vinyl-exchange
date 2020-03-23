@@ -27,7 +27,7 @@ class NotificationContextProvider extends React.Component {
 
         Object.keys(errors).forEach(function(field) {
           errorMessages.push({
-            messageText: `${field} : ${errors[field].join()}`,
+            messageText: `${errors[field].join()}`,
             id: uuidv4()
           });
         });

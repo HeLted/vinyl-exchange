@@ -22,7 +22,6 @@ class FilterReleaseContainer extends Component {
       .then(response => {
         this.context.handleAppNotification("Loaded Genres", 5);
         const genres = response.data;
-        console.log("debugging")
         genres.unshift({id:"",name:"All"})
       
         this.setState({ genres: genres});
@@ -64,7 +63,6 @@ class FilterReleaseContainer extends Component {
   handleOnChange = event => {
     const { value, name } = event.target;
     this.setState({ [name]: value });
-
    
     this.setState({styleMultiSelectInput:[]})
     this.props.functions.onUpdateFilterValue([],value) 

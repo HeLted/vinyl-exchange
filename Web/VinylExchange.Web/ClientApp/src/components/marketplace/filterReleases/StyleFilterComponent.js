@@ -14,6 +14,7 @@ function StyleFilterComponent(props) {
         onChange={props.functions.handleOnChangeMultiSelect}
         value={props.data.styleMultiSelectInput}
         options={props.data.styles}
+        isDisabled={props.data.genreSelectInput === "" ? true : false}
       />
     </div>
   );

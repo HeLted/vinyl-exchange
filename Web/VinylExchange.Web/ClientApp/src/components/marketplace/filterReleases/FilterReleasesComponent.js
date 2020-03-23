@@ -42,7 +42,8 @@ class FilterReleasesComponent extends Component {
                 <StyleFilterComponent
                   data={{
                     styles: this.props.data.styles,
-                    styleMultiSelectInput: this.props.data.styleMultiSelectInput
+                    styleMultiSelectInput: this.props.data.styleMultiSelectInput,
+                    genreSelectInput: this.props.data.genreSelectInput
                   }}
                   functions={{
                     handleOnChangeMultiSelect: this.props.functions
