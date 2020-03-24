@@ -24,7 +24,7 @@ class ReleasesComponent extends Component {
 
       return (
         <Fragment key={release.id}>
-          <tr
+          <tr 
             onClick={() =>
               this.props.functions.handleRedirectToRelease(release.id)
             }
@@ -35,9 +35,9 @@ class ReleasesComponent extends Component {
             <td>
               <PlayerLoaderButton data={{ releaseId: release.id }} />
             </td>
-            <td>{release.artist}</td>
-            <td>{release.title}</td>
-            <td>
+            <td className="property-text">{release.artist}</td>
+            <td className="property-text">{release.title}</td>
+            <td className="property-text">
               {release.label} - {release.year} - {release.format}
             </td>
           </tr>

@@ -14,6 +14,10 @@ function AddAddressComponent(props) {
           placeholder="Country..."
           value={props.data.countryInput}
           onChange={props.functions.handleOnChange}
+          required
+          validateLength
+          minLength={3}
+          maxLength={40}
         />
       </div>
 
@@ -24,6 +28,10 @@ function AddAddressComponent(props) {
           placeholder="Town..."
           value={props.data.townInput}
           onChange={props.functions.handleOnChange}
+          required
+          validateLength
+          minLength={3}
+          maxLength={40}
         />
       </div>
 
@@ -34,6 +42,10 @@ function AddAddressComponent(props) {
           placeholder="Postal Code..."
           value={props.data.postalCodeInput}
           onChange={props.functions.handleOnChange}
+          required
+          validateLength
+          minLength={3}
+          maxLength={40}
         />
       </div>
 
@@ -44,6 +56,10 @@ function AddAddressComponent(props) {
           placeholder="Full Address..."
           value={props.data.fullAddressInput}
           onChange={props.functions.handleOnChange}
+          required
+          validateLength
+          minLength={3}
+          maxLength={300}
         />
       </div>
       <br />

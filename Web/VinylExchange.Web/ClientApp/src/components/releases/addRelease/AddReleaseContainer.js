@@ -17,7 +17,7 @@ class AddReleaseContainer extends Component {
       genreSelectInput: "",
       styleMultiSelectInput: [],
       formatInput: "",
-      yearInput: "",
+      yearInput: 1900,
       labelInput: "",
       genres: [],
       styles: []

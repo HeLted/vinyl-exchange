@@ -97,6 +97,7 @@ class AddReleaseComponent extends Component {
                   onChange={this.props.functions.handleOnChangeMultiSelect}
                   options={this.props.state.styles}
                 />
+                
               </div>
             </div>
           </div>

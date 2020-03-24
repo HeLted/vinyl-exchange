@@ -73,15 +73,21 @@ class PlayerRelease extends Component {
         <div className="player-row row bg-dark text-center">
           <div className="col-12 p-0">
             <ul className="list-group" style={{ display: trakcsUlDisplay }}>
-              {this.props.tracks.map((track, index) => {
-                return (
-                  <PlayerTrack
-                    path={track.path}
-                    name={track.name}
-                    key={track.id}
-                  />
-                );
-              })}
+              {this.props.tracks.length > 0 ? (
+                this.props.tracks.map((track, index) => {
+                  return (
+                    <PlayerTrack
+                      path={track.path}
+                      name={track.name}
+                      key={track.id}
+                    />
+                  );
+                })
+              ) : (
+                <div className="border">
+                  <h6 className="property-text">This release has no tracks</h6>
+                </div>
+              )}
             </ul>
           </div>
         </div>

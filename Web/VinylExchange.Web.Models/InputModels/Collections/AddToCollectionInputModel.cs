@@ -12,13 +12,15 @@
 
     public class AddToCollectionInputModel : IMapTo<CollectionItem>
     {
-        [Required]
+
         public string Description { get; set; }
 
         [Required]
+        [Range((int)Condition.NotSelected,(int)Condition.Mint,ErrorMessage ="Please select correct option for field")]
         public Condition SleeveGrade { get; set; }
 
         [Required]
+        [Range((int)Condition.NotSelected,(int)Condition.Mint,ErrorMessage ="Please select correct option for field")]
         public Condition VinylGrade { get; set; }
     }
 }

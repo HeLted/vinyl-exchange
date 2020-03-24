@@ -19,6 +19,8 @@
         public Guid? BuyerId { get; set; }
 
         [Required]
+        [MinLength(10)]
+        [MaxLength(400)]
         public string Description { get; set; }
 
         public ICollection<SaleLog> Logs { get; set; } = new HashSet<SaleLog>();
@@ -37,6 +39,7 @@
 
         public VinylExchangeUser Seller { get; set; }
 
+        [Required]
         public Guid? SellerId { get; set; }
 
         [Column(TypeName = "decimal(18,4)")]
@@ -48,12 +51,15 @@
         public string ShipsTo { get; set; }
 
         [Required]
+        [Range((int)Condition.Poor, (int)Condition.Mint)]
         public Condition SleeveGrade { get; set; }
 
         [Required]
+        [Range((int)Status.Open, (int)Status.Finished)]
         public Status Status { get; set; }
 
         [Required]
+        [Range((int)Condition.Poor, (int)Condition.Mint)]
         public Condition VinylGrade { get; set; }
     }
 }

@@ -23,12 +23,9 @@
     {
         private readonly VinylExchangeDbContext dbContext;
 
-        private readonly IReleaseFilesService releaseFileService;
-
-        public SalesService(VinylExchangeDbContext dbContext, IReleaseFilesService releaseFileService)
+        public SalesService(VinylExchangeDbContext dbContext)
         {
             this.dbContext = dbContext;
-            this.releaseFileService = releaseFileService;
         }
 
         public async Task<TModel> CompletePayment<TModel>(CompletePaymentInputModel inputModel)

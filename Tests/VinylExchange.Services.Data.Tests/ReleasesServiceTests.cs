@@ -38,7 +38,7 @@
             {
                 Artist = "TestArtist",
                 Title = "Test Title",
-                Year = "1993",
+                Year = 1993,
                 Format = "Lp",
                 Label = "TestLabel",
                 StyleIds = new HashSet<int> { 1, 2, 3 }
@@ -96,7 +96,7 @@
         [Fact]
         public async Task GetReleaseoShouldReturnNullIfProvidedReleaseIdIsNotExistingInDb()
         {
-            var createdRelease = (await this.dbContext.Releases.AddAsync(new Release())).Entity;
+            await this.dbContext.Releases.AddAsync(new Release());
 
             await this.dbContext.SaveChangesAsync();
 

@@ -2,6 +2,8 @@
 {
     public enum Condition
     {
+        NotSelected = 0,
+
         Poor = 1,
 
         Fair = 2,

@@ -12,26 +12,26 @@
     public class CreateAddressInputModel : IMapTo<Address>
     {
         [Required]
-        [MinLength(3, ErrorMessage = "Min length of field is 3")]
-        [MaxLength(40, ErrorMessage = "Max length of field is 40")]
+        [MinLength(3, ErrorMessage = "Invalid min length of field!")]
+        [MaxLength(40, ErrorMessage = "Invalid max length of field!")]
 
         public string Country { get; set; }
 
         [Required]
-        [MinLength(3, ErrorMessage = "Min length of field is 3")]
-        [MaxLength(300, ErrorMessage = "Max length of field is 300")]
+        [MinLength(3, ErrorMessage = "Invalid min length of field!")]
+        [MaxLength(300, ErrorMessage = "Invalid max length of field!")]
 
         public string FullAddress { get; set; }
 
         [Required]
-        [MinLength(3, ErrorMessage = "Min length of field is 3")]
-        [MaxLength(40, ErrorMessage = "Max length of field is 40")]
+        [MinLength(3, ErrorMessage = "Invalid min length of field!")]
+        [MaxLength(40, ErrorMessage = "Invalid max length of field!")]
 
         public string PostalCode { get; set; }
 
         [Required]
-        [MinLength(3, ErrorMessage = "Min length of field is 3")]
-        [MaxLength(40, ErrorMessage = "Max length of field is 40")]
+        [MinLength(3, ErrorMessage = "Invalid min length of field!")]
+        [MaxLength(40, ErrorMessage = "Invalid max length of field!")]
 
         public string Town { get; set; }
     }

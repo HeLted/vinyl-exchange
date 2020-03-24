@@ -4,7 +4,7 @@
 
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    using VinylExchange.Common.Constants;
     using VinylExchange.Data.Common.Models;
 
     #endregion
@@ -12,12 +12,21 @@
     public class Release : BaseDeletableModel
     {
         [Required]
+        [MinLength(3)]
+        [MaxLength(40)]
+        [RegularExpression(RegexPatterns.AplhaNumericBracesAndDash)]
         public string Artist { get; set; }
 
         [Required]
+        [MinLength(2)]
+        [MaxLength(15)]
+        [RegularExpression(RegexPatterns.AplhaNumericBracesAndDash)]
         public string Format { get; set; }
 
         [Required]
+        [MinLength(3)]
+        [MaxLength(30)]
+        [RegularExpression(RegexPatterns.AplhaNumericBracesAndDash)]
         public string Label { get; set; }
 
         public ICollection<CollectionItem> ReleaseCollections { get; set; } = new HashSet<CollectionItem>();
@@ -29,9 +38,12 @@
         public ICollection<StyleRelease> Styles { get; set; } = new HashSet<StyleRelease>();
 
         [Required]
+        [MinLength(3)]
+        [MaxLength(40)]
+        [RegularExpression(RegexPatterns.AplhaNumericBracesAndDash)]
         public string Title { get; set; }
 
         [Required]
-        public string Year { get; set; }
+        public int Year { get; set; }
     }
 }

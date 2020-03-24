@@ -23,6 +23,7 @@ function SearchReleaseComponent(props) {
         placeholder="Search..."
         value={props.searchInputValue}
         onChange={props.inputOnChangeFunction}
+        
       />
     </div>
   );

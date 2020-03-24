@@ -15,7 +15,9 @@ class NotificationContextProvider extends React.Component {
 
     if (notificationObj.status >= 400) {
 
-      this.responseRedirect(notificationObj.status);
+      if(notificationObj.status !== 400){
+        this.responseRedirect(notificationObj.status);
+      }
 
       const errorMessages = [];
 
@@ -27,7 +29,7 @@ class NotificationContextProvider extends React.Component {
 
         Object.keys(errors).forEach(function(field) {
           errorMessages.push({
-            messageText: `${errors[field].join()}`,
+            messageText: `${field} : ${errors[field].join()}`,
             id: uuidv4()
           });
         });

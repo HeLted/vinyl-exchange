@@ -55,7 +55,7 @@
                     FileName = "defaultCoverArt.jpg",
                     FileType = FileType.Image,
                     IsPreview = true,
-                    Path = @"Releases\Default",
+                    Path = @"\Releases\Default\",
                     ReleaseId = releaseId
 
                 });
