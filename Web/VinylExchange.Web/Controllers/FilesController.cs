@@ -47,11 +47,11 @@
 
         [HttpDelete]
         [Route("{id}")]
-        public ActionResult<DeleteFileResourceModel> DeleteFile(Guid id, Guid formSessionId)
+        public ActionResult<RemoveFileResourceModel> RemoveFile([FromQuery]RemoveFileInputModel inputModel)
         {
             try
             {
-                return this.memoryCacheFileSevice.RemoveFile(formSessionId, id);
+                return this.memoryCacheFileSevice.RemoveFile<RemoveFileResourceModel>(inputModel);
             }
             catch (Exception ex)
             {

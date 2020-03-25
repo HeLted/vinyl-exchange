@@ -72,24 +72,24 @@
             throw new NullReferenceException(NullReferenceExceptionsConstants.FormSessionKeyNotFound);
         }
 
-        public DeleteFileResourceModel RemoveFile(Guid formSessionId, Guid fileGuid)
+        public TModel RemoveFile<TModel>(RemoveFileInputModel inputModel)
         {
-            var formSessionIdAsString = formSessionId.ToString();
+            var formSessionIdAsString = inputModel.FormSessionId.ToString();
 
-            var key = this.cacheManager.GetKeys().Where(x => x == formSessionId.ToString()).SingleOrDefault();
+            var key = this.cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
 
             if (this.cacheManager.IsSet(formSessionIdAsString))
             {
                 var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
-                var file = formSessionStorage.SingleOrDefault(x => x.FileGuid == fileGuid);
+                var file = formSessionStorage.SingleOrDefault(x => x.FileGuid == inputModel.Id);
 
                 formSessionStorage.Remove(file);
 
-                return new DeleteFileResourceModel { FileId = file.FileGuid, FileName = file.FileName };
+                return file.To<TModel>();
             }
 
-            throw new NullReferenceException("Session with this key is not set!");
+            throw new NullReferenceException(NullReferenceExceptionsConstants.FormSessionKeyNotFound);
         }
     }
 }

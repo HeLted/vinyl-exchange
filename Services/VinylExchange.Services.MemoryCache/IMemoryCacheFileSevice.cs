@@ -18,6 +18,6 @@
 
         List<TModel> RemoveAllFilesForSession<TModel>(RemoveAllFilesForSessionInputModel inputModel);
 
-        DeleteFileResourceModel RemoveFile(Guid formSessionId, Guid fileGuid);
+        TModel RemoveFile<TModel>(RemoveFileInputModel inputModel);
     }
 }
