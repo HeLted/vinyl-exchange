@@ -69,7 +69,7 @@ function getCookie(cname) {
 
       this.on("success", function(file, jsonResponse) {
         console.log(`Added File:${jsonResponse.fileName}`);
-        file.serverGuid = jsonResponse.fileId;
+        file.serverGuid = jsonResponse.fileGuid;
       });
 
       this.on("addedfile", function(file) {
