@@ -12,7 +12,7 @@
 
     public interface IMemoryCacheFileSevice
     {
-        UploadFileResourceModel AddFile(UploadFileUtilityModel file, Guid formSessionId);
+        TModel UploadFile<TModel>(UploadFileInputModel inputModel);
 
         List<UploadFileUtilityModel> GetAllFilesForFormSession(Guid formSessionId);
 

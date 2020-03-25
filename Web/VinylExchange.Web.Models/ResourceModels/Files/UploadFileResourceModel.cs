@@ -3,13 +3,13 @@
     #region
 
     using System;
+    using VinylExchange.Services.Mapping;
+    using VinylExchange.Web.Models.Utility;
 
     #endregion
 
-    public class UploadFileResourceModel
+    public class UploadFileResourceModel : IMapFrom<UploadFileUtilityModel>
     {
-        public Guid FileId { get; set; }
-
-        public string FileName { get; set; }
+        public Guid FileGuid { get; set; }       
     }
 }

@@ -47,7 +47,7 @@
 
         [HttpDelete]
         [Route("{id}")]
-        public ActionResult<RemoveFileResourceModel> RemoveFile([FromQuery]RemoveFileInputModel inputModel)
+        public ActionResult<RemoveFileResourceModel> RemoveFile([FromRoute][FromQuery]RemoveFileInputModel inputModel)
         {
             try
             {
@@ -62,13 +62,11 @@
         }
 
         [HttpPost]
-        public ActionResult<UploadFileResourceModel> UploadFile(IFormFile file, Guid formSessionId)
+        public ActionResult<UploadFileResourceModel> UploadFile([FromForm][FromQuery]UploadFileInputModel inputModel)
         {
-            try
-            {
-                var fileModel = new UploadFileUtilityModel(file);
-
-                return this.memoryCacheFileSevice.AddFile(fileModel, formSessionId);
+            try      
+            {       
+                return this.memoryCacheFileSevice.UploadFile<UploadFileResourceModel>(inputModel);
             }
             catch (Exception ex)
             {

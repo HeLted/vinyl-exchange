@@ -68,7 +68,6 @@ function getCookie(cname) {
       });
 
       this.on("success", function(file, jsonResponse) {
-        console.log(`Added File:${jsonResponse.fileName}`);
         file.serverGuid = jsonResponse.fileGuid;
       });
 
@@ -89,9 +88,7 @@ function getCookie(cname) {
               headers: {
                 RequestVerificationToken: getCookie("XSRF-TOKEN")
               }
-            })
-              .then(response => response.json())
-              .then(data => console.log(`Removed file: ${data.fileName}`));
+            });
           }
 
           _this.removeFile(file);

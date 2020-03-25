@@ -22,18 +22,20 @@
             this.cacheManager = cacheManager;
         }
 
-        public UploadFileResourceModel AddFile(UploadFileUtilityModel file, Guid formSessionId)
+        public   TModel UploadFile<TModel>(UploadFileInputModel inputModel)
         {
-            var formSessionIdAsString = formSessionId.ToString();
+            var formSessionIdAsString = inputModel.FormSessionId.ToString();
 
             if (!this.cacheManager.IsSet(formSessionIdAsString))
                 this.cacheManager.Set(formSessionIdAsString, new List<UploadFileUtilityModel>(), 1800);
 
             var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionIdAsString, null);
 
-            formSessionStorage.Add(file);
+            var fileUtilityModel = new UploadFileUtilityModel(inputModel.File);
 
-            return new UploadFileResourceModel { FileId = file.FileGuid, FileName = file.FileName };
+            formSessionStorage.Add(fileUtilityModel);
+
+            return fileUtilityModel.To<TModel>();
         }
 
         public List<UploadFileUtilityModel> GetAllFilesForFormSession(Guid formSessionId)
