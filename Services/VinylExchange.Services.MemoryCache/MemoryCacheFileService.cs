@@ -5,11 +5,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using VinylExchange.Web.Models.InputModels.Files;
-    using VinylExchange.Web.Models.ResourceModels.File;
-    using VinylExchange.Web.Models.Utility;
-    using VinylExchange.Services.Mapping;
+
     using VinylExchange.Common.Constants;
+    using VinylExchange.Services.Mapping;
+    using VinylExchange.Web.Models.InputModels.Files;
+    using VinylExchange.Web.Models.Utility;
 
     #endregion
 
@@ -22,12 +22,14 @@
             this.cacheManager = cacheManager;
         }
 
-        public   TModel UploadFile<TModel>(UploadFileInputModel inputModel)
+        public TModel UploadFile<TModel>(UploadFileInputModel inputModel)
         {
             var formSessionIdAsString = inputModel.FormSessionId.ToString();
 
             if (!this.cacheManager.IsSet(formSessionIdAsString))
+            {
                 this.cacheManager.Set(formSessionIdAsString, new List<UploadFileUtilityModel>(), 1800);
+            }
 
             var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionIdAsString, null);
 
@@ -62,7 +64,7 @@
             {
                 var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
-                deletedFormSessionCacheCopy.AddRange(formSessionStorage.Select(uf=> uf.To<TModel>()));
+                deletedFormSessionCacheCopy.AddRange(formSessionStorage.Select(uf => uf.To<TModel>()));
 
                 formSessionStorage.Clear();
 

@@ -5,8 +5,6 @@
     using System;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Http;
-
     using VinylExchange.Data.Models;
     using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using VinylExchange.Common.Enumerations;
-
-namespace VinylExchange.Web.Infrastructure.ValidationAttributes
+﻿namespace VinylExchange.Web.Infrastructure.ValidationAttributes
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class ValidateYearAttribute : ValidationAttribute
     {
-       
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var currentYear = DateTime.UtcNow.Year;
@@ -17,10 +13,8 @@ namespace VinylExchange.Web.Infrastructure.ValidationAttributes
             {
                 return ValidationResult.Success;
             }
-            else
-            {
-                return new ValidationResult($"Year must be in range between 1930 and {currentYear}");
-            }
+
+            return new ValidationResult($"Year must be in range between 1930 and {currentYear}");
         }
     }
 }

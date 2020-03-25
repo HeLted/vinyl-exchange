@@ -1,9 +1,10 @@
-﻿using System;
-using VinylExchange.Services.Mapping;
-using VinylExchange.Web.Models.Utility;
-
-namespace VinylExchange.Web.Models.ResourceModels.Files
+﻿namespace VinylExchange.Web.Models.ResourceModels.Files
 {
+    using System;
+
+    using VinylExchange.Services.Mapping;
+    using VinylExchange.Web.Models.Utility;
+
     public class RemoveAllFilesForSessionResourceModel : IMapFrom<UploadFileUtilityModel>
     {
         public Guid FileGuid { get; set; }

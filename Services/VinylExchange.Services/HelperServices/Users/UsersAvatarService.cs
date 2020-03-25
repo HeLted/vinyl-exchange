@@ -7,8 +7,8 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
+
     using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
@@ -39,7 +39,10 @@
 
             var user = await this.dbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
 
-            if (user == null) throw new NullReferenceException(NullReferenceExceptionsConstants.UserNotFound);
+            if (user == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserNotFound);
+            }
 
             user.Avatar = imageByteArray;
 
@@ -49,8 +52,9 @@
         }
 
         public async Task<GetUserAvatarResourceModel> GetUserAvatar(Guid userId)
-        => await this.dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
+        {
+            return await this.dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
                        .FirstOrDefaultAsync();
-        
+        }
     }
 }

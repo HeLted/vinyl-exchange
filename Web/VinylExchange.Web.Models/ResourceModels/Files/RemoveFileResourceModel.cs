@@ -3,6 +3,7 @@
     #region
 
     using System;
+
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.Utility;
 
@@ -11,6 +12,5 @@
     public class RemoveFileResourceModel : IMapFrom<UploadFileUtilityModel>
     {
         public Guid FileGuid { get; set; }
-
     }
 }

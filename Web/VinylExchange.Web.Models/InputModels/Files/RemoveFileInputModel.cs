@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace VinylExchange.Web.Models.InputModels.Files
+﻿namespace VinylExchange.Web.Models.InputModels.Files
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class RemoveFileInputModel
     {
         [Required]

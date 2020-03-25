@@ -5,7 +5,6 @@
     using System;
     using System.Collections.Generic;
 
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     using VinylExchange.Services.Logging;
@@ -13,7 +12,6 @@
     using VinylExchange.Web.Models.InputModels.Files;
     using VinylExchange.Web.Models.ResourceModels.File;
     using VinylExchange.Web.Models.ResourceModels.Files;
-    using VinylExchange.Web.Models.Utility;
 
     #endregion
 
@@ -31,11 +29,13 @@
 
         [HttpDelete]
         [Route("DeleteAll")]
-        public ActionResult<IEnumerable<RemoveAllFilesForSessionResourceModel>> RemoveAllFilesForSession([FromQuery]RemoveAllFilesForSessionInputModel inputModel)
+        public ActionResult<IEnumerable<RemoveAllFilesForSessionResourceModel>> RemoveAllFilesForSession(
+            [FromQuery] RemoveAllFilesForSessionInputModel inputModel)
         {
             try
             {
-                return this.memoryCacheFileSevice.RemoveAllFilesForSession<RemoveAllFilesForSessionResourceModel>(inputModel);
+                return this.memoryCacheFileSevice.RemoveAllFilesForSession<RemoveAllFilesForSessionResourceModel>(
+                    inputModel);
             }
             catch (Exception ex)
             {
@@ -47,7 +47,7 @@
 
         [HttpDelete]
         [Route("{id}")]
-        public ActionResult<RemoveFileResourceModel> RemoveFile([FromRoute][FromQuery]RemoveFileInputModel inputModel)
+        public ActionResult<RemoveFileResourceModel> RemoveFile([FromRoute] [FromQuery] RemoveFileInputModel inputModel)
         {
             try
             {
@@ -62,10 +62,10 @@
         }
 
         [HttpPost]
-        public ActionResult<UploadFileResourceModel> UploadFile([FromForm][FromQuery]UploadFileInputModel inputModel)
+        public ActionResult<UploadFileResourceModel> UploadFile([FromForm] [FromQuery] UploadFileInputModel inputModel)
         {
-            try      
-            {       
+            try
+            {
                 return this.memoryCacheFileSevice.UploadFile<UploadFileResourceModel>(inputModel);
             }
             catch (Exception ex)

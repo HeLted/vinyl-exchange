@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.ComponentModel.DataAnnotations;
-using VinylExchange.Web.Infrastructure.ValidationAttributes;
-
-namespace VinylExchange.Web.Models.InputModels.Files
+﻿namespace VinylExchange.Web.Models.InputModels.Files
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    using Microsoft.AspNetCore.Http;
+
+    using VinylExchange.Web.Infrastructure.ValidationAttributes;
+
     public class UploadFileInputModel
     {
         [ValidateFile]
