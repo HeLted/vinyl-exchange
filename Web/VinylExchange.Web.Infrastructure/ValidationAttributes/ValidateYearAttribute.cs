@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using VinylExchange.Common.Enumerations;
 
 namespace VinylExchange.Web.Infrastructure.ValidationAttributes
 {
-    public class ValidateYear: ValidationAttribute
+    public class ValidateYearAttribute : ValidationAttribute
     {
+       
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {           
+        {
             var currentYear = DateTime.UtcNow.Year;
-            
-            if ((int)value >= 1930 &&  (int)value <= currentYear)
+
+            if ((int)value >= 1930 && (int)value <= currentYear)
             {
                 return ValidationResult.Success;
             }

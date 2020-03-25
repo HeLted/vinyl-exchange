@@ -40,7 +40,7 @@
         public string Title { get; set; }
 
         [Required]
-        [ValidateYear]
+        [ValidateYearAttribute]
         public int Year { get; set; }
     }
 }
