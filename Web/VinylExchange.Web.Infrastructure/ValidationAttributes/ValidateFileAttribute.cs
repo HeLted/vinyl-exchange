@@ -11,9 +11,9 @@ namespace VinylExchange.Web.Infrastructure.ValidationAttributes
     {
         private readonly FileType? fileType;
 
-        public ValidateFileAttribute(int fileTypeAsInt)
+        public ValidateFileAttribute(FileType fileType)
         {
-            this.fileType = (FileType?)fileTypeAsInt;
+            this.fileType = (FileType?)fileType;
         }
 
         public ValidateFileAttribute()
@@ -36,7 +36,7 @@ namespace VinylExchange.Web.Infrastructure.ValidationAttributes
 
             if (!(value is IFormFile file))
             {
-               return new ValidationResult($"File is required");
+               return new ValidationResult($"Please upload file into the field!");
             }
             else
             {

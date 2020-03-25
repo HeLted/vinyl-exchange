@@ -11,9 +11,8 @@
     #endregion
 
     public class ChangeAvatarInputModel
-    {
-        [Required]
-        [ValidateFile((int)FileType.Image)]
+    {      
+        [ValidateFile(FileType.Image)]      
         public IFormFile Avatar { get; set; }
     }
 }

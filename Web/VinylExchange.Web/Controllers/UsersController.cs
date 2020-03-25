@@ -40,11 +40,11 @@
         [HttpPut]
         [Authorize]
         [Route("ChangeUserAvatar")]
-        public async Task<ActionResult> ChangeUserAvatar(IFormFile avatar)
+        public async Task<ActionResult> ChangeUserAvatar([FromForm]ChangeAvatarInputModel inputModel)
         {
             try
             {
-                await this.usersAvatarService.ChangeUserAvatar(avatar, this.GetUserId(this.User));
+                await this.usersAvatarService.ChangeUserAvatar(inputModel, this.GetUserId(this.User));
 
                 return this.NoContent();
             }

@@ -8,13 +8,14 @@
     using Microsoft.AspNetCore.Http;
 
     using VinylExchange.Data.Models;
+    using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
 
     #endregion
 
     public interface IUsersAvatarService
     {
-        Task<VinylExchangeUser> ChangeUserAvatar(IFormFile avatar, Guid userId);
+        Task<VinylExchangeUser> ChangeUserAvatar(ChangeAvatarInputModel inputModel, Guid userId);
 
         Task<GetUserAvatarResourceModel> GetUserAvatar(Guid userId);
     }

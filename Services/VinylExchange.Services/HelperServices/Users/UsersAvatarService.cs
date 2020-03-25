@@ -9,9 +9,10 @@
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
-
+    using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
+    using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
 
@@ -26,19 +27,19 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<VinylExchangeUser> ChangeUserAvatar(IFormFile avatar, Guid userId)
+        public async Task<VinylExchangeUser> ChangeUserAvatar(ChangeAvatarInputModel inputModel, Guid userId)
         {
             var imageByteArray = new byte[1];
 
             using (var ms = new MemoryStream())
             {
-                avatar.CopyTo(ms);
+                inputModel.Avatar.CopyTo(ms);
                 imageByteArray = ms.ToArray();
             }
 
             var user = await this.dbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
 
-            if (user == null) throw new NullReferenceException("User with this Id not found");
+            if (user == null) throw new NullReferenceException(NullReferenceExceptionsConstants.UserNotFound);
 
             user.Avatar = imageByteArray;
 
@@ -48,9 +49,8 @@
         }
 
         public async Task<GetUserAvatarResourceModel> GetUserAvatar(Guid userId)
-        {
-            return await this.dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
+        => await this.dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
                        .FirstOrDefaultAsync();
-        }
+        
     }
 }
