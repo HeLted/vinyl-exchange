@@ -10,7 +10,9 @@
 
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MemoryCache;
+    using VinylExchange.Web.Models.InputModels.Files;
     using VinylExchange.Web.Models.ResourceModels.File;
+    using VinylExchange.Web.Models.ResourceModels.Files;
     using VinylExchange.Web.Models.Utility;
 
     #endregion
@@ -29,11 +31,11 @@
 
         [HttpDelete]
         [Route("DeleteAll")]
-        public ActionResult<IEnumerable<UploadFileUtilityModel>> DeleteAllFiles(Guid formSessionId)
+        public ActionResult<IEnumerable<RemoveAllFilesForSessionResourceModel>> RemoveAllFilesForSession([FromQuery]RemoveAllFilesForSessionInputModel inputModel)
         {
             try
             {
-                return this.memoryCacheFileSevice.RemoveAllFilesForFormSession(formSessionId);
+                return this.memoryCacheFileSevice.RemoveAllFilesForSession<RemoveAllFilesForSessionResourceModel>(inputModel);
             }
             catch (Exception ex)
             {

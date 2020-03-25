@@ -5,9 +5,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using VinylExchange.Web.Models.InputModels.Files;
     using VinylExchange.Web.Models.ResourceModels.File;
     using VinylExchange.Web.Models.Utility;
+    using VinylExchange.Services.Mapping;
+    using VinylExchange.Common.Constants;
 
     #endregion
 
@@ -46,28 +48,28 @@
             }
         }
 
-        public List<UploadFileUtilityModel> RemoveAllFilesForFormSession(Guid formSessionId)
+        public List<TModel> RemoveAllFilesForSession<TModel>(RemoveAllFilesForSessionInputModel inputModel)
         {
-            var formSessionIdAsString = formSessionId.ToString();
+            var formSessionIdAsString = inputModel.FormSessionId.ToString();
 
             var key = this.cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
 
-            var formSessionIdCopy = new List<UploadFileUtilityModel>();
+            var deletedFormSessionCacheCopy = new List<TModel>();
 
             if (this.cacheManager.IsSet(formSessionIdAsString))
             {
                 var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
-                formSessionIdCopy.AddRange(formSessionStorage);
+                deletedFormSessionCacheCopy.AddRange(formSessionStorage.Select(uf=> uf.To<TModel>()));
 
                 formSessionStorage.Clear();
 
                 this.cacheManager.Remove(formSessionIdAsString);
 
-                return formSessionIdCopy;
+                return deletedFormSessionCacheCopy;
             }
 
-            throw new NullReferenceException("Session with this key is not set!");
+            throw new NullReferenceException(NullReferenceExceptionsConstants.FormSessionKeyNotFound);
         }
 
         public DeleteFileResourceModel RemoveFile(Guid formSessionId, Guid fileGuid)

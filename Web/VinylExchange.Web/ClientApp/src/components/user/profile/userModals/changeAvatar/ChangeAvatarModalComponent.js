@@ -34,6 +34,11 @@ class ChangeAvatarModalComponent extends Component {
                     </div>
                   </div>
                 </div>
+                <div className="row">
+                  <small className="form-text text-secondary">
+                    -Allowed file types : .jpg,.png,.jpeg (Max size 10MB)
+                  </small>
+                </div>
               </div>
             </div>
             <div className="modal-footer">
@@ -44,19 +49,19 @@ class ChangeAvatarModalComponent extends Component {
               >
                 Close
               </button>
-              {this.props.data.isLoading ? ( <button
-                type="button"
-                className="btn btn-success"
-              >
-               <FontAwesomeIcon icon={faSync} spin />
-              </button>) : ( <button
-                type="button"
-                className="btn btn-success"
-                onClick={this.props.functions.handleOnSubmit}
-              >
-                Submit
-              </button>)}
-             
+              {this.props.data.isLoading ? (
+                <button type="button" className="btn btn-success">
+                  <FontAwesomeIcon icon={faSync} spin />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={this.props.functions.handleOnSubmit}
+                >
+                  Submit
+                </button>
+              )}
             </div>
           </div>
         </div>

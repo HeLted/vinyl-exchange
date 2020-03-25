@@ -4,7 +4,7 @@
 
     using System;
     using System.Collections.Generic;
-
+    using VinylExchange.Web.Models.InputModels.Files;
     using VinylExchange.Web.Models.ResourceModels.File;
     using VinylExchange.Web.Models.Utility;
 
@@ -16,7 +16,7 @@
 
         List<UploadFileUtilityModel> GetAllFilesForFormSession(Guid formSessionId);
 
-        List<UploadFileUtilityModel> RemoveAllFilesForFormSession(Guid formSessionId);
+        List<TModel> RemoveAllFilesForSession<TModel>(RemoveAllFilesForSessionInputModel inputModel);
 
         DeleteFileResourceModel RemoveFile(Guid formSessionId, Guid fileGuid);
     }
