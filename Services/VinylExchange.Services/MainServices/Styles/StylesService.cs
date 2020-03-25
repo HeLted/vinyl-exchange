@@ -41,7 +41,10 @@
         {
             var stylesQueriable = this.dbContext.Styles.AsQueryable();
 
-            if (genreId != null) stylesQueriable = stylesQueriable.Where(x => x.GenreId == genreId);
+            if (genreId != null)
+            {
+                stylesQueriable = stylesQueriable.Where(x => x.GenreId == genreId);
+            }
 
             return await stylesQueriable.To<TModel>().ToListAsync();
         }
@@ -50,7 +53,10 @@
         {
             var style = await this.dbContext.Styles.FirstOrDefaultAsync(s => s.Id == styleId);
 
-            if (style == null) throw new NullReferenceException(NullReferenceExceptionsConstants.StyleNotFound);
+            if (style == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.StyleNotFound);
+            }
 
             var removedStyle = this.dbContext.Styles.Remove(style).Entity;
 

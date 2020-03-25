@@ -24,6 +24,11 @@
 
         public string SendGridUser { get; set; }
 
+        public Task SendEmailAsync(string email, string subject, string message)
+        {
+            return this.Execute(this.SendGridKey, subject, message, email);
+        }
+
         public async Task Execute(string apiKey, string subject, string message, string email)
         {
             var client = new SendGridClient(apiKey);
@@ -34,11 +39,6 @@
             var htmlContent = message;
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             await client.SendEmailAsync(msg);
-        }
-
-        public Task SendEmailAsync(string email, string subject, string message)
-        {
-            return this.Execute(this.SendGridKey, subject, message, email);
         }
     }
 }

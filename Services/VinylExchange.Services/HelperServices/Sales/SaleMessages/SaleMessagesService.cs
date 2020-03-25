@@ -29,7 +29,10 @@
         {
             var isSaleExists = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault() != null;
 
-            if (!isSaleExists) throw new NullReferenceException("Sale with this Id doesn't exist!");
+            if (!isSaleExists)
+            {
+                throw new NullReferenceException("Sale with this Id doesn't exist!");
+            }
 
             var saleMessage =
                 (await this.dbContext.SaleMessages.AddAsync(

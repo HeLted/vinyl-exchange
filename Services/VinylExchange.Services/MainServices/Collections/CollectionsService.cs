@@ -69,7 +69,10 @@
         {
             var collectionItem = await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItemId);
 
-            if (collectionItem == null) throw new NullReferenceException("Collection item with this Id doesn't exist");
+            if (collectionItem == null)
+            {
+                throw new NullReferenceException("Collection item with this Id doesn't exist");
+            }
 
             this.dbContext.Collections.Remove(collectionItem);
             await this.dbContext.SaveChangesAsync();

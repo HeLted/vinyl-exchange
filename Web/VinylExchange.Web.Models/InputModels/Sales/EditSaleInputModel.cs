@@ -13,13 +13,13 @@
 
     public class EditSaleInputModel : IMapTo<Sale>
     {
-          [Required]
-        [MinLength(10,ErrorMessage ="Invalid min length of field!")]
-        [MaxLength(400,ErrorMessage ="Invalid max length of field!")]
+        [Required]
+        [MinLength(10, ErrorMessage = "Invalid min length of field!")]
+        [MaxLength(400, ErrorMessage = "Invalid max length of field!")]
         public string Description { get; set; }
 
         [Required]
-        [Range(0,100000)]
+        [Range(0, 100000)]
         public decimal Price { get; set; }
 
         [Required]
@@ -31,11 +31,11 @@
         public Guid? ShipsFromAddressId { get; set; }
 
         [Required]
-        [Range((int)Condition.Poor,(int)Condition.Mint,ErrorMessage ="Please select correct option for field")]
+        [Range((int)Condition.Poor, (int)Condition.Mint, ErrorMessage = "Please select correct option for field")]
         public Condition SleeveGrade { get; set; }
 
         [Required]
-        [Range((int)Condition.Poor,(int)Condition.Mint,ErrorMessage ="Please select correct option for field")]
+        [Range((int)Condition.Poor, (int)Condition.Mint, ErrorMessage = "Please select correct option for field")]
         public Condition VinylGrade { get; set; }
     }
 }

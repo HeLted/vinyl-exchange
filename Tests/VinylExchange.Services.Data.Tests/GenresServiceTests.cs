@@ -26,18 +26,18 @@
     [Collection("AutoMapperSetup")]
     public class GenresServiceTests
     {
+        public GenresServiceTests()
+        {
+            this.dbContext = DbFactory.CreateVinylExchangeDbContext();
+            this.genresService = new GenresService(this.dbContext);
+        }
+
         private readonly VinylExchangeDbContext dbContext;
 
         private readonly IGenresService genresService;
 
         private readonly CreateGenreInputModel testCreateGenreInputModel =
             new CreateGenreInputModel { Name = "Test Genre" };
-
-        public GenresServiceTests()
-        {
-            this.dbContext = DbFactory.CreateVinylExchangeDbContext();
-            this.genresService = new GenresService(this.dbContext);
-        }
 
         [Fact]
         public async Task CreateGenreShouldCreateGenre()

@@ -30,20 +30,20 @@
 
         public ICollection<CollectionItem> Collection { get; set; } = new HashSet<CollectionItem>();
 
+        public ICollection<SaleMessage> Messages { get; set; } = new HashSet<SaleMessage>();
+
+        public ICollection<Sale> Purchases { get; set; } = new HashSet<Sale>();
+
+        public ICollection<Sale> Sales { get; set; } = new HashSet<Sale>();
+
         // Audit info
         public DateTime CreatedOn { get; set; }
+
+        public DateTime? ModifiedOn { get; set; }
 
         public DateTime? DeletedOn { get; set; }
 
         // Deletable entity
         public bool IsDeleted { get; set; }
-
-        public ICollection<SaleMessage> Messages { get; set; } = new HashSet<SaleMessage>();
-
-        public DateTime? ModifiedOn { get; set; }
-
-        public ICollection<Sale> Purchases { get; set; } = new HashSet<Sale>();
-
-        public ICollection<Sale> Sales { get; set; } = new HashSet<Sale>();
     }
 }

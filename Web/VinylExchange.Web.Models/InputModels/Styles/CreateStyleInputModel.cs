@@ -1,7 +1,8 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Styles
 {
-    using System.ComponentModel.DataAnnotations;
     #region
+
+    using System.ComponentModel.DataAnnotations;
 
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
@@ -12,8 +13,9 @@
     {
         [Required]
         public int? GenreId { get; set; }
+
         [Required]
-        [Display(Name="Style Name")]
+        [Display(Name = "Style Name")]
         public string Name { get; set; }
     }
 }

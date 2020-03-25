@@ -30,7 +30,10 @@
         {
             var sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
 
-            if (sale == null) throw new NullReferenceException("Sale with this Id doesn't exist!");
+            if (sale == null)
+            {
+                throw new NullReferenceException("Sale with this Id doesn't exist!");
+            }
 
             string logMessage = null;
 

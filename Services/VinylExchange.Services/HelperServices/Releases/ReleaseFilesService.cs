@@ -50,15 +50,15 @@
 
             if (releaseFilesModels.Where(rf => rf.FileType == FileType.Image).FirstOrDefault() == null)
             {
-                releaseFilesModels.Add(new ReleaseFile
-                {
-                    FileName = "defaultCoverArt.jpg",
-                    FileType = FileType.Image,
-                    IsPreview = true,
-                    Path = @"\Releases\Default\",
-                    ReleaseId = releaseId
-
-                });
+                releaseFilesModels.Add(
+                    new ReleaseFile
+                        {
+                            FileName = "defaultCoverArt.jpg",
+                            FileType = FileType.Image,
+                            IsPreview = true,
+                            Path = @"\Releases\Default\",
+                            ReleaseId = releaseId
+                        });
             }
 
             await this.dbContext.ReleaseFiles.AddRangeAsync(releaseFilesModels);

@@ -67,7 +67,10 @@ namespace VinylExchange.Web
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<VinylExchangeDbContext>();
 
-                if (env.IsDevelopment()) dbContext.Database.Migrate();
+                if (env.IsDevelopment())
+                {
+                    dbContext.Database.Migrate();
+                }
 
                 serviceScope.ServiceProvider.GetRequiredService<UserManager<VinylExchangeUser>>();
                 serviceScope.ServiceProvider.GetRequiredService<RoleManager<VinylExchangeRole>>();
@@ -141,7 +144,10 @@ namespace VinylExchange.Web
                     {
                         spa.Options.SourcePath = "ClientApp";
 
-                        if (env.IsDevelopment()) spa.UseReactDevelopmentServer("start");
+                        if (env.IsDevelopment())
+                        {
+                            spa.UseReactDevelopmentServer("start");
+                        }
                     });
         }
 
@@ -154,7 +160,10 @@ namespace VinylExchange.Web
             services.AddSignalR(
                 options =>
                     {
-                        if (this.Environment.IsDevelopment()) options.EnableDetailedErrors = true;
+                        if (this.Environment.IsDevelopment())
+                        {
+                            options.EnableDetailedErrors = true;
+                        }
                     });
 
             services.AddDefaultIdentity<VinylExchangeUser>(options => options.SignIn.RequireConfirmedAccount = true)

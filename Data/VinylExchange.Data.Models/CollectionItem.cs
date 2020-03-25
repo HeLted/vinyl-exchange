@@ -12,7 +12,6 @@
 
     public class CollectionItem : BaseModel
     {
-     
         public string Description { get; set; }
 
         public Release Release { get; set; }

@@ -62,19 +62,25 @@
             var releasesQuariable = this.dbContext.Releases.AsQueryable();
 
             if (searchTerm != null)
+            {
                 releasesQuariable = releasesQuariable.Where(
                     r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm));
+            }
 
             if (filterGenreId != null)
             {
                 if (filterStyleIds.Count() == 0)
+                {
                     releasesQuariable =
                         releasesQuariable.Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId));
+                }
                 else
+                {
                     releasesQuariable = releasesQuariable.Where(
                         r => r.Styles.Any(
                             sr => filterStyleIds.Contains(sr.StyleId)
                                   && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)));
+                }
             }
 
             releases = await releasesQuariable.Skip(releasesToSkip).Take(ReleasesToTake).To<TModel>().ToListAsync();

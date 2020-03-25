@@ -22,6 +22,13 @@
     [Collection("AutoMapperSetup")]
     public class StylesServiceTests
     {
+        public StylesServiceTests()
+        {
+            this.dbContext = DbFactory.CreateVinylExchangeDbContext();
+            this.stylesService = new StylesService(this.dbContext);
+            this.randomGenerator = new Random();
+        }
+
         private readonly VinylExchangeDbContext dbContext;
 
         private readonly Random randomGenerator;
@@ -30,13 +37,6 @@
 
         private readonly CreateStyleInputModel testCreateStyleInputModel =
             new CreateStyleInputModel { Name = "Electronic", GenreId = new Random().Next() };
-
-        public StylesServiceTests()
-        {
-            this.dbContext = DbFactory.CreateVinylExchangeDbContext();
-            this.stylesService = new StylesService(this.dbContext);
-            this.randomGenerator = new Random();
-        }
 
         [Fact]
         public async Task CreateGenreShouldCreateGenreWithCorrectData()

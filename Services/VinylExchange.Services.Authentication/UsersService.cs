@@ -47,7 +47,10 @@
         {
             var user = await this.userManager.FindByIdAsync(inputModel.UserId.ToString());
 
-            if (user == null) throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+            if (user == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+            }
 
             var identityResult = await this.userManager.ConfirmEmailAsync(user, inputModel.EmailConfirmToken);
 
@@ -84,7 +87,10 @@
         {
             var user = await this.userManager.FindByIdAsync(userId.ToString());
 
-            if (user == null) throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+            if (user == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+            }
 
             var emailContent = await this.ConstructConfirmationEmailContent(user);
 

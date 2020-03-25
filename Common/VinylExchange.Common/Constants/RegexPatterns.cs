@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VinylExchange.Common.Constants
+﻿namespace VinylExchange.Common.Constants
 {
     public class RegexPatterns
     {

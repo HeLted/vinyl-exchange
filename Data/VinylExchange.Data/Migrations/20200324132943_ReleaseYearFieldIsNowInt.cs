@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace VinylExchange.Data.Migrations
+﻿namespace VinylExchange.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class ReleaseYearFieldIsNowInt : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
-                name: "Year",
-                table: "Releases",
+                "Year",
+                "Releases",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
@@ -17,9 +17,9 @@ namespace VinylExchange.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Year",
-                table: "Releases",
-                type: "nvarchar(max)",
+                "Year",
+                "Releases",
+                "nvarchar(max)",
                 nullable: false,
                 oldClrType: typeof(int));
         }

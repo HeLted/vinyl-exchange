@@ -50,7 +50,10 @@
             {
                 var release = await this.releasesService.GetRelease<GetReleaseResourceModel>(id);
 
-                if (release == null) return this.NotFound();
+                if (release == null)
+                {
+                    return this.NotFound();
+                }
 
                 return release;
             }

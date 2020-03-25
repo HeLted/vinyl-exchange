@@ -4,6 +4,7 @@
 
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
     using VinylExchange.Common.Constants;
     using VinylExchange.Data.Common.Models;
 

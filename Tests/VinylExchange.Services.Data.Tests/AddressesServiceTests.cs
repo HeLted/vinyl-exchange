@@ -24,6 +24,12 @@
     [Collection("AutoMapperSetup")]
     public class AddressesServiceTests
     {
+        public AddressesServiceTests()
+        {
+            this.dbContext = DbFactory.CreateVinylExchangeDbContext();
+            this.addressesService = new AddressesService(this.dbContext);
+        }
+
         private readonly IAddressesService addressesService;
 
         private readonly VinylExchangeDbContext dbContext;
@@ -33,12 +39,6 @@
                 {
                     Country = "Bulgaria", Town = "Sofia", PostalCode = "1612", FullAddress = "Test"
                 };
-
-        public AddressesServiceTests()
-        {
-            this.dbContext = DbFactory.CreateVinylExchangeDbContext();
-            this.addressesService = new AddressesService(this.dbContext);
-        }
 
         [Fact]
         public async Task CreateAddressShouldCreateAddress()

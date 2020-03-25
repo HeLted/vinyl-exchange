@@ -21,12 +21,12 @@
         /// <remarks>Dictionary value indicating whether a key still exists in cache</remarks>
         protected static readonly ConcurrentDictionary<string, bool> _allKeys;
 
+        private readonly IMemoryCache _cache;
+
         /// <summary>
         ///     Cancellation token for clear cache
         /// </summary>
         protected CancellationTokenSource _cancellationTokenSource;
-
-        private readonly IMemoryCache _cache;
 
         static MemoryCacheManager()
         {
@@ -73,14 +73,19 @@
         public virtual T Get<T>(string key, Func<T> acquire, int? cacheTime = null)
         {
             // item already is in cache, so return it
-            if (this._cache.TryGetValue(key, out T value)) return value;
+            if (this._cache.TryGetValue(key, out T value))
+            {
+                return value;
+            }
 
             // or create it using passed function
             var result = acquire();
 
             // and set in cache (if cache time is defined)
             if ((cacheTime ?? NopCachingDefaults.CacheTime) > 0)
+            {
                 this.Set(key, result, cacheTime ?? NopCachingDefaults.CacheTime);
+            }
 
             return result;
         }
@@ -110,7 +115,10 @@
         public bool PerformActionWithLock(string key, TimeSpan expirationTime, Action action)
         {
             // ensure that lock is acquired
-            if (!_allKeys.TryAdd(key, true)) return false;
+            if (!_allKeys.TryAdd(key, true))
+            {
+                return false;
+            }
 
             try
             {
@@ -146,10 +154,12 @@
         public virtual void Set(string key, object data, int cacheTime)
         {
             if (data != null)
+            {
                 this._cache.Set(
                     this.AddKey(key),
                     data,
                     this.GetMemoryCacheEntryOptions(TimeSpan.FromMinutes(cacheTime)));
+            }
         }
 
         /// <summary>
@@ -202,9 +212,10 @@
         {
             // try to remove key from dictionary
             if (!_allKeys.TryRemove(key, out _))
-
+            {
                 // if not possible to remove key from dictionary, then try to mark key as not existing in cache
                 _allKeys.TryUpdate(key, false, true);
+            }
         }
 
         /// <summary>
@@ -225,7 +236,10 @@
         private void PostEviction(object key, object value, EvictionReason reason, object state)
         {
             // if cached item just change, then nothing doing
-            if (reason == EvictionReason.Replaced) return;
+            if (reason == EvictionReason.Replaced)
+            {
+                return;
+            }
 
             // try to remove all keys marked as not existing
             this.ClearKeys();

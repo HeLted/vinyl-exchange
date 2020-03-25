@@ -20,7 +20,10 @@
 
         public static void RegisterMappings(params Assembly[] assemblies)
         {
-            if (initialized) return;
+            if (initialized)
+            {
+                return;
+            }
 
             initialized = true;
 

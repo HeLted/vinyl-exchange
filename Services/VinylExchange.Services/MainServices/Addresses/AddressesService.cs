@@ -53,7 +53,10 @@
         {
             var address = await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
 
-            if (address == null) throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
+            if (address == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
+            }
 
             var removedAddress = this.dbContext.Addresses.Remove(address).Entity;
             await this.dbContext.SaveChangesAsync();

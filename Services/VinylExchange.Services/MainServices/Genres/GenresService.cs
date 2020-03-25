@@ -45,7 +45,10 @@
         {
             var genre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
 
-            if (genre == null) throw new NullReferenceException(NullReferenceExceptionsConstants.GenreNotFound);
+            if (genre == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.GenreNotFound);
+            }
 
             var removedGenre = this.dbContext.Genres.Remove(genre).Entity;
             await this.dbContext.SaveChangesAsync();

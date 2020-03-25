@@ -71,9 +71,15 @@
             {
                 var addressInfoModel = await this.addressesService.GetAddressInfo<GetAddressInfoUtilityModel>(id);
 
-                if (addressInfoModel == null) return this.NotFound();
+                if (addressInfoModel == null)
+                {
+                    return this.NotFound();
+                }
 
-                if (addressInfoModel.UserId != this.GetUserId(this.User)) return this.Forbid();
+                if (addressInfoModel.UserId != this.GetUserId(this.User))
+                {
+                    return this.Forbid();
+                }
 
                 return await this.addressesService.RemoveAddress<RemoveAddressResourceModel>(addressInfoModel.Id);
             }

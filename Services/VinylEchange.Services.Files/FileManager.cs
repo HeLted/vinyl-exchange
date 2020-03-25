@@ -73,8 +73,13 @@
                 modelType.GetProperty("CreatedOn").SetValue(modelInstance, createdOn);
 
                 if (isFist && fileType == FileType.Image)
+                {
                     modelType.GetProperty("IsPreview").SetValue(modelInstance, true);
-                else modelType.GetProperty("IsPreview").SetValue(modelInstance, false);
+                }
+                else
+                {
+                    modelType.GetProperty("IsPreview").SetValue(modelInstance, false);
+                }
 
                 modelType.GetProperty(entityIdPropertyName).SetValue(modelInstance, entityId);
 
