@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Web.Infrastructure.ValidationAttributes
+﻿namespace VinylExchange.Web.ModelBinding.ValidationAttributes
 {
     using System;
     using System.ComponentModel.DataAnnotations;

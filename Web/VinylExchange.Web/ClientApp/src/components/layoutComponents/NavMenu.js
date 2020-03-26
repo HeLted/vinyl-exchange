@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./NavMenu.css";
-import  UserMenu  from "./api-authorization/UserMenu";
+import  UserMenu  from "../api-authorization/UserMenu";
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;

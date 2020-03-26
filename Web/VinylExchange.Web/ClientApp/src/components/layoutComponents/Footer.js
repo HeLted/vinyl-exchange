@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {Link} from "react-router-dom";
 
 class Footer extends Component {
   constructor(props) {
@@ -28,27 +29,19 @@ class Footer extends Component {
                   <li>
                     <h5>
                       {" "}
-                      <a href="#" style={{marginTop: "3em"}}>
-                        {" "}
-                        Home
-                      </a>{" "}
+                      <Link to="/" style={{marginTop: "3em"}}>Home</Link>
+                     
                     </h5>
                     <hr/>
                   </li>
                   <li>
                     {" "}
                     <h5>
-                      <a href="#"> Marketplace </a>{" "}
+                    <Link to="/Marketplace" >Marketplace</Link>
                     </h5>
                                 <hr/>
                   </li>
-                  <li>
-                    {" "}
-                    <h5>
-                      <a href="#"> About Us </a>{" "}
-                    </h5>
-                    <hr/>
-                  </li>
+                
                 </ul>
               </div>
             </div>

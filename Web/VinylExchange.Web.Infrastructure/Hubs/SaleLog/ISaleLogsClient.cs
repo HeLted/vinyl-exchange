@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Web.Hubs.SaleLog
+﻿namespace VinylExchange.Web.Infrastructure.Hubs.SaleLog
 {
     #region
 

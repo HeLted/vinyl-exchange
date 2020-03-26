@@ -1,0 +1,11 @@
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\bin\Debug\netcoreapp3.1\VinylExchange.Web.ModelBinding.deps.json
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\bin\Debug\netcoreapp3.1\VinylExchange.Web.ModelBinding.dll
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\bin\Debug\netcoreapp3.1\VinylExchange.Common.dll
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\bin\Debug\netcoreapp3.1\VinylExchange.Common.pdb
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\obj\Debug\netcoreapp3.1\VinylExchange.Web.ModelBinding.csprojAssemblyReference.cache
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\obj\Debug\netcoreapp3.1\VinylExchange.Web.ModelBinding.AssemblyInfoInputs.cache
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\obj\Debug\netcoreapp3.1\VinylExchange.Web.ModelBinding.AssemblyInfo.cs
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\obj\Debug\netcoreapp3.1\VinylExchange.Web.ModelBinding.csproj.CopyComplete
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\bin\Debug\netcoreapp3.1\VinylExchange.Web.ModelBinding.pdb
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\obj\Debug\netcoreapp3.1\VinylExchange.Web.ModelBinding.dll
+C:\Users\dellpc\source\repos\VinylExchange\Web\VinylExchange.Web.ModelBinding\obj\Debug\netcoreapp3.1\VinylExchange.Web.ModelBinding.pdb

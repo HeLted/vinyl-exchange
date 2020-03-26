@@ -14,6 +14,7 @@
     using VinylExchange.Web.Models.InputModels.Collections;
     using VinylExchange.Web.Models.ResourceModels.Collections;
     using VinylExchange.Web.Models.Utility;
+    using VinylExchange.Web.Models.Utility.Collections;
 
     #endregion
 

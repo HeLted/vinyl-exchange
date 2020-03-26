@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Http;
 
     using VinylExchange.Common.Enumerations;
-    using VinylExchange.Web.Infrastructure.ValidationAttributes;
+    using VinylExchange.Web.ModelBinding.ValidationAttributes;
 
     #endregion
 

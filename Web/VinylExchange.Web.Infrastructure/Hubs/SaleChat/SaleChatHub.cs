@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Web.Hubs.SaleChat
+﻿namespace VinylExchange.Web.Infrastructure.Hubs.SaleChat
 {
     #region
 
@@ -11,6 +11,7 @@
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Web.Models.Utility;
+    using VinylExchange.Web.Models.Utility.Sales;
 
     #endregion
 

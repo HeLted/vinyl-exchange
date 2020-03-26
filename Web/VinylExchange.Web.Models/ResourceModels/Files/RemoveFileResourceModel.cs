@@ -6,6 +6,7 @@
 
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.Utility;
+    using VinylExchange.Web.Models.Utility.Files;
 
     #endregion
 

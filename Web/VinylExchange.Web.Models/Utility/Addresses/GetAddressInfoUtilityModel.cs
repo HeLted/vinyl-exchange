@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Web.Models.Utility
+﻿namespace VinylExchange.Web.Models.Utility.Addresses
 {
     #region
 
@@ -9,7 +9,7 @@
 
     #endregion
 
-    public class GetCollectionItemInfoUtilityModel : IMapFrom<CollectionItem>
+    public class GetAddressInfoUtilityModel : IMapFrom<Address>
     {
         public Guid Id { get; set; }
 

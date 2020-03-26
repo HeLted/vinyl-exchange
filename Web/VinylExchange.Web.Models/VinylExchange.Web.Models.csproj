@@ -14,7 +14,7 @@
     <ProjectReference Include="..\..\Data\VinylExchange.Data.Common\VinylExchange.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\VinylExchange.Data.Models\VinylExchange.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\VinylExchange.Services.Mapping\VinylExchange.Services.Mapping.csproj" />
-    <ProjectReference Include="..\VinylExchange.Web.Infrastructure\VinylExchange.Web.Infrastructure.csproj" />    
+    <ProjectReference Include="..\VinylExchange.Web.ModelBinding\VinylExchange.Web.ModelBinding.csproj" />    
    
  
   </ItemGroup>

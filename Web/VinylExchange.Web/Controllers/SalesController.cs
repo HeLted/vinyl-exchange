@@ -2,23 +2,22 @@
 {
     #region
 
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
-
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Logging;
-    using VinylExchange.Web.Hubs.SaleLog;
+    using VinylExchange.Web.Infrastructure.Hubs.SaleLog;
     using VinylExchange.Web.Models.InputModels.Sales;
     using VinylExchange.Web.Models.ResourceModels.Sales;
     using VinylExchange.Web.Models.Utility;
+    using VinylExchange.Web.Models.Utility.Sales;
 
     #endregion
 

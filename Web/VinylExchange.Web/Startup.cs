@@ -2,12 +2,6 @@ namespace VinylExchange.Web
 {
     #region
 
-    using System;
-    using System.Collections.Generic;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.IO;
-    using System.Reflection;
-
     using Microsoft.AspNetCore.Antiforgery;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,7 +16,11 @@ namespace VinylExchange.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
-
+    using System;
+    using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.IO;
+    using System.Reflection;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Data.Seeding;
@@ -42,8 +40,8 @@ namespace VinylExchange.Web
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Services.MemoryCache;
-    using VinylExchange.Web.Hubs.SaleChat;
-    using VinylExchange.Web.Hubs.SaleLog;
+    using VinylExchange.Web.Infrastructure.Hubs.SaleChat;
+    using VinylExchange.Web.Infrastructure.Hubs.SaleLog;
     using VinylExchange.Web.Infrastructure.IdentityServer.Profile;
     using VinylExchange.Web.Models;
 

@@ -8,7 +8,7 @@
     using VinylExchange.Common.Constants;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Infrastructure.ValidationAttributes;
+    using VinylExchange.Web.ModelBinding.ValidationAttributes;
 
     #endregion
 

@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Web.Models.Utility
+﻿namespace VinylExchange.Web.Models.Utility.Sales
 {
     #region
 

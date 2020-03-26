@@ -17,7 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\VinylExchange.Data\VinylExchange.Data.csproj" />
-    <ProjectReference Include="..\..\Services\VinylExchange.Services\VinylExchange.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Services\VinylExchange.Services.Data\VinylExchange.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Web\VinylExchange.Web.Models\VinylExchange.Web.Models.csproj" />
   </ItemGroup>
 
 </Project>

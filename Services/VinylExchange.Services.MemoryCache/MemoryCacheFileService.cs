@@ -9,7 +9,7 @@
     using VinylExchange.Common.Constants;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Files;
-    using VinylExchange.Web.Models.Utility;
+    using VinylExchange.Web.Models.Utility.Files;
 
     #endregion
 

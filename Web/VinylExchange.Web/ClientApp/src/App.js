@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router";
 import { Layout } from "./components/Layout";
-import { Home } from "./components/Home";
+import { Home } from "./components/home/Home";
 import { Roles, MultiRoles } from "./constants/RoleConstants";
 import MarketplaceContainer from "./components/marketplace/MarketplaceContainer";
 import ReleaseContainer from "./components/releases/release/ReleaseContainer";

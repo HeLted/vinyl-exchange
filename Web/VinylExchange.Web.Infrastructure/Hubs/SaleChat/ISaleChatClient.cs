@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Web.Hubs.SaleChat
+﻿namespace VinylExchange.Web.Infrastructure.Hubs.SaleChat
 {
     #region
 
