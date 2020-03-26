@@ -13,7 +13,6 @@
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.InputModels.Addresses;
     using VinylExchange.Web.Models.ResourceModels.Addresses;
-    using VinylExchange.Web.Models.Utility;
     using VinylExchange.Web.Models.Utility.Addresses;
 
     #endregion

@@ -97,7 +97,6 @@ class AddReleaseComponent extends Component {
                   onChange={this.props.functions.handleOnChangeMultiSelect}
                   options={this.props.state.styles}
                 />
-                
               </div>
             </div>
           </div>
@@ -159,6 +158,10 @@ class AddReleaseComponent extends Component {
               dropzonedeletepath={Url.api + Controllers.files.name + Url.slash}
               acceptedfiles="image/jpeg,image/png"
             ></div>
+            <small className="form-text text-secondary">
+              -Allowed file types : .jpg,.png,.jpeg (Max size 10MB).Image order on
+              release depends on upload order.
+            </small>
           </div>
 
           <div className="form-group">
@@ -170,6 +173,10 @@ class AddReleaseComponent extends Component {
               dropzonedeletepath={Url.api + Controllers.files.name + Url.slash}
               acceptedfiles=".mp3"
             ></div>
+            <small className="form-text text-secondary">
+              -Allowed file types : .mp3 (Max size 40MB).Tracks order on release
+              depends on upload order.
+            </small>
           </div>
 
           <button type="submit" className="btn btn-primary">

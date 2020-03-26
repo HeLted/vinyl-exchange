@@ -62,6 +62,7 @@
         }
 
         [HttpPost]
+        [DisableRequestSizeLimit]
         public ActionResult<UploadFileResourceModel> UploadFile([FromForm] [FromQuery] UploadFileInputModel inputModel)
         {
             try

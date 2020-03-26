@@ -107,7 +107,7 @@ class PlayerControlls extends Component {
               </div>
 
               <div className="sm2-inline-element sm2-button-element">
-                <div className="sm2-button-bd">
+                <div className="sm2-button-bd" style={{opacity:"0.5"}}>
                   <a
                     href="#repeat"
                     title="Repeat playlist"

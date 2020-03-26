@@ -25,8 +25,8 @@
         [Display(Name = "Release Id")]
         public Guid? ReleaseId { get; set; }
 
-        [Required]
-        [Display(Name = "Ships From")]
+        [Required(ErrorMessageResourceName = "Ships From")]
+  
         public Guid? ShipsFromAddressId { get; set; }
 
         [Required]

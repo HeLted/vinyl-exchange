@@ -6,7 +6,6 @@
     using System.Collections.Generic;
 
     using VinylExchange.Web.Models.InputModels.Files;
-    using VinylExchange.Web.Models.Utility;
     using VinylExchange.Web.Models.Utility.Files;
 
     #endregion

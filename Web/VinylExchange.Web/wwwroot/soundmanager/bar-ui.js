@@ -755,6 +755,8 @@
     }
 
     function handleClick(e) {
+      e.preventDefault();
+
       var evt, target, offset, targetNodeName, methodName, href, handled;
 
       evt = e || window.event;
@@ -907,6 +909,9 @@
 
         // DRY things a bit
         e = offsetOrEvent;
+
+        e.preventDefault();
+        e.stopPropagation();
 
         if (e && e.target) {
           target = e.target || e.srcElement;

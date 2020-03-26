@@ -10,7 +10,6 @@
 
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.MainServices.Sales;
-    using VinylExchange.Web.Models.Utility;
     using VinylExchange.Web.Models.Utility.Sales;
 
     #endregion

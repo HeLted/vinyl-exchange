@@ -37,7 +37,7 @@ function getCookie(cname) {
   var myDropzone = new Dropzone(`#${dropzoneId}`, {
     url: dropzoneUploadPath + formSessionIdUrl,
     acceptedFiles: acceptedFiles,
-    maxFilesize: 30,
+    maxFilesize: 40,
     uploadMultiple: false,
     createImageThumbnails: true,
     maxFiles: 30,
@@ -59,10 +59,16 @@ function getCookie(cname) {
       });
 
       this.on("complete", function(file) {
-        if (file.size > 30 * 1024 * 1024) {
+        if (file.size > 40 * 1024 * 1024) {
           this.removeFile(file);
-          alert("File must be less than 30MB");
+          alert("File must be less than 40MB");
           return false;
+        }
+      });
+
+      this.on("addedfile", function(file) {
+        if (file.type === `audio/mp3`) {
+          this.emit("thumbnail", file, "/img/dropzoneAudioThumbnail.png");
         }
       });
 

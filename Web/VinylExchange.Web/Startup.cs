@@ -2,12 +2,19 @@ namespace VinylExchange.Web
 {
     #region
 
+    using System;
+    using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.IO;
+    using System.Reflection;
+
     using Microsoft.AspNetCore.Antiforgery;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Features;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -16,11 +23,7 @@ namespace VinylExchange.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
-    using System;
-    using System.Collections.Generic;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.IO;
-    using System.Reflection;
+
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Data.Seeding;
@@ -120,6 +123,8 @@ namespace VinylExchange.Web
             app.Use(
                 next => context =>
                     {
+                    
+
                         var path = context.Request.Path.Value;
 
                         if (string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) || string.Equals(

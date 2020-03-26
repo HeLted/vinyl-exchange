@@ -41,7 +41,7 @@ function getCookie(cname) {
     maxFilesize: 0.5,
     uploadMultiple: false,
     createImageThumbnails: true,
-    maxFiles: 3,
+    maxFiles: 30,
     headers: {
       RequestVerificationToken: getCookie("XSRF-TOKEN")
     },

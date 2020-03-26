@@ -22,9 +22,9 @@
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var audioMaxContentSize = 40000000; // 40 Mb
+            var audioMaxContentSize = 41943040; // 40 Mb
 
-            var imageMaxContentSize = 10000000; // 10 Mb
+            var imageMaxContentSize = 10485760; // 10 Mb
 
             string[] allowedImageTypes = { ".jpg", ".jpeg", ".png" };
 
@@ -41,7 +41,7 @@
                 if (file.Length > imageMaxContentSize)
                 {
                     return new ValidationResult(
-                        "Your image is too large, maximum allowed size is : " + imageMaxContentSize / 1024 + "MB");
+                        "Your image is too large, maximum allowed size is : " + (imageMaxContentSize / 1024f) / 1024f + "MB");
                 }
 
                 return ValidationResult.Success;
@@ -50,10 +50,10 @@
             if (allowedAudioTypes.Contains(file.FileName.Substring(file.FileName.LastIndexOf('.')))
                 && (this.fileType == null || this.fileType == FileType.Audio))
             {
-                if (file.Length > imageMaxContentSize)
+                if (file.Length > audioMaxContentSize)
                 {
                     return new ValidationResult(
-                        "Your audio file is too large, maximum allowed size is : " + audioMaxContentSize / 1024 + "MB");
+                        "Your audio file is too large, maximum allowed size is : " + (audioMaxContentSize / 1024f) / 1024f + "MB");
                 }
 
                 return ValidationResult.Success;

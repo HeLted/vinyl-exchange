@@ -1704,7 +1704,7 @@ function SoundManager(smURL, smID) {
 
             s._a.src = instanceOptions.url;
 
-            // TODO: review / re-apply all relevant options (volume, loop, onposition etc.)
+            // TODO: review / re-apply all relev, loop, onposition etc.)
 
             // reset position for new URL
             s.setPosition(0);
@@ -2502,7 +2502,7 @@ function SoundManager(smURL, smID) {
      * @return {SMSound} The SMSound object
      */
 
-    this.togglePause = function() {
+    this.togglePause = function(event) {
 
       sm2._wD(s.id + ': togglePause()');
 
