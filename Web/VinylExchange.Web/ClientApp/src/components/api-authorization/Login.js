@@ -84,7 +84,6 @@ export class Login extends Component {
     async processLoginCallback() {
         const url = window.location.href;
         const result = await authService.completeSignIn(url);
-        console.log(result);
         switch (result.status) {
             case AuthenticationResultStatus.Redirect:
                 // There should not be any redirects as the only time completeSignIn finishes

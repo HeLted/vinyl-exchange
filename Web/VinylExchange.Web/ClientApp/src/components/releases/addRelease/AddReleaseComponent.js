@@ -48,7 +48,7 @@ class AddReleaseComponent extends Component {
                   onChange={this.props.functions.handleOnChange}
                   required
                   validateLength
-                  alphanumeric
+                  aplhaNumericBracesDashAndSpace
                   minLength={3}
                   maxLength={40}
                 />
@@ -65,7 +65,7 @@ class AddReleaseComponent extends Component {
                   onChange={this.props.functions.handleOnChange}
                   required
                   validateLength
-                  alphanumeric
+                  aplhaNumericBracesDashAndSpace
                   minLength={3}
                   maxLength={40}
                 />
@@ -112,7 +112,7 @@ class AddReleaseComponent extends Component {
                   onChange={this.props.functions.handleOnChange}
                   required
                   validateLength
-                  alphanumeric
+                  aplhaNumericBracesDashAndSpace
                   minLength={2}
                   maxLength={15}
                 />
@@ -142,7 +142,7 @@ class AddReleaseComponent extends Component {
                   onChange={this.props.functions.handleOnChange}
                   required
                   validateLength
-                  alphanumeric
+                  aplhaNumericBracesDashAndSpace
                   minLength={3}
                   maxLength={30}
                 />

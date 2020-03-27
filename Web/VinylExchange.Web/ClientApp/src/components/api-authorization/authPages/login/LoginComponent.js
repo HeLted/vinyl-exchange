@@ -1,7 +1,6 @@
 import React from "react";
 import Label from "./../../../common/inputComponents/Label";
 import TextInput from "./../../../common/inputComponents/TextInput";
-import PasswordInput from "./../../../common/inputComponents/PasswordInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
 import "./../authForm.css";
@@ -12,7 +11,7 @@ function LoginComponent(props) {
       <div className="row justify-content-center border">
         <h3 className="property-text">Login</h3>
       </div>
-      <br/>
+      <br />
       <div className="row justify-content-center">
         <div className="auth-form col-4 border">
           <form onSubmit={props.functions.handleOnSubmit}>
@@ -28,7 +27,8 @@ function LoginComponent(props) {
 
             <div className="form-group">
               <Label for="passwordInput" value="Password" />
-              <PasswordInput
+              <TextInput
+                specialType="password"
                 id="passwordInput"
                 placeholder="Password..."
                 value={props.data.passwordInput}

@@ -15,6 +15,7 @@ function AddAddressComponent(props) {
           value={props.data.countryInput}
           onChange={props.functions.handleOnChange}
           required
+          lettersOnly 
           validateLength
           minLength={3}
           maxLength={40}
@@ -29,6 +30,7 @@ function AddAddressComponent(props) {
           value={props.data.townInput}
           onChange={props.functions.handleOnChange}
           required
+          lettersOnly 
           validateLength
           minLength={3}
           maxLength={40}
@@ -43,6 +45,7 @@ function AddAddressComponent(props) {
           value={props.data.postalCodeInput}
           onChange={props.functions.handleOnChange}
           required
+          aplhaNumericBracesDashAndSpace
           validateLength
           minLength={3}
           maxLength={40}
@@ -58,6 +61,7 @@ function AddAddressComponent(props) {
           onChange={props.functions.handleOnChange}
           required
           validateLength
+          alphaNumericDotCommaAndSpace
           minLength={3}
           maxLength={300}
         />

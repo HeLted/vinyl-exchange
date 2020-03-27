@@ -14,7 +14,6 @@ namespace VinylExchange.Web
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Http.Features;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -123,8 +122,6 @@ namespace VinylExchange.Web
             app.Use(
                 next => context =>
                     {
-                    
-
                         var path = context.Request.Path.Value;
 
                         if (string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) || string.Equals(

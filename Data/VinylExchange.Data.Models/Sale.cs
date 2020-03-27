@@ -14,24 +14,30 @@
 
     public class Sale : BaseDeletableModel
     {
-        public VinylExchangeUser Buyer { get; set; }
+        [Required]
+        [Range((int)Condition.Poor, (int)Condition.Mint)]
+        public Condition VinylGrade { get; set; }
 
-        public Guid? BuyerId { get; set; }
+        [Required]
+        [Range((int)Condition.Poor, (int)Condition.Mint)]
+        public Condition SleeveGrade { get; set; }
 
         [Required]
         [MinLength(10)]
         [MaxLength(400)]
         public string Description { get; set; }
 
-        public ICollection<SaleLog> Logs { get; set; } = new HashSet<SaleLog>();
+        public VinylExchangeUser Buyer { get; set; }
 
-        public ICollection<SaleMessage> Messages { get; set; } = new HashSet<SaleMessage>();
-
-        public string OrderId { get; set; }
+        public Guid? BuyerId { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18,4)")]
         public decimal Price { get; set; }
+
+        [Required]
+        [Range((int)Status.Open, (int)Status.Finished)]
+        public Status Status { get; set; }
 
         public Release Release { get; set; }
 
@@ -50,16 +56,11 @@
 
         public string ShipsTo { get; set; }
 
-        [Required]
-        [Range((int)Condition.Poor, (int)Condition.Mint)]
-        public Condition SleeveGrade { get; set; }
+        public string OrderId { get; set; }
 
-        [Required]
-        [Range((int)Status.Open, (int)Status.Finished)]
-        public Status Status { get; set; }
+        public ICollection<SaleLog> Logs { get; set; } = new HashSet<SaleLog>();
 
-        [Required]
-        [Range((int)Condition.Poor, (int)Condition.Mint)]
-        public Condition VinylGrade { get; set; }
+        public ICollection<SaleMessage> Messages { get; set; } = new HashSet<SaleMessage>();
+
     }
 }

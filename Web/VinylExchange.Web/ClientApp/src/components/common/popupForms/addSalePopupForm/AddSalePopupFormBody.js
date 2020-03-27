@@ -1,14 +1,18 @@
 import React from "react";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import SingleSelect from "./../../inputComponents/SingleSelect";
 import Label from "./../../inputComponents/Label";
 import TextAreaInput from "./../../inputComponents/TextAreaInput";
-import MoneyInput from "./../../inputComponents/MoneyInput";
-
+import NumberInput from "./../../inputComponents/NumberInput";
 
 function AddSalePopupBody(props) {
   return (
-    <div className="modal fade" tabIndex="-1" id={"addSaleModal" + props.data.collectionItemId} role="dialog">
+    <div
+      className="modal fade"
+      tabIndex="-1"
+      id={"addSaleModal" + props.data.collectionItemId}
+      role="dialog"
+    >
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header">
@@ -47,20 +51,34 @@ function AddSalePopupBody(props) {
                   rows="3"
                   value={props.data.descriptionInput}
                   onChange={props.functions.handleOnChange}
+                  required
+                  validateLength
+                  minLength={10}
+                  maxLength={400}
                 />
               </div>
               <div className="form-group">
                 <Label for="priceInput" value="Price" />
-                <div className="input-group mb-2">
-                  <div className="input-group-prepend">
-                    <div className="input-group-text">€</div>
+                <div className="row">
+                  <div className="col-1 ">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">$</div>
+                    </div>
                   </div>
-                  <MoneyInput
-                    id="priceInput"
-                    placeholder="Price"
-                    value={props.data.priceInput}
-                    onChange={props.functions.handleOnChange}
-                  />
+                  <div className="col-11">
+                  
+                      <NumberInput
+                        id="priceInput"
+                        placeholder="Price"
+                        value={props.data.priceInput}
+                        onChange={props.functions.handleOnChange}
+                        required
+                        minNumber={0}
+                        maxNumber={100000}
+                        money
+                      />
+              
+                  </div>
                 </div>
                 <div className="form-group">
                   <Label for="shipsFromAddressSelectInput" value="Ships From" />

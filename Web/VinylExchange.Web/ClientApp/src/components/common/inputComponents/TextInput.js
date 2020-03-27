@@ -2,7 +2,11 @@ import React, { Fragment, Component } from "react";
 import uuid4 from "./../../../functions/guidGenerator";
 import InputValidationMessage from "./../clienSideValidation/InputValidationMessage";
 
-const alphaNumericRegex = new RegExp("^[A-Za-z0-9-() ]*$");
+const AplhaNumericBracesDashAndSpaceRegex = new RegExp(/^[A-Za-z0-9-() ]*$/);
+const AlphaNumericAndUnderscoreRegex = new RegExp(/^[A-Za-z0-9_]*$/);
+const AlphaNumericDotCommaAndSpaceRegex = new RegExp(/^[A-Z-a-z0-9., ]*$/);
+const LettersOnlyRegex = new RegExp(/^[A-Za-z]*$/);
+const ValidateEmailRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
 class TextInput extends Component {
   constructor(props) {
@@ -11,7 +15,11 @@ class TextInput extends Component {
     this.state = {
       validationRules: {
         isRequired: false,
-        isAlphaNumeric:false,
+        isAplhaNumericBracesDashAndSpace: false,
+        isAlphaNumericAndUnderscore: false,
+        isAlphaNumericDotCommaAndSpace: false,
+        isLettersOnly: false,
+        isValidateEmail:false,
         isValidateLength: false,
         minLength: 0,
         maxLength: 0
@@ -29,6 +37,8 @@ class TextInput extends Component {
       });
     }
 
+
+
     if (this.props.validateLength === true) {
       this.setState(prevState => {
         return {
@@ -42,12 +52,51 @@ class TextInput extends Component {
       });
     }
 
-    if (this.props.alphanumeric=== true) {
+    if (this.props.validateEmail === true) {
       this.setState(prevState => {
         return {
           validationRules: {
             ...prevState.validationRules,
-            isAlphaNumeric:true
+            isValidateEmail:true
+          }
+        };
+      });
+    }
+
+
+    if (this.props.aplhaNumericBracesDashAndSpace === true) {
+      this.setState(prevState => {
+        return {
+          validationRules: {
+            ...prevState.validationRules,
+            isAplhaNumericBracesDashAndSpace: true
+          }
+        };
+      });
+    } else if (this.props.alphaNumericAndUnderscore === true) {
+      this.setState(prevState => {
+        return {
+          validationRules: {
+            ...prevState.validationRules,
+            isAlphaNumericAndUnderscore: true
+          }
+        };
+      });
+    } else if (this.props.alphaNumericDotCommaAndSpace === true) {
+      this.setState(prevState => {
+        return {
+          validationRules: {
+            ...prevState.validationRules,
+            isAlphaNumericDotCommaAndSpace: true
+          }
+        };
+      });
+    } else if (this.props.lettersOnly === true) {
+      this.setState(prevState => {
+        return {
+          validationRules: {
+            ...prevState.validationRules,
+            isLettersOnly: true
           }
         };
       });
@@ -81,12 +130,44 @@ class TextInput extends Component {
       }
     }
 
-    if(validationRules.isAlphaNumeric){
-        if(!alphaNumericRegex.test(value)){
-          updatedValidationMessages.push(
-            `Allowed characters are (A-Z,a-z,0-9,(,),-,whitespace)!`
-          );
-        }
+    if (validationRules.isAplhaNumericBracesDashAndSpace) {
+      if (!AplhaNumericBracesDashAndSpaceRegex.test(value)) {
+        updatedValidationMessages.push(
+          "Allowed characters are (A-Z,a-z,0-9,(,),-,whitespace)!"
+        );
+      }
+    }
+
+    if (validationRules.isAlphaNumericAndUnderscore) {
+      if (!AlphaNumericAndUnderscoreRegex.test(value)) {
+        updatedValidationMessages.push(
+          "Allowed characters are (A-Z,a-z,0-9,_)!"
+        );
+      }
+    }
+
+    if (validationRules.isAlphaNumericDotCommaAndSpace) {
+      if (!AlphaNumericDotCommaAndSpaceRegex.test(value)) {
+        updatedValidationMessages.push(
+          "Allowed characters are (A-Z,a-z,0-9,.,comma, )!"
+        );
+      }
+    }
+
+    if (validationRules.isLettersOnly) {
+      if (!LettersOnlyRegex.test(value)) {
+        updatedValidationMessages.push(
+          "Allowed characters are (A-Z,a-z)!"
+        );
+      }
+    }
+
+    if(validationRules.isValidateEmail){
+      if(!ValidateEmailRegex.test(value)){
+        updatedValidationMessages.push(
+          "Please enter a valid e-mail! address"
+        );
+      }
     }
 
     this.setState({ validationMessages: updatedValidationMessages });
@@ -98,17 +179,17 @@ class TextInput extends Component {
         ? ""
         : " " + this.props.extraClasses;
 
+     const inputType = this.props.specialType != undefined ? this.props.specialType : "text";
+
     const validationMessages = this.state.validationMessages.map(
       validationMsg => {
-        return (
-         <InputValidationMessage message={validationMsg} key={uuid4()}/>
-        );
+        return <InputValidationMessage message={validationMsg} key={uuid4()} />;
       }
     );
     return (
       <div className="text-left">
         <input
-          type="text"
+          type={inputType}
           className={"form-control" + extraClasses}
           id={this.props.id}
           value={this.props.value}

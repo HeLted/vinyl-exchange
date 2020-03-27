@@ -1,11 +1,15 @@
 ﻿namespace VinylExchange.Web.ModelBinding.ValidationAttributes
 {
+    #region
+
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
 
     using Microsoft.AspNetCore.Http;
 
     using VinylExchange.Common.Enumerations;
+
+    #endregion
 
     public class ValidateFileAttribute : ValidationAttribute
     {
@@ -41,7 +45,8 @@
                 if (file.Length > imageMaxContentSize)
                 {
                     return new ValidationResult(
-                        "Your image is too large, maximum allowed size is : " + (imageMaxContentSize / 1024f) / 1024f + "MB");
+                        "Your image is too large, maximum allowed size is : " + imageMaxContentSize / 1024f / 1024f
+                                                                              + "MB");
                 }
 
                 return ValidationResult.Success;
@@ -53,7 +58,8 @@
                 if (file.Length > audioMaxContentSize)
                 {
                     return new ValidationResult(
-                        "Your audio file is too large, maximum allowed size is : " + (audioMaxContentSize / 1024f) / 1024f + "MB");
+                        "Your audio file is too large, maximum allowed size is : " + audioMaxContentSize / 1024f / 1024f
+                                                                                   + "MB");
                 }
 
                 return ValidationResult.Success;

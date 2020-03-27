@@ -17,7 +17,6 @@ function PayNowModalComponent(props) {
           <div className="address-modal-body modal-body">
             <PayPalButton
               amount={props.data.price + props.data.shippingPrice}
-              currency={"EUR"}
               // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
               onSuccess={(details, data) => {
                 props.functions.handleApprovePayment(data.orderID);

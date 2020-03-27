@@ -3,6 +3,8 @@ import TextInput from "./../../../common/inputComponents/TextInput";
 import UserThumbnail from "./../../../common/UserThumbnail";
 import uuid4 from "./../../../../functions/guidGenerator";
 import BorderSpinner from "./../../../common/spinners/BorderSpinner";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 function SaleChatComponent(props) {
   const listItems = props.data.messages.map(messageObj => {
@@ -40,7 +42,7 @@ function SaleChatComponent(props) {
           className="btn btn-primary"
           onClick={props.functions.handleSendMessage}
         >
-          Send
+          <FontAwesomeIcon icon={faArrowRight}/>
         </button>
       </div>
     </div>

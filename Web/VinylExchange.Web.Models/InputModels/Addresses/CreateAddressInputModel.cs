@@ -7,32 +7,39 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
 
+    using static VinylExchange.Common.Constants.RegexPatterns;
+    using static VinylExchange.Common.Constants.ValidationConstants;
+
     #endregion
 
     public class CreateAddressInputModel : IMapTo<Address>
     {
         [Required]
-        [MinLength(3, ErrorMessage = "Invalid min length of field!")]
-        [MaxLength(40, ErrorMessage = "Invalid max length of field!")]
+        [MinLength(3, ErrorMessage = InvalidMinLength)]
+        [MaxLength(40, ErrorMessage = InvalidMaxLength)]
+        [RegularExpression(LettersOnly, ErrorMessage = AllowedLettersOnly)]
 
         public string Country { get; set; }
 
         [Required]
-        [MinLength(3, ErrorMessage = "Invalid min length of field!")]
-        [MaxLength(300, ErrorMessage = "Invalid max length of field!")]
+        [MinLength(3, ErrorMessage = InvalidMinLength)]
+        [MaxLength(40, ErrorMessage = InvalidMaxLength)]
+        [RegularExpression(LettersOnly, ErrorMessage = AllowedLettersOnly)]
 
-        public string FullAddress { get; set; }
+        public string Town { get; set; }
 
         [Required]
-        [MinLength(3, ErrorMessage = "Invalid min length of field!")]
-        [MaxLength(40, ErrorMessage = "Invalid max length of field!")]
+        [MinLength(3, ErrorMessage = InvalidMinLength)]
+        [MaxLength(40, ErrorMessage = InvalidMaxLength)]
+        [RegularExpression(AplhaNumericBracesDashAndSpace , ErrorMessage = AllowedAplhaNumericBracesDashAndSpace)]
 
         public string PostalCode { get; set; }
 
         [Required]
-        [MinLength(3, ErrorMessage = "Invalid min length of field!")]
-        [MaxLength(40, ErrorMessage = "Invalid max length of field!")]
+        [MinLength(3, ErrorMessage = InvalidMinLength)]
+        [MaxLength(300, ErrorMessage = InvalidMaxLength)]
+        [RegularExpression(AlphaNumericDotCommaAndSpace, ErrorMessage = AllowedAplhaNumericDotCommaAndSpace)]
 
-        public string Town { get; set; }
+        public string FullAddress { get; set; }
     }
 }

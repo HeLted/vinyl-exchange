@@ -7,7 +7,8 @@ import {
   Controllers
 } from "./../../.../../../../../../constants/UrlConstants";
 import { NotificationContext } from "./../../../../../../contexts/NotificationContext";
-import $ from "jquery"
+import $ from "jquery";
+import hideModal from "./../../../../../../functions/hideModal";
 
 class PayNowModalContainer extends Component {
   constructor(props) {
@@ -36,10 +37,9 @@ class PayNowModalContainer extends Component {
         getAntiForgeryAxiosConfig()
       )
       .then(response => {
-        $(".modal-backdrop").hide();
-        $(".modal").hide();
         this.setState({ isLoading: false });
         this.context.handleAppNotification("Successfull payment", 4);
+        hideModal();
       })
       .catch(error => {
         this.setState({ isLoading: false });

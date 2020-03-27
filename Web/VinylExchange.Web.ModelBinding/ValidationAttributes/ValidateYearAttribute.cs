@@ -1,7 +1,11 @@
 ﻿namespace VinylExchange.Web.ModelBinding.ValidationAttributes
 {
+    #region
+
     using System;
     using System.ComponentModel.DataAnnotations;
+
+    #endregion
 
     public class ValidateYearAttribute : ValidationAttribute
     {

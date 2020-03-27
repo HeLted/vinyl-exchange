@@ -1,6 +1,6 @@
 import React from "react";
 import Label from "./../../../../../common/inputComponents/Label";
-import MoneyInput from "./../../../../../common/inputComponents/MoneyInput";
+import NumberInput from "./../../../../../common/inputComponents/NumberInput";
 
 function SetShippingPriceModalComponent(props) {
   return (
@@ -19,16 +19,24 @@ function SetShippingPriceModalComponent(props) {
             <div className="row justify-content-center">
               <div className="form-group">
                 <Label for="priceInput" value="Price" />
-                <div className="input-group mb-2">
-                  <div className="input-group-prepend">
-                    <div className="input-group-text">€</div>
+                <div className="row">
+                  <div className="col-2">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">$</div>
+                    </div>
                   </div>
-                  <MoneyInput
-                    id="priceInput"
-                    placeholder="Price"
-                    value={props.data.priceInput}
-                    onChange={props.functions.handleOnChange}
-                  />
+                  <div className="col-10">
+                    <NumberInput
+                      id="priceInput"
+                      placeholder="Price"
+                      value={props.data.priceInput}
+                      onChange={props.functions.handleOnChange}
+                      required
+                      minNumber={0}
+                      maxNumber={1000}
+                      money
+                    />
+                  </div>
                 </div>
               </div>
             </div>

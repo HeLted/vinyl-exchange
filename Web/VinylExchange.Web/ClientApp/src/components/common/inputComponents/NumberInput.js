@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import InputValidationMessage from "./../clienSideValidation/InputValidationMessage";
 import uuid4 from "./../../../functions/guidGenerator";
 
-const numbericRegex = new RegExp("^[0-9]*$");
+const NumericRegex = new RegExp("^[0-9]*$");
+const MoneyRegex = new RegExp("^[0-9.]*");
 
 class NumberInput extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class NumberInput extends Component {
     this.state = {
       validationRules: {
         isRequired: false,
+        isMoney: false,
         minNumber: 0,
         maxNumber: 1000000
       },
@@ -18,11 +20,22 @@ class NumberInput extends Component {
   }
 
   componentDidMount() {
-    if (this.props.required === true) {
+    if (this.props.required) {
       this.setState({
         validationRules: {
           isRequired: true
         }
+      });
+    }
+
+    if (this.props.money) {
+      this.setState(prevState => {
+        return {
+          validationRules: {
+            ...prevState.validationRules,
+            isMoney: true
+          }
+        };
       });
     }
 
@@ -74,7 +87,13 @@ class NumberInput extends Component {
       );
     }
 
-    if (!numbericRegex.test(value)) {
+    if (validationRules.isMoney) {
+      if (!MoneyRegex.test(value)) {
+        updatedValidationMessages.push(
+          "Special characters are not allowed in money input!"
+        );
+      }
+    } else if (!NumericRegex.test(value)) {
       updatedValidationMessages.push(
         "Field must contain only numeric (integer) characters!"
       );
@@ -82,7 +101,6 @@ class NumberInput extends Component {
 
     this.setState({ validationMessages: updatedValidationMessages });
   };
-
   render() {
     const extraClasses =
       this.props.extraClasses === undefined

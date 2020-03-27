@@ -57,8 +57,6 @@ function SaleComponent(props) {
 
             <br />
 
-            <br />
-
             <SaleStatusBar data={{ status: props.data.sale.status }} />
 
             <br />
@@ -66,17 +64,22 @@ function SaleComponent(props) {
               className="row border border-dark"
               style={{ backgroundColor: "black" }}
             ></div>
+            <br />
+            <div className="row text-center border border-dark justify-content-center">
+              <h5 className="property-text-lm">Sale Chat</h5>
+            </div>
             <div className="row justify-content-center  text-center">
               <div className="chat-container align-content-center col-12">
                 {props.data.sale.buyerId !== null ? (
-                <SaleChatContainer data={{ sale: props.data.sale }} />) : (
-                <div className="search-not-found">
-                  <h6>
-                    <b>
-                      <i>Chat is not active when sale is in open state!</i>
-                    </b>
-                  </h6>
-                </div>
+                  <SaleChatContainer data={{ sale: props.data.sale }} />
+                ) : (
+                  <div className="search-not-found">
+                    <h6>
+                      <b>
+                        <i>Chat is not active when sale is in open state!</i>
+                      </b>
+                    </h6>
+                  </div>
                 )}
               </div>
             </div>

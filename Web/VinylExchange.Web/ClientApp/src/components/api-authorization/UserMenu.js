@@ -83,10 +83,10 @@ class UserMenu extends Component {
             className="user-dropdown dropdown-menu"
             style={{ display: this.state.isDropDownActive ? "block" : "none" }}
           >
-            <Link className="dropdown-item" to={ApplicationPaths.Profile}>
+            <Link className="dropdown-item" to="/User/Profile">
               Profile
             </Link>
-              <Link className="dropdown-item" to={ApplicationPaths.UserCollection}>
+              <Link className="dropdown-item" to="/User/Collection">
               Collection
             </Link>
             
@@ -96,7 +96,7 @@ class UserMenu extends Component {
           <NavLink
             tag={Link}
             className="navbar-link btn btn-outline-light text-light"
-            to={logoutPath}
+            to="/Authentication/Logout"
           >
             Logout
           </NavLink>
@@ -112,7 +112,7 @@ class UserMenu extends Component {
           <NavLink
             tag={Link}
             className="navbar-link btn btn-outline-light text-light"
-            to={registerPath}
+            to="/Authentication/Register"
           >
             Register
           </NavLink>
@@ -121,7 +121,7 @@ class UserMenu extends Component {
           <NavLink
             tag={Link}
             className="navbar-link btn btn-outline-light text-light"
-            to={loginPath}
+            to="/Authentication/Login"
           >
             Login
           </NavLink>

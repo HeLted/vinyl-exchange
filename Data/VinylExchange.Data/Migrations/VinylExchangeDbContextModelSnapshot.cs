@@ -2,11 +2,15 @@
 
 namespace VinylExchange.Data.Migrations
 {
+    #region
+
     using System;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
     using Microsoft.EntityFrameworkCore.Metadata;
+
+    #endregion
 
     [DbContext(typeof(VinylExchangeDbContext))]
     internal class VinylExchangeDbContextModelSnapshot : ModelSnapshot
