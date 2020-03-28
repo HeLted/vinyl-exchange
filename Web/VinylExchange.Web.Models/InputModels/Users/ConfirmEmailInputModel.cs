@@ -3,13 +3,13 @@
     #region
 
     using System;
+    using System.ComponentModel.DataAnnotations;
 
     #endregion
 
     public class ConfirmEmailInputModel
     {
+        [Required]
         public string EmailConfirmToken { get; set; }
-
-        public Guid UserId { get; set; }
     }
 }

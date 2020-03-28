@@ -16,6 +16,7 @@
     using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Services.EmaiSender;
     using VinylExchange.Services.Mapping;
+    using VinylExchange.Web.Models.InputModels.Users;
 
     #endregion
 
@@ -43,9 +44,9 @@
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        public async Task<IdentityResult> ConfirmUserEmail(ConfirmEmailInputModel inputModel)
+        public async Task<IdentityResult> ConfirmEmail(ConfirmEmailInputModel inputModel,Guid userId)
         {
-            var user = await this.userManager.FindByIdAsync(inputModel.UserId.ToString());
+            var user = await this.userManager.FindByIdAsync(userId.ToString());
 
             if (user == null)
             {
@@ -53,6 +54,20 @@
             }
 
             var identityResult = await this.userManager.ConfirmEmailAsync(user, inputModel.EmailConfirmToken);
+
+            return identityResult;
+        }
+
+        public async Task<IdentityResult> ChangeEmail(ChangeEmailInputModel inputModel,Guid userId)
+        {
+            var user = await this.userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+            }
+
+            var identityResult = await this.userManager.ChangeEmailAsync(user,inputModel.NewEmail,inputModel.ChangeEmailToken);
 
             return identityResult;
         }
@@ -97,6 +112,34 @@
             await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Confirmation Email", emailContent);
         }
 
+        public async Task SendChangeEmailEmail(SendChangeEmailEmailInputModel inputModel,Guid userId)
+        {
+            var user = await this.userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+            }
+
+            var emailContent = await this.ConstructChangeEmailEmailContent(user,inputModel.NewEmail);
+
+            await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Change Your Email", emailContent);
+        }
+
+        public async Task SendChangePasswordEmail(Guid userId)
+        {
+            var user = await this.userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+            }
+
+            var emailContent = await this.ConstructChangePasswordEmailContent(user);
+
+            await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Change Your Email", emailContent);
+        }
+
         private async Task<string> ConstructConfirmationEmailContent(VinylExchangeUser user)
         {
             var emailConfirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -104,12 +147,44 @@
             var request = this.contextAccessor.HttpContext.Request;
 
             var emailConfirmationUrl = request.Scheme + "://" + request.Host
-                                       + $"/Authentication/EmailConfirm?cofirmToken={emailConfirmationToken}&userId={user.Id}";
+                                       + $"/Authentication/EmailConfirm?cofirmToken={emailConfirmationToken}";
 
             var confirmEmailHtmlContent =
                 $@"<h1>Confirm Your Vinyl Exchange Account</h1>.Follow This <a href=""{emailConfirmationUrl}"">Link</a>";
 
             return confirmEmailHtmlContent;
         }
+
+        private async Task<string> ConstructChangeEmailEmailContent(VinylExchangeUser user,string newEmail)
+        {
+            var changeEmailConfirmationToken = await this.userManager.GenerateChangeEmailTokenAsync(user,newEmail);
+
+            var request = this.contextAccessor.HttpContext.Request;
+
+            var emailChangeUrl = request.Scheme + "://" + request.Host
+                                       + $"/Authentication/ChangeEmail?cofirmToken={changeEmailConfirmationToken}";
+
+            var changeEmailHtmlContent =
+                $@"<h1>Change Your Vinyl Exchange Email</h1>.Follow This <a href=""{emailChangeUrl}"">Link</a>";
+
+            return changeEmailHtmlContent ;
+        }
+
+        private async Task<string> ConstructChangePasswordEmailContent(VinylExchangeUser user)
+        {
+            var changePasswordConfirmationToken = await this.userManager.GeneratePasswordResetTokenAsync(user);
+
+            var request = this.contextAccessor.HttpContext.Request;
+
+            var passwordChangeUrl = request.Scheme + "://" + request.Host
+                                 + $"/Authentication/ChangePassword?cofirmToken={changePasswordConfirmationToken}";
+
+            var changePasswordHtmlContent =
+                $@"<h1>Change Your Vinyl Exchange Password</h1>.Follow This <a href=""{passwordChangeUrl}"">Link</a>";
+
+            return changePasswordHtmlContent ;
+        }
+
+        
     }
 }

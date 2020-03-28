@@ -50,7 +50,7 @@ class ChangeAvatarModalComponent extends Component {
                 Close
               </button>
               {this.props.data.isLoading ? (
-                <button type="button" className="btn btn-success">
+                <button type="button" className="btn btn-success" disabled>
                   <FontAwesomeIcon icon={faSync} spin />
                 </button>
               ) : (

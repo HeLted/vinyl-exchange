@@ -27,7 +27,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<VinylExchangeUser> ChangeUserAvatar(ChangeAvatarInputModel inputModel, Guid userId)
+        public async Task<VinylExchangeUser> ChangeAvatar(ChangeAvatarInputModel inputModel, Guid userId)
         {
             var imageByteArray = new byte[1];
 

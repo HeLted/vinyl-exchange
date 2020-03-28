@@ -10,11 +10,11 @@
 
     #endregion
 
-    public class UserSeeder
+    public class UsersSeeder
     {
         private readonly UserManager<VinylExchangeUser> userManager;
 
-        public UserSeeder(UserManager<VinylExchangeUser> userManager)
+        public UsersSeeder(UserManager<VinylExchangeUser> userManager)
         {
             this.userManager = userManager;
         }

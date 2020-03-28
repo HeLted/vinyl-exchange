@@ -4,17 +4,16 @@ import {
   Url,
   Controllers,
   Queries
-} from "./../../../../constants/UrlConstants";
+} from "../../../../constants/UrlConstants";
 import axios from "axios";
-import { NotificationContext } from "./../../../../contexts/NotificationContext";
-import  getAntiForgeryAxiosConfig from "./../../../../functions/getAntiForgeryAxiosConfig";
+import { NotificationContext } from "../../../../contexts/NotificationContext";
+import  getAntiForgeryAxiosConfig from "../../../../functions/getAntiForgeryAxiosConfig";
 
 class EmailConfirmContainer extends Component {
   constructor() {
     super();
     this.state = {
       emailConfirmToken: "",
-      userId: "",
       isLoading: false
     };
   }
@@ -22,20 +21,13 @@ class EmailConfirmContainer extends Component {
   static contextType = NotificationContext;
 
   componentDidMount() {
-    let confirmTokenAndUserId = this.props.location.search.replace(
+    let confirmToken = this.props.location.search.replace(
       Url.queryStart + Queries.cofirmToken + Url.equal,
       ""
     );
 
-    const splittedConfirmTokenAndUserId = confirmTokenAndUserId.split(
-      Url.and + Queries.userId + Url.equal
-    );
-
-    const emailConfirmToken = splittedConfirmTokenAndUserId[0];
-    const userId = splittedConfirmTokenAndUserId[1];
-
-    if (splittedConfirmTokenAndUserId.length === 2) {
-      this.setState({ emailConfirmToken, userId });
+    if (confirmToken !== "") {
+      this.setState({ emailConfirmToken:confirmToken });
     } else {
       this.props.history.push("/");
     }
@@ -46,7 +38,6 @@ class EmailConfirmContainer extends Component {
 
     const submitFormObj = {
       emailConfirmToken: this.state.emailConfirmToken,
-      userId: this.state.userId
     };
     axios
       .post(

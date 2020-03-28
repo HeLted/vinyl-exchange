@@ -13,7 +13,7 @@ import ApiAuthorizationRoutes from "./components/api-authorization/ApiAuthorizat
 import { ApplicationPaths } from "./components/api-authorization/ApiAuthorizationConstants";
 import RegisterContainer from "./components/api-authorization/authPages/register/RegisterContainer";
 import LoginContainer from "./components/api-authorization/authPages/login/LoginContainer";
-import EmailConfirmContainer from "./components/api-authorization/authPages/register/EmailConfirmContainer";
+import EmailConfirmContainer from "./components/api-authorization/authPages/emailConfirm/EmailConfirmContainer";
 import ProfileContainer from "./components/user/profile/ProfileContainer";
 import LogoutContainer from "./components/api-authorization/authPages/logout/LogoutContainer";
 import LogoutCallbackContainer from "./components/api-authorization/authPages/logout/LogoutCallbackContainer";
@@ -21,6 +21,7 @@ import FailedAuthorizationContainer from "./components/api-authorization/authPag
 import AdminPanelContainer from "./components/user/adminPanel/AdminPanelContainer";
 import PageNotFoundContainer from "./components/common/pages/pageNotFound/PageNotFoundContainer";
 import ServerErrorContainer from "./components/common/pages/serverError/ServerErrorContainer";
+import ChangeEmailContainer from "./components/api-authorization/authPages/changeEmail/ChangeEmailContainer";
 
 import "./custom.css";
 
@@ -53,10 +54,15 @@ export default class App extends Component {
             path="/Authentication/Login"
             component={LoginContainer}
           />
-          <Route
+          <AuthorizeRoute
             exact
             path="/Authentication/EmailConfirm"
             component={EmailConfirmContainer}
+          />
+          <AuthorizeRoute
+            exact
+            path="/Authentication/ChangeEmail"
+            component={ChangeEmailContainer}
           />
           <Route
             exact

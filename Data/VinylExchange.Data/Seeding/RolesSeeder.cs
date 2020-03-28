@@ -11,13 +11,13 @@
 
     #endregion
 
-    public class RoleSeeder
+    public class RolesSeeder
     {
         private readonly RoleManager<VinylExchangeRole> roleManager;
 
         private readonly UserManager<VinylExchangeUser> userManager;
 
-        public RoleSeeder(UserManager<VinylExchangeUser> userManager, RoleManager<VinylExchangeRole> roleManager)
+        public RolesSeeder(UserManager<VinylExchangeUser> userManager, RoleManager<VinylExchangeRole> roleManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;

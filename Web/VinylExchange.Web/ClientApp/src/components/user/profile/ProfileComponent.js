@@ -5,10 +5,9 @@ import ChangeAvatarModalContainer from "./userModals/changeAvatar/ChangeAvatarMo
 import UserAvatarContainer from "./userAvatar/UserAvatarContainer";
 import UserPurchasesContainer from "./userPurchases/UserPurchasesContainer";
 import UserSalesContainer from "./userSales/UserSalesContainer";
-import ConfirmEmailContainer from "./userModals/confirmEmail/ConfirmEmailModalContainer";
+import ConfirmEmailModalContainer from "./userModals/confirmEmail/ConfirmEmailModalContainer";
 import PageSpinner from "./../../common/spinners/PageSpinner";
-import { Roles } from "./../../../constants/RoleConstants";
-import { Link } from "react-router-dom";
+import ChangeEmailModalContainer from "./userModals/changeEmail/ChageEmailModalContainer";
 
 function ProfileComponent(props) {
   return props.data.isLoading ? (
@@ -85,16 +84,21 @@ function ProfileComponent(props) {
                     >
                       Confirm Email
                     </button>
-                    <ConfirmEmailContainer />
+                    <ConfirmEmailModalContainer />
                   </div>
                 )}
               </div>
 
-              <div className="row  justify-content-center  text-center">
+              <div className="row justify-content-center  text-center">
                 <div className=" col-12">
-                  <button className="profile-menu-button btn btn-outline-primary btn-lg">
+                  <button
+                    className="profile-menu-button btn btn-outline-primary btn-lg"
+                    data-toggle="modal"
+                    data-target="#changeEmailModal"
+                  >
                     Change Email
                   </button>
+                  <ChangeEmailModalContainer />
                   <br />
                 </div>
 

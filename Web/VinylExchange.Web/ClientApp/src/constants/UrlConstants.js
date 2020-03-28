@@ -78,10 +78,13 @@ export const Controllers = {
       register: "/Register",
       login: "/Login",
       confirmEmail: "/ConfirmEmail",
-      changeUserAvatar: "/ChangeUserAvatar",
+      changeAvatar: "/ChangeAvatar",
       getCurrentUserAvatar: "/GetCurrentUserAvatar",
       getUserAvatar: "/GetUserAvatar",
-      sendConfirmEmail:"/SendConfirmEmail"
+      sendConfirmEmail:"/SendConfirmEmail",
+      sendChangeEmailEmail:"/SendChangeEmailEmail",
+      sendChangePasswordEmail:"/SendChangePasswordEmail",
+      changeEmail:"/ChangeEmail"
     }
   },
   addresses: {

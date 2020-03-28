@@ -14,6 +14,7 @@
     using VinylExchange.Services.Authentication;
     using VinylExchange.Services.Data.HelperServices.Users;
     using VinylExchange.Services.Logging;
+    using VinylExchange.Web.Models.InputModels.Users;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
 
     #endregion
@@ -38,12 +39,12 @@
 
         [HttpPut]
         [Authorize]
-        [Route("ChangeUserAvatar")]
-        public async Task<ActionResult> ChangeUserAvatar([FromForm] ChangeAvatarInputModel inputModel)
+        [Route("ChangeAvatar")]
+        public async Task<ActionResult> ChangeAvatar([FromForm] ChangeAvatarInputModel inputModel)
         {
             try
             {
-                await this.usersAvatarService.ChangeUserAvatar(inputModel, this.GetUserId(this.User));
+                await this.usersAvatarService.ChangeAvatar(inputModel, this.GetUserId(this.User));
 
                 return this.NoContent();
             }
@@ -61,7 +62,30 @@
         {
             try
             {
-                var confirmEmailIdentityResult = await this.userService.ConfirmUserEmail(inputModel);
+                var confirmEmailIdentityResult = await this.userService.ConfirmEmail(inputModel,this.GetUserId(this.User));
+
+                if (confirmEmailIdentityResult.Succeeded)
+                {
+                    return this.Ok();
+                }
+
+                return this.BadRequest(confirmEmailIdentityResult.Errors);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("ChangeEmail")]
+        public async Task<ActionResult> hangeEmail(ChangeEmailInputModel inputModel)
+        {
+            try
+            {
+                var confirmEmailIdentityResult = await this.userService.ChangeEmail(inputModel,this.GetUserId(this.User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -160,6 +184,42 @@
             try
             {
                 await this.userService.SendConfirmEmail(this.GetUserId(this.User));
+
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("SendChangeEmailEmail")]
+        public async Task<ActionResult> SendChangeEmailEmail(SendChangeEmailEmailInputModel inputModel)
+        {
+            try
+            {
+                await this.userService.SendChangeEmailEmail(inputModel,this.GetUserId(this.User));
+
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("SendChangePasswordEmail")]
+        public async Task<ActionResult> SendChangePasswordEmail()
+        {
+            try
+            {
+                await this.userService.SendChangePasswordEmail(this.GetUserId(this.User));
 
                 return this.Ok();
             }
