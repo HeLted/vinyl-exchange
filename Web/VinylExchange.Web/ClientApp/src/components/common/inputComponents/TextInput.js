@@ -6,7 +6,9 @@ const AplhaNumericBracesDashAndSpaceRegex = new RegExp(/^[A-Za-z0-9-() ]*$/);
 const AlphaNumericAndUnderscoreRegex = new RegExp(/^[A-Za-z0-9_]*$/);
 const AlphaNumericDotCommaAndSpaceRegex = new RegExp(/^[A-Z-a-z0-9., ]*$/);
 const LettersOnlyRegex = new RegExp(/^[A-Za-z]*$/);
-const ValidateEmailRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+const ValidateEmailRegex = new RegExp(
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+);
 
 class TextInput extends Component {
   constructor(props) {
@@ -19,8 +21,9 @@ class TextInput extends Component {
         isAlphaNumericAndUnderscore: false,
         isAlphaNumericDotCommaAndSpace: false,
         isLettersOnly: false,
-        isValidateEmail:false,
+        isValidateEmail: false,
         isValidateLength: false,
+        isConfirmPassword: false,
         minLength: 0,
         maxLength: 0
       },
@@ -37,8 +40,6 @@ class TextInput extends Component {
       });
     }
 
-
-
     if (this.props.validateLength === true) {
       this.setState(prevState => {
         return {
@@ -52,17 +53,27 @@ class TextInput extends Component {
       });
     }
 
-    if (this.props.validateEmail === true) {
+    if (this.props.confirmPassword === true) {
       this.setState(prevState => {
         return {
           validationRules: {
             ...prevState.validationRules,
-            isValidateEmail:true
+            isConfirmPassword: true
           }
         };
       });
     }
 
+    if (this.props.validateEmail === true) {
+      this.setState(prevState => {
+        return {
+          validationRules: {
+            ...prevState.validationRules,
+            isValidateEmail: true
+          }
+        };
+      });
+    }
 
     if (this.props.aplhaNumericBracesDashAndSpace === true) {
       this.setState(prevState => {
@@ -156,17 +167,19 @@ class TextInput extends Component {
 
     if (validationRules.isLettersOnly) {
       if (!LettersOnlyRegex.test(value)) {
-        updatedValidationMessages.push(
-          "Allowed characters are (A-Z,a-z)!"
-        );
+        updatedValidationMessages.push("Allowed characters are (A-Z,a-z)!");
       }
     }
 
-    if(validationRules.isValidateEmail){
-      if(!ValidateEmailRegex.test(value)){
-        updatedValidationMessages.push(
-          "Please enter a valid e-mail! address"
-        );
+    if (validationRules.isValidateEmail) {
+      if (!ValidateEmailRegex.test(value)) {
+        updatedValidationMessages.push("Please enter a valid e-mail address!");
+      }
+    }
+
+    if (validationRules.isConfirmPassword) {
+      if (this.props.curerentPasswordValue !== value) {
+        updatedValidationMessages.push("The password inputs must match!");
       }
     }
 
@@ -179,7 +192,8 @@ class TextInput extends Component {
         ? ""
         : " " + this.props.extraClasses;
 
-     const inputType = this.props.specialType != undefined ? this.props.specialType : "text";
+    const inputType =
+      this.props.specialType != undefined ? this.props.specialType : "text";
 
     const validationMessages = this.state.validationMessages.map(
       validationMsg => {

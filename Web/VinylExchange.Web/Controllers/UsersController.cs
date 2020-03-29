@@ -81,11 +81,34 @@
         [HttpPost]
         [Authorize]
         [Route("ChangeEmail")]
-        public async Task<ActionResult> hangeEmail(ChangeEmailInputModel inputModel)
+        public async Task<ActionResult> ChangeEmail(ChangeEmailInputModel inputModel)
         {
             try
             {
                 var confirmEmailIdentityResult = await this.userService.ChangeEmail(inputModel,this.GetUserId(this.User));
+
+                if (confirmEmailIdentityResult.Succeeded)
+                {
+                    return this.Ok();
+                }
+
+                return this.BadRequest(confirmEmailIdentityResult.Errors);
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<ActionResult> ResetPassword(ResetPasswordInputModel inputModel)
+        {
+            try
+            {
+                var confirmEmailIdentityResult = await this.userService.ResetPassword(inputModel);
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -222,6 +245,27 @@
                 await this.userService.SendChangePasswordEmail(this.GetUserId(this.User));
 
                 return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+        [HttpPost]
+        [Route("SendResetPasswordEmail")]
+        public async Task<ActionResult> SendResetPasswordEmail(SendResetPasswordEmailInputModel inputModel)
+        {
+            try
+            {
+                await this.userService.SendResetPasswordEmail(inputModel);
+
+                return this.Ok();
+            }
+            catch(NullReferenceException ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

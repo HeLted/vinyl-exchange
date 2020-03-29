@@ -72,6 +72,20 @@
             return identityResult;
         }
 
+        public async Task<IdentityResult> ResetPassword(ResetPasswordInputModel inputModel)
+        {
+            var user = await this.userManager.FindByEmailAsync(inputModel.Email);
+
+            if (user == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+            }
+
+            var identityResult = await this.userManager.ResetPasswordAsync(user,inputModel.ResetPasswordToken,inputModel.NewPassword);
+
+            return identityResult;
+        }
+
         public async Task<SignInResult> LoginUser(LoginUserInputModel inputModel)
         {
             this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -137,7 +151,21 @@
 
             var emailContent = await this.ConstructChangePasswordEmailContent(user);
 
-            await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Change Your Email", emailContent);
+            await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Password Change", emailContent);
+        }
+
+        public async Task SendResetPasswordEmail(SendResetPasswordEmailInputModel inputModel)
+        {
+            var user = await this.userManager.FindByEmailAsync(inputModel.Email);
+
+            if (user == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserWithEmailCannotBeFound);
+            }
+
+            var emailContent = await this.ConstructChangePasswordEmailContent(user);
+
+            await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Password Reset", emailContent);
         }
 
         private async Task<string> ConstructConfirmationEmailContent(VinylExchangeUser user)
@@ -173,14 +201,9 @@
         private async Task<string> ConstructChangePasswordEmailContent(VinylExchangeUser user)
         {
             var changePasswordConfirmationToken = await this.userManager.GeneratePasswordResetTokenAsync(user);
-
-            var request = this.contextAccessor.HttpContext.Request;
-
-            var passwordChangeUrl = request.Scheme + "://" + request.Host
-                                 + $"/Authentication/ChangePassword?cofirmToken={changePasswordConfirmationToken}";
-
+            
             var changePasswordHtmlContent =
-                $@"<h1>Change Your Vinyl Exchange Password</h1>.Follow This <a href=""{passwordChangeUrl}"">Link</a>";
+                $@"<h1>Change Your Vinyl Exchange Password</h1><h3>Your password change/reset token is: {changePasswordConfirmationToken}<h3>";
 
             return changePasswordHtmlContent ;
         }

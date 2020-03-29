@@ -18,7 +18,7 @@ export const Queries = {
   styleIds: "styleIds",
   returnUrl: "returnUrl",
   cofirmToken: "cofirmToken",
-  filterGenreId:"filterGenreId"
+  filterGenreId: "filterGenreId"
 };
 
 export const Headers = { requestVerificationToken: "RequestVerificationToken" };
@@ -64,12 +64,12 @@ export const Controllers = {
     actions: {
       getAllSalesForRelease: "/GetAllSalesForRelease",
       placeOrder: "/PlaceOrder",
-      setShippingPrice:"/SetShippingPrice",
-      completePayment:"/CompletePayment",
-      getUserSales:"/GetUserSales",
-      getUserPurchases:"/GetUserPurchases",
-      confirmItemSent:"/ConfirmItemSent",
-      confirmItemRecieved:"/ConfirmItemRecieved"
+      setShippingPrice: "/SetShippingPrice",
+      completePayment: "/CompletePayment",
+      getUserSales: "/GetUserSales",
+      getUserPurchases: "/GetUserPurchases",
+      confirmItemSent: "/ConfirmItemSent",
+      confirmItemRecieved: "/ConfirmItemRecieved"
     }
   },
   users: {
@@ -81,10 +81,12 @@ export const Controllers = {
       changeAvatar: "/ChangeAvatar",
       getCurrentUserAvatar: "/GetCurrentUserAvatar",
       getUserAvatar: "/GetUserAvatar",
-      sendConfirmEmail:"/SendConfirmEmail",
-      sendChangeEmailEmail:"/SendChangeEmailEmail",
-      sendChangePasswordEmail:"/SendChangePasswordEmail",
-      changeEmail:"/ChangeEmail"
+      sendConfirmEmail: "/SendConfirmEmail",
+      sendChangeEmailEmail: "/SendChangeEmailEmail",
+      sendChangePasswordEmail: "/SendChangePasswordEmail",
+      sendResetPasswordEmail: "/SendResetPasswordEmail",
+      changeEmail: "/ChangeEmail",
+      resetPassword: "/ResetPassword"
     }
   },
   addresses: {

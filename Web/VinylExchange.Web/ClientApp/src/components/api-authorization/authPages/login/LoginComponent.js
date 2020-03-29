@@ -4,6 +4,7 @@ import TextInput from "./../../../common/inputComponents/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
 import "./../authForm.css";
+import { Link } from "react-router-dom";
 
 function LoginComponent(props) {
   return (
@@ -12,10 +13,10 @@ function LoginComponent(props) {
         <h3 className="property-text">Login</h3>
       </div>
       <br />
-      <div className="row justify-content-center">
+      <div className="row justify-content-center text-center">
         <div className="auth-form col-4 border">
           <form onSubmit={props.functions.handleOnSubmit}>
-            <div className="form-group">
+            <div className="form-groupt ">
               <Label for="usernameInput" value="Username" />
               <TextInput
                 id="usernameInput"
@@ -24,7 +25,7 @@ function LoginComponent(props) {
                 onChange={props.functions.handleOnChange}
               />
             </div>
-
+            <br/>
             <div className="form-group">
               <Label for="passwordInput" value="Password" />
               <TextInput
@@ -54,6 +55,15 @@ function LoginComponent(props) {
                   </label>
                 </div>
               </div>
+            </div>
+
+            <div className="form-group text-center">
+              <Link
+                className="btn btn-link"
+                to={"/Authentication/ForgotPassword"}
+              >
+                Forgot Your Password?
+              </Link>
             </div>
 
             <div className="text-center">

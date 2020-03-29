@@ -23,6 +23,7 @@ import AdminPanelContainer from "./components/user/adminPanel/AdminPanelContaine
 import PageNotFoundContainer from "./components/common/pages/pageNotFound/PageNotFoundContainer";
 import ServerErrorContainer from "./components/common/pages/serverError/ServerErrorContainer";
 import ChangeEmailContainer from "./components/api-authorization/authPages/changeEmail/ChangeEmailContainer";
+import ForgotPasswordContainer from "./components/api-authorization/authPages/forgotPassword/ForgotPasswordContainer";
 
 import "./custom.css";
 
@@ -39,6 +40,11 @@ export default class App extends Component {
             exact
             path="/Authentication/Register"
             component={RegisterContainer}
+          />
+           <AnonymousRoute
+            exact
+            path="/Authentication/ForgotPassword"
+            component={ForgotPasswordContainer}
           />
           <Route
             exact

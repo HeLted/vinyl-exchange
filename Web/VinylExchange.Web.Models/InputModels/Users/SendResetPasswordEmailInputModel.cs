@@ -8,14 +8,11 @@
 
     #endregion
 
-    public class ChangeEmailInputModel
+    public class SendResetPasswordEmailInputModel
     {
-        [Required]
-        public string ChangeEmailToken { get; set; }
-
         [Required]
         [EmailAddress]
         [MaxLength(100, ErrorMessage = InvalidMaxLength)]
-        public string NewEmail { get; set; }
+        public string Email { get; set; }
     }
 }

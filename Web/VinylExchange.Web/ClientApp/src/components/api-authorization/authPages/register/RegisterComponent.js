@@ -8,11 +8,11 @@ import "./../authForm.css";
 function RegisterComponent(props) {
   return (
     <div className="container-fluid">
-      <div className="row justify-content-center border">
+      <div className="row justify-content-center border ">
         <h3 className="property-text">Register</h3>
       </div>
       <br />
-      <div className="row justify-content-center">
+      <div className="row justify-content-center text-center">
         <div className="auth-form col-4 border">
           <form onSubmit={props.functions.handleOnSubmit}>
             <div className="form-group">
@@ -66,6 +66,8 @@ function RegisterComponent(props) {
                 placeholder="Confirm Password..."
                 value={props.data.confirmPasswordInput}
                 onChange={props.functions.handleOnChange}
+                curerentPasswordValue={props.data.passwordInput}
+                confirmPassword
               />
             </div>
             <div className="text-center">
