@@ -8,7 +8,8 @@ import ReleaseContainer from "./components/releases/release/ReleaseContainer";
 import AddReleaseContainer from "./components/releases/addRelease/AddReleaseContainer";
 import CollectionContainer from "./components/user/collection/CollectionContainer";
 import SaleContainer from "./components/sales/sale/SaleContainer";
-import AuthorizeRoute from "./components/api-authorization/AuthorizeRoute";
+import AuthorizeRoute from "./components/api-authorization/routeSecurityLevel/AuthorizeRoute";
+import AnonymousRoute from "./components/api-authorization/routeSecurityLevel/AnonymousRoute";
 import ApiAuthorizationRoutes from "./components/api-authorization/ApiAuthorizationRoutes";
 import { ApplicationPaths } from "./components/api-authorization/ApiAuthorizationConstants";
 import RegisterContainer from "./components/api-authorization/authPages/register/RegisterContainer";
@@ -33,8 +34,8 @@ export default class App extends Component {
       <Layout>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/Marketplace" component={MarketplaceContainer} />
-          <Route
+          <Route exact path="/Marketplace" component={MarketplaceContainer} />
+          <AnonymousRoute
             exact
             path="/Authentication/Register"
             component={RegisterContainer}
@@ -49,7 +50,7 @@ export default class App extends Component {
             path="/Authentication/Logout-Callback"
             component={LogoutCallbackContainer}
           />
-          <Route
+          <AnonymousRoute
             exact
             path="/Authentication/Login"
             component={LoginContainer}
@@ -75,20 +76,18 @@ export default class App extends Component {
             component={ServerErrorContainer}
           />
           <AuthorizeRoute
+            exact
             path="/Releases/AddRelease"
             component={AddReleaseContainer}
             role={MultiRoles.UserAdmin}
           />
           <AuthorizeRoute
+            exact
             path="/Sales"
             component={SaleContainer}
             role={MultiRoles.UserAdmin}
           />
-          <Route
-            path="/Releases"
-            component={ReleaseContainer}
-        
-          />
+          <Route path="/Releases" component={ReleaseContainer} />
           <AuthorizeRoute
             exact
             path="/User/Collection"

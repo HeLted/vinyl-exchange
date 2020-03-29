@@ -4,7 +4,7 @@ import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 
 function ClientError(props){
    return( <div>
-        <div className="container  border">
+        <div className="container  border" style={{padding:"30px"}}>
           <div className="row justify-content-center text-center py-2">
           <div className="col-md-2 text-center">
               <p>

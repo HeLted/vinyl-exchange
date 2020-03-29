@@ -11,8 +11,8 @@ export const LogoutActions = {
 
 export const LoginActions = {
   Login: "Login",
-  LoginCallback: "login-callback",
-  LoginFailed: "login-failed"
+  LoginCallback: "Login-Callback",
+  
 };
 
 const prefix = "/Authentication";
@@ -22,6 +22,5 @@ export const ApplicationPaths = {
   ApiAuthorizationClientConfigurationUrl: `/_configuration/${ApplicationName}`,
   ApiAuthorizationPrefix: prefix,
   Login: `${prefix}/${LoginActions.Login}`,
-  LoginFailed: `${prefix}/${LoginActions.LoginFailed}`,
   LoginCallback: `${prefix}/${LoginActions.LoginCallback}`
 };

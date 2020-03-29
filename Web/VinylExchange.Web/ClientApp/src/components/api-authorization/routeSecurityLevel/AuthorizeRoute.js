@@ -4,12 +4,12 @@ import { Route, Redirect } from "react-router-dom";
 import {
   ApplicationPaths,
   QueryParameterNames
-} from "./ApiAuthorizationConstants";
-import authService from "./AuthorizeService";
-import { Roles } from "./../../constants/RoleConstants";
-import PageSpinner from "./../common/spinners/PageSpinner";
+} from "../ApiAuthorizationConstants";
+import authService from "../AuthorizeService";
+import { Roles } from "../../../constants/RoleConstants";
+import PageSpinner from "../../common/spinners/PageSpinner";
 
-export default class AuthorizeRoute extends Component {
+class AuthorizeRoute extends Component {
   constructor(props) {
     super(props);
 
@@ -54,7 +54,7 @@ export default class AuthorizeRoute extends Component {
       QueryParameterNames.ReturnUrl
     }=${encodeURI(window.location.href)}`;
       
-    !isAuthorized && authenticated && (redirectUrl = "/Authorization/FailedAuthorization");
+    !isAuthorized && authenticated && (redirectUrl = "/Error/FailedAuthorization");
     if (!ready || isAuthLoading) {
       return (
         <div>
@@ -88,3 +88,5 @@ export default class AuthorizeRoute extends Component {
     await this.populateAuthenticationState();
   }
 }
+
+export default AuthorizeRoute;

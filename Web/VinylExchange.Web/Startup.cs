@@ -69,16 +69,8 @@ namespace VinylExchange.Web
 
                 if (env.IsDevelopment())
                 {
-                    if(dbContext.Database.EnsureCreated())
-                    {
-                        
-                    }
-
-
                     dbContext.Database.Migrate();
                 }
-
-             
 
                 serviceScope.ServiceProvider.GetRequiredService<UserManager<VinylExchangeUser>>();
                 serviceScope.ServiceProvider.GetRequiredService<RoleManager<VinylExchangeRole>>();
@@ -105,12 +97,12 @@ namespace VinylExchange.Web
             app.UseStaticFiles();
             app.UseFileServer(
                 new FileServerOptions
-                    {
-                        FileProvider = new PhysicalFileProvider(
+                {
+                    FileProvider = new PhysicalFileProvider(
                             Path.Combine(Directory.GetCurrentDirectory(), "MediaStorage")),
-                        RequestPath = "/File/Media",
-                        EnableDirectoryBrowsing = true
-                    });
+                    RequestPath = "/File/Media",
+                    EnableDirectoryBrowsing = true
+                });
 
             app.UseSpaStaticFiles();
 
@@ -200,10 +192,10 @@ namespace VinylExchange.Web
                         options.SecurityTokenValidators.Clear();
                         options.SecurityTokenValidators.Add(
                             new JwtSecurityTokenHandler
-                                {
-                                    // Disable the built-in JWT claims mapping feature.
-                                    InboundClaimTypeMap = new Dictionary<string, string>()
-                                });
+                            {
+                                // Disable the built-in JWT claims mapping feature.
+                                InboundClaimTypeMap = new Dictionary<string, string>()
+                            });
                     }).AddIdentityServerJwt();
 
             services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>()
