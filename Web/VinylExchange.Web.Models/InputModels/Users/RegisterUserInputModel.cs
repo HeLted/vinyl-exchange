@@ -35,7 +35,5 @@
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = PassAndConfrimPassNotMatching)]
         public string ConfirmPassword { get; set; }
-
-
     }
 }

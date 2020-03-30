@@ -2,47 +2,38 @@
 {
     #region
 
+    using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.DependencyInjection;
 
     using VinylExchange.Common.Constants;
     using VinylExchange.Data.Models;
 
     #endregion
 
-    public class RolesSeeder
+    internal class RolesSeeder : ISeeder
     {
-        private readonly RoleManager<VinylExchangeRole> roleManager;
-
-        private readonly UserManager<VinylExchangeUser> userManager;
-
-        public RolesSeeder(UserManager<VinylExchangeUser> userManager, RoleManager<VinylExchangeRole> roleManager)
+        public async Task SeedAsync(VinylExchangeDbContext dbContext, IServiceProvider serviceProvider)
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<VinylExchangeRole>>();
+
+            await SeedRoleAsync(roleManager, Roles.Admin);
+            await SeedRoleAsync(roleManager, Roles.User);
         }
 
-        public async Task SeedRoles()
+        private static async Task SeedRoleAsync(RoleManager<VinylExchangeRole> roleManager, string roleName)
         {
-            var adminRoleExists = await this.roleManager.RoleExistsAsync(Roles.Admin);
-            if (!adminRoleExists)
+            var role = await roleManager.FindByNameAsync(roleName);
+            if (role == null)
             {
-                await this.roleManager.CreateAsync(new VinylExchangeRole(Roles.Admin));
-            }
-
-            var userRoleExists = await this.roleManager.RoleExistsAsync(Roles.User);
-
-            if (!userRoleExists)
-            {
-                await this.roleManager.CreateAsync(new VinylExchangeRole(Roles.User));
-            }
-
-            var user = await this.userManager.FindByNameAsync("sysadmin");
-
-            if (!await this.userManager.IsInRoleAsync(user, Roles.Admin))
-            {
-                await this.userManager.AddToRoleAsync(user, Roles.Admin);
+                var result = await roleManager.CreateAsync(new VinylExchangeRole(roleName));
+                if (!result.Succeeded)
+                {
+                    throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+                }
             }
         }
     }

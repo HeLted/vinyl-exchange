@@ -72,10 +72,7 @@ namespace VinylExchange.Web
                     dbContext.Database.Migrate();
                 }
 
-                serviceScope.ServiceProvider.GetRequiredService<UserManager<VinylExchangeUser>>();
-                serviceScope.ServiceProvider.GetRequiredService<RoleManager<VinylExchangeRole>>();
-                serviceScope.ServiceProvider.GetRequiredService<UsersSeeder>().SeedAdmin().GetAwaiter().GetResult();
-                serviceScope.ServiceProvider.GetRequiredService<RolesSeeder>().SeedRoles().GetAwaiter().GetResult();
+                new VinylExchangeDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
             AutoMapperConfig.RegisterMappings(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly);
@@ -236,8 +233,6 @@ namespace VinylExchange.Web
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<ILoggerService, LoggerService>();
             services.AddTransient<IUsersService, UsersService>();
-            services.AddTransient<RolesSeeder>();
-            services.AddTransient<UsersSeeder>();
             services.AddSingleton<IEmailSender>(new EmailSender(this.Configuration["SendGridKey"]));
         }
     }

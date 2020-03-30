@@ -2,33 +2,90 @@
 {
     #region
 
+    using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.DependencyInjection;
 
+    using VinylExchange.Common.Constants;
     using VinylExchange.Data.Models;
 
     #endregion
 
-    public class UsersSeeder
+    internal class UsersSeeder : ISeeder
     {
-        private readonly UserManager<VinylExchangeUser> userManager;
-
-        public UsersSeeder(UserManager<VinylExchangeUser> userManager)
+        public async Task SeedAsync(VinylExchangeDbContext dbContext, IServiceProvider serviceProvider)
         {
-            this.userManager = userManager;
+            var userManager = serviceProvider.GetRequiredService<UserManager<VinylExchangeUser>>();
+
+            await SeedAdminAsync(dbContext, userManager, "sysadmin", "aphextwindrukqs22", "sysadmin@vinylexchange.com");
+            await SeedUserAsync(dbContext,userManager,"testUserOne","testUserOnePassword","testUserOne@gmail.com");
+            await SeedUserAsync(dbContext,userManager,"testUserTwo","testUserTwoPassword","testUserTwo@gmail.com");
         }
 
-        public async Task SeedAdmin()
+        private static async Task SeedAdminAsync(
+            VinylExchangeDbContext dbContext,
+            UserManager<VinylExchangeUser> userManager,
+            string username,
+            string password,
+            string email)
         {
-            if (await this.userManager.FindByNameAsync("sysadmin") == null)
+            if (!dbContext.Users.Any())
             {
-                var admin = new VinylExchangeUser { UserName = "sysadmin", Email = "sysadmin@vinylexchange.com" };
+                var admin = await CreateUserAsync(userManager, username, password, email);
 
-                admin.PasswordHash = this.userManager.PasswordHasher.HashPassword(admin, "aphextwindrukqs22");
+                var setAdminRoleResult = await userManager.AddToRoleAsync(admin, Roles.Admin);
 
-                await this.userManager.CreateAsync(admin);
+                if (!setAdminRoleResult.Succeeded)
+                {
+                    throw new Exception(
+                        string.Join(Environment.NewLine, setAdminRoleResult.Errors.Select(e => e.Description)));
+                }
             }
+        }
+
+        private static async Task SeedUserAsync(
+            VinylExchangeDbContext dbContext,
+            UserManager<VinylExchangeUser> userManager,
+            string username,
+            string password,
+            string email)
+        {
+            if (!dbContext.Users.Where(u => u.UserName != "sysadmin").Any())
+            {
+                var user = await CreateUserAsync(userManager, username, password, email);
+
+                var setAdminRoleResult = await userManager.AddToRoleAsync(user, Roles.User);
+
+                if (!setAdminRoleResult.Succeeded)
+                {
+                    throw new Exception(
+                        string.Join(Environment.NewLine, setAdminRoleResult.Errors.Select(e => e.Description)));
+                }
+            }
+        }
+
+        private static async Task<VinylExchangeUser> CreateUserAsync(
+            UserManager<VinylExchangeUser> userManager,
+            string username,
+            string password,
+            string email)
+        {
+            var user = new VinylExchangeUser { UserName = username, Email = email };
+
+            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, password);
+
+            var createUserResult = await userManager.CreateAsync(user);
+
+            if (!createUserResult.Succeeded)
+            {
+                throw new Exception(
+                    string.Join(Environment.NewLine, createUserResult.Errors.Select(e => e.Description)));
+            }
+
+            return user;
         }
     }
 }
