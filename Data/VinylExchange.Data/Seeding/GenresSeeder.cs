@@ -20,6 +20,8 @@
 
             await SeedGenreAsync(dbContext, "Hip Hop");
 
+            await SeedGenreAsync(dbContext, "Jazz");
+
             await dbContext.SaveChangesAsync();
         }
 
