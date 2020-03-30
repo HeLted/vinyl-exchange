@@ -2,8 +2,6 @@
 {
     #region
 
-    #region
-
     using System;
     using System.Threading.Tasks;
 
@@ -18,8 +16,6 @@
     using VinylExchange.Web.Models.ResourceModels.Genres;
 
     using Xunit;
-
-    #endregion
 
     #endregion
 
