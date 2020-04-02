@@ -64,7 +64,8 @@
             if (searchTerm != null)
             {
                 releasesQuariable = releasesQuariable.Where(
-                    r => r.Artist.Contains(searchTerm) || r.Title.Contains(searchTerm));
+                    r => r.Artist.ToLower().Contains(searchTerm.ToLower())
+                         || r.Title.ToLower().Contains(searchTerm.ToLower()));
             }
 
             if (filterGenreId != null)

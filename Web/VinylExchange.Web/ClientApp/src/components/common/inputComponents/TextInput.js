@@ -201,7 +201,7 @@ class TextInput extends Component {
       }
     );
     return (
-      <div className="text-left">
+      <div className="text-left w-100">
         <input
           type={inputType}
           className={"form-control" + extraClasses}

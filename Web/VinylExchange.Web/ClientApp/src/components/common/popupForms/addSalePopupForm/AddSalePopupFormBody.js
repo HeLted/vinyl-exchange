@@ -66,47 +66,45 @@ function AddSalePopupBody(props) {
                     </div>
                   </div>
                   <div className="col-11">
-                  
-                      <NumberInput
-                        id="priceInput"
-                        placeholder="Price"
-                        value={props.data.priceInput}
-                        onChange={props.functions.handleOnChange}
-                        required
-                        minNumber={0}
-                        maxNumber={100000}
-                        money
-                      />
-              
+                    <NumberInput
+                      id="priceInput"
+                      placeholder="Price"
+                      value={props.data.priceInput}
+                      onChange={props.functions.handleOnChange}
+                      required
+                      minNumber={0}
+                      maxNumber={100000}
+                      money
+                    />
                   </div>
                 </div>
-                <div className="form-group">
-                  <Label for="shipsFromAddressSelectInput" value="Ships From" />
-                  {props.data.userAddresses.length > 0 ? (
-                    <SingleSelect
-                      id="shipsFromAddressSelectInput"
-                      value={props.data.shipsFromAddressSelectInput}
-                      onChange={props.functions.handleOnChange}
-                      options={props.data.userAddresses}
-                      defaultOptionLabel="--Please Select Seller Address--"
-                    />
-                  ) : (
-                    <div className="no-addresses-container border">
-                      <h6 className="property-text">
-                        You don't have any registered addresses.
-                      </h6>
+              </div>
+              <div className="form-group">
+                <Label for="shipsFromAddressSelectInput" value="Ships From" />
+                {props.data.userAddresses.length > 0 ? (
+                  <SingleSelect
+                    id="shipsFromAddressSelectInput"
+                    value={props.data.shipsFromAddressSelectInput}
+                    onChange={props.functions.handleOnChange}
+                    options={props.data.userAddresses}
+                    defaultOptionLabel="--Please Select Seller Address--"
+                  />
+                ) : (
+                  <div className="no-addresses-container border">
+                    <h6 className="property-text">
+                      You don't have any registered addresses.
+                    </h6>
 
-                      <Link
-                        onClick={props.functions.handleFlushModal}
-                        className="btn btn-primary"
-                        to="/User/Profile"
-                      >
-                        Go To Profile
-                      </Link>
-                      <br />
-                    </div>
-                  )}
-                </div>
+                    <Link
+                      onClick={props.functions.handleFlushModal}
+                      className="btn btn-primary"
+                      to="/User/Profile"
+                    >
+                      Go To Profile
+                    </Link>
+                    <br />
+                  </div>
+                )}
               </div>
             </form>
           </div>

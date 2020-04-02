@@ -12,19 +12,24 @@ function SearchReleaseComponent(props) {
     );
 
   return (
-    <div className="input-group" id="searchBar">
-      <span className="input-group-btn">
-        <button className="btn btn-outline-primary" type="button" disabled>
-          {icon}
-        </button>
-      </span>
-      <TextInput
-        id="searchBarInput"
-        placeholder="Search..."
-        value={props.searchInputValue}
-        onChange={props.inputOnChangeFunction}
-        
-      />
+    <div className="form-group">
+      <div className="row m-0">
+        <div className="col-lg-3 col-md-12 col-sm-12 col-xs-12 text-center p-0">
+          <div className="input-group-prepend">
+            <button className="btn btn-outline-primary w-100 " type="button" disabled>
+              {icon}
+            </button>
+          </div>
+        </div>
+        <div className="col-lg-9 col-md-12 col-sm-12 col-xs-12 p-0">
+          <TextInput
+            id="searchBarInput"
+            placeholder="Search..."
+            value={props.searchInputValue}
+            onChange={props.inputOnChangeFunction}
+          />
+        </div>
+      </div>
     </div>
   );
 }

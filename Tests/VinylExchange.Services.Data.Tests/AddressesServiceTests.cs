@@ -15,7 +15,7 @@
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Web.Models.InputModels.Addresses;
     using VinylExchange.Web.Models.ResourceModels.Addresses;
-
+    using VinylExchange.Web.Models.Utility.Addresses;
     using Xunit;
 
     #endregion
