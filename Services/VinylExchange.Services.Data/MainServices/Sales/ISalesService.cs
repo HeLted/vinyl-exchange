@@ -24,9 +24,7 @@
 
         Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid releaseId);
 
-        Task<TModel> GetSale<TModel>(Guid saleId);
-
-        Task<TModel> GetSaleInfo<TModel>(Guid? saleId);
+        Task<TModel> GetSale<TModel>(Guid? saleId);
 
         Task<List<TModel>> GetUserPurchases<TModel>(Guid buyerId);
 

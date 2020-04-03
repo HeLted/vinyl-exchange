@@ -11,8 +11,8 @@
     using Microsoft.AspNetCore.Mvc;
 
     using VinylExchange.Models.InputModels.Users;
-    using VinylExchange.Services.Authentication;
     using VinylExchange.Services.Data.HelperServices.Users;
+    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.InputModels.Users;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
@@ -62,7 +62,7 @@
         {
             try
             {
-                var confirmEmailIdentityResult = await this.userService.ConfirmEmail(inputModel,this.GetUserId(this.User));
+                var confirmEmailIdentityResult = await this.userService.ConfirmEmail(inputModel, this.GetUserId(this.User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -85,7 +85,7 @@
         {
             try
             {
-                var confirmEmailIdentityResult = await this.userService.ChangeEmail(inputModel,this.GetUserId(this.User));
+                var confirmEmailIdentityResult = await this.userService.ChangeEmail(inputModel, this.GetUserId(this.User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -101,7 +101,7 @@
             }
         }
 
-        
+
         [HttpPost]
         [Route("ResetPassword")]
         public async Task<ActionResult> ResetPassword(ResetPasswordInputModel inputModel)
@@ -224,7 +224,7 @@
         {
             try
             {
-                await this.userService.SendChangeEmailEmail(inputModel,this.GetUserId(this.User));
+                await this.userService.SendChangeEmailEmail(inputModel, this.GetUserId(this.User));
 
                 return this.Ok();
             }
@@ -262,7 +262,7 @@
 
                 return this.Ok();
             }
-            catch(NullReferenceException ex)
+            catch (NullReferenceException ex)
             {
                 this.loggerService.LogException(ex);
                 return this.BadRequest(ex.Message);

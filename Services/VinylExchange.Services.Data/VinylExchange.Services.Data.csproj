@@ -9,6 +9,7 @@
     <ProjectReference Include="..\..\Data\VinylExchange.Data\VinylExchange.Data.csproj" />
     <ProjectReference Include="..\..\Web\VinylExchange.Web.Models\VinylExchange.Web.Models.csproj" />
     <ProjectReference Include="..\VinylEchange.Services.Files\VinylExchange.Services.Files.csproj" />
+    <ProjectReference Include="..\VinylExchange.Services.EmailSender\VinylExchange.Services.EmailSender.csproj" />
   </ItemGroup>
 
 

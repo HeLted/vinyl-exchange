@@ -307,7 +307,7 @@
         }
 
         [Fact]
-        public async Task GetAllSalesForReleaseShouldNotGetAnyReleasesWithStatusOtherThanOpen()
+        public async Task GetAllSalesForReleaseShouldNotGetAnySAlesWithStatusOtherThanOpen()
         {
             var release = new Release();
 
@@ -315,11 +315,11 @@
             for (int i = 0; i < 5; i++)
             {
                 var sale = new Sale
-                    {
-                        Status = Status.Finished,
+                {
+                    Status = Status.Finished,
 
-                        ReleaseId = release.Id
-                    };
+                    ReleaseId = release.Id
+                };
 
                 await this.dbContext.Sales.AddAsync(sale);
 
@@ -330,7 +330,256 @@
             var saleModels = await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(release.Id);
 
             Assert.True(saleModels.Count == 0);
-            
+
+        }
+
+        [Fact]
+        public async Task GetAllSalesForReleaseShouldNotGetAnySalesIfProvidedReleaseIdIsNotRegisteredByAnySale()
+        {
+            var release = new Release();
+
+
+            for (int i = 0; i < 5; i++)
+            {
+                var sale = new Sale
+                {
+                    Status = Status.Finished,
+
+                    ReleaseId = release.Id
+                };
+
+                await this.dbContext.Sales.AddAsync(sale);
+
+            }
+
+            await this.dbContext.SaveChangesAsync();
+
+            var saleModels = await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(Guid.NewGuid());
+
+            Assert.True(saleModels.Count == 0);
+        }
+
+        [Fact]
+        public async Task GetSaleShouldGetSaleIfProvidedSaleIsInDb()
+        {
+            var sale = new Sale();
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var saleModel = this.salesService.GetSale<GetSaleResourceModel>(sale.Id);
+
+            Assert.NotNull(saleModel);
+        }
+
+        [Fact]
+        public async Task GetSaleShouldReturnNullIfProvidedSaleIsNotInDb()
+        {
+            var sale = new Sale();
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var saleModel = await this.salesService.GetSale<GetSaleResourceModel>(Guid.NewGuid());
+
+            Assert.Null(saleModel);
+        }
+
+        [Fact]
+        public async Task GetUserPurchasesShouldGetUserPurchases()
+        {
+            var user = await this.dbContext.Users.FirstAsync();
+
+            for (int i = 0; i < 5; i++)
+            {
+                var sale = new Sale
+                {
+                    BuyerId = user.Id
+                };
+
+                await this.dbContext.Sales.AddAsync(sale);
+
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                var sale = new Sale
+                {
+                    BuyerId = Guid.NewGuid()
+                };
+
+                await this.dbContext.Sales.AddAsync(sale);
+
+            }
+
+            await this.dbContext.SaveChangesAsync();
+
+            var purchasesModels = await this.salesService.GetUserPurchases<GetSaleResourceModel>(user.Id);
+
+            Assert.True(purchasesModels.All(pm => pm.BuyerId == user.Id));
+        }
+
+        [Fact]
+        public async Task GetUserPurchasesShouldReturnEmptyListIfUserHasNoPurchases()
+        {
+            var user = await this.dbContext.Users.FirstAsync();
+
+            for (int i = 0; i < 10; i++)
+            {
+                var sale = new Sale
+                {
+                    BuyerId = Guid.NewGuid()
+                };
+
+                await this.dbContext.Sales.AddAsync(sale);
+
+            }
+
+            await this.dbContext.SaveChangesAsync();
+
+            var purchasesModels = await this.salesService.GetUserPurchases<GetSaleResourceModel>(user.Id);
+
+            Assert.True(purchasesModels.Count == 0);
+        }
+
+        [Fact]
+        public async Task GetUserSalesShouldGetUserSales()
+        {
+            var user = await this.dbContext.Users.FirstAsync();
+
+            for (int i = 0; i < 5; i++)
+            {
+                var sale = new Sale
+                {
+                    SellerId = user.Id
+                };
+
+                await this.dbContext.Sales.AddAsync(sale);
+
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                var sale = new Sale
+                {
+                    SellerId = Guid.NewGuid()
+                };
+
+                await this.dbContext.Sales.AddAsync(sale);
+
+            }
+
+            await this.dbContext.SaveChangesAsync();
+
+            var saleModels = await this.salesService.GetUserSales<GetSaleResourceModel>(user.Id);
+
+            Assert.True(saleModels.All(sm => sm.SellerId == user.Id));
+        }
+
+        [Fact]
+        public async Task GetUserSalesShouldReturnEmptyListIfUserHasNoSales()
+        {
+            var user = await this.dbContext.Users.FirstAsync();
+
+            for (int i = 0; i < 10; i++)
+            {
+                var sale = new Sale
+                {
+                    SellerId = Guid.NewGuid()
+                };
+
+                await this.dbContext.Sales.AddAsync(sale);
+
+            }
+
+            await this.dbContext.SaveChangesAsync();
+
+            var salesModels = await this.salesService.GetUserPurchases<GetSaleResourceModel>(user.Id);
+
+            Assert.True(salesModels.Count == 0);
+        }
+
+        [Fact]
+        public async Task PlaceOrderShouldChangeSaleStatusToShippingNegotiation()
+        {
+            var sale = new Sale
+            {
+                Status = Status.Open
+            };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var address = await this.dbContext.Addresses.FirstAsync();
+
+            var user = await this.dbContext.Users.FirstAsync();
+
+            var placeOrderInputModel = new PlaceOrderInputModel
+            {
+                AddressId = address.Id,
+                SaleId = sale.Id
+            };
+
+            await this.salesService.PlaceOrder<SaleStatusResourceModel>(placeOrderInputModel, user.Id);
+
+            var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.True(Status.ShippingNegotiation == changedSale.Status);
+        }
+
+        [Fact]
+        public async Task PlaceOrderShouldSetBuyerId()
+        {
+            var sale = new Sale();
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var address = await this.dbContext.Addresses.FirstAsync();
+
+            var user = await this.dbContext.Users.FirstAsync();
+
+            var placeOrderInputModel = new PlaceOrderInputModel
+            {
+                AddressId = address.Id,
+                SaleId = sale.Id
+            };
+
+            await this.salesService.PlaceOrder<SaleStatusResourceModel>(placeOrderInputModel, user.Id);
+
+            var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.True(user.Id == changedSale.BuyerId);
+        }
+
+        [Fact]
+        public async Task PlaceOrderShouldSetShipsToAddress()
+        {
+            var sale = new Sale();
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var address = await this.dbContext.Addresses.FirstAsync();
+
+            var user = await this.dbContext.Users.FirstAsync();
+
+            var placeOrderInputModel = new PlaceOrderInputModel
+                {
+                    AddressId = address.Id,
+                    SaleId = sale.Id
+                };
+
+            await this.salesService.PlaceOrder<SaleStatusResourceModel>(placeOrderInputModel, user.Id);
+
+            var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.True($"{address.Country} - {address.Town} - {address.PostalCode} - {address.FullAddress}" == changedSale.ShipsTo);
         }
 
         private async Task AddSalesTestData()

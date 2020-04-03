@@ -29,7 +29,7 @@
 
         public async Task LoadLogHistory(Guid saleId)
         {
-            var sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
+            var sale = await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
 
             var userId = Guid.Parse(this.GetUserId());
 
@@ -48,7 +48,7 @@
         {
             var subscriberGroupName = saleId.ToString();
 
-            var sale = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
+            var sale = await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
 
             var userId = Guid.Parse(this.GetUserId());
 

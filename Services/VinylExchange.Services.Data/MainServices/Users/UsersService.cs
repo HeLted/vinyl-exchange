@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Services.Authentication
+﻿namespace VinylExchange.Services.Data.MainServices.Users
 {
     #region
 

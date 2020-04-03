@@ -26,7 +26,6 @@ namespace VinylExchange.Web
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Data.Seeding;
-    using VinylExchange.Services.Authentication;
     using VinylExchange.Services.Data.HelperServices.Releases;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
@@ -37,6 +36,7 @@ namespace VinylExchange.Web
     using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Data.MainServices.Styles;
+    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.EmaiSender;
     using VinylExchange.Services.Files;
     using VinylExchange.Services.Logging;
@@ -226,13 +226,13 @@ namespace VinylExchange.Web
             services.AddTransient<ISalesService, SalesService>();
             services.AddTransient<ISaleMessagesService, SaleMessagesService>();
             services.AddTransient<ISaleLogsService, SaleLogsService>();
+            services.AddTransient<IUsersService, UsersService>();
 
             // Tool Services
             services.AddTransient<MemoryCacheManager>();
             services.AddTransient<IMemoryCacheFileSevice, MemoryCacheFileService>();
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<ILoggerService, LoggerService>();
-            services.AddTransient<IUsersService, UsersService>();
             services.AddSingleton<IEmailSender>(new EmailSender(this.Configuration["SendGridKey"]));
         }
     }

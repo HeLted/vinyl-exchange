@@ -25,8 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Common", "Com
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Logging", "Services\VinylExchange.Services.Logging\VinylExchange.Services.Logging.csproj", "{21EA526F-FE0B-42C0-A19B-04E671F21B6D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Authentication", "Services\VinylExchange.Services.Authentication\VinylExchange.Services.Authentication.csproj", "{599DE079-92B2-4A21-89BB-5784D4DEABF2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.EmailSender", "Services\VinylExchange.Services.EmailSender\VinylExchange.Services.EmailSender.csproj", "{DB5EE662-8EA8-439C-B3FC-4A18276CE271}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{6A46031E-D657-499F-B25A-75C04033DCAF}"
@@ -41,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4849EA7A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Data.Tests", "Tests\VinylExchange.Services.Data.Tests\VinylExchange.Services.Data.Tests.csproj", "{79069B89-F16E-4319-B80A-E08FF30154EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylExchange.Web.ModelBinding", "Web\VinylExchange.Web.ModelBinding\VinylExchange.Web.ModelBinding.csproj", "{DAF6CDB1-502D-4962-B6BA-BA02DD7116A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Web.ModelBinding", "Web\VinylExchange.Web.ModelBinding\VinylExchange.Web.ModelBinding.csproj", "{DAF6CDB1-502D-4962-B6BA-BA02DD7116A0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylExchange.Services.Data", "Services\VinylExchange.Services.Data\VinylExchange.Services.Data.csproj", "{8BE85C1A-FD97-4D0A-A59F-54570B248C11}"
 EndProject
@@ -83,10 +81,6 @@ Global
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{599DE079-92B2-4A21-89BB-5784D4DEABF2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DB5EE662-8EA8-439C-B3FC-4A18276CE271}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB5EE662-8EA8-439C-B3FC-4A18276CE271}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB5EE662-8EA8-439C-B3FC-4A18276CE271}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -128,7 +122,6 @@ Global
 		{C9B9D1E9-B202-43B8-8A8E-817ED0DD6E7D} = {F179BE77-4DF4-435B-BCE5-C8DC2F39C236}
 		{E7F4D057-D142-4019-800E-B49B474A5963} = {E9897BC8-8857-4187-B534-484854FD4A27}
 		{21EA526F-FE0B-42C0-A19B-04E671F21B6D} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
-		{599DE079-92B2-4A21-89BB-5784D4DEABF2} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
 		{DB5EE662-8EA8-439C-B3FC-4A18276CE271} = {D991CB2E-CE38-4DEE-9DCF-AB11AE174B10}
 		{077C4B5E-281B-491D-916C-EB6CD2E75E84} = {6A46031E-D657-499F-B25A-75C04033DCAF}
 		{7564B373-DF79-4325-A377-1C794ACAA9BD} = {6A46031E-D657-499F-B25A-75C04033DCAF}

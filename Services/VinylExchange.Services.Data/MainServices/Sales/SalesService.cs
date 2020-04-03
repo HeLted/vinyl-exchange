@@ -122,12 +122,7 @@
                        .To<TModel>().ToListAsync();
         }
 
-        public async Task<TModel> GetSale<TModel>(Guid saleId)
-        {
-            return await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>().FirstOrDefaultAsync();
-        }
-
-        public async Task<TModel> GetSaleInfo<TModel>(Guid? saleId)
+        public async Task<TModel> GetSale<TModel>(Guid? saleId)
         {
             return await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>().FirstOrDefaultAsync();
         }
@@ -178,6 +173,11 @@
         {
             var sale = await this.GetSale(inputModel.SaleId);
 
+            if (sale == null)
+            {
+                throw new NullReferenceException(SaleNotFound);
+            }
+
             sale.ShippingPrice = inputModel.ShippingPrice;
             sale.Status = Status.PaymentPending;
 
@@ -189,6 +189,11 @@
         public async Task<TModel> CompletePayment<TModel>(CompletePaymentInputModel inputModel)
         {
             var sale = await this.GetSale(inputModel.SaleId);
+
+            if (sale == null)
+            {
+                throw new NullReferenceException(SaleNotFound);
+            }
 
             sale.Status = Status.Paid;
             sale.OrderId = inputModel.OrderId;
@@ -202,6 +207,11 @@
         {
             var sale = await this.GetSale(inputModel.SaleId);
 
+            if (sale == null)
+            {
+                throw new NullReferenceException(SaleNotFound);
+            }
+
             sale.Status = Status.Sent;
 
             await this.dbContext.SaveChangesAsync();
@@ -212,6 +222,11 @@
         public async Task<TModel> ConfirmItemRecieved<TModel>(ConfirmItemRecievedInputModel inputModel)
         {
             var sale = await this.GetSale(inputModel.SaleId);
+
+            if (sale == null)
+            {
+                throw new NullReferenceException(SaleNotFound);
+            }
 
             sale.Status = Status.Finished;
 

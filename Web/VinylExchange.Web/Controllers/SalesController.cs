@@ -289,7 +289,7 @@
         {
             try
             {
-                var saleInfoModel = await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(id);
+                var saleInfoModel = await this.salesService.GetSale<GetSaleInfoUtilityModel>(id);
 
                 if (saleInfoModel == null)
                 {
@@ -385,7 +385,7 @@
 
         private async Task<GetSaleInfoUtilityModel> GetSaleInfo(Guid? saleId)
         {
-            return await this.salesService.GetSaleInfo<GetSaleInfoUtilityModel>(saleId);
+            return await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
         }
     }
 }
