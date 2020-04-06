@@ -12,7 +12,7 @@
 
     public interface ICollectionsService
     {
-        Task<TModel> AddToCollection<TModel>(AddToCollectionInputModel inputModel, Guid releaseId, Guid userId);
+        Task<TModel> AddToCollection<TModel>(AddToCollectionInputModel inputModel, Guid userId);
 
         Task<bool> DoesUserCollectionContainRelease(Guid releaseId, Guid userId);
 

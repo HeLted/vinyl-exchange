@@ -11,8 +11,12 @@
 
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Releases;
+    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Collections;
+
+    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
     #endregion
 
@@ -20,20 +24,40 @@
     {
         private readonly VinylExchangeDbContext dbContext;
 
-        public CollectionsService(VinylExchangeDbContext dbContext)
+        private readonly IReleasesEntityRetriever releasesEntityRetriever;
+
+        private readonly IUsersEntityRetriever usersEntityRetriever;
+
+        public CollectionsService(
+            VinylExchangeDbContext dbContext,
+            IReleasesEntityRetriever releasesEntityRetriever,
+            IUsersEntityRetriever usersEntityRetriever)
         {
             this.dbContext = dbContext;
+            this.releasesEntityRetriever = releasesEntityRetriever;
+            this.usersEntityRetriever = usersEntityRetriever;
         }
 
-        public async Task<TModel> AddToCollection<TModel>(
-            AddToCollectionInputModel inputModel,
-            Guid releaseId,
-            Guid userId)
+        public async Task<TModel> AddToCollection<TModel>(AddToCollectionInputModel inputModel, Guid userId)
         {
+            var release = await this.releasesEntityRetriever.GetRelease(inputModel.ReleaseId);
+
+            if (release == null)
+            {
+                throw new NullReferenceException(ReleaseNotFound);
+            }
+
+            var user = await this.usersEntityRetriever.GetUser(userId);
+
+            if (user == null)
+            {
+                throw new NullReferenceException(UserNotFound);
+            }
+
             var collectionItem = inputModel.To<CollectionItem>();
 
-            collectionItem.ReleaseId = releaseId;
-            collectionItem.UserId = userId;
+            collectionItem.ReleaseId = release.Id;
+            collectionItem.UserId = user.Id;
 
             var trackedCollectionItem = await this.dbContext.Collections.AddAsync(collectionItem);
 
@@ -71,7 +95,7 @@
 
             if (collectionItem == null)
             {
-                throw new NullReferenceException("Collection item with this Id doesn't exist");
+                throw new NullReferenceException(CollectionItemNotFound);
             }
 
             this.dbContext.Collections.Remove(collectionItem);

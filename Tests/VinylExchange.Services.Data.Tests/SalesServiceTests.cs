@@ -579,8 +579,8 @@
             var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.True(
-                $"{address.Country} - {address.Town} - {address.PostalCode} - {address.FullAddress}"
-                == changedSale.ShipsTo);
+                changedSale.ShipsTo
+                == $"{address.Country} - {address.Town} - {address.PostalCode} - {address.FullAddress}");
         }
     }
 }

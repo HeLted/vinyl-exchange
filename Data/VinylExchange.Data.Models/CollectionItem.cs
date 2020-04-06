@@ -17,7 +17,7 @@
         public Release Release { get; set; }
 
         [Required]
-        public Guid ReleaseId { get; set; }
+        public Guid? ReleaseId { get; set; }
 
         [Required]
         public Condition SleeveGrade { get; set; }

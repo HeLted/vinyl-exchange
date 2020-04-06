@@ -1,5 +1,6 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Collections
 {
+    using System;
     #region
 
     using System.ComponentModel.DataAnnotations;
@@ -27,5 +28,8 @@
             (int)Condition.Mint,
             ErrorMessage = "Please select correct option for field")]
         public Condition VinylGrade { get; set; }
+
+        [Required]
+        public Guid? ReleaseId { get; set; }
     }
 }

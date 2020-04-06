@@ -88,7 +88,7 @@
         [Fact]
         public async Task GetAddressShouldReturnNullIfProvidedAddressIdIsNotExistingInDb()
         {
-            var address = (await this.dbContext.Addresses.AddAsync(new Address())).Entity;
+            await this.dbContext.Addresses.AddAsync(new Address());
 
             await this.dbContext.SaveChangesAsync();
 

@@ -32,14 +32,12 @@
 
         [HttpPost]
         public async Task<ActionResult<AddToCollectionResourceModel>> Add(
-            AddToCollectionInputModel inputModel,
-            Guid releaseId)
+            AddToCollectionInputModel inputModel)
         {
             try
             {
                 return await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                           inputModel,
-                           releaseId,
+                           inputModel,                         
                            this.GetUserId(this.User));
             }
             catch (Exception ex)

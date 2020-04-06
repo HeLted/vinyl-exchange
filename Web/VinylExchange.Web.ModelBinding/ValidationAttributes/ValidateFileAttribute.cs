@@ -45,7 +45,7 @@
                 if (file.Length > imageMaxContentSize)
                 {
                     return new ValidationResult(
-                        "Your image is too large, maximum allowed size is : " + imageMaxContentSize / 1024f / 1024f
+                        "Your image is too large, maximum allowed size is : " + ((imageMaxContentSize / 1024f) / 1024f)
                                                                               + "MB");
                 }
 
@@ -58,8 +58,8 @@
                 if (file.Length > audioMaxContentSize)
                 {
                     return new ValidationResult(
-                        "Your audio file is too large, maximum allowed size is : " + audioMaxContentSize / 1024f / 1024f
-                                                                                   + "MB");
+                        "Your audio file is too large, maximum allowed size is : "
+                        + ((audioMaxContentSize / 1024f) / 1024f) + "MB");
                 }
 
                 return ValidationResult.Success;
