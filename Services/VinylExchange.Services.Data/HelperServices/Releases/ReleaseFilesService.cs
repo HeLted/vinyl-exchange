@@ -34,7 +34,7 @@
             this.fileManager = fileManager;
         }
 
-        public async Task<List<ReleaseFile>> AddFilesForRelease(Guid releaseId, Guid formSessionId)
+        public async Task<List<ReleaseFile>> AddFilesForRelease(Guid? releaseId, Guid formSessionId)
         {
             var uploadFileUtilityModels = this.fileManager.RetrieveFilesFromCache(formSessionId);
 

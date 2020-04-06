@@ -22,7 +22,7 @@
 
         Task<TModel> EditSale<TModel>(EditSaleInputModel inputModel);
 
-        Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid releaseId);
+        Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid? releaseId);
 
         Task<TModel> GetSale<TModel>(Guid? saleId);
 
@@ -32,7 +32,7 @@
 
         Task<TModel> PlaceOrder<TModel>(PlaceOrderInputModel inputModel, Guid? buyerId);
 
-        Task<TModel> RemoveSale<TModel>(Guid saleId);
+        Task<TModel> RemoveSale<TModel>(Guid? saleId);
 
         Task<TModel> SetShippingPrice<TModel>(SetShippingPriceInputModel inputModel);
     }

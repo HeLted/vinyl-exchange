@@ -19,7 +19,6 @@
         [Range((int)Condition.Poor, (int)Condition.Mint, ErrorMessage = SelectCorrectEnumOption)]
         public Condition VinylGrade { get; set; }
 
-        
         [Required]
         [Range((int)Condition.Poor, (int)Condition.Mint, ErrorMessage = SelectCorrectEnumOption)]
         public Condition SleeveGrade { get; set; }
@@ -32,7 +31,7 @@
         [Required]
         [Range(0, 100000)]
         public decimal Price { get; set; }
-        
+
         [Required]
         [Display(Name = "Ships From")]
 
@@ -41,7 +40,5 @@
         [Required]
         [Display(Name = "Release Id")]
         public Guid? ReleaseId { get; set; }
-
-        
     }
 }

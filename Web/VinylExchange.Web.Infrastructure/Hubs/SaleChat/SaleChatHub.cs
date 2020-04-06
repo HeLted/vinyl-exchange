@@ -37,7 +37,8 @@
 
             if (sale != null)
             {
-                if (sale.SellerId == userId || sale.BuyerId == userId)
+                if (sale.SellerId == userId
+                    || sale.BuyerId == userId)
                 {
                     await this.Groups.AddToGroupAsync(this.Context.ConnectionId, roomName);
                 }
@@ -57,7 +58,8 @@
 
             if (sale != null)
             {
-                if (sale.SellerId == userId || sale.BuyerId == userId)
+                if (sale.SellerId == userId
+                    || sale.BuyerId == userId)
                 {
                     var messages = await this.saleMessagesService.GetMessagesForSale(saleId);
 

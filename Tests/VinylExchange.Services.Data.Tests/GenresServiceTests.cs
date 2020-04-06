@@ -19,21 +19,21 @@
 
     #endregion
 
-    [Collection("AutoMapperSetup")]
     public class GenresServiceTests
     {
-        public GenresServiceTests()
-        {
-            this.dbContext = DbFactory.CreateVinylExchangeDbContext();
-            this.genresService = new GenresService(this.dbContext);
-        }
-
         private readonly VinylExchangeDbContext dbContext;
 
         private readonly IGenresService genresService;
 
         private readonly CreateGenreInputModel testCreateGenreInputModel =
             new CreateGenreInputModel { Name = "Test Genre" };
+
+        public GenresServiceTests()
+        {
+            this.dbContext = DbFactory.CreateDbContext();
+
+            this.genresService = new GenresService(this.dbContext);
+        }
 
         [Fact]
         public async Task CreateGenreShouldCreateGenre()
@@ -64,7 +64,10 @@
         [Fact]
         public async Task GetAllGenresShouldGetAllGenres()
         {
-            for (var i = 0; i < 3; i++) await this.dbContext.Genres.AddAsync(new Genre());
+            for (var i = 0; i < 3; i++)
+            {
+                await this.dbContext.Genres.AddAsync(new Genre());
+            }
 
             await this.dbContext.SaveChangesAsync();
 

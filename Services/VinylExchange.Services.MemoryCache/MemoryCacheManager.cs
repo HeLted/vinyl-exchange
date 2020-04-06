@@ -223,7 +223,10 @@
         /// </summary>
         private void ClearKeys()
         {
-            foreach (var key in _allKeys.Where(p => !p.Value).Select(p => p.Key).ToList()) this.RemoveKey(key);
+            foreach (var key in _allKeys.Where(p => !p.Value).Select(p => p.Key).ToList())
+            {
+                this.RemoveKey(key);
+            }
         }
 
         /// <summary>

@@ -17,7 +17,7 @@
 
     #endregion
 
-    public class ReleasesService : IReleasesService
+    public class ReleasesService : IReleasesService, IReleasesEntityRetriever
     {
         private const int ReleasesToTake = 5;
 
@@ -46,7 +46,7 @@
             return trackedRelease.Entity.To<TModel>();
         }
 
-        public async Task<TModel> GetRelease<TModel>(Guid releaseId)
+        public async Task<TModel> GetRelease<TModel>(Guid? releaseId)
         {
             return await this.dbContext.Releases.Where(x => x.Id == releaseId).To<TModel>().FirstOrDefaultAsync();
         }
@@ -89,7 +89,12 @@
             return releases;
         }
 
-        private async Task AddStylesForRelease(Guid releaseId, ICollection<int> styleIds)
+        public async Task<Release> GetRelease(Guid? releaseId)
+        {
+            return await this.dbContext.Releases.Where(x => x.Id == releaseId).FirstOrDefaultAsync();
+        }
+
+        private async Task AddStylesForRelease(Guid? releaseId, ICollection<int> styleIds)
         {
             foreach (var styleId in styleIds)
             {

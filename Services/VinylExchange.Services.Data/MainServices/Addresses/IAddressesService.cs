@@ -14,7 +14,7 @@
     {
         Task<TModel> CreateAddress<TModel>(CreateAddressInputModel inputModel, Guid userId);
 
-        Task<TModel> GetAddressInfo<TModel>(Guid addressId);
+        Task<TModel> GetAddress<TModel>(Guid addressId);
 
         Task<List<TModel>> GetUserAddresses<TModel>(Guid userId);
 

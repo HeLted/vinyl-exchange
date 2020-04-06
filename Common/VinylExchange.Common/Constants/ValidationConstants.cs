@@ -6,11 +6,12 @@
 
         public const string InvalidMaxLength = "Invalid max length of field!";
 
-        public const string AllowedAplhaNumericBracesDashAndSpace = "Allowed characters are (A-Z,a-z,0-9,(,),-,whitespace)!";
+        public const string AllowedAplhaNumericBracesDashAndSpace =
+            "Allowed characters are (A-Z,a-z,0-9,(,),-,whitespace)!";
 
-        public const string AllowedAplhaNumericAndUnderscore= "Allowed characters are (A-Z,a-z,0-9,_)!";
+        public const string AllowedAplhaNumericAndUnderscore = "Allowed characters are (A-Z,a-z,0-9,_)!";
 
-        public const string AllowedAplhaNumericDotCommaAndSpace= "Allowed characters are (A-Z,a-z,0-9,.,comma, )!";
+        public const string AllowedAplhaNumericDotCommaAndSpace = "Allowed characters are (A-Z,a-z,0-9,.,comma, )!";
 
         public const string AllowedLettersOnly = "Allowed characters are (A-Z,a-z)!";
 

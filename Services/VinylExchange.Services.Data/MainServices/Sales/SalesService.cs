@@ -12,6 +12,9 @@
     using VinylExchange.Data;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Addresses;
+    using VinylExchange.Services.Data.MainServices.Releases;
+    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Sales;
 
@@ -23,20 +26,33 @@
     {
         private readonly VinylExchangeDbContext dbContext;
 
-        public SalesService(VinylExchangeDbContext dbContext)
+        private readonly IAddressesEntityRetriever addressesEntityRetriever;
+
+        private readonly IUsersEntityRetriever usersEntityRetriever;
+
+        private readonly IReleasesEntityRetriever releasesEntityRetriever;
+
+        public SalesService(
+            VinylExchangeDbContext dbContext,
+            IAddressesEntityRetriever addressesEntityRetriever,
+            IUsersEntityRetriever usersEntityRetriever,
+            IReleasesEntityRetriever releasesEntityRetriever)
         {
             this.dbContext = dbContext;
+            this.addressesEntityRetriever = addressesEntityRetriever;
+            this.usersEntityRetriever = usersEntityRetriever;
+            this.releasesEntityRetriever = releasesEntityRetriever;
         }
 
         public async Task<TModel> CreateSale<TModel>(CreateSaleInputModel inputModel, Guid sellerId)
         {
-            var release = await this.GetRelease(inputModel.ReleaseId);
-            
-            var address = await this.GetAddress(inputModel.ShipsFromAddressId);
+            var release = await this.releasesEntityRetriever.GetRelease(inputModel.ReleaseId);
 
-            var user = await this.GetUser(sellerId);
+            var address = await this.addressesEntityRetriever.GetAddress(inputModel.ShipsFromAddressId);
 
-            if(release == null)
+            var user = await this.usersEntityRetriever.GetUser(sellerId);
+
+            if (release == null)
             {
                 throw new NullReferenceException(ReleaseNotFound);
             }
@@ -70,7 +86,7 @@
         {
             var sale = await this.GetSale(inputModel.SaleId);
 
-            var address = await this.GetAddress(inputModel.ShipsFromAddressId);
+            var address = await this.addressesEntityRetriever.GetAddress(inputModel.ShipsFromAddressId);
 
             if (sale == null)
             {
@@ -101,7 +117,7 @@
             return sale.To<TModel>();
         }
 
-        public async Task<TModel> RemoveSale<TModel>(Guid saleId)
+        public async Task<TModel> RemoveSale<TModel>(Guid? saleId)
         {
             var sale = await this.GetSale(saleId);
 
@@ -116,7 +132,7 @@
             return removedAddress.To<TModel>();
         }
 
-        public async Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid releaseId)
+        public async Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid? releaseId)
         {
             return await this.dbContext.Sales.Where(s => s.ReleaseId == releaseId).Where(s => s.Status == Status.Open)
                        .To<TModel>().ToListAsync();
@@ -141,9 +157,9 @@
         {
             var sale = await this.GetSale(inputModel.SaleId);
 
-            var address = await this.GetAddress(inputModel.AddressId);
+            var address = await this.addressesEntityRetriever.GetAddress(inputModel.AddressId);
 
-            var user = await this.GetUser(buyerId);
+            var user = await this.usersEntityRetriever.GetUser(buyerId);
 
             if (sale == null)
             {
@@ -233,21 +249,6 @@
             await this.dbContext.SaveChangesAsync();
 
             return sale.To<TModel>();
-        }
-
-        private async Task<Release> GetRelease(Guid? releaseId)
-        {
-            return await this.dbContext.Releases.FirstOrDefaultAsync(r => r.Id == releaseId);
-        }
-
-        private async Task<Address> GetAddress(Guid? addressId)
-        {
-            return await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
-        }
-        
-        private async Task<VinylExchangeUser> GetUser(Guid? userId)
-        {
-            return await this.dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
         }
 
         private async Task<Sale> GetSale(Guid? saleId)

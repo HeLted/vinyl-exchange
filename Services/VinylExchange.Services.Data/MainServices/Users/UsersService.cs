@@ -20,7 +20,7 @@
 
     #endregion
 
-    public class UsersService : IUsersService
+    public class UsersService : IUsersService, IUsersEntityRetriever
     {
         private readonly IHttpContextAccessor contextAccessor;
 
@@ -44,7 +44,7 @@
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        public async Task<IdentityResult> ConfirmEmail(ConfirmEmailInputModel inputModel,Guid userId)
+        public async Task<IdentityResult> ConfirmEmail(ConfirmEmailInputModel inputModel, Guid userId)
         {
             var user = await this.userManager.FindByIdAsync(userId.ToString());
 
@@ -58,7 +58,7 @@
             return identityResult;
         }
 
-        public async Task<IdentityResult> ChangeEmail(ChangeEmailInputModel inputModel,Guid userId)
+        public async Task<IdentityResult> ChangeEmail(ChangeEmailInputModel inputModel, Guid userId)
         {
             var user = await this.userManager.FindByIdAsync(userId.ToString());
 
@@ -67,7 +67,10 @@
                 throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
             }
 
-            var identityResult = await this.userManager.ChangeEmailAsync(user,inputModel.NewEmail,inputModel.ChangeEmailToken);
+            var identityResult = await this.userManager.ChangeEmailAsync(
+                                     user,
+                                     inputModel.NewEmail,
+                                     inputModel.ChangeEmailToken);
 
             return identityResult;
         }
@@ -81,7 +84,10 @@
                 throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
             }
 
-            var identityResult = await this.userManager.ResetPasswordAsync(user,inputModel.ResetPasswordToken,inputModel.NewPassword);
+            var identityResult = await this.userManager.ResetPasswordAsync(
+                                     user,
+                                     inputModel.ResetPasswordToken,
+                                     inputModel.NewPassword);
 
             return identityResult;
         }
@@ -126,7 +132,7 @@
             await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Confirmation Email", emailContent);
         }
 
-        public async Task SendChangeEmailEmail(SendChangeEmailEmailInputModel inputModel,Guid userId)
+        public async Task SendChangeEmailEmail(SendChangeEmailEmailInputModel inputModel, Guid userId)
         {
             var user = await this.userManager.FindByIdAsync(userId.ToString());
 
@@ -135,7 +141,7 @@
                 throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
             }
 
-            var emailContent = await this.ConstructChangeEmailEmailContent(user,inputModel.NewEmail);
+            var emailContent = await this.ConstructChangeEmailEmailContent(user, inputModel.NewEmail);
 
             await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Change Your Email", emailContent);
         }
@@ -168,6 +174,11 @@
             await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Password Reset", emailContent);
         }
 
+        public async Task<VinylExchangeUser> GetUser(Guid? userId)
+        {
+            return await this.userManager.FindByIdAsync(userId.ToString());
+        }
+
         private async Task<string> ConstructConfirmationEmailContent(VinylExchangeUser user)
         {
             var emailConfirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -183,31 +194,29 @@
             return confirmEmailHtmlContent;
         }
 
-        private async Task<string> ConstructChangeEmailEmailContent(VinylExchangeUser user,string newEmail)
+        private async Task<string> ConstructChangeEmailEmailContent(VinylExchangeUser user, string newEmail)
         {
-            var changeEmailConfirmationToken = await this.userManager.GenerateChangeEmailTokenAsync(user,newEmail);
+            var changeEmailConfirmationToken = await this.userManager.GenerateChangeEmailTokenAsync(user, newEmail);
 
             var request = this.contextAccessor.HttpContext.Request;
 
             var emailChangeUrl = request.Scheme + "://" + request.Host
-                                       + $"/Authentication/ChangeEmail?cofirmToken={changeEmailConfirmationToken}";
+                                 + $"/Authentication/ChangeEmail?cofirmToken={changeEmailConfirmationToken}";
 
             var changeEmailHtmlContent =
                 $@"<h1>Change Your Vinyl Exchange Email</h1>.Follow This <a href=""{emailChangeUrl}"">Link</a>";
 
-            return changeEmailHtmlContent ;
+            return changeEmailHtmlContent;
         }
 
         private async Task<string> ConstructChangePasswordEmailContent(VinylExchangeUser user)
         {
             var changePasswordConfirmationToken = await this.userManager.GeneratePasswordResetTokenAsync(user);
-            
+
             var changePasswordHtmlContent =
                 $@"<h1>Change Your Vinyl Exchange Password</h1><h3>Your password change/reset token is: {changePasswordConfirmationToken}<h3>";
 
-            return changePasswordHtmlContent ;
+            return changePasswordHtmlContent;
         }
-
-        
     }
 }

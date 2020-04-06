@@ -35,7 +35,7 @@
         [MinLength(3)]
         [MaxLength(300)]
         [RegularExpression(AlphaNumericDotCommaAndSpace)]
-        
+
         public string FullAddress { get; set; }
 
         public VinylExchangeUser User { get; set; }

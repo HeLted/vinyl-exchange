@@ -182,7 +182,7 @@ namespace VinylExchange.Data.Migrations
 
                         b.Property<string>("Town").IsRequired().HasColumnType("nvarchar(40)").HasMaxLength(40);
 
-                        b.Property<Guid>("UserId").HasColumnType("uniqueidentifier");
+                        b.Property<Guid?>("UserId").IsRequired().HasColumnType("uniqueidentifier");
 
                         b.HasKey("Id");
 
@@ -197,7 +197,7 @@ namespace VinylExchange.Data.Migrations
                     {
                         b.Property<Guid>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
 
-                        b.Property<string>("Description").IsRequired().HasColumnType("nvarchar(max)");
+                        b.Property<string>("Description").HasColumnType("nvarchar(max)");
 
                         b.Property<Guid>("ReleaseId").HasColumnType("uniqueidentifier");
 
@@ -235,23 +235,23 @@ namespace VinylExchange.Data.Migrations
                 "VinylExchange.Data.Models.Release",
                 b =>
                     {
-                        b.Property<Guid>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
+                        b.Property<Guid?>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
 
-                        b.Property<string>("Artist").IsRequired().HasColumnType("nvarchar(max)");
+                        b.Property<string>("Artist").IsRequired().HasColumnType("nvarchar(40)").HasMaxLength(40);
 
                         b.Property<DateTime>("CreatedOn").HasColumnType("datetime2");
 
                         b.Property<DateTime?>("DeletedOn").HasColumnType("datetime2");
 
-                        b.Property<string>("Format").IsRequired().HasColumnType("nvarchar(max)");
+                        b.Property<string>("Format").IsRequired().HasColumnType("nvarchar(15)").HasMaxLength(15);
 
                         b.Property<bool>("IsDeleted").HasColumnType("bit");
 
-                        b.Property<string>("Label").IsRequired().HasColumnType("nvarchar(max)");
+                        b.Property<string>("Label").IsRequired().HasColumnType("nvarchar(30)").HasMaxLength(30);
 
                         b.Property<DateTime?>("ModifiedOn").HasColumnType("datetime2");
 
-                        b.Property<string>("Title").IsRequired().HasColumnType("nvarchar(max)");
+                        b.Property<string>("Title").IsRequired().HasColumnType("nvarchar(40)").HasMaxLength(40);
 
                         b.Property<int>("Year").HasColumnType("int");
 
@@ -264,7 +264,7 @@ namespace VinylExchange.Data.Migrations
                 "VinylExchange.Data.Models.ReleaseFile",
                 b =>
                     {
-                        b.Property<Guid>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
+                        b.Property<Guid?>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
 
                         b.Property<DateTime>("CreatedOn").HasColumnType("datetime2");
 
@@ -282,7 +282,7 @@ namespace VinylExchange.Data.Migrations
 
                         b.Property<string>("Path").IsRequired().HasColumnType("nvarchar(max)");
 
-                        b.Property<Guid>("ReleaseId").HasColumnType("uniqueidentifier");
+                        b.Property<Guid?>("ReleaseId").IsRequired().HasColumnType("uniqueidentifier");
 
                         b.HasKey("Id");
 
@@ -295,7 +295,7 @@ namespace VinylExchange.Data.Migrations
                 "VinylExchange.Data.Models.Sale",
                 b =>
                     {
-                        b.Property<Guid>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
+                        b.Property<Guid?>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
 
                         b.Property<Guid?>("BuyerId").HasColumnType("uniqueidentifier");
 
@@ -303,7 +303,7 @@ namespace VinylExchange.Data.Migrations
 
                         b.Property<DateTime?>("DeletedOn").HasColumnType("datetime2");
 
-                        b.Property<string>("Description").IsRequired().HasColumnType("nvarchar(max)");
+                        b.Property<string>("Description").IsRequired().HasColumnType("nvarchar(400)").HasMaxLength(400);
 
                         b.Property<bool>("IsDeleted").HasColumnType("bit");
 
@@ -315,7 +315,7 @@ namespace VinylExchange.Data.Migrations
 
                         b.Property<Guid?>("ReleaseId").HasColumnType("uniqueidentifier");
 
-                        b.Property<Guid?>("SellerId").HasColumnType("uniqueidentifier");
+                        b.Property<Guid?>("SellerId").IsRequired().HasColumnType("uniqueidentifier");
 
                         b.Property<decimal>("ShippingPrice").HasColumnType("decimal(18,4)");
 
@@ -344,7 +344,7 @@ namespace VinylExchange.Data.Migrations
                 "VinylExchange.Data.Models.SaleLog",
                 b =>
                     {
-                        b.Property<Guid>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
+                        b.Property<Guid?>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
 
                         b.Property<string>("Content").IsRequired().HasColumnType("nvarchar(max)");
 
@@ -365,7 +365,7 @@ namespace VinylExchange.Data.Migrations
                 "VinylExchange.Data.Models.SaleMessage",
                 b =>
                     {
-                        b.Property<Guid>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
+                        b.Property<Guid?>("Id").ValueGeneratedOnAdd().HasColumnType("uniqueidentifier");
 
                         b.Property<string>("Content").IsRequired().HasColumnType("nvarchar(150)").HasMaxLength(150);
 
@@ -411,7 +411,7 @@ namespace VinylExchange.Data.Migrations
                     {
                         b.Property<int>("StyleId").HasColumnType("int");
 
-                        b.Property<Guid>("ReleaseId").HasColumnType("uniqueidentifier");
+                        b.Property<Guid?>("ReleaseId").HasColumnType("uniqueidentifier");
 
                         b.HasKey("StyleId", "ReleaseId");
 
@@ -584,7 +584,7 @@ namespace VinylExchange.Data.Migrations
                             .HasForeignKey("ReleaseId");
 
                         b.HasOne("VinylExchange.Data.Models.VinylExchangeUser", "Seller").WithMany("Sales")
-                            .HasForeignKey("SellerId").OnDelete(DeleteBehavior.Restrict);
+                            .HasForeignKey("SellerId").OnDelete(DeleteBehavior.Restrict).IsRequired();
                     });
 
             modelBuilder.Entity(

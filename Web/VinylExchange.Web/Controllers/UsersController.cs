@@ -62,7 +62,8 @@
         {
             try
             {
-                var confirmEmailIdentityResult = await this.userService.ConfirmEmail(inputModel, this.GetUserId(this.User));
+                var confirmEmailIdentityResult =
+                    await this.userService.ConfirmEmail(inputModel, this.GetUserId(this.User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -85,7 +86,8 @@
         {
             try
             {
-                var confirmEmailIdentityResult = await this.userService.ChangeEmail(inputModel, this.GetUserId(this.User));
+                var confirmEmailIdentityResult =
+                    await this.userService.ChangeEmail(inputModel, this.GetUserId(this.User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -100,7 +102,6 @@
                 return this.BadRequest();
             }
         }
-
 
         [HttpPost]
         [Route("ResetPassword")]
@@ -252,6 +253,7 @@
                 return this.BadRequest();
             }
         }
+
         [HttpPost]
         [Route("SendResetPasswordEmail")]
         public async Task<ActionResult> SendResetPasswordEmail(SendResetPasswordEmailInputModel inputModel)

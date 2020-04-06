@@ -69,7 +69,7 @@
         {
             try
             {
-                var addressInfoModel = await this.addressesService.GetAddressInfo<GetAddressInfoUtilityModel>(id);
+                var addressInfoModel = await this.addressesService.GetAddress<GetAddressInfoUtilityModel>(id);
 
                 if (addressInfoModel == null)
                 {

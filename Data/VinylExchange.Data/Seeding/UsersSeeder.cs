@@ -21,8 +21,8 @@
             var userManager = serviceProvider.GetRequiredService<UserManager<VinylExchangeUser>>();
 
             await SeedAdminAsync(dbContext, userManager, "sysadmin", "aphextwindrukqs22", "sysadmin@vinylexchange.com");
-            await SeedUserAsync(dbContext,userManager,"testUserOne","testUserOnePassword","testUserOne@gmail.com");
-            await SeedUserAsync(dbContext,userManager,"testUserTwo","testUserTwoPassword","testUserTwo@gmail.com");
+            await SeedUserAsync(dbContext, userManager, "testUserOne", "testUserOnePassword", "testUserOne@gmail.com");
+            await SeedUserAsync(dbContext, userManager, "testUserTwo", "testUserTwoPassword", "testUserTwo@gmail.com");
         }
 
         private static async Task SeedAdminAsync(

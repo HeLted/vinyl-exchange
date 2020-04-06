@@ -60,7 +60,8 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleModel.BuyerId == currentUserId && saleModel.Status == Status.PaymentPending)
+                if (saleModel.BuyerId == currentUserId
+                    && saleModel.Status == Status.PaymentPending)
                 {
                     var saleStatusModel = await this.salesService.CompletePayment<SaleStatusResourceModel>(inputModel);
 
@@ -97,7 +98,8 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleModel.BuyerId == currentUserId && saleModel.Status == Status.Sent)
+                if (saleModel.BuyerId == currentUserId
+                    && saleModel.Status == Status.Sent)
                 {
                     var saleStatusModel =
                         await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(inputModel);
@@ -134,7 +136,8 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleModel.SellerId == currentUserId && saleModel.Status == Status.Paid)
+                if (saleModel.SellerId == currentUserId
+                    && saleModel.Status == Status.Paid)
                 {
                     var saleStatusModel = await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(inputModel);
 
@@ -184,8 +187,9 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleInfoModel.BuyerId != currentUserId && saleInfoModel.SellerId != currentUserId
-                                                           && saleInfoModel.Status != Status.Open)
+                if (saleInfoModel.BuyerId != currentUserId
+                    && saleInfoModel.SellerId != currentUserId
+                    && saleInfoModel.Status != Status.Open)
                 {
                     return this.Forbid();
                 }
@@ -261,8 +265,9 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleInfoModel.SellerId == currentUserId || saleInfoModel.BuyerId == currentUserId
-                                                            || saleInfoModel.Status != Status.Open)
+                if (saleInfoModel.SellerId == currentUserId
+                    || saleInfoModel.BuyerId == currentUserId
+                    || saleInfoModel.Status != Status.Open)
                 {
                     return this.Forbid();
                 }
@@ -325,7 +330,8 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleInfoModel.SellerId == currentUserId && saleInfoModel.Status == Status.ShippingNegotiation)
+                if (saleInfoModel.SellerId == currentUserId
+                    && saleInfoModel.Status == Status.ShippingNegotiation)
                 {
                     var saleStatusModel = await this.salesService.SetShippingPrice<SaleStatusResourceModel>(inputModel);
 
@@ -362,7 +368,8 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleInfoModel.SellerId == currentUserId && saleInfoModel.Status == Status.Open)
+                if (saleInfoModel.SellerId == currentUserId
+                    && saleInfoModel.Status == Status.Open)
                 {
                     var saleModel = await this.salesService.EditSale<EditSaleResourceModel>(inputModel);
 

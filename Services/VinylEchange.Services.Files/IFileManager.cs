@@ -15,7 +15,7 @@
 
         IEnumerable<TModel> MapFilesToDbObjects<TModel>(
             IEnumerable<UploadFileUtilityModel> uploadFileUtilityModels,
-            Guid entityId,
+            Guid? entityId,
             string entityIdPropertyName,
             string subFolderName);
 

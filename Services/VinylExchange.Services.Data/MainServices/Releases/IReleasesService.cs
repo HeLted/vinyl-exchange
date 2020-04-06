@@ -14,7 +14,7 @@
     {
         Task<TModel> CreateRelease<TModel>(CreateReleaseInputModel inputModel, Guid formSessionId);
 
-        Task<TModel> GetRelease<TModel>(Guid releaseId);
+        Task<TModel> GetRelease<TModel>(Guid? releaseId);
 
         Task<List<TModel>> GetReleases<TModel>(
             string searchTerm,

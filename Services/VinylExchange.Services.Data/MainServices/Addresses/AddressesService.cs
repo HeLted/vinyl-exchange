@@ -17,7 +17,7 @@
 
     #endregion
 
-    public class AddressesService : IAddressesService
+    public class AddressesService : IAddressesService, IAddressesEntityRetriever
     {
         private readonly VinylExchangeDbContext dbContext;
 
@@ -39,7 +39,12 @@
             return trackedAddress.Entity.To<TModel>();
         }
 
-        public async Task<TModel> GetAddressInfo<TModel>(Guid addressId)
+        public object Get()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<TModel> GetAddress<TModel>(Guid addressId)
         {
             return await this.dbContext.Addresses.Where(a => a.Id == addressId).To<TModel>().FirstOrDefaultAsync();
         }
@@ -62,6 +67,11 @@
             await this.dbContext.SaveChangesAsync();
 
             return removedAddress.To<TModel>();
+        }
+
+        public async Task<Address> GetAddress(Guid? addressId)
+        {
+            return await this.dbContext.Addresses.Where(a => a.Id == addressId).FirstOrDefaultAsync();
         }
     }
 }

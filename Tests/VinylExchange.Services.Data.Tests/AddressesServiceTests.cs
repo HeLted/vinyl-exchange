@@ -16,19 +16,13 @@
     using VinylExchange.Web.Models.InputModels.Addresses;
     using VinylExchange.Web.Models.ResourceModels.Addresses;
     using VinylExchange.Web.Models.Utility.Addresses;
+
     using Xunit;
 
     #endregion
 
-    [Collection("AutoMapperSetup")]
     public class AddressesServiceTests
     {
-        public AddressesServiceTests()
-        {
-            this.dbContext = DbFactory.CreateVinylExchangeDbContext();
-            this.addressesService = new AddressesService(this.dbContext);
-        }
-
         private readonly IAddressesService addressesService;
 
         private readonly VinylExchangeDbContext dbContext;
@@ -38,6 +32,13 @@
                 {
                     Country = "Bulgaria", Town = "Sofia", PostalCode = "1612", FullAddress = "Test"
                 };
+
+        public AddressesServiceTests()
+        {
+            this.dbContext = DbFactory.CreateDbContext();
+
+            this.addressesService = new AddressesService(this.dbContext);
+        }
 
         [Fact]
         public async Task CreateAddressShouldCreateAddress()
@@ -73,27 +74,26 @@
         }
 
         [Fact]
-        public async Task GetAddressInfoShouldReturnCorrectAddress()
+        public async Task GetAddressShouldReturnCorrectAddress()
         {
             var address = (await this.dbContext.Addresses.AddAsync(new Address())).Entity;
 
             await this.dbContext.SaveChangesAsync();
 
-            var returnedAddressModel =
-                await this.addressesService.GetAddressInfo<GetAddressInfoUtilityModel>(address.Id);
+            var returnedAddressModel = await this.addressesService.GetAddress<GetAddressInfoUtilityModel>(address.Id);
 
             Assert.Equal(address.Id, returnedAddressModel.Id);
         }
 
         [Fact]
-        public async Task GetAddressInfoShouldReturnNullIfProvidedAddressIdIsNotExistingInDb()
+        public async Task GetAddressShouldReturnNullIfProvidedAddressIdIsNotExistingInDb()
         {
             var address = (await this.dbContext.Addresses.AddAsync(new Address())).Entity;
 
             await this.dbContext.SaveChangesAsync();
 
             var returnedAddressModel =
-                await this.addressesService.GetAddressInfo<GetAddressInfoUtilityModel>(Guid.NewGuid());
+                await this.addressesService.GetAddress<GetAddressInfoUtilityModel>(Guid.NewGuid());
 
             Assert.Null(returnedAddressModel);
         }
@@ -103,7 +103,10 @@
         {
             var userId = Guid.NewGuid();
 
-            for (var i = 0; i < 3; i++) await this.dbContext.Addresses.AddAsync(new Address { UserId = userId });
+            for (var i = 0; i < 3; i++)
+            {
+                await this.dbContext.Addresses.AddAsync(new Address { UserId = userId });
+            }
 
             await this.dbContext.SaveChangesAsync();
 
@@ -118,7 +121,10 @@
         {
             var userId = Guid.NewGuid();
 
-            for (var i = 0; i < 3; i++) await this.dbContext.Addresses.AddAsync(new Address { UserId = userId });
+            for (var i = 0; i < 3; i++)
+            {
+                await this.dbContext.Addresses.AddAsync(new Address { UserId = userId });
+            }
 
             await this.dbContext.SaveChangesAsync();
 

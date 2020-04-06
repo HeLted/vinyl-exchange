@@ -35,14 +35,16 @@
         {
             var filesContent = new List<byte[]>();
             foreach (var fileUtilityModel in uploadFileUtilityModels)
+            {
                 filesContent.Add(fileUtilityModel.FileByteContent);
+            }
 
             return filesContent;
         }
 
         public IEnumerable<TModel> MapFilesToDbObjects<TModel>(
             IEnumerable<UploadFileUtilityModel> uploadFileUtilityModels,
-            Guid entityId,
+            Guid? entityId,
             string entityIdPropertyName,
             string subFolderName)
         {

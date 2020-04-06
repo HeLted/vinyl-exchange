@@ -18,6 +18,7 @@ namespace VinylExchange.Web
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
@@ -72,7 +73,8 @@ namespace VinylExchange.Web
                     dbContext.Database.Migrate();
                 }
 
-                new VinylExchangeDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+                new VinylExchangeDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter()
+                    .GetResult();
             }
 
             AutoMapperConfig.RegisterMappings(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly);
@@ -94,12 +96,12 @@ namespace VinylExchange.Web
             app.UseStaticFiles();
             app.UseFileServer(
                 new FileServerOptions
-                {
-                    FileProvider = new PhysicalFileProvider(
+                    {
+                        FileProvider = new PhysicalFileProvider(
                             Path.Combine(Directory.GetCurrentDirectory(), "MediaStorage")),
-                    RequestPath = "/File/Media",
-                    EnableDirectoryBrowsing = true
-                });
+                        RequestPath = "/File/Media",
+                        EnableDirectoryBrowsing = true
+                    });
 
             app.UseSpaStaticFiles();
 
@@ -121,7 +123,8 @@ namespace VinylExchange.Web
                     {
                         var path = context.Request.Path.Value;
 
-                        if (string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) || string.Equals(
+                        if (string.Equals(path, "/", StringComparison.OrdinalIgnoreCase)
+                            || string.Equals(
                                 path,
                                 "/Authentication/Logout-Callback",
                                 StringComparison.OrdinalIgnoreCase))
@@ -189,10 +192,10 @@ namespace VinylExchange.Web
                         options.SecurityTokenValidators.Clear();
                         options.SecurityTokenValidators.Add(
                             new JwtSecurityTokenHandler
-                            {
-                                // Disable the built-in JWT claims mapping feature.
-                                InboundClaimTypeMap = new Dictionary<string, string>()
-                            });
+                                {
+                                    // Disable the built-in JWT claims mapping feature.
+                                    InboundClaimTypeMap = new Dictionary<string, string>()
+                                });
                     }).AddIdentityServerJwt();
 
             services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>()
@@ -228,7 +231,13 @@ namespace VinylExchange.Web
             services.AddTransient<ISaleLogsService, SaleLogsService>();
             services.AddTransient<IUsersService, UsersService>();
 
+            // Entity Retrievers
+            services.AddTransient<IUsersEntityRetriever, UsersService>();
+            services.AddTransient<IAddressesEntityRetriever, AddressesService>();
+            services.AddTransient<IReleasesEntityRetriever, ReleasesService>();
+
             // Tool Services
+            services.AddTransient<IMemoryCache, MemoryCache>();
             services.AddTransient<MemoryCacheManager>();
             services.AddTransient<IMemoryCacheFileSevice, MemoryCacheFileService>();
             services.AddTransient<IFileManager, FileManager>();

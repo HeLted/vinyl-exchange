@@ -31,7 +31,7 @@
         [Required]
         [MinLength(3, ErrorMessage = InvalidMinLength)]
         [MaxLength(40, ErrorMessage = InvalidMaxLength)]
-        [RegularExpression(AplhaNumericBracesDashAndSpace , ErrorMessage = AllowedAplhaNumericBracesDashAndSpace)]
+        [RegularExpression(AplhaNumericBracesDashAndSpace, ErrorMessage = AllowedAplhaNumericBracesDashAndSpace)]
 
         public string PostalCode { get; set; }
 

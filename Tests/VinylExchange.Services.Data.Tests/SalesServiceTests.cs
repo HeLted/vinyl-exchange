@@ -9,10 +9,15 @@
 
     using Microsoft.EntityFrameworkCore;
 
+    using Moq;
+
     using VinylExchange.Data;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Addresses;
+    using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Web.Models.InputModels.Sales;
     using VinylExchange.Web.Models.ResourceModels.Sales;
@@ -23,38 +28,62 @@
 
     #endregion
 
-    [Collection("AutoMapperSetup")]
     public class SalesServiceTests
     {
         private readonly VinylExchangeDbContext dbContext;
 
         private readonly ISalesService salesService;
 
+        private readonly Mock<IAddressesEntityRetriever> addressesEntityRetrieverMock;
+
+        private readonly Mock<IUsersEntityRetriever> usersEntityRetrieverMock;
+
+        private readonly Mock<IReleasesEntityRetriever> releasesEntityRetrieverMock;
+
         private readonly CreateSaleInputModel testCreateSaleInputModel = new CreateSaleInputModel
-        {
-            VinylGrade = Condition.Mint,
-            SleeveGrade = Condition.Fair,
-            Price = 30,
-            Description = "test description"
-        };
+            {
+                VinylGrade = Condition.Mint,
+                SleeveGrade = Condition.Fair,
+                Price = 30,
+                Description = "test description"
+            };
+
+        private readonly Address testAddress = new Address
+            {
+                Country = "Bulgaria", Town = "Sofia", PostalCode = "1612", FullAddress = "j.k Lagera blok 123"
+            };
 
         public SalesServiceTests()
         {
-            this.dbContext = DbFactory.CreateVinylExchangeDbContext();
+            this.dbContext = DbFactory.CreateDbContext();
 
-            this.salesService = new SalesService(this.dbContext);
+            this.addressesEntityRetrieverMock = new Mock<IAddressesEntityRetriever>();
 
-            Task.Run(async () => { await this.AddSalesTestData(); }).Wait();
+            this.usersEntityRetrieverMock = new Mock<IUsersEntityRetriever>();
+
+            this.releasesEntityRetrieverMock = new Mock<IReleasesEntityRetriever>();
+
+            this.salesService = new SalesService(
+                this.dbContext,
+                this.addressesEntityRetrieverMock.Object,
+                this.usersEntityRetrieverMock.Object,
+                this.releasesEntityRetrieverMock.Object);
         }
 
         [Fact]
         public async Task CreateSaleShouldCreateSale()
         {
-            var release = await this.dbContext.Releases.FirstAsync();
+            var release = new Release();
 
-            var seller = await this.dbContext.Users.FirstAsync();
+            var seller = new VinylExchangeUser();
 
-            var address = await this.dbContext.Addresses.FirstAsync();
+            var address = new Address();
+
+            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             this.testCreateSaleInputModel.ReleaseId = release.Id;
 
@@ -73,18 +102,19 @@
         [Fact]
         public async Task CreateSaleShouldCreateSaleWithCorrectData()
         {
-            var release = await this.dbContext.Releases.FirstAsync();
+            var release = new Release();
 
-            var seller = await this.dbContext.Users.FirstAsync();
+            var seller = new VinylExchangeUser();
 
-            var address = await this.dbContext.Addresses.FirstAsync();
+            var address = this.testAddress;
 
-            var addressProperties = new List<string>
-            {
-                address.Country,
+            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
 
-                address.Town
-            };
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+
+            var addressProperties = new List<string> { address.Country, address.Town };
 
             this.testCreateSaleInputModel.ReleaseId = release.Id;
 
@@ -107,13 +137,15 @@
         [Fact]
         public async Task CreateSaleShouldThrowNullRefferenceExceptionIfProvidedReleaseIdIsNotInDb()
         {
-            var address = await this.dbContext.Addresses.FirstAsync();
+            var address = new Address();
 
-            var seller = await this.dbContext.Users.FirstAsync();
+            var seller = new VinylExchangeUser();
 
-            this.testCreateSaleInputModel.ShipsFromAddressId = address.Id;
+            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync((Release)null);
 
-            this.testCreateSaleInputModel.ReleaseId = Guid.NewGuid();
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
@@ -126,13 +158,15 @@
         [Fact]
         public async Task CreateSaleShouldThrowNullRefferenceExceptionIfProvidedAddressIdIsNotInDb()
         {
-            var release = await this.dbContext.Releases.FirstAsync();
+            var release = new Release();
 
-            var seller = await this.dbContext.Users.FirstAsync();
+            var seller = new VinylExchangeUser();
 
-            this.testCreateSaleInputModel.ShipsFromAddressId = Guid.NewGuid();
+            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
 
-            this.testCreateSaleInputModel.ReleaseId = release.Id;
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync((Address)null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
@@ -145,12 +179,16 @@
         [Fact]
         public async Task CreateSaleShouldThrowNullRefferenceExceptionIfProvidedUserIdIsNotInDb()
         {
-            var release = await this.dbContext.Releases.FirstAsync();
+            var release = new Release();
 
-            var address = await this.dbContext.Addresses.FirstAsync();
+            var address = new Address();
 
-            this.testCreateSaleInputModel.ShipsFromAddressId = address.Id;
-            this.testCreateSaleInputModel.ReleaseId = release.Id;
+            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>()))
+                .ReturnsAsync((VinylExchangeUser)null);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
@@ -163,30 +201,41 @@
         [Fact]
         public async Task EditSaleShouldEditSaleWithCorrectData()
         {
-            var initialAddress = await this.dbContext.Addresses.FirstAsync();
+            var release = new Release();
 
-            var sale = await this.dbContext.Sales.FirstAsync();
+            var user = new VinylExchangeUser();
 
-            sale.ShipsFrom = $"{initialAddress.Country} - {initialAddress.Town}";
+            var updatedAddress = this.testAddress;
 
-            var updatedAddress = await this.dbContext.Addresses.Skip(1).FirstAsync();
+            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
 
-            var addressProperties = new List<string>
-            {
-                updatedAddress.Country,
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-                updatedAddress.Town
-            };
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(updatedAddress);
+
+            var addressProperties = new List<string> { updatedAddress.Country, updatedAddress.Town };
+
+            var sale = new Sale
+                {
+                    VinylGrade = Condition.Poor,
+                    SleeveGrade = Condition.NearMint,
+                    Description = "blbbebe",
+                    Price = 50,
+                    ShipsFrom = "Paris France"
+                };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
 
             var editSaleInputModel = new EditSaleInputModel
-            {
-                VinylGrade = Condition.Mint,
-                SleeveGrade = Condition.Mint,
-                Description = "updated description",
-                ShipsFromAddressId = updatedAddress.Id,
-                Price = 100,
-                SaleId = sale.Id
-            };
+                {
+                    VinylGrade = Condition.Mint,
+                    SleeveGrade = Condition.Mint,
+                    Description = "updated description",
+                    Price = 100,
+                    SaleId = sale.Id
+                };
 
             await this.salesService.EditSale<EditSaleResourceModel>(editSaleInputModel);
 
@@ -203,13 +252,15 @@
         [Fact]
         public async Task EditSaleShouldThrowNullRefferenceExceptionIfProvidedAddressIdIsNotInDb()
         {
-            var sale = await this.dbContext.Sales.FirstAsync();
+            var sale = new Sale();
 
-            var editSaleInputModel = new EditSaleInputModel
-            {
-                SaleId = sale.Id,
-                ShipsFromAddressId = Guid.NewGuid()
-            };
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync((Address)null);
+
+            var editSaleInputModel = new EditSaleInputModel { SaleId = sale.Id, ShipsFromAddressId = Guid.NewGuid() };
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.EditSale<EditSaleResourceModel>(
@@ -221,13 +272,9 @@
         [Fact]
         public async Task EditSaleShouldThrowNullRefferenceExceptionIfProvidedSaleIdIsNotInDb()
         {
-            var address = await this.dbContext.Addresses.FirstAsync();
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(new Address());
 
-            var editSaleInputModel = new EditSaleInputModel
-            {
-                SaleId = Guid.NewGuid(),
-                ShipsFromAddressId = address.Id
-            };
+            var editSaleInputModel = new EditSaleInputModel();
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.EditSale<EditSaleResourceModel>(
@@ -239,7 +286,9 @@
         [Fact]
         public async Task RemoveSaleShouldRemoveSale()
         {
-            var sale = await this.dbContext.Sales.FirstAsync();
+            var sale = new Sale();
+
+            await this.dbContext.Sales.AddAsync(sale);
 
             await this.dbContext.SaveChangesAsync();
 
@@ -267,31 +316,20 @@
 
             var secondRelease = new Release();
 
-            var saleIds = new List<Guid>();
+            var saleIds = new List<Guid?>();
 
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale
-                {
-                    Status = Status.Open,
-
-                    ReleaseId = release.Id
-                };
+                var sale = new Sale { Status = Status.Open, ReleaseId = release.Id };
 
                 await this.dbContext.Sales.AddAsync(sale);
 
                 saleIds.Add(sale.Id);
             }
 
-
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale
-                {
-                    Status = Status.Open,
-
-                    ReleaseId = secondRelease.Id
-                };
+                var sale = new Sale { Status = Status.Open, ReleaseId = secondRelease.Id };
 
                 await this.dbContext.Sales.AddAsync(sale);
 
@@ -300,10 +338,11 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            var saleModels = await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(release.Id);
+            var saleModels =
+                await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(release.Id);
 
             Assert.True(saleModels.Count == release.Sales.Count);
-            Assert.True(saleModels.Select(sm => saleIds.Contains(sm.Id)).All(x => x == true));
+            Assert.True(saleModels.Select(sm => saleIds.Contains(sm.Id)).All(x => x));
         }
 
         [Fact]
@@ -311,26 +350,19 @@
         {
             var release = new Release();
 
-
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale
-                {
-                    Status = Status.Finished,
-
-                    ReleaseId = release.Id
-                };
+                var sale = new Sale { Status = Status.Finished, ReleaseId = release.Id };
 
                 await this.dbContext.Sales.AddAsync(sale);
-
             }
 
             await this.dbContext.SaveChangesAsync();
 
-            var saleModels = await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(release.Id);
+            var saleModels =
+                await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(release.Id);
 
             Assert.True(saleModels.Count == 0);
-
         }
 
         [Fact]
@@ -338,23 +370,17 @@
         {
             var release = new Release();
 
-
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale
-                {
-                    Status = Status.Finished,
-
-                    ReleaseId = release.Id
-                };
+                var sale = new Sale { Status = Status.Finished, ReleaseId = release.Id };
 
                 await this.dbContext.Sales.AddAsync(sale);
-
             }
 
             await this.dbContext.SaveChangesAsync();
 
-            var saleModels = await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(Guid.NewGuid());
+            var saleModels =
+                await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(Guid.NewGuid());
 
             Assert.True(saleModels.Count == 0);
         }
@@ -390,28 +416,20 @@
         [Fact]
         public async Task GetUserPurchasesShouldGetUserPurchases()
         {
-            var user = await this.dbContext.Users.FirstAsync();
+            var user = new VinylExchangeUser();
 
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale
-                {
-                    BuyerId = user.Id
-                };
+                var sale = new Sale { BuyerId = user.Id };
 
                 await this.dbContext.Sales.AddAsync(sale);
-
             }
 
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale
-                {
-                    BuyerId = Guid.NewGuid()
-                };
+                var sale = new Sale { BuyerId = Guid.NewGuid() };
 
                 await this.dbContext.Sales.AddAsync(sale);
-
             }
 
             await this.dbContext.SaveChangesAsync();
@@ -424,17 +442,13 @@
         [Fact]
         public async Task GetUserPurchasesShouldReturnEmptyListIfUserHasNoPurchases()
         {
-            var user = await this.dbContext.Users.FirstAsync();
+            var user = new VinylExchangeUser();
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                var sale = new Sale
-                {
-                    BuyerId = Guid.NewGuid()
-                };
+                var sale = new Sale { BuyerId = Guid.NewGuid() };
 
                 await this.dbContext.Sales.AddAsync(sale);
-
             }
 
             await this.dbContext.SaveChangesAsync();
@@ -447,28 +461,20 @@
         [Fact]
         public async Task GetUserSalesShouldGetUserSales()
         {
-            var user = await this.dbContext.Users.FirstAsync();
+            var user = new VinylExchangeUser();
 
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale
-                {
-                    SellerId = user.Id
-                };
+                var sale = new Sale { SellerId = user.Id };
 
                 await this.dbContext.Sales.AddAsync(sale);
-
             }
 
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale
-                {
-                    SellerId = Guid.NewGuid()
-                };
+                var sale = new Sale { SellerId = Guid.NewGuid() };
 
                 await this.dbContext.Sales.AddAsync(sale);
-
             }
 
             await this.dbContext.SaveChangesAsync();
@@ -481,17 +487,13 @@
         [Fact]
         public async Task GetUserSalesShouldReturnEmptyListIfUserHasNoSales()
         {
-            var user = await this.dbContext.Users.FirstAsync();
+            var user = new VinylExchangeUser();
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                var sale = new Sale
-                {
-                    SellerId = Guid.NewGuid()
-                };
+                var sale = new Sale { SellerId = Guid.NewGuid() };
 
                 await this.dbContext.Sales.AddAsync(sale);
-
             }
 
             await this.dbContext.SaveChangesAsync();
@@ -504,24 +506,21 @@
         [Fact]
         public async Task PlaceOrderShouldChangeSaleStatusToShippingNegotiation()
         {
-            var sale = new Sale
-            {
-                Status = Status.Open
-            };
+            var sale = new Sale { Status = Status.Open };
 
             await this.dbContext.Sales.AddAsync(sale);
 
             await this.dbContext.SaveChangesAsync();
 
-            var address = await this.dbContext.Addresses.FirstAsync();
+            var address = new Address();
 
-            var user = await this.dbContext.Users.FirstAsync();
+            var user = new VinylExchangeUser();
 
-            var placeOrderInputModel = new PlaceOrderInputModel
-            {
-                AddressId = address.Id,
-                SaleId = sale.Id
-            };
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+
+            var placeOrderInputModel = new PlaceOrderInputModel { AddressId = address.Id, SaleId = sale.Id };
 
             await this.salesService.PlaceOrder<SaleStatusResourceModel>(placeOrderInputModel, user.Id);
 
@@ -539,15 +538,15 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            var address = await this.dbContext.Addresses.FirstAsync();
+            var address = new Address();
 
-            var user = await this.dbContext.Users.FirstAsync();
+            var user = new VinylExchangeUser();
 
-            var placeOrderInputModel = new PlaceOrderInputModel
-            {
-                AddressId = address.Id,
-                SaleId = sale.Id
-            };
+            var placeOrderInputModel = new PlaceOrderInputModel { SaleId = sale.Id };
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             await this.salesService.PlaceOrder<SaleStatusResourceModel>(placeOrderInputModel, user.Id);
 
@@ -565,68 +564,23 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            var address = await this.dbContext.Addresses.FirstAsync();
+            var address = new Address();
 
-            var user = await this.dbContext.Users.FirstAsync();
+            var user = new VinylExchangeUser();
 
-            var placeOrderInputModel = new PlaceOrderInputModel
-                {
-                    AddressId = address.Id,
-                    SaleId = sale.Id
-                };
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+
+            var placeOrderInputModel = new PlaceOrderInputModel { SaleId = sale.Id };
 
             await this.salesService.PlaceOrder<SaleStatusResourceModel>(placeOrderInputModel, user.Id);
 
             var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
-            Assert.True($"{address.Country} - {address.Town} - {address.PostalCode} - {address.FullAddress}" == changedSale.ShipsTo);
-        }
-
-        private async Task AddSalesTestData()
-        {
-            var releases = new List<Release> { new Release { Artist = "Test Artist", Title = "Test Title" }, new Release { Artist = "Test Artist", Title = "Test Title" } };
-
-            var adresses = new List<Address>
-                {
-                    new Address
-                        {
-                            Country = "Bulgaria",
-                            Town = "Sofia",
-                            PostalCode = "1612",
-                            FullAddress = "j.k Lagera blok 123"
-                        },
-                    new Address
-                        {
-                            Country = "Bulgaria",
-                            Town = "Sofia",
-                            PostalCode = "1612",
-                            FullAddress = "Mladost blok 123"
-                        }
-                };
-
-            var users = new List<VinylExchangeUser> { new VinylExchangeUser { Id = Guid.NewGuid() } };
-
-            var sales = new List<Sale>
-                {
-                    new Sale
-                        {
-                            VinylGrade = Condition.Poor,
-                            SleeveGrade = Condition.NearMint,
-                            Description = "blbbebe",
-                           Price = 50,
-
-                        }
-                };
-
-            await this.dbContext.Releases.AddRangeAsync(releases);
-
-            await this.dbContext.Addresses.AddRangeAsync(adresses);
-
-            await this.dbContext.Users.AddRangeAsync(users);
-
-            await this.dbContext.Sales.AddRangeAsync(sales);
-
-            await this.dbContext.SaveChangesAsync();
+            Assert.True(
+                $"{address.Country} - {address.Town} - {address.PostalCode} - {address.FullAddress}"
+                == changedSale.ShipsTo);
         }
     }
 }

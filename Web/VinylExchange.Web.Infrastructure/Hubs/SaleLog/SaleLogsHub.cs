@@ -35,7 +35,8 @@
 
             if (sale != null)
             {
-                if (sale.SellerId == userId || sale.BuyerId == userId)
+                if (sale.SellerId == userId
+                    || sale.BuyerId == userId)
                 {
                     var logs = await this.saleLogsService.GetLogsForSale(saleId);
 
@@ -54,7 +55,8 @@
 
             if (sale != null)
             {
-                if (sale.SellerId == userId || sale.BuyerId == userId)
+                if (sale.SellerId == userId
+                    || sale.BuyerId == userId)
                 {
                     await this.Groups.AddToGroupAsync(this.Context.ConnectionId, subscriberGroupName);
                 }

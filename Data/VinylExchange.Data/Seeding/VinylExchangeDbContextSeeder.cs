@@ -1,12 +1,15 @@
 ﻿namespace VinylExchange.Data.Seeding
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using VinylExchange.Data;
+
+    #endregion
 
     public class VinylExchangeDbContextSeeder : ISeeder
     {
@@ -22,13 +25,10 @@
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(typeof(VinylExchangeDbContextSeeder));
+            var logger = serviceProvider.GetService<ILoggerFactory>()
+                .CreateLogger(typeof(VinylExchangeDbContextSeeder));
 
-            var seeders = new List<ISeeder>
-                {
-                    new RolesSeeder(),
-                    new UsersSeeder(),
-                };
+            var seeders = new List<ISeeder> { new RolesSeeder(), new UsersSeeder() };
 
             foreach (var seeder in seeders)
             {

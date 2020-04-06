@@ -19,24 +19,21 @@
 
     #endregion
 
-    [Collection("AutoMapperSetup")]
     public class StylesServiceTests
     {
-        public StylesServiceTests()
-        {
-            this.dbContext = DbFactory.CreateVinylExchangeDbContext();
-            this.stylesService = new StylesService(this.dbContext);
-            this.randomGenerator = new Random();
-        }
-
         private readonly VinylExchangeDbContext dbContext;
-
-        private readonly Random randomGenerator;
 
         private readonly IStylesService stylesService;
 
         private readonly CreateStyleInputModel testCreateStyleInputModel =
             new CreateStyleInputModel { Name = "Electronic", GenreId = new Random().Next() };
+
+        public StylesServiceTests()
+        {
+            this.dbContext = DbFactory.CreateDbContext();
+
+            this.stylesService = new StylesService(this.dbContext);
+        }
 
         [Fact]
         public async Task CreateGenreShouldCreateGenreWithCorrectData()
@@ -71,7 +68,10 @@
             var genreId = 38421;
             var secondGenreId = 23123;
 
-            for (var i = 0; i < 5; i++) this.dbContext.Styles.Add(new Style { Name = "Electronic", GenreId = genreId });
+            for (var i = 0; i < 5; i++)
+            {
+                this.dbContext.Styles.Add(new Style { Name = "Electronic", GenreId = genreId });
+            }
 
             this.dbContext.Styles.Add(new Style { Name = "Metal", GenreId = secondGenreId });
 
@@ -88,7 +88,10 @@
             var genreId = 38421;
             var secondGenreId = 23123;
 
-            for (var i = 0; i < 5; i++) this.dbContext.Styles.Add(new Style { Name = "Electronic", GenreId = genreId });
+            for (var i = 0; i < 5; i++)
+            {
+                this.dbContext.Styles.Add(new Style { Name = "Electronic", GenreId = genreId });
+            }
 
             this.dbContext.Styles.Add(new Style { Name = "Metal", GenreId = secondGenreId });
 
@@ -105,7 +108,10 @@
             var genreId = 38421;
             var secondGenreId = 23123;
 
-            for (var i = 0; i < 5; i++) this.dbContext.Styles.Add(new Style { Name = "Electronic", GenreId = genreId });
+            for (var i = 0; i < 5; i++)
+            {
+                this.dbContext.Styles.Add(new Style { Name = "Electronic", GenreId = genreId });
+            }
 
             await this.dbContext.SaveChangesAsync();
 

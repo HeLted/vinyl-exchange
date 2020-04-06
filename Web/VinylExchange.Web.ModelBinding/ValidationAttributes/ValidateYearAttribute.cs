@@ -13,7 +13,8 @@
         {
             var currentYear = DateTime.UtcNow.Year;
 
-            if ((int)value >= 1930 && (int)value <= currentYear)
+            if ((int)value >= 1930
+                && (int)value <= currentYear)
             {
                 return ValidationResult.Success;
             }

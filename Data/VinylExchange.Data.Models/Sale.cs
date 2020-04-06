@@ -61,6 +61,5 @@
         public ICollection<SaleLog> Logs { get; set; } = new HashSet<SaleLog>();
 
         public ICollection<SaleMessage> Messages { get; set; } = new HashSet<SaleMessage>();
-
     }
 }

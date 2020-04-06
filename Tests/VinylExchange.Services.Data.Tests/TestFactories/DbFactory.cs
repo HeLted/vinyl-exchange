@@ -3,7 +3,6 @@
     #region
 
     using System;
-    using System.Linq;
     using System.Reflection;
 
     using Microsoft.EntityFrameworkCore;
@@ -15,7 +14,7 @@
 
     public static class DbFactory
     {
-        public static VinylExchangeDbContext CreateVinylExchangeDbContext()
+        public static VinylExchangeDbContext CreateDbContext()
         {
             var options = new DbContextOptionsBuilder<VinylExchangeDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;

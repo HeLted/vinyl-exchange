@@ -13,7 +13,7 @@
 
     public interface IReleaseFilesService
     {
-        Task<List<ReleaseFile>> AddFilesForRelease(Guid releaseId, Guid formSessionId);
+        Task<List<ReleaseFile>> AddFilesForRelease(Guid? releaseId, Guid formSessionId);
 
         Task<ReleaseFileResourceModel> GetReleaseCoverArt(Guid releaseId);
 
