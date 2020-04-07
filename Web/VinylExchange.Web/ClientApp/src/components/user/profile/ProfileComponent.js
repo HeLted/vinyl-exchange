@@ -15,7 +15,7 @@ function ProfileComponent(props) {
   ) : (
     <div className="container-fluid">
       <div className="row justify-content-center">
-        <div className="profile-avatar-container col-3 border">
+        <div className="profile-avatar-container col-3 border p-1">
           <UserAvatarContainer
             data={{ shouldAvatarUpdate: props.data.shouldAvatarUpdate }}
           />

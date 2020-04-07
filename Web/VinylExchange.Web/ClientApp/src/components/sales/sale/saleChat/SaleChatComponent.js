@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 function SaleChatComponent(props) {
-  const listItems = props.data.messages.map(messageObj => {
+  const listItems = props.data.messages.map((messageObj) => {
     return (
       <li key={uuid4()}>
         <div
@@ -32,18 +32,26 @@ function SaleChatComponent(props) {
     <div className="chat-container border">
       <ul className="chat border ">{listItems}</ul>
       <br />
-      <div className="input-group">
-        <TextInput
-          value={props.data.messageInput}
-          id="messageInput"
-          onChange={props.functions.handleOnChange}
-        />
-        <button
-          className="btn btn-primary"
-          onClick={props.functions.handleSendMessage}
-        >
-          <FontAwesomeIcon icon={faArrowRight}/>
-        </button>
+
+      <div className="form-group">
+        <div className="row m-0">
+          <div className="col-lg-9 col-md-9 col-sm-9 col-xs-12 p-0">
+            <TextInput
+              value={props.data.messageInput}
+              id="messageInput"
+              onChange={props.functions.handleOnChange}
+            />
+          </div>
+
+          <div className="col-lg-3 col-md-3 col-sm-3 col-xs-12 text-center p-0">
+            <button
+              className="btn btn-primary w-100"
+              onClick={props.functions.handleSendMessage}
+            >
+              <FontAwesomeIcon icon={faArrowRight} />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

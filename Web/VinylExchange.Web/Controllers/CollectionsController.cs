@@ -109,7 +109,7 @@
             try
             {
                 var collectionItemInfoModel =
-                    await this.collectionsService.GetCollectionItemInfo<GetCollectionItemInfoUtilityModel>(id);
+                    await this.collectionsService.GetCollectionItem<GetCollectionItemInfoUtilityModel>(id);
 
                 if (collectionItemInfoModel == null)
                 {

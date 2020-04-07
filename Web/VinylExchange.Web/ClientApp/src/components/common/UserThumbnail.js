@@ -60,7 +60,7 @@ class UserThubnail extends Component {
       </div>
     ) : (
       <img
-        className="thumbnail-image img-fluid"
+        className="thumbnail-image"
         height={
           (this.props.data.height != undefined ? this.props.data.height : 50) +
           "px"

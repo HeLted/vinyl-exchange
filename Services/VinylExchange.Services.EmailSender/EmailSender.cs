@@ -29,7 +29,7 @@
             return this.Execute(this.SendGridKey, subject, message, email);
         }
 
-        public async Task Execute(string apiKey, string subject, string message, string email)
+        private async Task Execute(string apiKey, string subject, string message, string email)
         {
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress(SenderEmail, NameOfTheSender);

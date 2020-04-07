@@ -14,14 +14,12 @@
     {
         Task<TModel> AddToCollection<TModel>(AddToCollectionInputModel inputModel, Guid userId);
 
-        Task<bool> DoesUserCollectionContainRelease(Guid releaseId, Guid userId);
+        Task<bool> DoesUserCollectionContainRelease(Guid? releaseId, Guid userId);
 
-        Task<TModel> GetCollectionItem<TModel>(Guid collectionItemId);
-
-        Task<TModel> GetCollectionItemInfo<TModel>(Guid collectionItemId);
+        Task<TModel> GetCollectionItem<TModel>(Guid? collectionItemId);             
 
         Task<List<TModel>> GetUserCollection<TModel>(Guid userId);
 
-        Task<TModel> RemoveCollectionItem<TModel>(Guid collectionItemId);
+        Task<TModel> RemoveCollectionItem<TModel>(Guid? collectionItemId);
     }
 }

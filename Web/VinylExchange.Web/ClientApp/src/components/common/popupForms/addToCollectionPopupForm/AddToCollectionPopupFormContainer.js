@@ -60,18 +60,15 @@ class AddtoColletionPopupFormContainer extends Component {
         const submitFormObj = {
       vinylGrade: this.state.vinylGradeInput,
       sleeveGrade: this.state.sleeveGradeInput,
-      description: this.state.descriptionInput
+      description: this.state.descriptionInput,
+      releaseId: this.state.releaseId
     };
 
 
     axios
       .post(
         Url.api +
-          Controllers.collections.name +
-          Url.queryStart +
-          Queries.releaseId +
-          Url.equal +
-          this.state.releaseId,
+          Controllers.collections.name,
         submitFormObj,
         getAntiForgeryAxiosConfig()
       )

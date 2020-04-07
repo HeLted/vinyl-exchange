@@ -8,6 +8,7 @@ function UserAvatarComponent(props) {
     <img
       className="img-thumbnail image-responsive"
       src={"data:image/png;base64, " + props.data.avatar}
+     
     ></img>
   );
 
