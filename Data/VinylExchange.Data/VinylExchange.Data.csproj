@@ -55,6 +55,8 @@
     <Compile Remove="Migrations\20200301225011_AddedDeliveryPriceShipsFromAndShipsToToSaleEntity.Designer.cs" />
     <Compile Remove="Migrations\20200406212003_CollectionItemReleaseIdIsNowNullableGuid.cs" />
     <Compile Remove="Migrations\20200406212003_CollectionItemReleaseIdIsNowNullableGuid.Designer.cs" />
+    <Compile Remove="Migrations\20200408200025_ChangedSomeDbFieldsFromGuidToNullableGuid.cs" />
+    <Compile Remove="Migrations\20200408200025_ChangedSomeDbFieldsFromGuidToNullableGuid.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
