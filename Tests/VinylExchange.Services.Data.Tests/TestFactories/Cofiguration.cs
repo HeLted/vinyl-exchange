@@ -26,8 +26,6 @@ namespace VinylExchange.Services.Data.Tests.TestFactories
         public Configuration(IMessageSink messageSink)
             : base(messageSink)
         {
-            MockingDependenciesFactory.BuildServiceProvider();
-
             AutoMapperConfig.RegisterMappings(typeof(ModelGetAssemblyClass).GetTypeInfo().Assembly);
         }
     }

@@ -10,13 +10,14 @@
 
     public class ResetPasswordInputModel
     {
+        
+        [Required]
+        public string ResetPasswordToken { get; set; }
+
         [Required]
         [EmailAddress]
         [MaxLength(100, ErrorMessage = InvalidMaxLength)]
         public string Email { get; set; }
-
-        [Required]
-        public string ResetPasswordToken { get; set; }
 
         [Required]
         [MinLength(8, ErrorMessage = InvalidMinLength)]

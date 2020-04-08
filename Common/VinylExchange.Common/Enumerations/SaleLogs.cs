@@ -12,6 +12,6 @@
 
         ItemRecieved = 5,
 
-        SaleEdit = 6
+        SaleEdited = 6
     }
 }

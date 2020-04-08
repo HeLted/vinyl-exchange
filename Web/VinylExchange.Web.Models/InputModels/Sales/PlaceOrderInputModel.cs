@@ -10,9 +10,9 @@
     public class PlaceOrderInputModel
     {
         [Required]
-        public Guid? AddressId { get; set; }
+        public Guid? SaleId { get; set; }
 
         [Required]
-        public Guid? SaleId { get; set; }
+        public Guid? AddressId { get; set; }
     }
 }

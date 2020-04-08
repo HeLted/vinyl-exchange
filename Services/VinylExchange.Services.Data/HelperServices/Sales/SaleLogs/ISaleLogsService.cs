@@ -13,7 +13,7 @@
 
     public interface ISaleLogsService
     {
-        Task<AddLogToSaleResourceModel> AddLogToSale(Guid saleId, SaleLogs logType);
+        Task<AddLogToSaleResourceModel> AddLogToSale(Guid? saleId, SaleLogs logType);
 
         Task<IEnumerable<GetLogsForSaleResourceModel>> GetLogsForSale(Guid saleId);
     }

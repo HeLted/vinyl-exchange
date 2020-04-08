@@ -14,7 +14,7 @@
     using VinylExchange.Common.Constants;
     using VinylExchange.Data.Models;
     using VinylExchange.Models.InputModels.Users;
-    using VinylExchange.Services.EmaiSender;
+    using VinylExchange.Services.EmailSender;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Users;
 
@@ -44,7 +44,33 @@
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        public async Task<IdentityResult> ConfirmEmail(ConfirmEmailInputModel inputModel, Guid userId)
+        public async Task<IdentityResult> RegisterUser(RegisterUserInputModel inputModel)
+        {
+            var user = inputModel.To<VinylExchangeUser>();
+
+            user.PasswordHash = this.userManager.PasswordHasher.HashPassword(user, inputModel.Password);
+
+            var identityResult = await this.userManager.CreateAsync(user);
+
+            await this.userManager.AddToRoleAsync(user, Roles.User);
+
+            return identityResult;
+        }
+
+        public async Task<SignInResult> LoginUser(string username, string password, bool rememberMe)
+        {
+            this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            var identityResult = await this.signInManager.PasswordSignInAsync(
+                                     username,
+                                     password,
+                                     rememberMe,
+                                     false);
+
+            return identityResult;
+        }
+
+        public async Task<IdentityResult> ConfirmEmail(string emailConfirmToken, Guid userId)
         {
             var user = await this.userManager.FindByIdAsync(userId.ToString());
 
@@ -53,12 +79,12 @@
                 throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
             }
 
-            var identityResult = await this.userManager.ConfirmEmailAsync(user, inputModel.EmailConfirmToken);
+            var identityResult = await this.userManager.ConfirmEmailAsync(user, emailConfirmToken);
 
             return identityResult;
         }
 
-        public async Task<IdentityResult> ChangeEmail(ChangeEmailInputModel inputModel, Guid userId)
+        public async Task<IdentityResult> ChangeEmail(string changeEmailToken, string newEmail, Guid userId)
         {
             var user = await this.userManager.FindByIdAsync(userId.ToString());
 
@@ -69,15 +95,15 @@
 
             var identityResult = await this.userManager.ChangeEmailAsync(
                                      user,
-                                     inputModel.NewEmail,
-                                     inputModel.ChangeEmailToken);
+                                     newEmail,
+                                     changeEmailToken);
 
             return identityResult;
         }
 
-        public async Task<IdentityResult> ResetPassword(ResetPasswordInputModel inputModel)
+        public async Task<IdentityResult> ResetPassword(string resetPasswordToken, string email, string newPassword)
         {
-            var user = await this.userManager.FindByEmailAsync(inputModel.Email);
+            var user = await this.userManager.FindByEmailAsync(email);
 
             if (user == null)
             {
@@ -85,35 +111,10 @@
             }
 
             var identityResult = await this.userManager.ResetPasswordAsync(
-                                     user,
-                                     inputModel.ResetPasswordToken,
-                                     inputModel.NewPassword);
+                user,
+                resetPasswordToken,
 
-            return identityResult;
-        }
-
-        public async Task<SignInResult> LoginUser(LoginUserInputModel inputModel)
-        {
-            this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            var identityResult = await this.signInManager.PasswordSignInAsync(
-                                     inputModel.Username,
-                                     inputModel.Password,
-                                     inputModel.RememberMe,
-                                     false);
-
-            return identityResult;
-        }
-
-        public async Task<IdentityResult> RegisterUser(RegisterUserInputModel inputModel)
-        {
-            var user = inputModel.To<VinylExchangeUser>();
-
-            user.PasswordHash = this.userManager.PasswordHasher.HashPassword(user, inputModel.Password);
-
-            var identityResult = await this.userManager.CreateAsync(user);
-
-            await this.userManager.AddToRoleAsync(user, Roles.User);
+                                                                          newPassword);
 
             return identityResult;
         }

@@ -14,15 +14,15 @@
 
     public interface IUsersService
     {
-        Task<IdentityResult> ConfirmEmail(ConfirmEmailInputModel inputModel, Guid userId);
-
-        Task<IdentityResult> ChangeEmail(ChangeEmailInputModel inputModel, Guid userId);
-
-        Task<IdentityResult> ResetPassword(ResetPasswordInputModel inputModel);
-
-        Task<SignInResult> LoginUser(LoginUserInputModel inputModel);
-
         Task<IdentityResult> RegisterUser(RegisterUserInputModel inputModel);
+
+        Task<SignInResult> LoginUser(string username, string password, bool rememberMe);
+
+        Task<IdentityResult> ConfirmEmail(string emailConfirmToken, Guid userId);
+
+        Task<IdentityResult> ChangeEmail(string changeEmailToken, string newEmail, Guid userId);
+
+        Task<IdentityResult> ResetPassword(string resetPasswordToken, string email, string newPassword);
 
         Task SendConfirmEmail(Guid userId);
 

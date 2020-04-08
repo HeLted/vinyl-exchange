@@ -132,15 +132,15 @@
             return removedAddress.To<TModel>();
         }
 
+        public async Task<TModel> GetSale<TModel>(Guid? saleId)
+        {
+            return await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>().FirstOrDefaultAsync();
+        }
+
         public async Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid? releaseId)
         {
             return await this.dbContext.Sales.Where(s => s.ReleaseId == releaseId).Where(s => s.Status == Status.Open)
                        .To<TModel>().ToListAsync();
-        }
-
-        public async Task<TModel> GetSale<TModel>(Guid? saleId)
-        {
-            return await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>().FirstOrDefaultAsync();
         }
 
         public async Task<List<TModel>> GetUserPurchases<TModel>(Guid buyerId)
@@ -153,11 +153,11 @@
             return await this.dbContext.Sales.Where(s => s.SellerId == sellerId).To<TModel>().ToListAsync();
         }
 
-        public async Task<TModel> PlaceOrder<TModel>(PlaceOrderInputModel inputModel, Guid? buyerId)
+        public async  Task<TModel> PlaceOrder<TModel>(Guid? saleId, Guid? addressId, Guid? buyerId)
         {
-            var sale = await this.GetSale(inputModel.SaleId);
+            var sale = await this.GetSale(saleId);
 
-            var address = await this.addressesEntityRetriever.GetAddress(inputModel.AddressId);
+            var address = await this.addressesEntityRetriever.GetAddress(addressId);
 
             var user = await this.usersEntityRetriever.GetUser(buyerId);
 
@@ -185,16 +185,16 @@
             return sale.To<TModel>();
         }
 
-        public async Task<TModel> SetShippingPrice<TModel>(SetShippingPriceInputModel inputModel)
+        public async Task<TModel> SetShippingPrice<TModel>(Guid? saleId, decimal shippingPrice)
         {
-            var sale = await this.GetSale(inputModel.SaleId);
+            var sale = await this.GetSale(saleId);
 
             if (sale == null)
             {
                 throw new NullReferenceException(SaleNotFound);
             }
 
-            sale.ShippingPrice = inputModel.ShippingPrice;
+            sale.ShippingPrice = shippingPrice;
             sale.Status = Status.PaymentPending;
 
             await this.dbContext.SaveChangesAsync();
@@ -202,9 +202,9 @@
             return sale.To<TModel>();
         }
 
-        public async Task<TModel> CompletePayment<TModel>(CompletePaymentInputModel inputModel)
+        public async  Task<TModel> CompletePayment<TModel>(Guid? saleId, string orderId)
         {
-            var sale = await this.GetSale(inputModel.SaleId);
+            var sale = await this.GetSale(saleId);
 
             if (sale == null)
             {
@@ -212,16 +212,16 @@
             }
 
             sale.Status = Status.Paid;
-            sale.OrderId = inputModel.OrderId;
+            sale.OrderId = orderId;
 
             await this.dbContext.SaveChangesAsync();
 
             return sale.To<TModel>();
         }
 
-        public async Task<TModel> ConfirmItemSent<TModel>(ConfirmItemSentInputModel inputModel)
+        public async Task<TModel> ConfirmItemSent<TModel>(Guid? saleId)
         {
-            var sale = await this.GetSale(inputModel.SaleId);
+            var sale = await this.GetSale(saleId);
 
             if (sale == null)
             {
@@ -235,9 +235,9 @@
             return sale.To<TModel>();
         }
 
-        public async Task<TModel> ConfirmItemRecieved<TModel>(ConfirmItemRecievedInputModel inputModel)
+        public async Task<TModel> ConfirmItemRecieved<TModel>(Guid? saleId)
         {
-            var sale = await this.GetSale(inputModel.SaleId);
+            var sale = await this.GetSale(saleId);
 
             if (sale == null)
             {

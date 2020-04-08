@@ -45,119 +45,6 @@
             this.saleLogsService = saleLogsService;
         }
 
-        [HttpPut]
-        [Route("CompletePayment")]
-        public async Task<ActionResult<SaleStatusResourceModel>> CompletePayment(CompletePaymentInputModel inputModel)
-        {
-            try
-            {
-                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
-
-                if (saleModel == null)
-                {
-                    return this.NotFound();
-                }
-
-                var currentUserId = this.GetUserId(this.User);
-
-                if (saleModel.BuyerId == currentUserId
-                    && saleModel.Status == Status.PaymentPending)
-                {
-                    var saleStatusModel = await this.salesService.CompletePayment<SaleStatusResourceModel>(inputModel);
-
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.Paid);
-
-                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
-                        .RecieveLogNotification(addedLogModel.Content);
-
-                    return saleStatusModel;
-                }
-
-                return this.Forbid();
-            }
-            catch (Exception ex)
-            {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
-            }
-        }
-
-        [HttpPut]
-        [Route("ConfirmItemRecieved")]
-        public async Task<ActionResult<SaleStatusResourceModel>> ConfirmItemRecieved(
-            ConfirmItemRecievedInputModel inputModel)
-        {
-            try
-            {
-                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
-
-                if (saleModel == null)
-                {
-                    return this.NotFound();
-                }
-
-                var currentUserId = this.GetUserId(this.User);
-
-                if (saleModel.BuyerId == currentUserId
-                    && saleModel.Status == Status.Sent)
-                {
-                    var saleStatusModel =
-                        await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(inputModel);
-
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemRecieved);
-
-                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
-                        .RecieveLogNotification(addedLogModel.Content);
-
-                    return saleStatusModel;
-                }
-
-                return this.Forbid();
-            }
-            catch (Exception ex)
-            {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
-            }
-        }
-
-        [HttpPut]
-        [Route("ConfirmItemSent")]
-        public async Task<ActionResult<SaleStatusResourceModel>> ConfirmItemSent(ConfirmItemSentInputModel inputModel)
-        {
-            try
-            {
-                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
-
-                if (saleModel == null)
-                {
-                    return this.NotFound();
-                }
-
-                var currentUserId = this.GetUserId(this.User);
-
-                if (saleModel.SellerId == currentUserId
-                    && saleModel.Status == Status.Paid)
-                {
-                    var saleStatusModel = await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(inputModel);
-
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemSent);
-
-                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
-                        .RecieveLogNotification(addedLogModel.Content);
-
-                    return saleStatusModel;
-                }
-
-                return this.Forbid();
-            }
-            catch (Exception ex)
-            {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
-            }
-        }
-
         [HttpPost]
         public async Task<ActionResult<CreateSaleResourceModel>> Create(CreateSaleInputModel inputModel)
         {
@@ -165,6 +52,69 @@
             {
                 return this.Created(
                     await this.salesService.CreateSale<CreateSaleResourceModel>(inputModel, this.GetUserId(this.User)));
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<EditSaleResourceModel>> Update(EditSaleInputModel inputModel)
+        {
+            try
+            {
+                var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
+
+                if (saleInfoModel == null)
+                {
+                    return this.NotFound();
+                }
+
+                var currentUserId = this.GetUserId(this.User);
+
+                if (saleInfoModel.SellerId == currentUserId
+                    && saleInfoModel.Status == Status.Open)
+                {
+                    var saleModel = await this.salesService.EditSale<EditSaleResourceModel>(inputModel);
+
+                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.SaleEdited);
+
+                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                        .RecieveLogNotification(addedLogModel.Content);
+
+                    return saleModel;
+                }
+
+                return this.Forbid();
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<RemoveSaleResourceModel>> Remove(Guid id)
+        {
+            try
+            {
+                var saleInfoModel = await this.salesService.GetSale<GetSaleInfoUtilityModel>(id);
+
+                if (saleInfoModel == null)
+                {
+                    return this.NotFound();
+                }
+
+                if (saleInfoModel.SellerId == this.GetUserId(this.User))
+                {
+                    return await this.salesService.RemoveSale<RemoveSaleResourceModel>(saleInfoModel.Id);
+                }
+
+                return this.Forbid();
             }
             catch (Exception ex)
             {
@@ -219,6 +169,7 @@
             }
         }
 
+
         [HttpGet]
         [Route("GetUserPurchases")]
         public async Task<ActionResult<IEnumerable<GetUserPurchasesResourceModel>>> GetUserPurchases()
@@ -272,7 +223,7 @@
                     return this.Forbid();
                 }
 
-                await this.salesService.PlaceOrder<SaleStatusResourceModel>(inputModel, currentUserId);
+                await this.salesService.PlaceOrder<SaleStatusResourceModel>(inputModel.SaleId,inputModel.AddressId, currentUserId);
 
                 var addedLogModel = await this.saleLogsService.AddLogToSale(saleInfoModel.Id, SaleLogs.PlacedOrder);
 
@@ -288,32 +239,6 @@
             }
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<ActionResult<RemoveSaleResourceModel>> Remove(Guid id)
-        {
-            try
-            {
-                var saleInfoModel = await this.salesService.GetSale<GetSaleInfoUtilityModel>(id);
-
-                if (saleInfoModel == null)
-                {
-                    return this.NotFound();
-                }
-
-                if (saleInfoModel.SellerId == this.GetUserId(this.User))
-                {
-                    return await this.salesService.RemoveSale<RemoveSaleResourceModel>(saleInfoModel.Id);
-                }
-
-                return this.Forbid();
-            }
-            catch (Exception ex)
-            {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
-            }
-        }
 
         [HttpPut]
         [Route("SetShippingPrice")]
@@ -333,7 +258,7 @@
                 if (saleInfoModel.SellerId == currentUserId
                     && saleInfoModel.Status == Status.ShippingNegotiation)
                 {
-                    var saleStatusModel = await this.salesService.SetShippingPrice<SaleStatusResourceModel>(inputModel);
+                    var saleStatusModel = await this.salesService.SetShippingPrice<SaleStatusResourceModel>(inputModel.SaleId,inputModel.ShippingPrice);
 
                     var addedLogModel = await this.saleLogsService.AddLogToSale(
                                             saleInfoModel.Id,
@@ -355,30 +280,107 @@
         }
 
         [HttpPut]
-        public async Task<ActionResult<EditSaleResourceModel>> Update(EditSaleInputModel inputModel)
+        [Route("CompletePayment")]
+        public async Task<ActionResult<SaleStatusResourceModel>> CompletePayment(CompletePaymentInputModel inputModel)
         {
             try
             {
-                var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
 
-                if (saleInfoModel == null)
+                if (saleModel == null)
                 {
                     return this.NotFound();
                 }
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleInfoModel.SellerId == currentUserId
-                    && saleInfoModel.Status == Status.Open)
+                if (saleModel.BuyerId == currentUserId
+                    && saleModel.Status == Status.PaymentPending)
                 {
-                    var saleModel = await this.salesService.EditSale<EditSaleResourceModel>(inputModel);
+                    var saleStatusModel = await this.salesService.CompletePayment<SaleStatusResourceModel>(inputModel.SaleId,inputModel.OrderId);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.SaleEdit);
+                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.Paid);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
 
-                    return saleModel;
+                    return saleStatusModel;
+                }
+
+                return this.Forbid();
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("ConfirmItemSent")]
+        public async Task<ActionResult<SaleStatusResourceModel>> ConfirmItemSent(ConfirmItemSentInputModel inputModel)
+        {
+            try
+            {
+                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
+
+                if (saleModel == null)
+                {
+                    return this.NotFound();
+                }
+
+                var currentUserId = this.GetUserId(this.User);
+
+                if (saleModel.SellerId == currentUserId
+                    && saleModel.Status == Status.Paid)
+                {
+                    var saleStatusModel = await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(inputModel.SaleId);
+
+                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemSent);
+
+                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                        .RecieveLogNotification(addedLogModel.Content);
+
+                    return saleStatusModel;
+                }
+
+                return this.Forbid();
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("ConfirmItemRecieved")]
+        public async Task<ActionResult<SaleStatusResourceModel>> ConfirmItemRecieved(
+          ConfirmItemRecievedInputModel inputModel)
+        {
+            try
+            {
+                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
+
+                if (saleModel == null)
+                {
+                    return this.NotFound();
+                }
+
+                var currentUserId = this.GetUserId(this.User);
+
+                if (saleModel.BuyerId == currentUserId
+                    && saleModel.Status == Status.Sent)
+                {
+                    var saleStatusModel =
+                        await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(inputModel.SaleId);
+
+                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemRecieved);
+
+                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                        .RecieveLogNotification(addedLogModel.Content);
+
+                    return saleStatusModel;
                 }
 
                 return this.Forbid();

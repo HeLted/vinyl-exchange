@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Services.EmaiSender
+﻿namespace VinylExchange.Services.EmailSender
 {
     #region
 

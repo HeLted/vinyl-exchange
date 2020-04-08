@@ -1,38 +1,43 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Moq;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using VinylExchange.Data;
-using VinylExchange.Data.Common.Enumerations;
-using VinylExchange.Data.Models;
-using VinylExchange.Services.Data.MainServices.Collections;
-using VinylExchange.Services.Data.MainServices.Releases;
-using VinylExchange.Services.Data.MainServices.Users;
-using VinylExchange.Services.Data.Tests.TestFactories;
-using VinylExchange.Web.Models.InputModels.Collections;
-using VinylExchange.Web.Models.ResourceModels.Collections;
-using Xunit;
-using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
-
-namespace VinylExchange.Services.Data.Tests
+﻿namespace VinylExchange.Services.Data.Tests
 {
+    #region
+
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using Moq;
+
+    using VinylExchange.Data;
+    using VinylExchange.Data.Common.Enumerations;
+    using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Collections;
+    using VinylExchange.Services.Data.MainServices.Releases;
+    using VinylExchange.Services.Data.MainServices.Users;
+    using VinylExchange.Services.Data.Tests.TestFactories;
+    using VinylExchange.Web.Models.InputModels.Collections;
+    using VinylExchange.Web.Models.ResourceModels.Collections;
+
+    using Xunit;
+
+    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
+
+    #endregion
+
     public class CollectionsServiceTests
     {
-        private readonly ICollectionsService collectionsService;
-
         private readonly VinylExchangeDbContext dbContext;
+
+        private readonly ICollectionsService collectionsService;
 
         private readonly Mock<IUsersEntityRetriever> usersEntityRetrieverMock;
 
         private readonly Mock<IReleasesEntityRetriever> releasesEntityRetrieverMock;
 
         private readonly AddToCollectionInputModel testAddToCollectionInputModel =
-            new AddToCollectionInputModel
-            {
-                VinylGrade = Condition.Poor,
-                SleeveGrade = Condition.Mint
-            };
+            new AddToCollectionInputModel { VinylGrade = Condition.Poor, SleeveGrade = Condition.Mint };
 
         public CollectionsServiceTests()
         {
@@ -42,9 +47,10 @@ namespace VinylExchange.Services.Data.Tests
 
             this.usersEntityRetrieverMock = new Mock<IUsersEntityRetriever>();
 
-            this.collectionsService = new CollectionsService(this.dbContext,
-                releasesEntityRetrieverMock.Object,
-                usersEntityRetrieverMock.Object);
+            this.collectionsService = new CollectionsService(
+                this.dbContext,
+                this.releasesEntityRetrieverMock.Object,
+                this.usersEntityRetrieverMock.Object);
         }
 
         [Fact]
@@ -58,9 +64,10 @@ namespace VinylExchange.Services.Data.Tests
 
             this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            var createdCollectionItemModel = await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                                        this.testAddToCollectionInputModel,
-                                        Guid.NewGuid());
+            var createdCollectionItemModel =
+                await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
+                    this.testAddToCollectionInputModel,
+                    Guid.NewGuid());
 
             var createdCollectionItem =
                 await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == createdCollectionItemModel.Id);
@@ -79,11 +86,13 @@ namespace VinylExchange.Services.Data.Tests
 
             this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            var createdCollectionItemModel = await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                                       this.testAddToCollectionInputModel,
-                                       Guid.NewGuid());
+            var createdCollectionItemModel =
+                await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
+                    this.testAddToCollectionInputModel,
+                    Guid.NewGuid());
 
-            var createdCollectionItem = await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == createdCollectionItemModel.Id);
+            var createdCollectionItem =
+                await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == createdCollectionItemModel.Id);
 
             Assert.Equal(this.testAddToCollectionInputModel.VinylGrade, createdCollectionItem.VinylGrade);
             Assert.Equal(this.testAddToCollectionInputModel.SleeveGrade, createdCollectionItem.SleeveGrade);
@@ -116,7 +125,8 @@ namespace VinylExchange.Services.Data.Tests
 
             this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync((VinylExchangeUser)null);
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>()))
+                .ReturnsAsync((VinylExchangeUser)null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
@@ -137,7 +147,8 @@ namespace VinylExchange.Services.Data.Tests
 
             await this.collectionsService.RemoveCollectionItem<RemoveCollectionItemResourceModel>(collectionItem.Id);
 
-            var removedCollectionItem = await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItem.Id);
+            var removedCollectionItem =
+                await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItem.Id);
 
             Assert.Null(removedCollectionItem);
         }
@@ -145,9 +156,10 @@ namespace VinylExchange.Services.Data.Tests
         [Fact]
         public async Task RemoveCollectionItemShouldThrowNullRefferenceExceptionIfProvidedCollectionItemIdIsNotInDb()
         {
-
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.collectionsService.RemoveCollectionItem<RemoveCollectionItemResourceModel>(Guid.NewGuid()));
+                                async () => await this.collectionsService
+                                                .RemoveCollectionItem<RemoveCollectionItemResourceModel>(
+                                                    Guid.NewGuid()));
 
             Assert.Equal(CollectionItemNotFound, exception.Message);
         }
@@ -159,29 +171,24 @@ namespace VinylExchange.Services.Data.Tests
 
             var userTwo = new VinylExchangeUser();
 
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
-                var collectionItem = new CollectionItem
-                {
-                    UserId = user.Id
-                };
+                var collectionItem = new CollectionItem { UserId = user.Id };
 
                 await this.dbContext.Collections.AddAsync(collectionItem);
             }
 
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
-                var collectionItem = new CollectionItem
-                {
-                    UserId = userTwo.Id
-                };
+                var collectionItem = new CollectionItem { UserId = userTwo.Id };
 
                 await this.dbContext.Collections.AddAsync(collectionItem);
             }
 
             await this.dbContext.SaveChangesAsync();
 
-            var userCollectionModels = await this.collectionsService.GetUserCollection<GetCollectionItemUserIdResourceModel>(user.Id);
+            var userCollectionModels =
+                await this.collectionsService.GetUserCollection<GetCollectionItemUserIdResourceModel>(user.Id);
 
             Assert.True(userCollectionModels.Count == 6);
             Assert.True(userCollectionModels.All(ucm => ucm.UserId == user.Id));
@@ -192,20 +199,17 @@ namespace VinylExchange.Services.Data.Tests
         {
             var user = new VinylExchangeUser();
 
-
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
-                var collectionItem = new CollectionItem
-                {
-                    UserId = user.Id
-                };
+                var collectionItem = new CollectionItem { UserId = user.Id };
 
                 await this.dbContext.Collections.AddAsync(collectionItem);
             }
 
             await this.dbContext.SaveChangesAsync();
 
-            var userCollectionModels = await this.collectionsService.GetUserCollection<GetCollectionItemUserIdResourceModel>(Guid.NewGuid());
+            var userCollectionModels =
+                await this.collectionsService.GetUserCollection<GetCollectionItemUserIdResourceModel>(Guid.NewGuid());
 
             Assert.True(userCollectionModels.Count == 0);
         }
@@ -219,7 +223,8 @@ namespace VinylExchange.Services.Data.Tests
 
             await this.dbContext.SaveChangesAsync();
 
-            var collectionItemModel = this.collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(collectionItem.Id);
+            var collectionItemModel =
+                this.collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(collectionItem.Id);
 
             Assert.NotNull(collectionItemModel);
         }
@@ -233,51 +238,44 @@ namespace VinylExchange.Services.Data.Tests
 
             await this.dbContext.SaveChangesAsync();
 
-            var collectionItemModel = await this.collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(Guid.NewGuid());
+            var collectionItemModel =
+                await this.collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(Guid.NewGuid());
 
             Assert.Null(collectionItemModel);
         }
 
         [Fact]
-        public async Task DoesUserCollectionContainReleaseShouldReturnTrueIfUserHasCollectionItemInCollectionWithTheProvidedReleaseId()
+        public async Task
+            DoesUserCollectionContainReleaseShouldReturnTrueIfUserHasCollectionItemInCollectionWithTheProvidedReleaseId()
         {
             var release = new Release();
 
             var user = new VinylExchangeUser();
 
-            var collectionItem = new CollectionItem()
-            {
-                ReleaseId = release.Id,
-                UserId = user.Id                
-            };
-            
+            var collectionItem = new CollectionItem { ReleaseId = release.Id, UserId = user.Id };
+
             await this.dbContext.Collections.AddAsync(collectionItem);
 
             await this.dbContext.SaveChangesAsync();
 
-            Assert.True(await this.collectionsService.DoesUserCollectionContainRelease(release.Id,user.Id));
-
+            Assert.True(await this.collectionsService.DoesUserCollectionContainRelease(release.Id, user.Id));
         }
 
         [Fact]
-        public async Task DoesUserCollectionContainReleaseShouldReturnFalseIfUserDoesntHaveCollectionItemInCollectionWithTheProvidedReleaseId()
+        public async Task
+            DoesUserCollectionContainReleaseShouldReturnFalseIfUserDoesntHaveCollectionItemInCollectionWithTheProvidedReleaseId()
         {
             var release = new Release();
 
             var user = new VinylExchangeUser();
 
-            var collectionItem = new CollectionItem()
-            {
-                ReleaseId = release.Id,
-                UserId = user.Id                
-            };
-            
+            var collectionItem = new CollectionItem { ReleaseId = release.Id, UserId = user.Id };
+
             await this.dbContext.Collections.AddAsync(collectionItem);
 
             await this.dbContext.SaveChangesAsync();
 
-            Assert.False(await this.collectionsService.DoesUserCollectionContainRelease(release.Id,Guid.NewGuid()));
-
+            Assert.False(await this.collectionsService.DoesUserCollectionContainRelease(release.Id, Guid.NewGuid()));
         }
     }
 }

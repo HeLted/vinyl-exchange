@@ -518,11 +518,9 @@
 
             this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);                     
 
-            var placeOrderInputModel = new PlaceOrderInputModel { AddressId = address.Id, SaleId = sale.Id };
-
-            await this.salesService.PlaceOrder<SaleStatusResourceModel>(placeOrderInputModel, user.Id);
+            await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id,user.Id);
 
             var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
@@ -542,13 +540,11 @@
 
             var user = new VinylExchangeUser();
 
-            var placeOrderInputModel = new PlaceOrderInputModel { SaleId = sale.Id };
-
             this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
             this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
-            await this.salesService.PlaceOrder<SaleStatusResourceModel>(placeOrderInputModel, user.Id);
+            await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id,address.Id, user.Id);
 
             var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
@@ -570,11 +566,9 @@
 
             this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);                     
 
-            var placeOrderInputModel = new PlaceOrderInputModel { SaleId = sale.Id };
-
-            await this.salesService.PlaceOrder<SaleStatusResourceModel>(placeOrderInputModel, user.Id);
+            await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id,address.Id, user.Id);
 
             var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 

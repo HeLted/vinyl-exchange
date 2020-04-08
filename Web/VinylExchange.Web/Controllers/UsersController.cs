@@ -63,7 +63,8 @@
             try
             {
                 var confirmEmailIdentityResult =
-                    await this.userService.ConfirmEmail(inputModel, this.GetUserId(this.User));
+                    await this.userService.ConfirmEmail(inputModel.EmailConfirmToken
+                    , this.GetUserId(this.User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -87,7 +88,7 @@
             try
             {
                 var confirmEmailIdentityResult =
-                    await this.userService.ChangeEmail(inputModel, this.GetUserId(this.User));
+                    await this.userService.ChangeEmail(inputModel.ChangeEmailToken, inputModel.NewEmail, this.GetUserId(this.User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -109,7 +110,7 @@
         {
             try
             {
-                var confirmEmailIdentityResult = await this.userService.ResetPassword(inputModel);
+                var confirmEmailIdentityResult = await this.userService.ResetPassword(inputModel.ResetPasswordToken, inputModel.Email, inputModel.NewPassword);
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -162,7 +163,7 @@
 
             try
             {
-                var registerUserIdentityResult = await this.userService.LoginUser(inputModel);
+                var registerUserIdentityResult = await this.userService.LoginUser(inputModel.Username,inputModel.Password,inputModel.RememberMe);
 
                 if (registerUserIdentityResult.Succeeded)
                 {

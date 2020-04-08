@@ -16,6 +16,7 @@
 
         public Sale Sale { get; set; }
 
-        public Guid SaleId { get; set; }
+        [Required]
+        public Guid? SaleId { get; set; }
     }
 }
