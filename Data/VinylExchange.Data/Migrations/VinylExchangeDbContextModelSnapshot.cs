@@ -252,8 +252,7 @@ namespace VinylExchange.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ReleaseId")
-                        .IsRequired()
+                    b.Property<Guid>("ReleaseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SleeveGrade")

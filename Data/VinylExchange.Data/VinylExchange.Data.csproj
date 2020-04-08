@@ -53,6 +53,8 @@
     <Compile Remove="Migrations\20200229214350_AddedUserAvatars.Designer.cs" />
     <Compile Remove="Migrations\20200301225011_AddedDeliveryPriceShipsFromAndShipsToToSaleEntity.cs" />
     <Compile Remove="Migrations\20200301225011_AddedDeliveryPriceShipsFromAndShipsToToSaleEntity.Designer.cs" />
+    <Compile Remove="Migrations\20200406212003_CollectionItemReleaseIdIsNowNullableGuid.cs" />
+    <Compile Remove="Migrations\20200406212003_CollectionItemReleaseIdIsNowNullableGuid.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -133,7 +133,7 @@
             await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Confirmation Email", emailContent);
         }
 
-        public async Task SendChangeEmailEmail(SendChangeEmailEmailInputModel inputModel, Guid userId)
+        public async Task SendChangeEmailEmail(string newEmail, Guid userId)
         {
             var user = await this.userManager.FindByIdAsync(userId.ToString());
 
@@ -142,7 +142,7 @@
                 throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
             }
 
-            var emailContent = await this.ConstructChangeEmailEmailContent(user, inputModel.NewEmail);
+            var emailContent = await this.ConstructChangeEmailEmailContent(user, newEmail);
 
             await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Change Your Email", emailContent);
         }
@@ -161,9 +161,9 @@
             await this.emailSender.SendEmailAsync(user.Email, "Vinyl Exchange Password Change", emailContent);
         }
 
-        public async Task SendResetPasswordEmail(SendResetPasswordEmailInputModel inputModel)
+        public async Task SendResetPasswordEmail(string email)
         {
-            var user = await this.userManager.FindByEmailAsync(inputModel.Email);
+            var user = await this.userManager.FindByEmailAsync(email);
 
             if (user == null)
             {

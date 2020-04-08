@@ -11,6 +11,6 @@
 
     public interface IReleasesEntityRetriever
     {
-        Task<Release> GetRelease(Guid? addressId);
+        Task<Release> GetRelease(Guid? releaseId);
     }
 }

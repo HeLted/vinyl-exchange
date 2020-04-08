@@ -226,7 +226,7 @@
         {
             try
             {
-                await this.userService.SendChangeEmailEmail(inputModel, this.GetUserId(this.User));
+                await this.userService.SendChangeEmailEmail(inputModel.NewEmail, this.GetUserId(this.User));
 
                 return this.Ok();
             }
@@ -261,7 +261,7 @@
         {
             try
             {
-                await this.userService.SendResetPasswordEmail(inputModel);
+                await this.userService.SendResetPasswordEmail(inputModel.Email);
 
                 return this.Ok();
             }

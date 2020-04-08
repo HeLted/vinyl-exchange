@@ -26,10 +26,10 @@
 
         Task SendConfirmEmail(Guid userId);
 
-        Task SendChangeEmailEmail(SendChangeEmailEmailInputModel inputModel, Guid userId);
+        Task SendChangeEmailEmail(string newEmail, Guid userId);
 
         Task SendChangePasswordEmail(Guid userId);
 
-        Task SendResetPasswordEmail(SendResetPasswordEmailInputModel inputModel);
+        Task SendResetPasswordEmail(string email);
     }
 }
