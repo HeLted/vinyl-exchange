@@ -86,7 +86,7 @@ class SaleLogContainer extends Component {
 
   recieveLogNotification = notificationContent => {
 
-    this.context.handleAppNotification(notificationContent,4);
+    this.context.handleAppNotification(notificationContent,6);
     
     this.props.functions.handleReLoadSale();
     

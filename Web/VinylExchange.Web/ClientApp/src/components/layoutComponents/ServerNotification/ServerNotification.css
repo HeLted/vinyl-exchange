@@ -17,6 +17,12 @@
   
 }
 
+.sale-notification {
+  
+  background-color:#5ba6fc !important;
+  
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

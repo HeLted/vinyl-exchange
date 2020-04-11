@@ -9,7 +9,8 @@ import { NotificationContext } from "../../../contexts/NotificationContext";
 
 const notificationsIds = [];
 const notificationClass = "toast-notification";
-const devNotificationClass = "toast-notification dev-notification"
+const devNotificationClass = notificationClass + " dev-notification";
+const saleNotificationClass = notificationClass + " sale-notification";
 
 class ServerNotification extends Component {
   static contextType = NotificationContext;
@@ -48,6 +49,12 @@ class ServerNotification extends Component {
             notificationObj.messageText,
             notificationElementTimer,
             notificationClass
+          );
+        }else if (notificationSeverity === 6) {
+          ToastsStore.success(
+            notificationObj.messageText,
+            notificationElementTimer,
+            saleNotificationClass
           );
         }
         // else if (notificationSeverity === 5) {
