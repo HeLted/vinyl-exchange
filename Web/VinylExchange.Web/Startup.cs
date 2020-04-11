@@ -241,7 +241,7 @@ namespace VinylExchange.Web
             services.AddTransient<MemoryCacheManager>();
             services.AddTransient<IMemoryCacheFileSevice, MemoryCacheFileService>();
             services.AddTransient<IFileManager, FileManager>();
-            services.AddTransient<ILoggerService, LoggerService>();
+            services.AddSingleton<ILoggerService, LoggerService>();
             services.AddSingleton<IEmailSender>(new EmailSender(this.Configuration["SendGridKey"]));
         }
     }

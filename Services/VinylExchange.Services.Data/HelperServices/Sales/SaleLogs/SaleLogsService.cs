@@ -29,7 +29,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<AddLogToSaleResourceModel> AddLogToSale(Guid? saleId, SaleLogs logType)
+        public async Task<TModel> AddLogToSale<TModel>(Guid? saleId, SaleLogs logType)
         {
             var sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
 
@@ -38,15 +38,33 @@
                 throw new NullReferenceException(SaleNotFound);
             }
 
-            string logMessage = this.GenerateLogMessage(logType);               
+            string logMessage = this.GenerateLogMessage(logType);
 
             var saleLog =
                 (await this.dbContext.SaleLogs.AddAsync(new SaleLog { Content = logMessage, SaleId = saleId })).Entity
-                .To<AddLogToSaleResourceModel>();
+                .To<TModel>();
 
             await this.dbContext.SaveChangesAsync();
 
             return saleLog;
+        }
+
+        public async Task<int> ClearSaleLogs(Guid? saleId)
+        {
+            var sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
+
+            if (sale == null)
+            {
+                throw new NullReferenceException(SaleNotFound);
+            }
+
+            var logsToBeClearedNumber = sale.Logs.Count;
+
+            sale.Logs.Clear();
+
+            await this.dbContext.SaveChangesAsync();
+
+            return logsToBeClearedNumber;
         }
 
         public async Task<IEnumerable<GetLogsForSaleResourceModel>> GetLogsForSale(Guid saleId)

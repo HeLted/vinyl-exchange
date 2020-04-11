@@ -14,6 +14,7 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Addresses;
     using VinylExchange.Services.Data.MainServices.Releases;
+    using VinylExchange.Services.Data.MainServices.Sales.Exceptions;
     using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Sales;
@@ -153,7 +154,7 @@
             return await this.dbContext.Sales.Where(s => s.SellerId == sellerId).To<TModel>().ToListAsync();
         }
 
-        public async  Task<TModel> PlaceOrder<TModel>(Guid? saleId, Guid? addressId, Guid? buyerId)
+        public async Task<TModel> PlaceOrder<TModel>(Guid? saleId, Guid? addressId, Guid? buyerId)
         {
             var sale = await this.GetSale(saleId);
 
@@ -176,9 +177,44 @@
                 throw new NullReferenceException(UserNotFound);
             }
 
+            if (sale.Status != Status.Open)
+            {
+                throw new InvalidSaleActionException($"Cannot complete sale action if sale status is {sale.Status}");
+            }
+
             sale.BuyerId = buyerId;
             sale.Status = Status.ShippingNegotiation;
             sale.ShipsTo = $"{address.Country} - {address.Town} - {address.PostalCode} - {address.FullAddress}";
+
+            await this.dbContext.SaveChangesAsync();
+
+            return sale.To<TModel>();
+        }
+
+        public async Task<TModel> CancelOrder<TModel>(Guid? saleId, Guid? buyerId)
+        {
+            var sale = await this.GetSale(saleId);
+          
+            var user = await this.usersEntityRetriever.GetUser(buyerId);
+
+            if (sale == null)
+            {
+                throw new NullReferenceException(SaleNotFound);
+            }         
+
+            if (user == null)
+            {
+                throw new NullReferenceException(UserNotFound);
+            }
+
+            if (sale.Status >= Status.Paid)
+            {
+                throw new InvalidSaleActionException($"Cannot complete sale action if sale status is {sale.Status}");
+            }
+
+            sale.BuyerId = null;
+
+            sale.Status = Status.Open;            
 
             await this.dbContext.SaveChangesAsync();
 
@@ -194,6 +230,11 @@
                 throw new NullReferenceException(SaleNotFound);
             }
 
+            if (sale.Status != Status.ShippingNegotiation)
+            {
+                throw new InvalidSaleActionException($"Cannot complete sale action if sale status is {sale.Status}");
+            }
+
             sale.ShippingPrice = shippingPrice;
             sale.Status = Status.PaymentPending;
 
@@ -202,13 +243,18 @@
             return sale.To<TModel>();
         }
 
-        public async  Task<TModel> CompletePayment<TModel>(Guid? saleId, string orderId)
+        public async Task<TModel> CompletePayment<TModel>(Guid? saleId, string orderId)
         {
             var sale = await this.GetSale(saleId);
 
             if (sale == null)
             {
                 throw new NullReferenceException(SaleNotFound);
+            }
+
+            if (sale.Status != Status.PaymentPending)
+            {
+                throw new InvalidSaleActionException($"Cannot complete sale action if sale status is {sale.Status}");
             }
 
             sale.Status = Status.Paid;
@@ -228,6 +274,11 @@
                 throw new NullReferenceException(SaleNotFound);
             }
 
+            if (sale.Status != Status.Paid)
+            {
+                throw new InvalidSaleActionException($"Cannot complete sale action if sale status is {sale.Status}");
+            }
+
             sale.Status = Status.Sent;
 
             await this.dbContext.SaveChangesAsync();
@@ -242,6 +293,11 @@
             if (sale == null)
             {
                 throw new NullReferenceException(SaleNotFound);
+            }
+
+            if (sale.Status != Status.Sent)
+            {
+                throw new InvalidSaleActionException($"Cannot complete sale action if sale status is {sale.Status}");
             }
 
             sale.Status = Status.Finished;

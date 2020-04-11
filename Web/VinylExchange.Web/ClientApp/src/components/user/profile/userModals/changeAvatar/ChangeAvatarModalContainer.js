@@ -34,7 +34,7 @@ class ChangeAvatarModalContainer extends Component {
       .put(
         Url.api +
           Controllers.users.name +
-          Controllers.users.actions.changeUserAvatar,
+          Controllers.users.actions.changeAvatar,
         fileFormData,
         getAntiForgeryAxiosConfig()
       )

@@ -28,6 +28,8 @@
 
         Task<TModel> PlaceOrder<TModel>(Guid? saleId, Guid? addressId, Guid? buyerId);
 
+        Task<TModel> CancelOrder<TModel>(Guid? saleId, Guid? buyerId);
+
         Task<TModel> SetShippingPrice<TModel>(Guid? saleId, decimal shippingPrice);
 
         Task<TModel> CompletePayment<TModel>(Guid? saleId, string orderId);

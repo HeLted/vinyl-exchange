@@ -8,7 +8,7 @@ import ConfirmItemSentModalContainer from "./saleMenuModals/confirmItemSent/Conf
 import ConfirmItemRecievedModalContainer from "./saleMenuModals/confirmItemRecieved/ConfirmItemRecievedModalContainer";
 import EditSaleModalContainer from "./saleMenuModals/editSale/EditSaleModalContainer";
 import RemoveSaleModalContainer from "./saleMenuModals/removeSale/RemoveSaleModalContainer";
-
+import CancelOrderModalContainer from "./saleMenuModals/cancelOrder/CancelOrderModalContainer";
 
 function SaleMenuComponent(props) {
   let component = null;
@@ -18,14 +18,14 @@ function SaleMenuComponent(props) {
   if (sale.status === 1 && currentUserId === sale.sellerId) {
     component = (
       <div>
-      <button
+        <button
           className="btn btn-danger btn-lg"
           data-toggle="modal"
           data-target="#removeSaleModal"
         >
           Remove Sale
         </button>
-        <RemoveSaleModalContainer data={{saleId:sale.id}}/>
+        <RemoveSaleModalContainer data={{ saleId: sale.id }} />
         <button
           className="btn btn-primary btn-lg"
           data-toggle="modal"
@@ -52,7 +52,7 @@ function SaleMenuComponent(props) {
         <PlaceOrderModalContainer
           data={{ saleId: sale.id }}
           functions={{
-            handleReLoadSale: props.functions.handleReLoadSale
+            handleReLoadSale: props.functions.handleReLoadSale,
           }}
         />
       </div>
@@ -71,10 +71,29 @@ function SaleMenuComponent(props) {
       </div>
     );
   } else if (sale.status === 2 && currentUserId === sale.buyerId) {
-    component = <NoActionAvailableTextBox />;
+    component = (
+      <div>
+        <button
+          className="btn btn-danger btn-lg"
+          data-toggle="modal"
+          data-target="#cancelOrderModal"
+        >
+          Cancel Order
+        </button>
+        <CancelOrderModalContainer data={{ saleId: sale.id }} />
+      </div>
+    );
   } else if (sale.status === 3 && currentUserId === sale.buyerId) {
     component = (
       <div>
+        <button
+          className="btn btn-danger btn-lg"
+          data-toggle="modal"
+          data-target="#cancelOrderModal"
+        >
+          Cancel Order
+        </button>
+        <CancelOrderModalContainer data={{ saleId: sale.id }} />
         <button
           className="btn btn-success btn-lg"
           data-toggle="modal"
@@ -86,7 +105,7 @@ function SaleMenuComponent(props) {
           data={{
             saleId: sale.id,
             price: sale.price,
-            shippingPrice: sale.shippingPrice
+            shippingPrice: sale.shippingPrice,
           }}
         />
       </div>

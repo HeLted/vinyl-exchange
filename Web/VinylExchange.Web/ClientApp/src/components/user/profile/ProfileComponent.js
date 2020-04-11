@@ -102,12 +102,7 @@ function ProfileComponent(props) {
                   <br />
                 </div>
 
-                <div className=" col-12">
-                  <button className="profile-menu-button btn btn-outline-primary btn-lg">
-                    Change Password
-                  </button>
-                  <br />
-                </div>
+               
               </div>
             </div>
           </div>

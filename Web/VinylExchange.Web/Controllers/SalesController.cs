@@ -17,6 +17,7 @@
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Infrastructure.Hubs.SaleLog;
     using VinylExchange.Web.Models.InputModels.Sales;
+    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
     using VinylExchange.Web.Models.ResourceModels.Sales;
     using VinylExchange.Web.Models.Utility.Sales;
 
@@ -79,10 +80,10 @@
                 {
                     var saleModel = await this.salesService.EditSale<EditSaleResourceModel>(inputModel);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.SaleEdited);
+                    await this.saleLogsService.ClearSaleLogs(saleInfoModel.Id);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
-                        .RecieveLogNotification(addedLogModel.Content);
+                        .RecieveLogNotification("Sale was edited by seller!");
 
                     return saleModel;
                 }
@@ -218,17 +219,53 @@
 
                 if (saleInfoModel.SellerId == currentUserId
                     || saleInfoModel.BuyerId == currentUserId
-                    || saleInfoModel.Status != Status.Open)
+                    )
                 {
                     return this.Forbid();
                 }
 
                 await this.salesService.PlaceOrder<SaleStatusResourceModel>(inputModel.SaleId,inputModel.AddressId, currentUserId);
 
-                var addedLogModel = await this.saleLogsService.AddLogToSale(saleInfoModel.Id, SaleLogs.PlacedOrder);
+                var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleInfoModel.Id, SaleLogs.PlacedOrder);
 
                 await this.saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
                     .RecieveLogNotification(addedLogModel.Content);
+
+                return saleInfoModel;
+            }
+            catch (Exception ex)
+            {
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("CancelOrder")]
+        public async Task<ActionResult<GetSaleInfoUtilityModel>> CancelOrder(CancelOrderInputModel inputModel)
+        {
+            try
+            {
+                var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
+
+                if (saleInfoModel == null)
+                {
+                    return this.NotFound();
+                }
+
+                var currentUserId = this.GetUserId(this.User);
+
+                if (saleInfoModel.BuyerId != currentUserId)
+                {
+                    return this.Forbid();
+                }
+
+                await this.salesService.CancelOrder<SaleStatusResourceModel>(inputModel.SaleId, currentUserId);
+
+                await this.saleLogsService.ClearSaleLogs(saleInfoModel.Id);
+
+                await this.saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
+                    .RecieveLogNotification("Order was canceled by buyer!");
 
                 return saleInfoModel;
             }
@@ -255,12 +292,11 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleInfoModel.SellerId == currentUserId
-                    && saleInfoModel.Status == Status.ShippingNegotiation)
+                if (saleInfoModel.SellerId == currentUserId)
                 {
                     var saleStatusModel = await this.salesService.SetShippingPrice<SaleStatusResourceModel>(inputModel.SaleId,inputModel.ShippingPrice);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(
+                    var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
                                             saleInfoModel.Id,
                                             SaleLogs.SettedShippingPrice);
 
@@ -294,12 +330,11 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleModel.BuyerId == currentUserId
-                    && saleModel.Status == Status.PaymentPending)
+                if (saleModel.BuyerId == currentUserId)
                 {
                     var saleStatusModel = await this.salesService.CompletePayment<SaleStatusResourceModel>(inputModel.SaleId,inputModel.OrderId);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.Paid);
+                    var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleModel.Id, SaleLogs.Paid);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
@@ -331,12 +366,11 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleModel.SellerId == currentUserId
-                    && saleModel.Status == Status.Paid)
+                if (saleModel.SellerId == currentUserId)
                 {
                     var saleStatusModel = await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(inputModel.SaleId);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemSent);
+                    var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleModel.Id, SaleLogs.ItemSent);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
@@ -369,13 +403,12 @@
 
                 var currentUserId = this.GetUserId(this.User);
 
-                if (saleModel.BuyerId == currentUserId
-                    && saleModel.Status == Status.Sent)
+                if (saleModel.BuyerId == currentUserId)
                 {
                     var saleStatusModel =
                         await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(inputModel.SaleId);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale(saleModel.Id, SaleLogs.ItemRecieved);
+                    var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleModel.Id, SaleLogs.ItemRecieved);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);

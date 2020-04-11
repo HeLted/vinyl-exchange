@@ -13,7 +13,9 @@
 
     public interface ISaleLogsService
     {
-        Task<AddLogToSaleResourceModel> AddLogToSale(Guid? saleId, SaleLogs logType);
+        Task<TModel> AddLogToSale<TModel>(Guid? saleId, SaleLogs logType);
+
+        Task<int> ClearSaleLogs(Guid? saleId);
 
         Task<IEnumerable<GetLogsForSaleResourceModel>> GetLogsForSale(Guid saleId);
     }

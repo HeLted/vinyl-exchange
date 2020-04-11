@@ -69,7 +69,8 @@ export const Controllers = {
       getUserSales: "/GetUserSales",
       getUserPurchases: "/GetUserPurchases",
       confirmItemSent: "/ConfirmItemSent",
-      confirmItemRecieved: "/ConfirmItemRecieved"
+      confirmItemRecieved: "/ConfirmItemRecieved",
+      cancelOrder:"/CancelOrder"
     }
   },
   users: {
