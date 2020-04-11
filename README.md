@@ -8,7 +8,7 @@ Technologies used:
  FrontEnd - React(JS)  
  DB - MSSQL  
 
- Additional technologies used:
+ Additional technologies used:  
 -EF Core  
 -AutoMapper  
 -SingalR  
