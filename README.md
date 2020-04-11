@@ -15,7 +15,7 @@ Technologies used:
 -XUnit  
 
 Warning: Seeders are still in development.  
-Currently working data seeders: 
+Currently working data seeders:  
 -UsersSeeder  
 -GenresSeeder  
 -StylesSeeder  
