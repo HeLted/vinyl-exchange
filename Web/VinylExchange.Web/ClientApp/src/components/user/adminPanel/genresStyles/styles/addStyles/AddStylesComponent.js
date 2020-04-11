@@ -24,6 +24,10 @@ function AddStylesComponent(props) {
           placeholder="Style Name..."
           value={props.data.styleNameInput}
          onChange={props.functions.handleOnChange}
+         required
+         validateLength
+         minLength={3}
+         maxLength={50}
         />
       </div>
 

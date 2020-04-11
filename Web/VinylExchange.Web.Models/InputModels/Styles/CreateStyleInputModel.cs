@@ -7,6 +7,8 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
 
+    using static VinylExchange.Common.Constants.ValidationConstants;
+
     #endregion
 
     public class CreateStyleInputModel : IMapTo<Style>
@@ -15,6 +17,8 @@
         public int? GenreId { get; set; }
 
         [Required]
+        [MinLength(3, ErrorMessage = InvalidMinLength)]
+        [MaxLength(50, ErrorMessage = InvalidMaxLength)]
         [Display(Name = "Style Name")]
         public string Name { get; set; }
     }

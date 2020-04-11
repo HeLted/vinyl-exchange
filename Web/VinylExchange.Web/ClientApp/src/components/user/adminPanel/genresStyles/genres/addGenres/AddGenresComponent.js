@@ -11,6 +11,10 @@ function AddGenresComponent(props) {
         placeholder="Genre Name..."
         value={props.data.genreNameInput}
         onChange={props.functions.handleOnChange}
+        required
+        validateLength
+        minLength={3}
+        maxLength={50}
       />
       <br />
       <button
