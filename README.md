@@ -4,18 +4,18 @@ Vinyl Exchange is app built with the intent of providing vinyl collectors with a
 
 Technologies used:
 
- BackEnd - ASP.NET CORE 
- FrontEnd - React(JS)
- DB - MSSQL
+ BackEnd - ASP.NET CORE  
+ FrontEnd - React(JS)  
+ DB - MSSQL  
 
  Additional technologies used:
--EF Core
--AutoMapper
--SingalR
--XUnit
+-EF Core  
+-AutoMapper  
+-SingalR  
+-XUnit  
 
-Warning: Seeders are still in development
+Warning: Seeders are still in development.  
 Currently working data seeders: 
--UsersSeeder
--GenresSeeder
--StylesSeeder
+-UsersSeeder  
+-GenresSeeder  
+-StylesSeeder  
