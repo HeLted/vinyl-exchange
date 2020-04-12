@@ -11,7 +11,7 @@ function CollectionCoponent(props) {
   return (
     <div className="col-lg-4 col-md-6 col-sm-8 col-xs-12">
       <div
-        className="row border text-center justify-content-center"
+        className="row border text-center "
         style={{ padding: "30px", height: "600px" }}
       >
         <div className="col-12 ">

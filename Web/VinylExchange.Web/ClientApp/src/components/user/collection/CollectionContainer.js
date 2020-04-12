@@ -101,7 +101,7 @@ class CollectionContainer extends Component {
           </div>
         </div>
         <div
-          className="row border justify-content-center"
+          className="row border justify-content-left"
           style={{ padding: "100px", height: "1200px", overflowY: "scroll" }}
         >
           {collectionComponents.length > 0 ? (
