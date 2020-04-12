@@ -9,6 +9,7 @@ using VinylExchange.Data;
 using VinylExchange.Data.Models;
 using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
 using VinylExchange.Services.Data.Tests.TestFactories;
+using VinylExchange.Web.Models.ResourceModels.SaleLogs;
 using Xunit;
 
 namespace VinylExchange.Services.Data.Tests
@@ -35,7 +36,7 @@ namespace VinylExchange.Services.Data.Tests
 
             await this.dbContext.SaveChangesAsync();
 
-            await this.saleLogsService.AddLogToSale(sale.Id, SaleLogs.ItemRecieved);
+            await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(sale.Id, SaleLogs.ItemRecieved);
 
             var log = await this.dbContext.SaleLogs.FirstOrDefaultAsync(sl => sl.SaleId == sale.Id);
 
@@ -58,7 +59,7 @@ namespace VinylExchange.Services.Data.Tests
 
             await this.dbContext.SaveChangesAsync();
 
-            await this.saleLogsService.AddLogToSale(sale.Id, logType);
+            await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(sale.Id, logType);
 
             var log = await this.dbContext.SaleLogs.FirstOrDefaultAsync(sl => sl.SaleId == sale.Id);
 

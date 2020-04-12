@@ -17,6 +17,6 @@
         public IFormFile File { get; set; }
 
         [Required]
-        public Guid FormSessionId { get; set; }
+        public Guid? FormSessionId { get; set; }
     }
 }

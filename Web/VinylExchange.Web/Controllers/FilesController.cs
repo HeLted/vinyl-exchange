@@ -63,11 +63,13 @@
 
         [HttpPost]
         [DisableRequestSizeLimit]
-        public ActionResult<UploadFileResourceModel> UploadFile([FromForm] [FromQuery] UploadFileInputModel inputModel)
+        public ActionResult<UploadFileResourceModel> UploadFile([FromQuery] [FromForm] UploadFileInputModel inputModel)
         {
             try
             {
-                return this.memoryCacheFileSevice.UploadFile<UploadFileResourceModel>(inputModel);
+                return this.memoryCacheFileSevice.UploadFile<UploadFileResourceModel>(
+                    inputModel.File,
+                    inputModel.FormSessionId);
             }
             catch (Exception ex)
             {

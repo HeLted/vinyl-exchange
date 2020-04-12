@@ -1,5 +1,6 @@
 ﻿namespace VinylExchange.Services.MemoryCache
 {
+    using Microsoft.AspNetCore.Http;
     #region
 
     using System;
@@ -22,9 +23,9 @@
             this.cacheManager = cacheManager;
         }
 
-        public TModel UploadFile<TModel>(UploadFileInputModel inputModel)
+        public TModel UploadFile<TModel>(IFormFile file,Guid? formSessionId)
         {
-            var formSessionIdAsString = inputModel.FormSessionId.ToString();
+            var formSessionIdAsString = formSessionId.ToString();
 
             if (!this.cacheManager.IsSet(formSessionIdAsString))
             {
@@ -33,7 +34,7 @@
 
             var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionIdAsString, null);
 
-            var fileUtilityModel = new UploadFileUtilityModel(inputModel.File);
+            var fileUtilityModel = new UploadFileUtilityModel(file);
 
             formSessionStorage.Add(fileUtilityModel);
 

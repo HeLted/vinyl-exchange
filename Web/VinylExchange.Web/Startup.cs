@@ -238,7 +238,7 @@ namespace VinylExchange.Web
 
             // Tool Services
             services.AddTransient<IMemoryCache, MemoryCache>();
-            services.AddTransient<MemoryCacheManager>();
+            services.AddSingleton<MemoryCacheManager>();
             services.AddTransient<IMemoryCacheFileSevice, MemoryCacheFileService>();
             services.AddTransient<IFileManager, FileManager>();
             services.AddSingleton<ILoggerService, LoggerService>();

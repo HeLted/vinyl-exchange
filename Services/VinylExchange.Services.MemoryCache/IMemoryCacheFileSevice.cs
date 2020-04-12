@@ -1,5 +1,6 @@
 ﻿namespace VinylExchange.Services.MemoryCache
 {
+    using Microsoft.AspNetCore.Http;
     #region
 
     using System;
@@ -12,7 +13,7 @@
 
     public interface IMemoryCacheFileSevice
     {
-        TModel UploadFile<TModel>(UploadFileInputModel inputModel);
+        TModel UploadFile<TModel>(IFormFile file, Guid? formSessionId);
 
         List<UploadFileUtilityModel> GetAllFilesForFormSession(Guid formSessionId);
 
