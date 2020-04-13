@@ -13,6 +13,7 @@
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
+    using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Infrastructure.Hubs.SaleLog;
@@ -31,19 +32,21 @@
         private readonly IHubContext<SaleLogsHub, ISaleLogsClient> saleLogHubContext;
 
         private readonly ISaleLogsService saleLogsService;
-
+        private readonly ISaleMessagesService saleChatService;
         private readonly ISalesService salesService;
 
         public SalesController(
             ISalesService salesService,
             ILoggerService loggerService,
             IHubContext<SaleLogsHub, ISaleLogsClient> saleLogHubContext,
-            ISaleLogsService saleLogsService)
+            ISaleLogsService saleLogsService,
+            ISaleMessagesService saleChatService)
         {
             this.salesService = salesService;
             this.loggerService = loggerService;
             this.saleLogHubContext = saleLogHubContext;
             this.saleLogsService = saleLogsService;
+            this.saleChatService = saleChatService;
         }
 
         [HttpPost]
@@ -267,6 +270,8 @@
                 await this.saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
                     .RecieveLogNotification("Order was canceled by buyer!");
 
+                await this.saleChatService.ClearSaleMessages(saleInfoModel.Id);
+
                 return saleInfoModel;
             }
             catch (Exception ex)
@@ -287,7 +292,7 @@
 
                 if (saleInfoModel == null)
                 {
-                    return this.BadRequest();
+                    return this.NotFound();
                 }
 
                 var currentUserId = this.GetUserId(this.User);

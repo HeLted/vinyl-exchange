@@ -58,9 +58,11 @@
                 throw new NullReferenceException(SaleNotFound);
             }
 
-            var logsToBeClearedNumber = sale.Logs.Count;
+            var saleLogs = this.dbContext.SaleLogs.Where(sl => sl.SaleId == sale.Id).ToList();
 
-            sale.Logs.Clear();
+            var logsToBeClearedNumber = saleLogs.Count;
+            
+            this.dbContext.SaleLogs.RemoveRange(saleLogs);
 
             await this.dbContext.SaveChangesAsync();
 

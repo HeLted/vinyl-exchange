@@ -160,20 +160,27 @@ class SaleChatContainer extends Component {
   };
 
   recieveMessage = messageObj => {
-    this.setState(prevState => {
-      const updatedMesssages = prevState.messages;
-      updatedMesssages.push({
-        user: messageObj.userId,
-        message: messageObj.content,
-        avatar: this.state.avatars[
-          this.state.avatars
-            .map(avatarObj => avatarObj.userId)
-            .indexOf(messageObj.userId)
-        ].avatar
+
+
+      this.setState(prevState => {
+        const updatedMesssages = prevState.messages;
+        updatedMesssages.push({
+          user: messageObj.userId,
+          message: messageObj.content,
+    
+  
+          avatar: this.state.avatars[
+            this.state.avatars
+              .map(avatarObj => avatarObj.userId)
+              .indexOf(messageObj.userId)
+          ].avatar
+        });
+        return { messages: updatedMesssages };
       });
-      return { messages: updatedMesssages };
-    });
-  };
+    
+   
+  }
+
 
   handleOnChange = event => {
     const { value, name } = event.target;

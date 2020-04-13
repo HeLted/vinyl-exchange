@@ -17,6 +17,7 @@
     using VinylExchange.Services.EmailSender;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Users;
+    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
     #endregion
 
@@ -112,9 +113,8 @@
 
             var identityResult = await this.userManager.ResetPasswordAsync(
                 user,
-                resetPasswordToken,
-
-                                                                          newPassword);
+                resetPasswordToken, 
+                newPassword);
 
             return identityResult;
         }
@@ -177,7 +177,14 @@
 
         public async Task<VinylExchangeUser> GetUser(Guid? userId)
         {
-            return await this.userManager.FindByIdAsync(userId.ToString());
+            var user = await this.userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                throw new NullReferenceException(UserNotFound);
+            }
+
+            return user;
         }
 
         private async Task<string> ConstructConfirmationEmailContent(VinylExchangeUser user)

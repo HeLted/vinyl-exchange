@@ -15,5 +15,7 @@
         Task<AddMessageToSaleResourceModel> AddMessageToSale(Guid saleId, Guid userId, string message);
 
         Task<IEnumerable<GetMessagesForSaleResourceModel>> GetMessagesForSale(Guid saleId);
+
+        Task<int> ClearSaleMessages(Guid? saleId);
     }
 }

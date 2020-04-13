@@ -13,6 +13,7 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.SaleMessages;
+    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
     #endregion
 
@@ -42,6 +43,26 @@
             await this.dbContext.SaveChangesAsync();
 
             return saleMessage;
+        }
+
+        public async Task<int> ClearSaleMessages(Guid? saleId)
+        {
+            var sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
+
+            if (sale == null)
+            {
+                throw new NullReferenceException(SaleNotFound);
+            }
+
+            var saleMessages = this.dbContext.SaleMessages.Where(sm => sm.SaleId == sale.Id).ToList();
+
+            var messagesToBeClearedNumber = saleMessages.Count;
+
+            this.dbContext.SaleMessages.RemoveRange(saleMessages);
+
+            await this.dbContext.SaveChangesAsync();
+
+            return messagesToBeClearedNumber;
         }
 
         public async Task<IEnumerable<GetMessagesForSaleResourceModel>> GetMessagesForSale(Guid saleId)
