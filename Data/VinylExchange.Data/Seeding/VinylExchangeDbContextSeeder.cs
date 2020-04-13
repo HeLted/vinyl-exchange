@@ -28,7 +28,7 @@
             var logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger(typeof(VinylExchangeDbContextSeeder));
 
-            var seeders = new List<ISeeder> { new RolesSeeder(), new UsersSeeder() };
+            var seeders = new List<ISeeder> { new RolesSeeder(), new UsersSeeder(),new GenresSeeder(),new StylesSeeder() };
 
             foreach (var seeder in seeders)
             {
