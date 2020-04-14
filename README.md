@@ -14,12 +14,6 @@ Technologies used:
 -SingalR  
 -XUnit  
 
-Warning: Seeders are still in development.  
-Currently working data seeders:  
--UsersSeeder  
--GenresSeeder  
--StylesSeeder  
-
 # Starting App Instructions:
 1.Create appsettings.json in root/Web/VinylExchange.Web/appsettings.json by the following template :   https://gist.github.com/deyvidnenchev/28dc2e6a8fcc5850d30940981d1cd09f  
 2.Download Sample Data (Some of the sample data in this project depends on external audio and image files you can download them here : ->  
