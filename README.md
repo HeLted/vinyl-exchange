@@ -22,10 +22,11 @@ Currently working data seeders:
 
 # Starting App Instructions:
 1.Create appsettings.json in root/Web/VinylExchange.Web/appsettings.json by the following template :   https://gist.github.com/deyvidnenchev/28dc2e6a8fcc5850d30940981d1cd09f  
-2.Download Sample Data (Some of the sample data in this project depends on external audio and image files you can download them here :  )
-3.Unzip the zip file and place contents of Image folder into root/Web/VinylExchange.Web/MediaStorage/Image and also place contents of Audio folder into root/Web/VinylExchange.Web/MediaStorage/Audio
+2.Download Sample Data (Some of the sample data in this project depends on external audio and image files you can download them here : ->  
+https://mega.nz/file/nV8WWaIJ#6AjxZpArMt0mQDIa3LqiNyctch795z30WTp7J5nbYFQ )  
+3.Unzip the zip file and place contents of Image folder into root/Web/VinylExchange.Web/MediaStorage/Image and also place contents of Audio folder into root/Web/VinylExchange.Web/MediaStorage/Audio  
 4.Open project and rebuild project  
-5.Start project (First time launch may hang for 2-3 minutes)
+5.Start project (First time launch may hang for 2-3 minutes)  
 
 !!!Copyright notice for sample data!!! : All sample data used in this project is used only for educational purposes and belongs to it's respective owners.If you are a crator/label/copyright owner and you are not ok with me using your copyright owned material you can DM me and I will take it down as soon as possible :)
 
