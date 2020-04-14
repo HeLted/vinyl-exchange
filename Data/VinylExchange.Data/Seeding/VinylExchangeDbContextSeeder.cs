@@ -29,7 +29,7 @@
             var logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger(typeof(VinylExchangeDbContextSeeder));
 
-            var seeders = new List<ISeeder> { new RolesSeeder(), new UsersSeeder(),new GenresSeeder(),new StylesSeeder() };
+            var seeders = new List<ISeeder> { new RolesSeeder(), new UsersSeeder(),new GenresSeeder(),new StylesSeeder(),new ReleasesSeeder(),new ReleaseFilesSeeder() };
 
             foreach (var seeder in seeders)
             {
