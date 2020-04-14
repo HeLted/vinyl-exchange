@@ -8,6 +8,7 @@
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using VinylExchange.Data.Seeding.Contracts;
 
     #endregion
 
