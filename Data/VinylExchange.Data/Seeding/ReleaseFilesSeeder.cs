@@ -25,7 +25,7 @@ namespace VinylExchange.Data.Seeding
                 "e10ccdba-7f17-4831-a9e9-335a3f2ec96c@---@ZG93bmxvYWQ=.jpg",true);
 
               await SeedReleaseFileAsync(dbContext,Guid.Parse("3cc8ee5c-4dc3-4009-b3fc-d768e6a564f8"),FileType.Audio,
-                "0d8f30d3-67a7-48b6-a2ad-f69d0afebed8@---@MDQgLSBBcGhleCBUd2luIC0gQWdlaXNwb2xpcw==.mp3",false);
+                "0d8f30d3-67a7-48b6-a2ad-f69d0afebed8@---@QXBoZXggVHdpbiAtIEFnZWlzcG9saXM=.mp3",false);
 
             }
 

@@ -15,6 +15,7 @@ function ReleaseMenuComponent(props) {
         <Fragment>
           {" "}
           <AddSalePopupContainer
+            disabled={props.data.user !== null}
             data={{
               releaseId: props.data.releaseId
             }}
