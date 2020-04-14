@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using VinylExchange.Data.Models;
+    using VinylExchange.Data.Seeding.Contracts;
 
     #endregion
 

@@ -11,6 +11,7 @@
 
     using VinylExchange.Common.Constants;
     using VinylExchange.Data.Models;
+    using VinylExchange.Data.Seeding.Contracts;
 
     #endregion
 

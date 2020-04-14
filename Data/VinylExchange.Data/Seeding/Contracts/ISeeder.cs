@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Data.Seeding
+﻿namespace VinylExchange.Data.Seeding.Contracts
 {
     #region
 
