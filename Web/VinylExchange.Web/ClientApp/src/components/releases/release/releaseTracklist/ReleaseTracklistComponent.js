@@ -11,7 +11,7 @@ function ReleaseTracklistComponent(props){
 
     const component = props.data.isLoading ? (<tr><td><BorderSpinner/></td></tr>) : (tracksRows)
 
-   return( <table className="tracklist-table table-borderless border text-left">
+   return( <table className="tracklist-table table-borderless border text-center">
    <tbody>
      {tracksRows.length ===  0 && props.data.isLoading === false ?  <tr><td>This release has no tracks</td></tr>: component }
    </tbody>
