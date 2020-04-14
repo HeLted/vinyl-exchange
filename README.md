@@ -23,6 +23,5 @@ Currently working data seeders:
 # Starting App Instructions:
 1.Create appsettings.json in root/Web/VinylExchange.Web/appsettings.json by the following template :   https://gist.github.com/deyvidnenchev/28dc2e6a8fcc5850d30940981d1cd09f  
 2.Open project and rebuild project  
-3.Apply migrations  
-4.Start project  
+3.Start project (Kestrel prefered)(First time starting my hang for 2-3 minutes)
 
