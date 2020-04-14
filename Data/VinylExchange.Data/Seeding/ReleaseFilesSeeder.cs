@@ -5,7 +5,7 @@ using VinylExchange.Data.Seeding.Contracts;
 
 namespace VinylExchange.Data.Seeding
 {
-    public class ReleasesSeeder : ISeeder
+    public class ReleaseFilesSeeder : ISeeder
     {
     }
 }
