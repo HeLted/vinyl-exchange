@@ -6,7 +6,7 @@ namespace VinylExchange.Services.Data.MainServices.Sales.Exceptions
 {
     public class InvalidSaleActionException : Exception
     {
-        public InvalidSaleActionException(string message) : base (message)
+        public  InvalidSaleActionException(string message) : base (message)
         {
         }
     }

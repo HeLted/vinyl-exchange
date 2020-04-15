@@ -17,6 +17,7 @@
     using VinylExchange.Services.Data.MainServices.Addresses;
     using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Services.Data.MainServices.Sales.Exceptions;
     using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Web.Models.InputModels.Sales;
@@ -563,7 +564,7 @@
             var sale = new Sale()
             {
                 Status = Status.Open
-            };            
+            };
 
             await this.dbContext.Sales.AddAsync(sale);
 
@@ -584,6 +585,35 @@
             Assert.True(
                 changedSale.ShipsTo
                 == $"{address.Country} - {address.Town} - {address.PostalCode} - {address.FullAddress}");
+        }
+
+        [Theory]
+        [InlineData(Status.Finished)]
+        [InlineData(Status.Paid)]
+        [InlineData(Status.PaymentPending)]
+        [InlineData(Status.Sent)]
+        [InlineData(Status.ShippingNegotiation)]
+        public async Task PlaceOrderShouldThrowInvalidSaleStatusExceptionIfStatusIsNotOpen(Status status)
+        {
+            var sale = new Sale()
+            {
+                Status = status
+            };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var address = new Address();
+
+            var user = new VinylExchangeUser();
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+
+            await Assert.ThrowsAsync<InvalidSaleActionException>(
+                                async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id));
         }
     }
 }
