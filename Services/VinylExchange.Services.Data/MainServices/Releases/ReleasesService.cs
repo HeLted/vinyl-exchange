@@ -19,7 +19,7 @@
 
     public class ReleasesService : IReleasesService, IReleasesEntityRetriever
     {
-        private const int ReleasesToTake = 5;
+        private const int ReleasesToTake = 8;
 
         private readonly VinylExchangeDbContext dbContext;
 

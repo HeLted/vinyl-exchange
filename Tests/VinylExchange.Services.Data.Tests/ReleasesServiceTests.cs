@@ -26,7 +26,7 @@
 
     public class ReleasesServiceTests
     {
-        public const int ReleasesToTake = 5;
+        public const int ReleasesToTake = 8;
 
         private readonly VinylExchangeDbContext dbContext;
 
@@ -51,231 +51,6 @@
             this.releaseFilesServiceMock = new Mock<IReleaseFilesService>();
 
             this.releasesService = new ReleasesService(this.dbContext, this.releaseFilesServiceMock.Object);
-        }
-
-        [Theory]
-        [InlineData("Aphex", 1, new[] { 5 }, 4)]
-        [InlineData("Aph", 1, new[] { 5, 6 }, 5)]
-        [InlineData("", 1, new[] { 7 }, 2)]
-        [InlineData("Tiesto", 1, new[] { 10 }, 0)]
-        [InlineData("bt", 1, new[] { 2 }, 1)]
-        [InlineData("bt", 1, new[] { 2, 4 }, 2)]
-        [InlineData("a", 1, new[] { 4 }, 2)]
-        public async Task GetReleasesShouldGetFirstFiveReleasesMatchingSearchTermAndGenreFilterAndStyleFilter(
-            string searchTerm,
-            int filterGenreId,
-            IEnumerable<int> filterStyleIds,
-            int expectedMatchingReleasesCount)
-        {
-            await this.AddReleasesTestData();
-
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
-                                              .Where(
-                                                  r => r.Artist.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase)
-                                                       || r.Title.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase))
-                                              .Where(
-                                                  r => r.Styles.Any(
-                                                      sr => filterStyleIds.Contains(sr.StyleId)
-                                                            && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)))
-                                              .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
-
-            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
-                                    searchTerm,
-                                    filterGenreId,
-                                    filterStyleIds,
-                                    0);
-
-            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
-            Assert.Equal(
-                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
-                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
-        }
-
-        [Theory]
-        [InlineData("Aphex", 5)]
-        [InlineData("tiesto", 3)]
-        [InlineData("rwqrrwrqwr", 0)]
-        [InlineData("test", 0)]
-        [InlineData("Eminem", 2)]
-        [InlineData("eminem", 2)]
-        [InlineData("8", 1)]
-        [InlineData("Armin", 1)]
-        [InlineData("Chemical Bro", 2)]
-        [InlineData("this binary universe", 1)]
-        [InlineData("bt", 2)]
-        [InlineData("Fatboy", 1)]
-        [InlineData("escm", 1)]
-        [InlineData("nothing else", 1)]
-        [InlineData("metalica", 1)]
-        public async Task GetReleasesShouldGetFirstFiveReleasesMatchingSearchTermWithNoGenreAndStyleFilterProvided(
-            string searchTerm,
-            int expectedMatchingReleasesCount)
-        {
-            await this.AddReleasesTestData();
-
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Where(
-                                                  r => r.Artist.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase)
-                                                       || r.Title.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase))
-                                              .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
-
-            var releaseModels =
-                await this.releasesService.GetReleases<GetReleaseResourceModel>(searchTerm, null, new List<int>(), 0);
-
-            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
-            Assert.Equal(
-                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
-                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
-        }
-
-        [Theory]
-        [InlineData(20, 5)]
-        [InlineData(25, 1)]
-        [InlineData(23, 3)]
-        [InlineData(10, 5)]
-        [InlineData(5, 5)]
-        public async Task GetReleasesShouldSkipGivenNumberOfReleasesAndGetNextFiveReleases(
-            int releasesToSkip,
-            int expectedMatchingReleasesCount)
-        {
-            await this.AddReleasesTestData();
-
-            var releasesModelsToCompare = await this.dbContext.Releases.Skip(releasesToSkip).Take(ReleasesToTake)
-                                              .To<GetReleaseResourceModel>().ToListAsync();
-
-            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
-                                    null,
-                                    null,
-                                    new List<int>(),
-                                    releasesToSkip);
-
-            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
-            Assert.Equal(
-                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
-                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
-        }
-
-        [Theory]
-        [InlineData(1, new[] { 2, 5 }, 0, 5)]
-        [InlineData(1, new[] { 2, 5 }, 5, 5)]
-        [InlineData(1, new[] { 2, 5 }, 10, 1)]
-        [InlineData(2, new[] { 8, 9, 10 }, 0, 3)]
-        [InlineData(2, new[] { 8, 10 }, 0, 2)]
-        [InlineData(2, new[] { 8 }, 0, 1)]
-        public async Task
-            GetReleasesShouldSkipSkipCountAndGetNextFiveReleasesMatchingGenreFilterAndStyleFilterWithNoSearchTerm(
-                int filterGenreId,
-                IEnumerable<int> filterStyleIds,
-                int releasesToSkip,
-                int expectedMatchingReleasesCount)
-        {
-            await this.AddReleasesTestData();
-
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
-                                              .Where(
-                                                  r => r.Styles.Any(
-                                                      sr => filterStyleIds.Contains(sr.StyleId)
-                                                            && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)))
-                                              .Skip(releasesToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
-                                              .ToListAsync();
-            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
-                                    null,
-                                    filterGenreId,
-                                    filterStyleIds,
-                                    releasesToSkip);
-
-            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
-            Assert.Equal(
-                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
-                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
-        }
-
-        [Theory]
-        [InlineData(1, 0, 5)]
-        [InlineData(1, 3, 5)]
-        [InlineData(1, 5, 5)]
-        [InlineData(1, 19, 2)]
-        [InlineData(1, 21, 0)]
-        [InlineData(2, 0, 3)]
-        [InlineData(2, 1, 2)]
-        [InlineData(2, 3, 0)]
-        [InlineData(3, 0, 2)]
-        [InlineData(3, 2, 0)]
-        public async Task
-            GetReleasesShouldSkipSkipCountAndGetNextFiveReleasesMatchingGenreFilterWithNoSearchTermAndNoStyleFilterProvided(
-                int filterGenreId,
-                int releaseToSkip,
-                int expectedMatchingReleasesCount)
-        {
-            await this.AddReleasesTestData();
-
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
-                                              .Skip(releaseToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
-                                              .ToListAsync();
-
-            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
-                                    null,
-                                    filterGenreId,
-                                    new List<int>(),
-                                    releaseToSkip);
-
-            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
-            Assert.Equal(
-                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
-                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
-        }
-
-        [Theory]
-        [InlineData("Aphex", 1, 0, 5)]
-        [InlineData("Aphex", 1, 4, 2)]
-        [InlineData("Aphex", 1, 5, 1)]
-        [InlineData("Aphex", 2, 0, 0)]
-        [InlineData("tiesto", 1, 0, 3)]
-        [InlineData("Metalica", 2, 0, 1)]
-        [InlineData("Metalica", 1, 0, 0)]
-        public async Task
-            GetReleasesShouldSkipSkipCountAndGetNextFiveReleasesMatchingSearchTermAndGenreFilterWithNoStyleFilterProvided(
-                string searchTerm,
-                int filterGenreId,
-                int releaseToSkip,
-                int expectedMatchingReleasesCount)
-        {
-            await this.AddReleasesTestData();
-
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
-                                              .Where(
-                                                  r => r.Artist.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase)
-                                                       || r.Title.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase))
-                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
-                                              .Skip(releaseToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
-                                              .ToListAsync();
-
-            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
-                                    searchTerm,
-                                    filterGenreId,
-                                    new List<int>(),
-                                    releaseToSkip);
-
-            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
-            Assert.Equal(
-                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
-                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
         }
 
         [Fact]
@@ -312,7 +87,7 @@
                 string.Join(string.Empty, this.testCreateReleaseInputModel.StyleIds),
                 string.Join(string.Empty, createdRelease.Styles.Select(sr => sr.StyleId)));
         }
-
+        
         [Fact]
         public async Task GetReleaseoShouldReturnNullIfProvidedReleaseIdIsNotExistingInDb()
         {
@@ -338,14 +113,241 @@
             Assert.Equal(createdRelease.Id, returnedReleaseModel.Id);
         }
 
-        [Fact]
-        public async Task
-            GetReleasesShouldGetFirstFiveReleasesWithNoSearchTermAndNoGenreFilterAndNoStyleFilterProvided()
+
+
+        [Theory]
+        [InlineData("Aphex", 1, new[] { 5 }, 4)]
+        [InlineData("Aph", 1, new[] { 5, 6 }, 6)]
+        [InlineData("", 1, new[] { 7 }, 2)]
+        [InlineData("Tiesto", 1, new[] { 10 }, 0)]
+        [InlineData("bt", 1, new[] { 2 }, 1)]
+        [InlineData("bt", 1, new[] { 2, 4 }, 2)]
+        [InlineData("a", 1, new[] { 4 }, 2)]
+        public async Task GetReleasesShouldGetFirstEightReleasesMatchingSearchTermAndGenreFilterAndStyleFilter(
+            string searchTerm,
+            int filterGenreId,
+            IEnumerable<int> filterStyleIds,
+            int expectedMatchingReleasesCount)
         {
             await this.AddReleasesTestData();
 
             var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Take(5).To<GetReleaseResourceModel>().ToListAsync();
+                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
+                                              .Where(
+                                                  r => r.Artist.Contains(
+                                                           searchTerm,
+                                                           StringComparison.InvariantCultureIgnoreCase)
+                                                       || r.Title.Contains(
+                                                           searchTerm,
+                                                           StringComparison.InvariantCultureIgnoreCase))
+                                              .Where(
+                                                  r => r.Styles.Any(
+                                                      sr => filterStyleIds.Contains(sr.StyleId)
+                                                            && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)))
+                                              .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
+
+            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
+                                    searchTerm,
+                                    filterGenreId,
+                                    filterStyleIds,
+                                    0);
+
+            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
+            Assert.Equal(
+                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
+                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
+        }
+
+        [Theory]
+        [InlineData("Aphex", 6)]
+        [InlineData("tiesto", 3)]
+        [InlineData("rwqrrwrqwr", 0)]
+        [InlineData("test", 0)]
+        [InlineData("Eminem", 2)]
+        [InlineData("eminem", 2)]
+        [InlineData("8", 1)]
+        [InlineData("Armin", 1)]
+        [InlineData("Chemical Bro", 2)]
+        [InlineData("this binary universe", 1)]
+        [InlineData("bt", 2)]
+        [InlineData("Fatboy", 1)]
+        [InlineData("escm", 1)]
+        [InlineData("nothing else", 1)]
+        [InlineData("metalica", 1)]
+        public async Task GetReleasesShouldGetFirstEightReleasesMatchingSearchTermWithNoGenreAndStyleFilterProvided(
+            string searchTerm,
+            int expectedMatchingReleasesCount)
+        {
+            await this.AddReleasesTestData();
+
+            var releasesModelsToCompare = await this.dbContext.Releases
+                                              .Where(
+                                                  r => r.Artist.Contains(
+                                                           searchTerm,
+                                                           StringComparison.InvariantCultureIgnoreCase)
+                                                       || r.Title.Contains(
+                                                           searchTerm,
+                                                           StringComparison.InvariantCultureIgnoreCase))
+                                              .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
+
+            var releaseModels =
+                await this.releasesService.GetReleases<GetReleaseResourceModel>(searchTerm, null, new List<int>(), 0);
+
+            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
+            Assert.Equal(
+                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
+                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
+        }
+
+        [Theory]
+        [InlineData(20, 6)]
+        [InlineData(25, 1)]
+        [InlineData(23, 3)]
+        [InlineData(10, 8)]
+        [InlineData(5, 8)]
+        public async Task GetReleasesShouldSkipGivenNumberOfReleasesAndGetNextEightReleases(
+            int releasesToSkip,
+            int expectedMatchingReleasesCount)
+        {
+            await this.AddReleasesTestData();
+
+            var releasesModelsToCompare = await this.dbContext.Releases.Skip(releasesToSkip).Take(ReleasesToTake)
+                                              .To<GetReleaseResourceModel>().ToListAsync();
+
+            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
+                                    null,
+                                    null,
+                                    new List<int>(),
+                                    releasesToSkip);
+
+            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
+            Assert.Equal(
+                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
+                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
+        }
+
+        [Theory]
+        [InlineData(1, new[] { 2, 5 }, 0, 8)]
+        [InlineData(1, new[] { 2, 5 }, 5, 6)]
+        [InlineData(1, new[] { 2, 5 }, 10, 1)]
+        [InlineData(2, new[] { 8, 9, 10 }, 0, 3)]
+        [InlineData(2, new[] { 8, 10 }, 0, 2)]
+        [InlineData(2, new[] { 8 }, 0, 1)]
+        public async Task
+            GetReleasesShouldSkipSkipCountAndGetNextEightReleasesMatchingGenreFilterAndStyleFilterWithNoSearchTerm(
+                int filterGenreId,
+                IEnumerable<int> filterStyleIds,
+                int releasesToSkip,
+                int expectedMatchingReleasesCount)
+        {
+            await this.AddReleasesTestData();
+
+            var releasesModelsToCompare = await this.dbContext.Releases
+                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
+                                              .Where(
+                                                  r => r.Styles.Any(
+                                                      sr => filterStyleIds.Contains(sr.StyleId)
+                                                            && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)))
+                                              .Skip(releasesToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
+                                              .ToListAsync();
+            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
+                                    null,
+                                    filterGenreId,
+                                    filterStyleIds,
+                                    releasesToSkip);
+
+            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
+            Assert.Equal(
+                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
+                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
+        }
+
+        [Theory]
+        [InlineData(1, 0, 8)]
+        [InlineData(1, 3, 8)]
+        [InlineData(1, 5, 8)]
+        [InlineData(1, 19, 2)]
+        [InlineData(1, 21, 0)]
+        [InlineData(2, 0, 3)]
+        [InlineData(2, 1, 2)]
+        [InlineData(2, 3, 0)]
+        [InlineData(3, 0, 2)]
+        [InlineData(3, 2, 0)]
+        public async Task
+            GetReleasesShouldSkipSkipCountAndGetNextEightReleasesMatchingGenreFilterWithNoSearchTermAndNoStyleFilterProvided(
+                int filterGenreId,
+                int releaseToSkip,
+                int expectedMatchingReleasesCount)
+        {
+            await this.AddReleasesTestData();
+
+            var releasesModelsToCompare = await this.dbContext.Releases
+                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
+                                              .Skip(releaseToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
+                                              .ToListAsync();
+
+            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
+                                    null,
+                                    filterGenreId,
+                                    new List<int>(),
+                                    releaseToSkip);
+
+            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
+            Assert.Equal(
+                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
+                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
+        }
+
+        [Theory]
+        [InlineData("Aphex", 1, 0, 6)]
+        [InlineData("Aphex", 1, 4, 2)]
+        [InlineData("Aphex", 1, 5, 1)]
+        [InlineData("Aphex", 2, 0, 0)]
+        [InlineData("tiesto", 1, 0, 3)]
+        [InlineData("Metalica", 2, 0, 1)]
+        [InlineData("Metalica", 1, 0, 0)]
+        public async Task
+            GetReleasesShouldSkipSkipCountAndGetNextEightReleasesMatchingSearchTermAndGenreFilterWithNoStyleFilterProvided(
+                string searchTerm,
+                int filterGenreId,
+                int releaseToSkip,
+                int expectedMatchingReleasesCount)
+        {
+            await this.AddReleasesTestData();
+
+            var releasesModelsToCompare = await this.dbContext.Releases
+                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
+                                              .Where(
+                                                  r => r.Artist.Contains(
+                                                           searchTerm,
+                                                           StringComparison.InvariantCultureIgnoreCase)
+                                                       || r.Title.Contains(
+                                                           searchTerm,
+                                                           StringComparison.InvariantCultureIgnoreCase))
+                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
+                                              .Skip(releaseToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
+                                              .ToListAsync();
+
+            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
+                                    searchTerm,
+                                    filterGenreId,
+                                    new List<int>(),
+                                    releaseToSkip);
+
+            Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
+            Assert.Equal(
+                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
+                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
+        }
+
+        [Fact]
+        public async Task
+            GetReleasesShouldGetFirstEightReleasesWithNoSearchTermAndNoGenreFilterAndNoStyleFilterProvided()
+        {
+            await this.AddReleasesTestData();
+
+            var releasesModelsToCompare = await this.dbContext.Releases
+                                              .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
 
             var releaseModels =
                 await this.releasesService.GetReleases<GetReleaseResourceModel>(null, null, new List<int>(), 0);
