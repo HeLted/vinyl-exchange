@@ -8,10 +8,10 @@
 
     #endregion
 
-    static class MockFactory
+    internal static class MockFactory
     {
         public static Mock<UserManager<TUser>> MockUserManager<TUser>()
-           where TUser : class
+            where TUser : class
         {
             var store = new Mock<IUserStore<TUser>>();
 

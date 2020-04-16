@@ -1,13 +1,18 @@
 ﻿namespace VinylExchange.Services.MemoryCache
 {
-    using Microsoft.AspNetCore.Http;
+    #region
+
     #region
 
     using System;
     using System.Collections.Generic;
 
+    using Microsoft.AspNetCore.Http;
+
     using VinylExchange.Web.Models.InputModels.Files;
     using VinylExchange.Web.Models.Utility.Files;
+
+    #endregion
 
     #endregion
 

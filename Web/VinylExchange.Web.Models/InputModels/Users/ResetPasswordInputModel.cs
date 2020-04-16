@@ -10,7 +10,6 @@
 
     public class ResetPasswordInputModel
     {
-        
         [Required]
         public string ResetPasswordToken { get; set; }
 

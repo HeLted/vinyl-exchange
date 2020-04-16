@@ -1,16 +1,21 @@
 ﻿namespace VinylExchange.Services.MemoryCache
 {
-    using Microsoft.AspNetCore.Http;
+    #region
+
     #region
 
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using Microsoft.AspNetCore.Http;
+
     using VinylExchange.Common.Constants;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Files;
     using VinylExchange.Web.Models.Utility.Files;
+
+    #endregion
 
     #endregion
 
@@ -23,7 +28,7 @@
             this.cacheManager = cacheManager;
         }
 
-        public TModel UploadFile<TModel>(IFormFile file,Guid? formSessionId)
+        public TModel UploadFile<TModel>(IFormFile file, Guid? formSessionId)
         {
             var formSessionIdAsString = formSessionId.ToString();
 

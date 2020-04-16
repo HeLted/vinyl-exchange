@@ -16,7 +16,7 @@
     using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Services.EmailSender;
     using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.InputModels.Users;
+
     using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
     #endregion
@@ -62,11 +62,7 @@
         {
             this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            var identityResult = await this.signInManager.PasswordSignInAsync(
-                                     username,
-                                     password,
-                                     rememberMe,
-                                     false);
+            var identityResult = await this.signInManager.PasswordSignInAsync(username, password, rememberMe, false);
 
             return identityResult;
         }
@@ -77,7 +73,7 @@
 
             if (user == null)
             {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+                throw new NullReferenceException(UserCannotBeNull);
             }
 
             var identityResult = await this.userManager.ConfirmEmailAsync(user, emailConfirmToken);
@@ -91,13 +87,10 @@
 
             if (user == null)
             {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+                throw new NullReferenceException(UserCannotBeNull);
             }
 
-            var identityResult = await this.userManager.ChangeEmailAsync(
-                                     user,
-                                     newEmail,
-                                     changeEmailToken);
+            var identityResult = await this.userManager.ChangeEmailAsync(user, newEmail, changeEmailToken);
 
             return identityResult;
         }
@@ -108,13 +101,10 @@
 
             if (user == null)
             {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+                throw new NullReferenceException(UserCannotBeNull);
             }
 
-            var identityResult = await this.userManager.ResetPasswordAsync(
-                user,
-                resetPasswordToken, 
-                newPassword);
+            var identityResult = await this.userManager.ResetPasswordAsync(user, resetPasswordToken, newPassword);
 
             return identityResult;
         }
@@ -125,7 +115,7 @@
 
             if (user == null)
             {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+                throw new NullReferenceException(UserCannotBeNull);
             }
 
             var emailContent = await this.ConstructConfirmationEmailContent(user);
@@ -139,7 +129,7 @@
 
             if (user == null)
             {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+                throw new NullReferenceException(UserCannotBeNull);
             }
 
             var emailContent = await this.ConstructChangeEmailEmailContent(user, newEmail);
@@ -153,7 +143,7 @@
 
             if (user == null)
             {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.UserCannotBeNull);
+                throw new NullReferenceException(UserCannotBeNull);
             }
 
             var emailContent = await this.ConstructChangePasswordEmailContent(user);
@@ -167,7 +157,7 @@
 
             if (user == null)
             {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.UserWithEmailCannotBeFound);
+                throw new NullReferenceException(UserWithEmailCannotBeFound);
             }
 
             var emailContent = await this.ConstructChangePasswordEmailContent(user);

@@ -13,6 +13,7 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.SaleMessages;
+
     using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
     #endregion

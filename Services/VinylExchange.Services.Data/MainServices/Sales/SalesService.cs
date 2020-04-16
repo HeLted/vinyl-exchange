@@ -194,13 +194,13 @@
         public async Task<TModel> CancelOrder<TModel>(Guid? saleId, Guid? buyerId)
         {
             var sale = await this.GetSale(saleId);
-          
+
             var user = await this.usersEntityRetriever.GetUser(buyerId);
 
             if (sale == null)
             {
                 throw new NullReferenceException(SaleNotFound);
-            }         
+            }
 
             if (user == null)
             {
@@ -214,7 +214,7 @@
 
             sale.BuyerId = null;
 
-            sale.Status = Status.Open;            
+            sale.Status = Status.Open;
 
             await this.dbContext.SaveChangesAsync();
 

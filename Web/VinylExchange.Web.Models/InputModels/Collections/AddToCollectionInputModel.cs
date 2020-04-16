@@ -1,13 +1,17 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Collections
 {
-    using System;
     #region
 
+    #region
+
+    using System;
     using System.ComponentModel.DataAnnotations;
 
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
+
+    #endregion
 
     #endregion
 

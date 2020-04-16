@@ -42,20 +42,17 @@
         private readonly Mock<IReleasesEntityRetriever> releasesEntityRetrieverMock;
 
         private readonly CreateSaleInputModel testCreateSaleInputModel = new CreateSaleInputModel
-        {
-            VinylGrade = Condition.Mint,
-            SleeveGrade = Condition.Fair,
-            Price = 30,
-            Description = "test description"
-        };
+            {
+                VinylGrade = Condition.Mint,
+                SleeveGrade = Condition.Fair,
+                Price = 30,
+                Description = "test description"
+            };
 
         private readonly Address testAddress = new Address
-        {
-            Country = "Bulgaria",
-            Town = "Sofia",
-            PostalCode = "1612",
-            FullAddress = "j.k Lagera blok 123"
-        };
+            {
+                Country = "Bulgaria", Town = "Sofia", PostalCode = "1612", FullAddress = "j.k Lagera blok 123"
+            };
 
         public SalesServiceTests()
         {
@@ -220,26 +217,26 @@
             var addressProperties = new List<string> { updatedAddress.Country, updatedAddress.Town };
 
             var sale = new Sale
-            {
-                VinylGrade = Condition.Poor,
-                SleeveGrade = Condition.NearMint,
-                Description = "blbbebe",
-                Price = 50,
-                ShipsFrom = "Paris France"
-            };
+                {
+                    VinylGrade = Condition.Poor,
+                    SleeveGrade = Condition.NearMint,
+                    Description = "blbbebe",
+                    Price = 50,
+                    ShipsFrom = "Paris France"
+                };
 
             await this.dbContext.Sales.AddAsync(sale);
 
             await this.dbContext.SaveChangesAsync();
 
             var editSaleInputModel = new EditSaleInputModel
-            {
-                VinylGrade = Condition.Mint,
-                SleeveGrade = Condition.Mint,
-                Description = "updated description",
-                Price = 100,
-                SaleId = sale.Id
-            };
+                {
+                    VinylGrade = Condition.Mint,
+                    SleeveGrade = Condition.Mint,
+                    Description = "updated description",
+                    Price = 100,
+                    SaleId = sale.Id
+                };
 
             await this.salesService.EditSale<EditSaleResourceModel>(editSaleInputModel);
 
@@ -534,10 +531,7 @@
         [Fact]
         public async Task PlaceOrderShouldSetBuyerId()
         {
-            var sale = new Sale()
-            {
-                Status = Status.Open
-            };
+            var sale = new Sale { Status = Status.Open };
 
             await this.dbContext.Sales.AddAsync(sale);
 
@@ -561,10 +555,7 @@
         [Fact]
         public async Task PlaceOrderShouldSetShipsToAddress()
         {
-            var sale = new Sale()
-            {
-                Status = Status.Open
-            };
+            var sale = new Sale { Status = Status.Open };
 
             await this.dbContext.Sales.AddAsync(sale);
 
@@ -595,10 +586,7 @@
         [InlineData(Status.ShippingNegotiation)]
         public async Task PlaceOrderShouldThrowInvalidSaleStatusExceptionIfStatusIsNotOpen(Status status)
         {
-            var sale = new Sale()
-            {
-                Status = status
-            };
+            var sale = new Sale { Status = status };
 
             await this.dbContext.Sales.AddAsync(sale);
 
@@ -613,7 +601,7 @@
             this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             await Assert.ThrowsAsync<InvalidSaleActionException>(
-                                async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id));
+                async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id));
         }
     }
 }

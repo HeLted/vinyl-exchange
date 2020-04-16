@@ -62,9 +62,9 @@
         {
             try
             {
-                var confirmEmailIdentityResult =
-                    await this.userService.ConfirmEmail(inputModel.EmailConfirmToken
-                    , this.GetUserId(this.User));
+                var confirmEmailIdentityResult = await this.userService.ConfirmEmail(
+                                                     inputModel.EmailConfirmToken,
+                                                     this.GetUserId(this.User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -87,8 +87,10 @@
         {
             try
             {
-                var confirmEmailIdentityResult =
-                    await this.userService.ChangeEmail(inputModel.ChangeEmailToken, inputModel.NewEmail, this.GetUserId(this.User));
+                var confirmEmailIdentityResult = await this.userService.ChangeEmail(
+                                                     inputModel.ChangeEmailToken,
+                                                     inputModel.NewEmail,
+                                                     this.GetUserId(this.User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -110,7 +112,10 @@
         {
             try
             {
-                var confirmEmailIdentityResult = await this.userService.ResetPassword(inputModel.ResetPasswordToken, inputModel.Email, inputModel.NewPassword);
+                var confirmEmailIdentityResult = await this.userService.ResetPassword(
+                                                     inputModel.ResetPasswordToken,
+                                                     inputModel.Email,
+                                                     inputModel.NewPassword);
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
@@ -163,7 +168,10 @@
 
             try
             {
-                var registerUserIdentityResult = await this.userService.LoginUser(inputModel.Username,inputModel.Password,inputModel.RememberMe);
+                var registerUserIdentityResult = await this.userService.LoginUser(
+                                                     inputModel.Username,
+                                                     inputModel.Password,
+                                                     inputModel.RememberMe);
 
                 if (registerUserIdentityResult.Succeeded)
                 {

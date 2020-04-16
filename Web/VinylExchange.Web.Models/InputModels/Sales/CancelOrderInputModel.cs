@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace VinylExchange.Web.Models.InputModels.Sales
+﻿namespace VinylExchange.Web.Models.InputModels.Sales
 {
+    #region
+
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    #endregion
+
     public class CancelOrderInputModel
     {
         [Required]

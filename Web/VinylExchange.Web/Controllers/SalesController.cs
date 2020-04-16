@@ -32,7 +32,9 @@
         private readonly IHubContext<SaleLogsHub, ISaleLogsClient> saleLogHubContext;
 
         private readonly ISaleLogsService saleLogsService;
+
         private readonly ISaleMessagesService saleChatService;
+
         private readonly ISalesService salesService;
 
         public SalesController(
@@ -173,7 +175,6 @@
             }
         }
 
-
         [HttpGet]
         [Route("GetUserPurchases")]
         public async Task<ActionResult<IEnumerable<GetUserPurchasesResourceModel>>> GetUserPurchases()
@@ -221,15 +222,20 @@
                 var currentUserId = this.GetUserId(this.User);
 
                 if (saleInfoModel.SellerId == currentUserId
-                    || saleInfoModel.BuyerId == currentUserId
-                    )
+                    || saleInfoModel.BuyerId == currentUserId)
                 {
                     return this.Forbid();
                 }
 
-                await this.salesService.PlaceOrder<SaleStatusResourceModel>(inputModel.SaleId,inputModel.AddressId, currentUserId);
+                await this.salesService.PlaceOrder<SaleStatusResourceModel>(
+                    inputModel.SaleId,
+                    inputModel.AddressId,
+                    currentUserId);
 
-                var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleInfoModel.Id, SaleLogs.PlacedOrder);
+                var addedLogModel =
+                    await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
+                        saleInfoModel.Id,
+                        SaleLogs.PlacedOrder);
 
                 await this.saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
                     .RecieveLogNotification(addedLogModel.Content);
@@ -281,7 +287,6 @@
             }
         }
 
-
         [HttpPut]
         [Route("SetShippingPrice")]
         public async Task<ActionResult<SaleStatusResourceModel>> SetShippingPrice(SetShippingPriceInputModel inputModel)
@@ -299,7 +304,9 @@
 
                 if (saleInfoModel.SellerId == currentUserId)
                 {
-                    var saleStatusModel = await this.salesService.SetShippingPrice<SaleStatusResourceModel>(inputModel.SaleId,inputModel.ShippingPrice);
+                    var saleStatusModel = await this.salesService.SetShippingPrice<SaleStatusResourceModel>(
+                                              inputModel.SaleId,
+                                              inputModel.ShippingPrice);
 
                     var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
                                             saleInfoModel.Id,
@@ -337,9 +344,13 @@
 
                 if (saleModel.BuyerId == currentUserId)
                 {
-                    var saleStatusModel = await this.salesService.CompletePayment<SaleStatusResourceModel>(inputModel.SaleId,inputModel.OrderId);
+                    var saleStatusModel =
+                        await this.salesService.CompletePayment<SaleStatusResourceModel>(
+                            inputModel.SaleId,
+                            inputModel.OrderId);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleModel.Id, SaleLogs.Paid);
+                    var addedLogModel =
+                        await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleModel.Id, SaleLogs.Paid);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
@@ -373,9 +384,13 @@
 
                 if (saleModel.SellerId == currentUserId)
                 {
-                    var saleStatusModel = await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(inputModel.SaleId);
+                    var saleStatusModel =
+                        await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(inputModel.SaleId);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleModel.Id, SaleLogs.ItemSent);
+                    var addedLogModel =
+                        await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
+                            saleModel.Id,
+                            SaleLogs.ItemSent);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
@@ -395,7 +410,7 @@
         [HttpPut]
         [Route("ConfirmItemRecieved")]
         public async Task<ActionResult<SaleStatusResourceModel>> ConfirmItemRecieved(
-          ConfirmItemRecievedInputModel inputModel)
+            ConfirmItemRecievedInputModel inputModel)
         {
             try
             {
@@ -413,7 +428,10 @@
                     var saleStatusModel =
                         await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(inputModel.SaleId);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleModel.Id, SaleLogs.ItemRecieved);
+                    var addedLogModel =
+                        await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
+                            saleModel.Id,
+                            SaleLogs.ItemRecieved);
 
                     await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);

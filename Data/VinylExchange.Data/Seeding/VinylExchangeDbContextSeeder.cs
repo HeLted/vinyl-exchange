@@ -8,6 +8,7 @@
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+
     using VinylExchange.Data.Seeding.Contracts;
 
     #endregion
@@ -29,7 +30,16 @@
             var logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger(typeof(VinylExchangeDbContextSeeder));
 
-            var seeders = new List<ISeeder> { new RolesSeeder(), new UsersSeeder(),new GenresSeeder(),new StylesSeeder(),new ReleasesSeeder(),new ReleaseFilesSeeder() ,new StyleReleasesSeeder()};
+            var seeders = new List<ISeeder>
+                {
+                    new RolesSeeder(),
+                    new UsersSeeder(),
+                    new GenresSeeder(),
+                    new StylesSeeder(),
+                    new ReleasesSeeder(),
+                    new ReleaseFilesSeeder(),
+                    new StyleReleasesSeeder()
+                };
 
             foreach (var seeder in seeders)
             {

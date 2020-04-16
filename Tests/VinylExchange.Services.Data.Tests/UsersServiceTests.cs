@@ -6,13 +6,12 @@
     using Microsoft.AspNetCore.Identity;
 
     using Moq;
-    using System.Threading.Tasks;
+
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Services.EmailSender;
-    using Xunit;
 
     #endregion
 
@@ -39,6 +38,6 @@
                 this.signInManagerMock.Object,
                 new Mock<IEmailSender>().Object,
                 new Mock<IHttpContextAccessor>().Object);
-        }      
+        }
     }
 }

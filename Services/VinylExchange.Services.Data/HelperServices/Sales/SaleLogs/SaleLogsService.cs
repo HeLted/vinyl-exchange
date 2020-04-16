@@ -38,7 +38,7 @@
                 throw new NullReferenceException(SaleNotFound);
             }
 
-            string logMessage = this.GenerateLogMessage(logType);
+            var logMessage = this.GenerateLogMessage(logType);
 
             var saleLog =
                 (await this.dbContext.SaleLogs.AddAsync(new SaleLog { Content = logMessage, SaleId = saleId })).Entity
@@ -61,7 +61,7 @@
             var saleLogs = this.dbContext.SaleLogs.Where(sl => sl.SaleId == sale.Id).ToList();
 
             var logsToBeClearedNumber = saleLogs.Count;
-            
+
             this.dbContext.SaleLogs.RemoveRange(saleLogs);
 
             await this.dbContext.SaveChangesAsync();

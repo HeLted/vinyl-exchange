@@ -8,7 +8,6 @@
     using Microsoft.AspNetCore.Identity;
 
     using VinylExchange.Models.InputModels.Users;
-    using VinylExchange.Web.Models.InputModels.Users;
 
     #endregion
 

@@ -12,7 +12,7 @@
 
     #endregion
 
-    static class DbFactory
+    internal static class DbFactory
     {
         public static VinylExchangeDbContext CreateDbContext()
         {

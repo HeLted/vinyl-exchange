@@ -16,7 +16,7 @@
 
         Task<bool> DoesUserCollectionContainRelease(Guid? releaseId, Guid userId);
 
-        Task<TModel> GetCollectionItem<TModel>(Guid? collectionItemId);             
+        Task<TModel> GetCollectionItem<TModel>(Guid? collectionItemId);
 
         Task<List<TModel>> GetUserCollection<TModel>(Guid userId);
 

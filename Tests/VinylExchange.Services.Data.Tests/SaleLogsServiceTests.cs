@@ -1,19 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using VinylExchange.Common.Constants;
-using VinylExchange.Common.Enumerations;
-using VinylExchange.Data;
-using VinylExchange.Data.Models;
-using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
-using VinylExchange.Services.Data.Tests.TestFactories;
-using VinylExchange.Web.Models.ResourceModels.SaleLogs;
-using Xunit;
-
-namespace VinylExchange.Services.Data.Tests
+﻿namespace VinylExchange.Services.Data.Tests
 {
+    #region
+
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using VinylExchange.Common.Constants;
+    using VinylExchange.Common.Enumerations;
+    using VinylExchange.Data;
+    using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
+    using VinylExchange.Services.Data.Tests.TestFactories;
+    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
+
+    using Xunit;
+
+    #endregion
+
     public class SaleLogsServiceTests
     {
         private readonly VinylExchangeDbContext dbContext;
@@ -24,7 +31,7 @@ namespace VinylExchange.Services.Data.Tests
         {
             this.dbContext = DbFactory.CreateDbContext();
 
-            this.saleLogsService = new SaleLogsService(dbContext);
+            this.saleLogsService = new SaleLogsService(this.dbContext);
         }
 
         [Fact]
@@ -50,7 +57,6 @@ namespace VinylExchange.Services.Data.Tests
         [InlineData(SaleLogs.PlacedOrder)]
         [InlineData(SaleLogs.SaleEdited)]
         [InlineData(SaleLogs.SettedShippingPrice)]
-
         public async Task AddTogToSaleShouldAddLogToSaleWithCorrectLogMessageAndCorrectSaleId(SaleLogs logType)
         {
             var sale = new Sale();
@@ -63,20 +69,19 @@ namespace VinylExchange.Services.Data.Tests
 
             var log = await this.dbContext.SaleLogs.FirstOrDefaultAsync(sl => sl.SaleId == sale.Id);
 
-            var saleLogMessagesMessagesConstantField = typeof(SaleLogsMessages).GetFields(BindingFlags.Public | BindingFlags.Static |
-               BindingFlags.FlattenHierarchy)
-               .Where(fi => fi.IsLiteral && !fi.IsInitOnly).First(fi=> fi.Name == logType.ToString());
+            var saleLogMessagesMessagesConstantField = typeof(SaleLogsMessages)
+                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                .Where(fi => fi.IsLiteral && !fi.IsInitOnly).First(fi => fi.Name == logType.ToString());
 
             if (saleLogMessagesMessagesConstantField != null)
             {
-                  Assert.Equal((string)saleLogMessagesMessagesConstantField.GetRawConstantValue(), log.Content);
+                Assert.Equal((string)saleLogMessagesMessagesConstantField.GetRawConstantValue(), log.Content);
             }
             else
             {
-                throw new NullReferenceException("Provided enum value has no correspodning logType message in SaleLogsMessages!");
+                throw new NullReferenceException(
+                    "Provided enum value has no correspodning logType message in SaleLogsMessages!");
             }
-
         }
-
     }
 }

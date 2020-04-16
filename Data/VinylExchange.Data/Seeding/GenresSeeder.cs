@@ -22,7 +22,6 @@
             await SeedGenreAsync(dbContext, "Hip Hop");
 
             await SeedGenreAsync(dbContext, "Jazz");
-
         }
 
         private static async Task SeedGenreAsync(VinylExchangeDbContext dbContext, string name)
