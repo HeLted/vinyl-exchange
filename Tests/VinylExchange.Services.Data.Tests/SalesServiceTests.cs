@@ -578,6 +578,67 @@
                 == $"{address.Country} - {address.Town} - {address.PostalCode} - {address.FullAddress}");
         }
 
+        [Fact]
+        public async Task PlaceOrderShouldThrowNullReferenceExceptionIfUserIsNull()
+        {
+            var sale = new Sale { Status = Status.Open };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var address = new Address();
+
+            var user = new VinylExchangeUser();
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync((VinylExchangeUser)null);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(
+                                async () =>  await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, Guid.NewGuid()));
+
+            Assert.Equal(UserNotFound, exception.Message);
+        }
+
+        [Fact]
+        public async Task PlaceOrderShouldThrowNullReferenceExceptionIfSSaleIsNull()
+        {
+            var user = new VinylExchangeUser();
+
+            var address = new Address();
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(
+                                async () =>  await this.salesService.PlaceOrder<SaleStatusResourceModel>(Guid.NewGuid(), address.Id, user.Id));
+
+            Assert.Equal(SaleNotFound, exception.Message);
+        }
+
+        [Fact]
+        public async Task PlaceOrderShouldThrowNullReferenceExceptionIfAddressIsNull()
+        {
+            var sale = new Sale { Status = Status.Open };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var user = new VinylExchangeUser();
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+
+            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync((Address)null);
+
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(
+                                async () =>  await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, Guid.NewGuid(), user.Id));
+
+            Assert.Equal(AddressNotFound, exception.Message);
+        }
+
         [Theory]
         [InlineData(Status.Finished)]
         [InlineData(Status.Paid)]
