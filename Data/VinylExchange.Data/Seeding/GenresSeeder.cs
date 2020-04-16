@@ -15,25 +15,30 @@
     {
         public async Task SeedAsync(VinylExchangeDbContext dbContext, IServiceProvider serviceProvider)
         {
-            await SeedGenreAsync(dbContext, "Electronic");
+            if (!dbContext.Genres.Any())
+            {
 
-            await SeedGenreAsync(dbContext, "Rock");
+                await SeedGenreAsync(dbContext, "Electronic");
 
-            await SeedGenreAsync(dbContext, "Hip Hop");
+                await SeedGenreAsync(dbContext, "Rock");
 
-            await SeedGenreAsync(dbContext, "Jazz");
+                await SeedGenreAsync(dbContext, "Hip Hop");
+
+                await SeedGenreAsync(dbContext, "Jazz");
+
+                await dbContext.SaveChangesAsync();
+
+            }
         }
 
         private static async Task SeedGenreAsync(VinylExchangeDbContext dbContext, string name)
         {
-            if (!dbContext.Genres.Any())
-            {
-                var genre = new Genre { Name = name };
 
-                await dbContext.Genres.AddAsync(genre);
+            var genre = new Genre { Name = name };
 
-                await dbContext.SaveChangesAsync();
-            }
+            await dbContext.Genres.AddAsync(genre);
+
+
         }
     }
 }

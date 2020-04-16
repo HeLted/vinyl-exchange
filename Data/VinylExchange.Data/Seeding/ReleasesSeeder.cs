@@ -49,6 +49,24 @@
                     "Vinyl 12'",
                     1999,
                     "Warp");
+                await SeedReleaseAsync(
+                    dbContext,
+                    Guid.Parse("4b3b4142-3621-4256-a209-4468a6c5ca4c"),
+                    "Squarepusher",
+                    "Ultravisitor",
+                    "2 x Vinyl LP",
+                    2004,
+                    "Warp");
+                await SeedReleaseAsync(
+                    dbContext,
+                    Guid.Parse("6eaabd12-fd4f-4b69-b0bd-f172f9b42085"),
+                    "Mobb Deep",
+                    "Shook Ones",
+                    "Vinyl 12 Promo",
+                    1994,
+                    "Loud Records");
+
+                
             }
         }
 
