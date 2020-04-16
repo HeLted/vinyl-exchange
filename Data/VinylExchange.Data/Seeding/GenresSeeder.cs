@@ -23,7 +23,6 @@
 
             await SeedGenreAsync(dbContext, "Jazz");
 
-            await dbContext.SaveChangesAsync();
         }
 
         private static async Task SeedGenreAsync(VinylExchangeDbContext dbContext, string name)
@@ -33,6 +32,8 @@
                 var genre = new Genre { Name = name };
 
                 await dbContext.Genres.AddAsync(genre);
+
+                await dbContext.SaveChangesAsync();
             }
         }
     }

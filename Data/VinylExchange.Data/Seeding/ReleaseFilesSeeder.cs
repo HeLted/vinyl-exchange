@@ -38,15 +38,27 @@ namespace VinylExchange.Data.Seeding
                "de61302f-01a7-446f-9d15-651ab4784d82@---@RGUgJ0xhY3kgSGlkZWF3YXkgW0RlZXAgRGlzaCBNaXhd.mp3", false);
 
                 //Sasha - Wavy Gravy 
-                //22d663f8-6bd6-4f20-9f74-bd82da066e42
 
-              await SeedReleaseFileAsync(dbContext, Guid.Parse("22d663f8-6bd6-4f20-9f74-bd82da066e42"), FileType.Image,
-                  "210d3e68-f74d-45f1-9488-8890b58503fd@---@Ui0yMDg3Nzc1LTEzMzc3NjY3NzktNjg3OS5qcGVn.jpg", true);
+                await SeedReleaseFileAsync(dbContext, Guid.Parse("22d663f8-6bd6-4f20-9f74-bd82da066e42"), FileType.Image,
+                    "210d3e68-f74d-45f1-9488-8890b58503fd@---@Ui0yMDg3Nzc1LTEzMzc3NjY3NzktNjg3OS5qcGVn.jpg", true);
 
-                   await SeedReleaseFileAsync(dbContext, Guid.Parse("22d663f8-6bd6-4f20-9f74-bd82da066e42"), FileType.Audio,
-               "129606d8-f943-4fbb-a21b-928af0252490@---@U2FzaGEgLSBXYXZ5IEdyYXZ5.mp3", false);
-             
+                await SeedReleaseFileAsync(dbContext, Guid.Parse("22d663f8-6bd6-4f20-9f74-bd82da066e42"), FileType.Audio,
+            "129606d8-f943-4fbb-a21b-928af0252490@---@U2FzaGEgLSBXYXZ5IEdyYXZ5.mp3", false);
 
+                //Aphex Twin - Windowlicker                
+
+                await SeedReleaseFileAsync(dbContext, Guid.Parse("eb9101dc-d7d4-4558-8211-cdd9fd9d60f9"), FileType.Image,
+                    "bf741066-f760-4a70-a213-8dcf7683d1d9@---@YTNkYTRiYmIzY2JkMTI0Mjk1NmFlNjAxMTVlMTA1MTA=.jpg", true);
+
+                await SeedReleaseFileAsync(dbContext, Guid.Parse("eb9101dc-d7d4-4558-8211-cdd9fd9d60f9"), FileType.Image,
+          "3853fa95-e3d0-4ff3-ae01-3f7b8cb19d79@---@Ui0zNjY2LTE1Mzk5OTQ0OTgtNjI0OC5qcGVn.jpg", false);
+
+                await SeedReleaseFileAsync(dbContext, Guid.Parse("eb9101dc-d7d4-4558-8211-cdd9fd9d60f9"), FileType.Audio,
+            "1142773b-44ba-410d-a56d-857783594434@---@QXBoZXggVHdpbiAtIFdpbmRvd2xpY2tlcg==.mp3", false);
+
+
+                await SeedReleaseFileAsync(dbContext, Guid.Parse("eb9101dc-d7d4-4558-8211-cdd9fd9d60f9"), FileType.Audio,
+            "89b0c1f5-c8b4-4929-b5a5-b065ff0883d8@---@QXBoZXggVHdpbiAtIE5hbm5vdQ==", false);
 
             }
 
