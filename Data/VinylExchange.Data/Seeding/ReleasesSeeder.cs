@@ -65,8 +65,6 @@
                     "Vinyl 12 Promo",
                     1994,
                     "Loud Records");
-
-                
             }
         }
 

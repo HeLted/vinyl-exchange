@@ -1,13 +1,13 @@
 import React, { Fragment, Component } from "react";
 import "./ReleasesTable.css";
 import InfiniteScroll from "react-infinite-scroller";
-import { css } from "@emotion/core";
 import PulseLoader from "react-spinners/PulseLoader";
 import PlayerLoaderButton from "./../../common/PlayerLoaderButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMeh } from "@fortawesome/free-solid-svg-icons";
 import { Url } from "./../../../constants/UrlConstants";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import uuid4 from "./../../../functions/guidGenerator";
 
 class ReleasesComponent extends Component {
   constructor() {
@@ -16,7 +16,7 @@ class ReleasesComponent extends Component {
   }
 
   render() {
-    const releases = this.props.data.releases.map(release => {
+    const releases = this.props.data.releases.map((release) => {
       const coverArtimageSource =
         release.coverArt !== null
           ? Url.mediaStorage + release.coverArt.path + release.coverArt.fileName
@@ -24,7 +24,7 @@ class ReleasesComponent extends Component {
 
       return (
         <Fragment key={release.id}>
-          <tr 
+          <tr
             onClick={() =>
               this.props.functions.handleRedirectToRelease(release.id)
             }
@@ -46,22 +46,24 @@ class ReleasesComponent extends Component {
     });
 
     const loader = (
-      <tr key="release loader">
-        <td>
+      
+      <tr className="justify-content-center text-center" key="release loader">
+        <td colSpan="5">
           <PulseLoader
             size={15}
             //size={"150px"} this also works
-            color={"#13eddb"}
+            color={"black"}
             loading={this.props.data.isLoadMoreReleasesLoading}
           />
         </td>
       </tr>
+     
     );
 
     return (
       <table
         className="releases-table table-hover"
-        ref={ref => (this.scrollParentRef = ref)}
+        ref={(ref) => (this.scrollParentRef = ref)}
       >
         <InfiniteScroll
           initialLoad={false}
@@ -70,6 +72,7 @@ class ReleasesComponent extends Component {
           loader={loader}
           element={"tbody"}
           useWindow={false}
+          threshold={0.7}
           getScrollParent={() => this.scrollParentRef}
         >
           {releases}
@@ -92,7 +95,7 @@ class ReleasesComponent extends Component {
                           className="btn btn-outline-secondary"
                           to="/Releases/AddRelease"
                         >
-                           Add Release
+                          Add Release
                         </Link>
                       </i>
                     </b>
