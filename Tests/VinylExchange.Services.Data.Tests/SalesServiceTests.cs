@@ -42,17 +42,20 @@
         private readonly Mock<IReleasesEntityRetriever> releasesEntityRetrieverMock;
 
         private readonly CreateSaleInputModel testCreateSaleInputModel = new CreateSaleInputModel
-            {
-                VinylGrade = Condition.Mint,
-                SleeveGrade = Condition.Fair,
-                Price = 30,
-                Description = "test description"
-            };
+        {
+            VinylGrade = Condition.Mint,
+            SleeveGrade = Condition.Fair,
+            Price = 30,
+            Description = "test description"
+        };
 
         private readonly Address testAddress = new Address
-            {
-                Country = "Bulgaria", Town = "Sofia", PostalCode = "1612", FullAddress = "j.k Lagera blok 123"
-            };
+        {
+            Country = "Bulgaria",
+            Town = "Sofia",
+            PostalCode = "1612",
+            FullAddress = "j.k Lagera blok 123"
+        };
 
         public SalesServiceTests()
         {
@@ -217,26 +220,26 @@
             var addressProperties = new List<string> { updatedAddress.Country, updatedAddress.Town };
 
             var sale = new Sale
-                {
-                    VinylGrade = Condition.Poor,
-                    SleeveGrade = Condition.NearMint,
-                    Description = "blbbebe",
-                    Price = 50,
-                    ShipsFrom = "Paris France"
-                };
+            {
+                VinylGrade = Condition.Poor,
+                SleeveGrade = Condition.NearMint,
+                Description = "blbbebe",
+                Price = 50,
+                ShipsFrom = "Paris France"
+            };
 
             await this.dbContext.Sales.AddAsync(sale);
 
             await this.dbContext.SaveChangesAsync();
 
             var editSaleInputModel = new EditSaleInputModel
-                {
-                    VinylGrade = Condition.Mint,
-                    SleeveGrade = Condition.Mint,
-                    Description = "updated description",
-                    Price = 100,
-                    SaleId = sale.Id
-                };
+            {
+                VinylGrade = Condition.Mint,
+                SleeveGrade = Condition.Mint,
+                Description = "updated description",
+                Price = 100,
+                SaleId = sale.Id
+            };
 
             await this.salesService.EditSale<EditSaleResourceModel>(editSaleInputModel);
 
@@ -596,7 +599,7 @@
             this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () =>  await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, Guid.NewGuid()));
+                                async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, Guid.NewGuid()));
 
             Assert.Equal(UserNotFound, exception.Message);
         }
@@ -613,7 +616,7 @@
             this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () =>  await this.salesService.PlaceOrder<SaleStatusResourceModel>(Guid.NewGuid(), address.Id, user.Id));
+                                async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(Guid.NewGuid(), address.Id, user.Id));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -634,7 +637,7 @@
             this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync((Address)null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () =>  await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, Guid.NewGuid(), user.Id));
+                                async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, Guid.NewGuid(), user.Id));
 
             Assert.Equal(AddressNotFound, exception.Message);
         }
@@ -663,6 +666,294 @@
 
             await Assert.ThrowsAsync<InvalidSaleActionException>(
                 async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id));
+        }
+
+        [Theory]
+        [InlineData(Status.Finished)]
+        [InlineData(Status.Paid)]
+        [InlineData(Status.Sent)]
+        public async Task CancelShouldThrowInvalidSaleStatusExceptionIfStatusIsAfterPaymentPendingOrOpen(Status status)
+        {
+            var sale = new Sale { Status = status };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var user = new VinylExchangeUser();
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+
+            await Assert.ThrowsAsync<InvalidSaleActionException>(
+                async () => await this.salesService.CancelOrder<SaleStatusResourceModel>(sale.Id, user.Id));
+        }
+
+
+        [Fact]
+        public async Task CancelOrderShouldThrowNullReferenceExceptionIfUserIsNull()
+        {
+            var sale = new Sale { Status = Status.Open };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync((VinylExchangeUser)null);
+
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(
+                                async () => await this.salesService.CancelOrder<SaleStatusResourceModel>(sale.Id, Guid.NewGuid()));
+
+            Assert.Equal(UserNotFound, exception.Message);
+        }
+
+        [Fact]
+        public async Task CancelOrderShouldThrowNullReferenceExceptionIfSSaleIsNull()
+        {
+            var user = new VinylExchangeUser();
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(
+                                async () => await this.salesService.CancelOrder<SaleStatusResourceModel>(Guid.NewGuid(), user.Id));
+
+            Assert.Equal(SaleNotFound, exception.Message);
+        }
+
+        [Fact]
+        public async Task CancelOrderShouldSetBuyerIdToNull()
+        {
+            var user = new VinylExchangeUser();
+
+            var sale = new Sale { Status = Status.PaymentPending, BuyerId = user.Id };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+
+            await this.salesService.CancelOrder<SaleStatusResourceModel>(sale.Id, Guid.NewGuid());
+
+            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.Null(saleFromDb.BuyerId);
+        }
+
+
+        [Fact]
+        public async Task CancelOrderShouldSetSaleStatusToOpen()
+        {
+            var user = new VinylExchangeUser();
+
+            var sale = new Sale { Status = Status.PaymentPending, BuyerId = user.Id };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+
+            await this.salesService.CancelOrder<SaleStatusResourceModel>(sale.Id, Guid.NewGuid());
+
+            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.Equal(Status.Open, saleFromDb.Status);
+        }
+
+
+        [Theory]
+        [InlineData(Status.Open)]
+        [InlineData(Status.Finished)]
+        [InlineData(Status.Paid)]
+        [InlineData(Status.Sent)]
+        [InlineData(Status.PaymentPending)]
+
+        public async Task SetShippingPriceShouldThrowInvalidSaleStatusExceptionIfStatusIsNotShippingNegotiation(Status status)
+        {
+            var sale = new Sale { Status = status };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            await Assert.ThrowsAsync<InvalidSaleActionException>(
+                async () => await this.salesService.SetShippingPrice<SaleStatusResourceModel>(sale.Id, 300));
+        }
+
+        [Fact]
+        public async Task SetShippingPriceShouldThrowNullReferenceExceptionIfSSaleIsNull()
+        {
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(
+                                async () => await this.salesService.SetShippingPrice<SaleStatusResourceModel>(Guid.NewGuid(), 500));
+
+            Assert.Equal(SaleNotFound, exception.Message);
+        }
+
+        [Fact]
+        public async Task SetShippingPriceShouldSetSaleShippingPrice()
+        {
+            var sale = new Sale { Status = Status.ShippingNegotiation };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            await this.salesService.SetShippingPrice<SaleStatusResourceModel>(sale.Id, 500);
+
+            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.Equal(500, saleFromDb.ShippingPrice);
+        }
+
+        [Fact]
+        public async Task SetShippingPriceShouldSetStatusToPaymentPending()
+        {
+            var sale = new Sale { Status = Status.ShippingNegotiation };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            await this.salesService.SetShippingPrice<SaleStatusResourceModel>(sale.Id, 500);
+
+            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.Equal(Status.PaymentPending, saleFromDb.Status);
+        }
+
+        [Fact]
+        public async Task ConfirmItemSentShouldThrowNullReferenceExceptionIfSSaleIsNull()
+        {
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(
+                                async () => await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(Guid.NewGuid()));
+
+            Assert.Equal(SaleNotFound, exception.Message);
+        }
+
+        [Theory]
+        [InlineData(Status.Open)]
+        [InlineData(Status.Finished)]
+        [InlineData(Status.ShippingNegotiation)]
+        [InlineData(Status.Sent)]
+        [InlineData(Status.PaymentPending)]
+
+        public async Task ConfirmItemSentThrowInvalidSaleStatusExceptionIfStatusIsNotPaid(Status status)
+        {
+            var sale = new Sale { Status = status };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            await Assert.ThrowsAsync<InvalidSaleActionException>(
+                async () => await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(sale.Id));
+        }
+
+        [Theory]
+        [InlineData(Status.Open)]
+        [InlineData(Status.Finished)]
+        [InlineData(Status.ShippingNegotiation)]
+        [InlineData(Status.Sent)]
+        [InlineData(Status.Paid)]
+
+        public async Task CompletePaymentShouldThrowInvalidSaleStatusExceptionIfStatusIsNotPaymentPending(Status status)
+        {
+            var sale = new Sale { Status = status };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            await Assert.ThrowsAsync<InvalidSaleActionException>(
+                async () => await this.salesService.CompletePayment<SaleStatusResourceModel>(sale.Id, "test order Id"));
+        }
+
+        [Fact]
+        public async Task CompletePaymentShouldThrowNullReferenceExceptionIfSSaleIsNull()
+        {
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(
+                                async () => await this.salesService.CompletePayment<SaleStatusResourceModel>(Guid.NewGuid(), "test order Id"));
+
+            Assert.Equal(SaleNotFound, exception.Message);
+        }
+
+        [Fact]
+        public async Task CompletePaymentShouldSetStatusToPaid()
+        {
+            var sale = new Sale { Status = Status.PaymentPending };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            await this.salesService.CompletePayment<SaleStatusResourceModel>(sale.Id, "test");
+
+            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.Equal(Status.Paid, saleFromDb.Status);
+        }
+
+        [Fact]
+        public async Task CompletePaymentShouldSetSaleOrderId()
+        {
+            var sale = new Sale { Status = Status.PaymentPending };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var saleOrderId = "332-442-133";
+
+            await this.salesService.CompletePayment<SaleStatusResourceModel>(sale.Id, saleOrderId);
+
+            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.Equal(saleFromDb.OrderId, saleFromDb.OrderId);
+        }
+
+        [Theory]
+        [InlineData(Status.Open)]
+        [InlineData(Status.Finished)]
+        [InlineData(Status.ShippingNegotiation)]
+        [InlineData(Status.Paid)]
+        [InlineData(Status.PaymentPending)]
+
+        public async Task ConfirmItemRecievedShouldThrowInvalidSaleStatusExceptionIfStatusIsNotSent(Status status)
+        {
+            var sale = new Sale { Status = status };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            await Assert.ThrowsAsync<InvalidSaleActionException>(
+                async () => await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(sale.Id));
+        }
+
+        [Fact]
+        public async Task ConfirmItemRecievedShouldThrowNullReferenceExceptionIfSSaleIsNull()
+        {
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(
+                                async () => await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(Guid.NewGuid()));
+
+            Assert.Equal(SaleNotFound, exception.Message);
+        }
+
+
+        [Fact]
+        public async Task ConfirmItemRecievedShouldSetStatusToFinished()
+        {
+            var sale = new Sale { Status = Status.Sent };
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(sale.Id);
+
+            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.Equal(Status.Finished, saleFromDb.Status);
         }
     }
 }
