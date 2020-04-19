@@ -39,7 +39,7 @@
 
             salesEntityRetrieverMock = new Mock<ISalesEntityRetriever>();
 
-            this.saleLogsService = new SaleLogsService(this.dbContext, salesEntityRetrieverMock.Object);
+            this.saleLogsService = new SaleLogsService(this.dbContext, this.salesEntityRetrieverMock.Object);
         }
 
         [Fact]
