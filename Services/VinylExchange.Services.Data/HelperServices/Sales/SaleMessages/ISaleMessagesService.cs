@@ -12,9 +12,9 @@
 
     public interface ISaleMessagesService
     {
-        Task<AddMessageToSaleResourceModel> AddMessageToSale(Guid saleId, Guid userId, string message);
+        Task<TModel> AddMessageToSale<TModel>(Guid? saleId, Guid? userId, string message);
 
-        Task<IEnumerable<GetMessagesForSaleResourceModel>> GetMessagesForSale(Guid saleId);
+        Task<IEnumerable<TModel>> GetMessagesForSale<TModel>(Guid? saleId);
 
         Task<int> ClearSaleMessages(Guid? saleId);
     }

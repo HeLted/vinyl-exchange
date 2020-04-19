@@ -11,8 +11,11 @@
 
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.SaleMessages;
+    using VinylExchange.Services.Mapping;
 
     using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
@@ -22,18 +25,32 @@
     {
         private readonly VinylExchangeDbContext dbContext;
 
-        public SaleMessagesService(VinylExchangeDbContext dbContext)
+        private readonly ISalesEntityRetriever salesEntityRetriever;
+
+        private readonly IUsersEntityRetriever usersEntityRetriever;
+
+        public SaleMessagesService(VinylExchangeDbContext dbContext,ISalesEntityRetriever salesEntityRetriever, IUsersEntityRetriever usersEntityRetriever)
         {
             this.dbContext = dbContext;
+            this.salesEntityRetriever = salesEntityRetriever;
+            this.usersEntityRetriever = usersEntityRetriever;
         }
 
-        public async Task<AddMessageToSaleResourceModel> AddMessageToSale(Guid saleId, Guid userId, string message)
-        {
-            var isSaleExists = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault() != null;
+        public async Task<TModel> AddMessageToSale<TModel>(Guid? saleId, Guid? userId, string message)
+        {                       
+         
+            var user = await this.usersEntityRetriever.GetUser(userId);
+            
+            var sale = await this.salesEntityRetriever.GetSale(saleId);
 
-            if (!isSaleExists)
+            if(user == null)
             {
-                throw new NullReferenceException("Sale with this Id doesn't exist!");
+                throw new NullReferenceException(UserNotFound);
+            }
+
+            if (sale == null)
+            {
+                throw new NullReferenceException(SaleNotFound);
             }
 
             var saleMessage =
@@ -43,7 +60,7 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            return saleMessage;
+            return saleMessage.To<TModel>();
         }
 
         public async Task<int> ClearSaleMessages(Guid? saleId)
@@ -66,10 +83,10 @@
             return messagesToBeClearedNumber;
         }
 
-        public async Task<IEnumerable<GetMessagesForSaleResourceModel>> GetMessagesForSale(Guid saleId)
+        public async Task<IEnumerable<TModel>> GetMessagesForSale<TModel>(Guid? saleId)
         {
             return await this.dbContext.SaleMessages.Where(sm => sm.SaleId == saleId).OrderBy(sm => sm.CreatedOn)
-                       .To<GetMessagesForSaleResourceModel>().ToListAsync();
+                       .To<TModel>().ToListAsync();
         }
     }
 }
