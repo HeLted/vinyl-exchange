@@ -10,6 +10,7 @@
 
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
     using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
     using VinylExchange.Web.Models.Utility.Sales;
 
     #endregion
@@ -38,7 +39,7 @@
                 if (sale.SellerId == userId
                     || sale.BuyerId == userId)
                 {
-                    var logs = await this.saleLogsService.GetLogsForSale(saleId);
+                    var logs = await this.saleLogsService.GetLogsForSale<GetLogsForSaleResourceModel>(saleId);
 
                     await this.Clients.Caller.LoadLogHistory(logs);
                 }

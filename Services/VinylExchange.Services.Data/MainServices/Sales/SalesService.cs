@@ -23,7 +23,7 @@
 
     #endregion
 
-    public class SalesService : ISalesService
+    public class SalesService : ISalesService , ISalesEntityRetriever
     {
         private readonly VinylExchangeDbContext dbContext;
 
@@ -307,7 +307,7 @@
             return sale.To<TModel>();
         }
 
-        private async Task<Sale> GetSale(Guid? saleId)
+        public async Task<Sale> GetSale(Guid? saleId)
         {
             return await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == saleId);
         }

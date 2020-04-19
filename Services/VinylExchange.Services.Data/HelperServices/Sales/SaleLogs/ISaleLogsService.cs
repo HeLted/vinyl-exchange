@@ -17,6 +17,6 @@
 
         Task<int> ClearSaleLogs(Guid? saleId);
 
-        Task<IEnumerable<GetLogsForSaleResourceModel>> GetLogsForSale(Guid saleId);
+        Task<IEnumerable<TModel>> GetLogsForSale<TModel>(Guid? saleId);
     }
 }

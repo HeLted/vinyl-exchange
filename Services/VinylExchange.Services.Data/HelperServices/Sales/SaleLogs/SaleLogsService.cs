@@ -12,6 +12,7 @@
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.SaleLogs;
 
@@ -24,9 +25,12 @@
     {
         private readonly VinylExchangeDbContext dbContext;
 
-        public SaleLogsService(VinylExchangeDbContext dbContext)
+        private readonly ISalesEntityRetriever salesEntityRetriever;
+
+        public SaleLogsService(VinylExchangeDbContext dbContext,ISalesEntityRetriever salesEntityRetriever)
         {
             this.dbContext = dbContext;
+            this.salesEntityRetriever = salesEntityRetriever;
         }
 
         public async Task<TModel> AddLogToSale<TModel>(Guid? saleId, SaleLogs logType)
@@ -51,7 +55,7 @@
 
         public async Task<int> ClearSaleLogs(Guid? saleId)
         {
-            var sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
+            var sale = await salesEntityRetriever.GetSale(saleId);
 
             if (sale == null)
             {
@@ -69,10 +73,10 @@
             return logsToBeClearedNumber;
         }
 
-        public async Task<IEnumerable<GetLogsForSaleResourceModel>> GetLogsForSale(Guid saleId)
+        public async Task<IEnumerable<TModel>> GetLogsForSale<TModel>(Guid? saleId)
         {
             return await this.dbContext.SaleLogs.Where(sl => sl.SaleId == saleId).OrderBy(sl => sl.CreatedOn)
-                       .To<GetLogsForSaleResourceModel>().ToListAsync();
+                       .To<TModel>().ToListAsync();
         }
 
         private string GenerateLogMessage(SaleLogs logType)
