@@ -3,6 +3,7 @@
     #region
 
     using System;
+    using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,7 @@
 
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Web.Models.ResourceModels.SaleMessages;
     using VinylExchange.Web.Models.Utility.Sales;
 
     #endregion
@@ -61,20 +63,20 @@
                 if (sale.SellerId == userId
                     || sale.BuyerId == userId)
                 {
-                    var messages = await this.saleMessagesService.GetMessagesForSale(saleId);
+                    var messages = await this.saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(saleId);
 
                     await this.Clients.Caller.LoadMessageHistory(messages);
                 }
             }
         }
 
-        public async Task SendMessage(Guid saleId, string messageContent)
+        public async Task SendMessage( [Required] Guid? saleId, [Required] string messageContent)
         {
             var roomName = saleId.ToString();
 
             var userId = Guid.Parse(this.GetUserId());
 
-            var message = await this.saleMessagesService.AddMessageToSale(saleId, userId, messageContent);
+            var message = await this.saleMessagesService.AddMessageToSale<AddMessageToSaleResourceModel>(saleId, userId, messageContent);
 
             await this.Clients.Group(roomName).NewMessage(message);
         }
