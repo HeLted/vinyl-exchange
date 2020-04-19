@@ -101,13 +101,13 @@ class CollectionContainer extends Component {
           </div>
         </div>
         <div
-          className="row border justify-content-left"
+          className="row border justify-content-center"
           style={{ padding: "100px", height: "1200px", overflowY: "scroll" }}
         >
           {collectionComponents.length > 0 ? (
             collectionComponents
           ) : (
-            <div className="border text-center">
+            <div className=" text-center">
               <h2 className="property-text">
                 There are no items in your collection
               </h2>
