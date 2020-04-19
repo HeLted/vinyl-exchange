@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from "react";
 import uuid4 from "./../../../functions/guidGenerator";
-import InputValidationMessage from "./../clienSideValidation/InputValidationMessage";
+import InputValidationMessage from "./../clientSideValidation/InputValidationMessage";
 
 const AplhaNumericBracesDashAndSpaceRegex = new RegExp(/^[A-Za-z0-9-() ]*$/);
 const AlphaNumericAndUnderscoreRegex = new RegExp(/^[A-Za-z0-9_]*$/);

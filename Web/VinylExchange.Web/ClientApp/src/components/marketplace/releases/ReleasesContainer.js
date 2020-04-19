@@ -32,7 +32,8 @@ class ReleasesContainer extends Component {
     if (
       nextPropsSearchValue !== this.props.data.searchValue ||
       qsArrayStringify(this.props.data.filterStyleIds) !==
-        qsArrayStringify(nextProps.data.filterStyleIds)
+        qsArrayStringify(nextProps.data.filterStyleIds) ||
+        this.props.data.filterGenreId !== nextProps.data.filterGenreId
     ) {
       this.setState({ isThereMoreReleasesToLoad: true });
       this.handleLoadReleases(true);

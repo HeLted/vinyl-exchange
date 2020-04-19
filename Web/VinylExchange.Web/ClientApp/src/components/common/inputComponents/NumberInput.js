@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import InputValidationMessage from "./../clienSideValidation/InputValidationMessage";
+import InputValidationMessage from "./../clientSideValidation/InputValidationMessage";
 import uuid4 from "./../../../functions/guidGenerator";
 
 const NumericRegex = new RegExp("^[0-9]*$");
