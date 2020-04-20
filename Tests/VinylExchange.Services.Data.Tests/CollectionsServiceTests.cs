@@ -36,9 +36,6 @@
 
         private readonly Mock<IReleasesEntityRetriever> releasesEntityRetrieverMock;
 
-        private readonly AddToCollectionInputModel testAddToCollectionInputModel =
-            new AddToCollectionInputModel { VinylGrade = Condition.Poor, SleeveGrade = Condition.Mint };
-
         public CollectionsServiceTests()
         {
             this.dbContext = DbFactory.CreateDbContext();
@@ -66,7 +63,7 @@
 
             var createdCollectionItemModel =
                 await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                    this.testAddToCollectionInputModel,
+                    Condition.Poor,Condition.Mint,"Description",release.Id,
                     Guid.NewGuid());
 
             var createdCollectionItem =
@@ -88,15 +85,15 @@
 
             var createdCollectionItemModel =
                 await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                    this.testAddToCollectionInputModel,
-                    Guid.NewGuid());
+                    Condition.Poor,Condition.Mint,"Description",release.Id,
+                    user.Id);
 
             var createdCollectionItem =
                 await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == createdCollectionItemModel.Id);
 
-            Assert.Equal(this.testAddToCollectionInputModel.VinylGrade, createdCollectionItem.VinylGrade);
-            Assert.Equal(this.testAddToCollectionInputModel.SleeveGrade, createdCollectionItem.SleeveGrade);
-            Assert.Equal(this.testAddToCollectionInputModel.Description, createdCollectionItem.Description);
+            Assert.Equal(Condition.Poor, createdCollectionItem.VinylGrade);
+            Assert.Equal(Condition.Mint, createdCollectionItem.SleeveGrade);
+            Assert.Equal("Description", createdCollectionItem.Description);
             Assert.Equal(release.Id, createdCollectionItem.ReleaseId);
             Assert.Equal(user.Id, createdCollectionItem.UserId);
         }
@@ -112,7 +109,7 @@
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                                                this.testAddToCollectionInputModel,
+                                                Condition.Poor,Condition.Mint,"Description",Guid.NewGuid(),
                                                 user.Id));
 
             Assert.Equal(ReleaseNotFound, exception.Message);
@@ -130,7 +127,7 @@
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                                                this.testAddToCollectionInputModel,
+                                                Condition.Poor,Condition.Mint,"Test Description",release.Id,
                                                 Guid.NewGuid()));
 
             Assert.Equal(UserNotFound, exception.Message);

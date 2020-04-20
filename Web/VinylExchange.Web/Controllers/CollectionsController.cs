@@ -36,7 +36,10 @@
             try
             {
                 return await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                           inputModel,
+                           inputModel.VinylGrade,
+                           inputModel.SleeveGrade,
+                           inputModel.Description,
+                           inputModel.ReleaseId,
                            this.GetUserId(this.User));
             }
             catch (Exception ex)

@@ -3,6 +3,7 @@
     #region
 
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@
     using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
 
@@ -18,15 +20,18 @@
     public class UsersAvatarService : IUsersAvatarService
     {
         private readonly VinylExchangeDbContext dbContext;
+        
+        private readonly IUsersEntityRetriever usersEntityRetriever;
 
-        public UsersAvatarService(VinylExchangeDbContext dbContext)
+        public UsersAvatarService(VinylExchangeDbContext dbContext,IUsersEntityRetriever usersEntityRetriever)
         {
             this.dbContext = dbContext;
+            this.usersEntityRetriever = usersEntityRetriever;
         }
 
         public async Task<VinylExchangeUser> ChangeAvatar(byte[] avatar, Guid? userId)
         {
-            var user = await this.dbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+            var user = await this.usersEntityRetriever.GetUser(userId);
 
             if (user == null)
             {

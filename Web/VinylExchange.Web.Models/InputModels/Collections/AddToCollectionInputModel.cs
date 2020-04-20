@@ -17,7 +17,12 @@
 
     public class AddToCollectionInputModel : IMapTo<CollectionItem>
     {
-        public string Description { get; set; }
+        [Required]
+        [Range(
+            (int)Condition.NotSelected,
+            (int)Condition.Mint,
+            ErrorMessage = "Please select correct option for field")]
+        public Condition VinylGrade { get; set; }
 
         [Required]
         [Range(
@@ -25,13 +30,8 @@
             (int)Condition.Mint,
             ErrorMessage = "Please select correct option for field")]
         public Condition SleeveGrade { get; set; }
-
-        [Required]
-        [Range(
-            (int)Condition.NotSelected,
-            (int)Condition.Mint,
-            ErrorMessage = "Please select correct option for field")]
-        public Condition VinylGrade { get; set; }
+        
+        public string Description { get; set; }
 
         [Required]
         public Guid? ReleaseId { get; set; }

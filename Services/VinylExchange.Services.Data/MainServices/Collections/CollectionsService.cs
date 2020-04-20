@@ -10,6 +10,7 @@
     using Microsoft.EntityFrameworkCore;
 
     using VinylExchange.Data;
+    using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.MainServices.Users;
@@ -38,9 +39,9 @@
             this.usersEntityRetriever = usersEntityRetriever;
         }
 
-        public async Task<TModel> AddToCollection<TModel>(AddToCollectionInputModel inputModel, Guid userId)
+        public async Task<TModel> AddToCollection<TModel>(Condition vinylGrade, Condition sleeveGrade, string description, Guid? releaseId, Guid userId)
         {
-            var release = await this.releasesEntityRetriever.GetRelease(inputModel.ReleaseId);
+            var release = await this.releasesEntityRetriever.GetRelease(releaseId);
 
             if (release == null)
             {
@@ -54,7 +55,14 @@
                 throw new NullReferenceException(UserNotFound);
             }
 
-            var collectionItem = inputModel.To<CollectionItem>();
+            var collectionItem = new CollectionItem
+            {
+                VinylGrade = vinylGrade,
+                SleeveGrade = sleeveGrade,
+                Description = description,
+                ReleaseId = releaseId,
+                UserId = userId
+            };
 
             collectionItem.ReleaseId = release.Id;
             collectionItem.UserId = user.Id;

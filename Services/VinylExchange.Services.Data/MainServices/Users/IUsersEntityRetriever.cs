@@ -11,6 +11,6 @@
 
     public interface IUsersEntityRetriever
     {
-        Task<VinylExchangeUser> GetUser(Guid? addressId);
+        Task<VinylExchangeUser> GetUser(Guid? userId);
     }
 }

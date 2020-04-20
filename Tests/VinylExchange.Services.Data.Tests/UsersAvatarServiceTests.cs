@@ -8,10 +8,11 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-
+    using Moq;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.HelperServices.Users;
+    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.Tests.TestFactories;
 
     using Xunit;
@@ -28,11 +29,15 @@
 
         private readonly IUsersAvatarService usersAvatarService;
 
+        private readonly Mock<IUsersEntityRetriever> usersEntityRetrieverMock;
+
         public UsersAvatarServiceTests()
         {
             this.dbContext = DbFactory.CreateDbContext();
 
-            this.usersAvatarService = new UsersAvatarService(this.dbContext);
+            this.usersEntityRetrieverMock = new Mock<IUsersEntityRetriever>();
+
+            this.usersAvatarService = new UsersAvatarService(this.dbContext, this.usersEntityRetrieverMock.Object);
         }
 
         [Fact]
@@ -46,6 +51,8 @@
             await this.dbContext.Users.AddAsync(user);
 
             await this.dbContext.SaveChangesAsync();
+          
+            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
             var newAvatar = new byte[]
                 {
