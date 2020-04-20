@@ -6,13 +6,16 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using VinylExchange.Web.Models.InputModels.Addresses;
-
     #endregion
 
     public interface IAddressesService
     {
-        Task<TModel> CreateAddress<TModel>(CreateAddressInputModel inputModel, Guid userId);
+        Task<TModel> CreateAddress<TModel>(
+            string country,
+            string town,
+            string postalCode,
+            string fullAddress,
+            Guid userId);
 
         Task<TModel> GetAddress<TModel>(Guid addressId);
 

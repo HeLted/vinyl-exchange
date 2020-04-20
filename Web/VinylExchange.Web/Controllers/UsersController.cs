@@ -3,6 +3,7 @@
     #region
 
     using System;
+    using System.IO;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authentication;
@@ -44,7 +45,15 @@
         {
             try
             {
-                await this.usersAvatarService.ChangeAvatar(inputModel, this.GetUserId(this.User));
+                var imageByteArray = new byte[1];
+
+                using (var ms = new MemoryStream())
+                {
+                    inputModel.Avatar.CopyTo(ms);
+                    imageByteArray = ms.ToArray();
+                }
+
+                await this.usersAvatarService.ChangeAvatar(imageByteArray, this.GetUserId(this.User));
 
                 return this.NoContent();
             }

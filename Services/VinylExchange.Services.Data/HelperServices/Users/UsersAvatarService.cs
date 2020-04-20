@@ -3,8 +3,6 @@
     #region
 
     using System;
-    using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -12,7 +10,6 @@
     using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
 
@@ -35,7 +32,7 @@
             {
                 throw new NullReferenceException(NullReferenceExceptionsConstants.UserNotFound);
             }
-            
+
             user.Avatar = avatar;
 
             await this.dbContext.SaveChangesAsync();
@@ -45,7 +42,8 @@
 
         public async Task<GetUserAvatarResourceModel> GetUserAvatar(Guid? userId)
         {
-            return await this.dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
+            return await QueryableMappingExtensions
+                       .To<GetUserAvatarResourceModel>(this.dbContext.Users.Where(u => u.Id == userId))
                        .FirstOrDefaultAsync();
         }
     }

@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
 
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
 
     #endregion

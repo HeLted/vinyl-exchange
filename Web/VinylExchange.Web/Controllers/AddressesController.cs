@@ -35,10 +35,14 @@
         {
             try
             {
-                return this.Created(
-                    await this.addressesService.CreateAddress<CreateAddressResourceModel>(
-                        inputModel,
-                        this.GetUserId(this.User)));
+                var resourceModel = await this.addressesService.CreateAddress<CreateAddressResourceModel>(
+                                        inputModel.Country,
+                                        inputModel.Town,
+                                        inputModel.PostalCode,
+                                        inputModel.FullAddress,
+                                        this.GetUserId(this.User));
+
+                return this.Created(resourceModel);
             }
             catch (Exception ex)
             {

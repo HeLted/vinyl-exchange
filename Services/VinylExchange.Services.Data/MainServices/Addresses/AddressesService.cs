@@ -13,7 +13,6 @@
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.InputModels.Addresses;
 
     #endregion
 
@@ -26,22 +25,27 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<TModel> CreateAddress<TModel>(CreateAddressInputModel inputModel, Guid userId)
+        public async Task<TModel> CreateAddress<TModel>(
+            string country,
+            string town,
+            string postalCode,
+            string fullAddress,
+            Guid userId)
         {
-            var address = inputModel.To<Address>();
-
-            address.UserId = userId;
+            var address = new Address
+                {
+                    Country = country,
+                    Town = town,
+                    PostalCode = postalCode,
+                    FullAddress = fullAddress,
+                    UserId = userId
+                };
 
             var trackedAddress = await this.dbContext.Addresses.AddAsync(address);
 
             await this.dbContext.SaveChangesAsync();
 
             return trackedAddress.Entity.To<TModel>();
-        }
-
-        public object Get()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<TModel> GetAddress<TModel>(Guid addressId)

@@ -13,7 +13,6 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Addresses;
     using VinylExchange.Services.Data.Tests.TestFactories;
-    using VinylExchange.Web.Models.InputModels.Addresses;
     using VinylExchange.Web.Models.ResourceModels.Addresses;
     using VinylExchange.Web.Models.Utility.Addresses;
 
@@ -27,12 +26,6 @@
 
         private readonly VinylExchangeDbContext dbContext;
 
-        private readonly CreateAddressInputModel testCreateAddressInputModel =
-            new CreateAddressInputModel
-                {
-                    Country = "Bulgaria", Town = "Sofia", PostalCode = "1612", FullAddress = "Test"
-                };
-
         public AddressesServiceTests()
         {
             this.dbContext = DbFactory.CreateDbContext();
@@ -44,7 +37,10 @@
         public async Task CreateAddressShouldCreateAddress()
         {
             var createdAddressModel = await this.addressesService.CreateAddress<CreateAddressResourceModel>(
-                                          this.testCreateAddressInputModel,
+                                          "Bulgaria",
+                                          "Sofia",
+                                          "1612",
+                                          "Test",
                                           Guid.NewGuid());
 
             await this.dbContext.SaveChangesAsync();
@@ -59,7 +55,10 @@
         public async Task CreateAddressShouldCreateAddressWithCorrectData()
         {
             var createdAddressModel = await this.addressesService.CreateAddress<CreateAddressResourceModel>(
-                                          this.testCreateAddressInputModel,
+                                          "Bulgaria",
+                                          "Sofia",
+                                          "1612",
+                                          "Test",
                                           Guid.NewGuid());
 
             await this.dbContext.SaveChangesAsync();
@@ -67,10 +66,10 @@
             var createdAddress =
                 await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == createdAddressModel.Id);
 
-            Assert.Equal(this.testCreateAddressInputModel.Country, createdAddress.Country);
-            Assert.Equal(this.testCreateAddressInputModel.Town, createdAddress.Town);
-            Assert.Equal(this.testCreateAddressInputModel.PostalCode, createdAddress.PostalCode);
-            Assert.Equal(this.testCreateAddressInputModel.FullAddress, createdAddress.FullAddress);
+            Assert.Equal("Bulgaria", createdAddress.Country);
+            Assert.Equal("Sofia", createdAddress.Town);
+            Assert.Equal("1612", createdAddress.PostalCode);
+            Assert.Equal("Test", createdAddress.FullAddress);
         }
 
         [Fact]
