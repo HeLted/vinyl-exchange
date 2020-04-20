@@ -27,7 +27,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<VinylExchangeUser> ChangeAvatar(ChangeAvatarInputModel inputModel, Guid userId)
+        public async Task<VinylExchangeUser> ChangeAvatar(byte[] avatar, Guid? userId)
         {
             var user = await this.dbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
 
@@ -35,23 +35,15 @@
             {
                 throw new NullReferenceException(NullReferenceExceptionsConstants.UserNotFound);
             }
-
-            var imageByteArray = new byte[1];
-
-            using (var ms = new MemoryStream())
-            {
-                inputModel.Avatar.CopyTo(ms);
-                imageByteArray = ms.ToArray();
-            }
-
-            user.Avatar = imageByteArray;
+            
+            user.Avatar = avatar;
 
             await this.dbContext.SaveChangesAsync();
 
             return user;
         }
 
-        public async Task<GetUserAvatarResourceModel> GetUserAvatar(Guid userId)
+        public async Task<GetUserAvatarResourceModel> GetUserAvatar(Guid? userId)
         {
             return await this.dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
                        .FirstOrDefaultAsync();

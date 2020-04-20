@@ -13,8 +13,8 @@
 
     public interface IUsersAvatarService
     {
-        Task<VinylExchangeUser> ChangeAvatar(ChangeAvatarInputModel inputModel, Guid userId);
+        Task<VinylExchangeUser> ChangeAvatar(byte[] avatar, Guid? userId);
 
-        Task<GetUserAvatarResourceModel> GetUserAvatar(Guid userId);
+        Task<GetUserAvatarResourceModel> GetUserAvatar(Guid? userId);
     }
 }
