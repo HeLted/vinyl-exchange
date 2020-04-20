@@ -3,7 +3,6 @@
     #region
 
     using System;
-    using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -63,20 +62,25 @@
                 if (sale.SellerId == userId
                     || sale.BuyerId == userId)
                 {
-                    var messages = await this.saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(saleId);
+                    var messages =
+                        await this.saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(saleId);
 
                     await this.Clients.Caller.LoadMessageHistory(messages);
                 }
             }
         }
 
-        public async Task SendMessage( [Required] Guid? saleId, [Required] string messageContent)
+        public async Task SendMessage(Guid? saleId, string messageContent)
         {
             var roomName = saleId.ToString();
 
             var userId = Guid.Parse(this.GetUserId());
 
-            var message = await this.saleMessagesService.AddMessageToSale<AddMessageToSaleResourceModel>(saleId, userId, messageContent);
+            var message =
+                await this.saleMessagesService.AddMessageToSale<AddMessageToSaleResourceModel>(
+                    saleId,
+                    userId,
+                    messageContent);
 
             await this.Clients.Group(roomName).NewMessage(message);
         }

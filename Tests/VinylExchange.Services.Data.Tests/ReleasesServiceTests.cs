@@ -87,7 +87,7 @@
                 string.Join(string.Empty, this.testCreateReleaseInputModel.StyleIds),
                 string.Join(string.Empty, createdRelease.Styles.Select(sr => sr.StyleId)));
         }
-        
+
         [Fact]
         public async Task GetReleaseoShouldReturnNullIfProvidedReleaseIdIsNotExistingInDb()
         {
@@ -112,8 +112,6 @@
 
             Assert.Equal(createdRelease.Id, returnedReleaseModel.Id);
         }
-
-
 
         [Theory]
         [InlineData("Aphex", 1, new[] { 5 }, 4)]
@@ -346,8 +344,8 @@
         {
             await this.AddReleasesTestData();
 
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
+            var releasesModelsToCompare = await this.dbContext.Releases.Take(ReleasesToTake)
+                                              .To<GetReleaseResourceModel>().ToListAsync();
 
             var releaseModels =
                 await this.releasesService.GetReleases<GetReleaseResourceModel>(null, null, new List<int>(), 0);

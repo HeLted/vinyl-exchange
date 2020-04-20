@@ -154,13 +154,13 @@
             bool isPrewiew)
         {
             var releaseFile = new ReleaseFile
-            {
-                ReleaseId = releaseId,
-                Path = @"\Releases\" + fileType + "\\",
-                FileName = fileName,
-                IsPreview = isPrewiew,
-                FileType = fileType
-            };
+                {
+                    ReleaseId = releaseId,
+                    Path = @"\Releases\" + fileType + "\\",
+                    FileName = fileName,
+                    IsPreview = isPrewiew,
+                    FileType = fileType
+                };
 
             await dbContext.ReleaseFiles.AddAsync(releaseFile);
 

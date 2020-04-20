@@ -235,7 +235,7 @@ namespace VinylExchange.Web
             services.AddTransient<IUsersEntityRetriever, UsersService>();
             services.AddTransient<IAddressesEntityRetriever, AddressesService>();
             services.AddTransient<IReleasesEntityRetriever, ReleasesService>();
-            services.AddTransient<ISalesEntityRetriever,SalesService>();
+            services.AddTransient<ISalesEntityRetriever, SalesService>();
 
             // Tool Services
             services.AddTransient<IMemoryCache, MemoryCache>();

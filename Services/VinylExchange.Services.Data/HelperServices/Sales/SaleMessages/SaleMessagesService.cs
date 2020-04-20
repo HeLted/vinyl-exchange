@@ -15,7 +15,6 @@
     using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.SaleMessages;
-    using VinylExchange.Services.Mapping;
 
     using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
@@ -29,7 +28,10 @@
 
         private readonly IUsersEntityRetriever usersEntityRetriever;
 
-        public SaleMessagesService(VinylExchangeDbContext dbContext,ISalesEntityRetriever salesEntityRetriever, IUsersEntityRetriever usersEntityRetriever)
+        public SaleMessagesService(
+            VinylExchangeDbContext dbContext,
+            ISalesEntityRetriever salesEntityRetriever,
+            IUsersEntityRetriever usersEntityRetriever)
         {
             this.dbContext = dbContext;
             this.salesEntityRetriever = salesEntityRetriever;
@@ -37,13 +39,12 @@
         }
 
         public async Task<TModel> AddMessageToSale<TModel>(Guid? saleId, Guid? userId, string message)
-        {                       
-         
+        {
             var user = await this.usersEntityRetriever.GetUser(userId);
-            
+
             var sale = await this.salesEntityRetriever.GetSale(saleId);
 
-            if(user == null)
+            if (user == null)
             {
                 throw new NullReferenceException(UserNotFound);
             }
@@ -65,7 +66,7 @@
 
         public async Task<int> ClearSaleMessages(Guid? saleId)
         {
-            var sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
+            var sale = await this.salesEntityRetriever.GetSale(saleId);
 
             if (sale == null)
             {

@@ -9,7 +9,9 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+
     using Moq;
+
     using VinylExchange.Common.Constants;
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data;
@@ -37,7 +39,7 @@
         {
             this.dbContext = DbFactory.CreateDbContext();
 
-            salesEntityRetrieverMock = new Mock<ISalesEntityRetriever>();
+            this.salesEntityRetrieverMock = new Mock<ISalesEntityRetriever>();
 
             this.saleLogsService = new SaleLogsService(this.dbContext, this.salesEntityRetrieverMock.Object);
         }
@@ -99,9 +101,9 @@
 
             this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                await this.dbContext.SaleLogs.AddAsync(new SaleLog() { SaleId = sale.Id });
+                await this.dbContext.SaleLogs.AddAsync(new SaleLog { SaleId = sale.Id });
             }
 
             await this.dbContext.SaveChangesAsync();
@@ -113,14 +115,13 @@
             Assert.True(logs.Count == 0);
         }
 
-
         [Fact]
         public async Task ClearSaleLogsShouldThrowNullReferenceExceptionIfSaleIsIdIsNotPresentInDb()
         {
             this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync((Sale)null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                               async () => await this.saleLogsService.ClearSaleLogs(Guid.NewGuid()));
+                                async () => await this.saleLogsService.ClearSaleLogs(Guid.NewGuid()));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -134,9 +135,9 @@
 
             var addedSaleLogsIds = new List<Guid?>();
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                var saleLog = new SaleLog() { SaleId = sale.Id };
+                var saleLog = new SaleLog { SaleId = sale.Id };
 
                 await this.dbContext.SaleLogs.AddAsync(saleLog);
 
@@ -155,7 +156,7 @@
         {
             var sale = new Sale();
 
-            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);                      
+            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
 
             var saleLogs = await this.saleLogsService.GetLogsForSale<GetLogsForSaleResourceModel>(sale.Id);
 

@@ -23,7 +23,7 @@
 
     #endregion
 
-    public class SalesService : ISalesService , ISalesEntityRetriever
+    public class SalesService : ISalesService, ISalesEntityRetriever
     {
         private readonly VinylExchangeDbContext dbContext;
 

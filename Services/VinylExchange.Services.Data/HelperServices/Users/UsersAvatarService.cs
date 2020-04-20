@@ -29,19 +29,19 @@
 
         public async Task<VinylExchangeUser> ChangeAvatar(ChangeAvatarInputModel inputModel, Guid userId)
         {
+            var user = await this.dbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new NullReferenceException(NullReferenceExceptionsConstants.UserNotFound);
+            }
+
             var imageByteArray = new byte[1];
 
             using (var ms = new MemoryStream())
             {
                 inputModel.Avatar.CopyTo(ms);
                 imageByteArray = ms.ToArray();
-            }
-
-            var user = await this.dbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
-
-            if (user == null)
-            {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.UserNotFound);
             }
 
             user.Avatar = imageByteArray;

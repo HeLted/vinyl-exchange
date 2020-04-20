@@ -29,9 +29,9 @@
                 await SeedStyleRelease(dbContext, Guid.Parse("eb9101dc-d7d4-4558-8211-cdd9fd9d60f9"), 13);
                 await SeedStyleRelease(dbContext, Guid.Parse("eb9101dc-d7d4-4558-8211-cdd9fd9d60f9"), 14);
 
-                await SeedStyleRelease(dbContext , Guid.Parse("4b3b4142-3621-4256-a209-4468a6c5ca4c"),1);
+                await SeedStyleRelease(dbContext, Guid.Parse("4b3b4142-3621-4256-a209-4468a6c5ca4c"), 1);
 
-                await SeedStyleRelease(dbContext , Guid.Parse("6eaabd12-fd4f-4b69-b0bd-f172f9b42085"),15);
+                await SeedStyleRelease(dbContext, Guid.Parse("6eaabd12-fd4f-4b69-b0bd-f172f9b42085"), 15);
             }
         }
 

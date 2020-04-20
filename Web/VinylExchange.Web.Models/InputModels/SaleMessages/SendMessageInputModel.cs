@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace VinylExchange.Web.Models.InputModels.SaleMessages
+﻿namespace VinylExchange.Web.Models.InputModels.SaleMessages
 {
+    #region
+
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    #endregion
+
     public class SendMessageInputModel
     {
         [Required]
@@ -14,6 +16,5 @@ namespace VinylExchange.Web.Models.InputModels.SaleMessages
         [MinLength(1)]
         [MaxLength(150)]
         public string MessageContent { get; set; }
-
     }
 }

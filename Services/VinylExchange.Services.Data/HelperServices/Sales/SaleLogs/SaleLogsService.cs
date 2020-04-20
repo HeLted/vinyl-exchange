@@ -14,7 +14,6 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
 
     using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
     using static VinylExchange.Common.Constants.SaleLogsMessages;
@@ -27,7 +26,7 @@
 
         private readonly ISalesEntityRetriever salesEntityRetriever;
 
-        public SaleLogsService(VinylExchangeDbContext dbContext,ISalesEntityRetriever salesEntityRetriever)
+        public SaleLogsService(VinylExchangeDbContext dbContext, ISalesEntityRetriever salesEntityRetriever)
         {
             this.dbContext = dbContext;
             this.salesEntityRetriever = salesEntityRetriever;
@@ -55,7 +54,7 @@
 
         public async Task<int> ClearSaleLogs(Guid? saleId)
         {
-            var sale = await salesEntityRetriever.GetSale(saleId);
+            var sale = await this.salesEntityRetriever.GetSale(saleId);
 
             if (sale == null)
             {

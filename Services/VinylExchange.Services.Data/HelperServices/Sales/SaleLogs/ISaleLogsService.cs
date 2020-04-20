@@ -7,7 +7,6 @@
     using System.Threading.Tasks;
 
     using VinylExchange.Common.Enumerations;
-    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
 
     #endregion
 
