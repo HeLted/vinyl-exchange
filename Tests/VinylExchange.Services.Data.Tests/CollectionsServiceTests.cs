@@ -15,7 +15,9 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Collections;
     using VinylExchange.Services.Data.MainServices.Releases;
+    using VinylExchange.Services.Data.MainServices.Releases.Contracts;
     using VinylExchange.Services.Data.MainServices.Users;
+    using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Web.Models.InputModels.Collections;
     using VinylExchange.Web.Models.ResourceModels.Collections;

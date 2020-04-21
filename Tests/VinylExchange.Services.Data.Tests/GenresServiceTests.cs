@@ -11,6 +11,7 @@
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Genres;
+    using VinylExchange.Services.Data.MainServices.Genres.Contracts;
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Web.Models.InputModels.Genres;
     using VinylExchange.Web.Models.ResourceModels.Genres;

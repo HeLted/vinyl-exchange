@@ -13,6 +13,7 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.HelperServices.Users;
     using VinylExchange.Services.Data.MainServices.Users;
+    using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Data.Tests.TestFactories;
 
     using Xunit;

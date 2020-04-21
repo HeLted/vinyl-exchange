@@ -18,6 +18,7 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
     using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Web.Models.ResourceModels.SaleLogs;
 
