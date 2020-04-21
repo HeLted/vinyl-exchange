@@ -6,10 +6,11 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-
+    using Moq;
     using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Genres;
     using VinylExchange.Services.Data.MainServices.Styles;
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Web.Models.InputModels.Styles;
@@ -17,6 +18,7 @@
 
     using Xunit;
 
+    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
     #endregion
 
     public class StylesServiceTests
@@ -25,35 +27,28 @@
 
         private readonly IStylesService stylesService;
 
-        private readonly CreateStyleInputModel testCreateStyleInputModel =
-            new CreateStyleInputModel { Name = "Electronic", GenreId = new Random().Next() };
+        private readonly Mock<IGenresEntityRetriever> genresEntityRetrieverMock;
 
         public StylesServiceTests()
         {
             this.dbContext = DbFactory.CreateDbContext();
 
-            this.stylesService = new StylesService(this.dbContext);
+            this.genresEntityRetrieverMock = new Mock<IGenresEntityRetriever>();
+
+            this.stylesService = new StylesService(this.dbContext,genresEntityRetrieverMock.Object);
         }
 
         [Fact]
-        public async Task CreateGenreShouldCreateGenreWithCorrectData()
+        public async Task CreateStyleShouldCreateStyle()
         {
+            var name = "Electronic";
+
+            var genre = new Genre();
+
+            this.genresEntityRetrieverMock.Setup(x => x.GetGenre(It.IsAny<int?>())).ReturnsAsync(genre);
+
             var createdStyleModel =
-                await this.stylesService.CreateStyle<CreateStyleResourceModel>(this.testCreateStyleInputModel);
-
-            await this.dbContext.SaveChangesAsync();
-
-            var createdStyle = await this.dbContext.Styles.FirstOrDefaultAsync(s => s.Id == createdStyleModel.Id);
-
-            Assert.Equal(this.testCreateStyleInputModel.Name, createdStyle.Name);
-            Assert.Equal(this.testCreateStyleInputModel.GenreId, createdStyle.GenreId);
-        }
-
-        [Fact]
-        public async Task CreateStyleShouldCreateGenre()
-        {
-            var createdStyleModel =
-                await this.stylesService.CreateStyle<CreateStyleResourceModel>(this.testCreateStyleInputModel);
+                await this.stylesService.CreateStyle<CreateStyleResourceModel>(name,genre.Id);
 
             await this.dbContext.SaveChangesAsync();
 
@@ -62,6 +57,38 @@
             Assert.NotNull(createdStyle);
         }
 
+        [Fact]
+        public async Task CreateStyleShouldCreateStyleWithCorrectData()
+        {
+            var name = "Electronic";
+
+            var genre = new Genre();
+
+            this.genresEntityRetrieverMock.Setup(x => x.GetGenre(It.IsAny<int?>())).ReturnsAsync(genre);
+            
+            var createdStyleModel =
+                await this.stylesService.CreateStyle<CreateStyleResourceModel>(name,genre.Id);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var createdStyle = await this.dbContext.Styles.FirstOrDefaultAsync(s => s.Id == createdStyleModel.Id);
+
+            Assert.Equal(name, createdStyle.Name);
+            Assert.Equal(genre.Id, createdStyle.GenreId);
+        }
+
+        
+        [Fact]
+        public async Task CreateStyleShouldThrowNullReferenceExceptionIfProvidedGenreIdIsNotInDb()
+        {
+            this.genresEntityRetrieverMock.Setup(x => x.GetGenre(It.IsAny<int>())).ReturnsAsync((Genre)null);
+            
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(async () =>  
+                await this.stylesService.CreateStyle<CreateStyleResourceModel>("test",2));
+
+            Assert.Equal(GenreNotFound, exception.Message);
+        }
+        
         [Fact]
         public async Task GetAllStylesForGenreShouldGetAllStylesForProvidedValidGenreId()
         {

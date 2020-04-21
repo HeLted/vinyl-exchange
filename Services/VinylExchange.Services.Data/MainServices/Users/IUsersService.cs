@@ -13,7 +13,7 @@
 
     public interface IUsersService
     {
-        Task<IdentityResult> RegisterUser(RegisterUserInputModel inputModel);
+        Task<IdentityResult> RegisterUser(string username, string email, string password);
 
         Task<SignInResult> LoginUser(string username, string password, bool rememberMe);
 

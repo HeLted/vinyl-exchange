@@ -35,7 +35,9 @@
         {
             try
             {
-                return this.Created(await this.stylesService.CreateStyle<CreateStyleResourceModel>(inputModel));
+                var resourceModel = await this.stylesService.CreateStyle<CreateStyleResourceModel>(inputModel.Name,inputModel.GenreId);
+
+                return this.Created(resourceModel);
             }
             catch (Exception ex)
             {

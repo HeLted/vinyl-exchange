@@ -32,7 +32,7 @@
 
         public async Task<TModel> CreateStyle<TModel>(string name, int genreId)
         {
-            var genre = this.genresEntityRetriever.GetGenre(genreId);
+            var genre = await this.genresEntityRetriever.GetGenre(genreId);
 
             if(genre == null)
             {

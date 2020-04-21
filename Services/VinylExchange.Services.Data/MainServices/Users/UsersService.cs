@@ -45,11 +45,15 @@
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        public async Task<IdentityResult> RegisterUser(RegisterUserInputModel inputModel)
+        public async Task<IdentityResult> RegisterUser(string username, string email, string password)
         {
-            var user = inputModel.To<VinylExchangeUser>();
+            var user = new VinylExchangeUser
+            {
+                UserName = username,
+                Email = email
+            };
 
-            user.PasswordHash = this.userManager.PasswordHasher.HashPassword(user, inputModel.Password);
+            user.PasswordHash = this.userManager.PasswordHasher.HashPassword(user, password);
 
             var identityResult = await this.userManager.CreateAsync(user);
 
