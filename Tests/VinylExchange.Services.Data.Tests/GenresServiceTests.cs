@@ -25,9 +25,6 @@
 
         private readonly IGenresService genresService;
 
-        private readonly CreateGenreInputModel testCreateGenreInputModel =
-            new CreateGenreInputModel { Name = "Test Genre" };
-
         public GenresServiceTests()
         {
             this.dbContext = DbFactory.CreateDbContext();
@@ -39,7 +36,7 @@
         public async Task CreateGenreShouldCreateGenre()
         {
             var createdGenreModel =
-                await this.genresService.CreateGenre<CreateGenreResourceModel>(this.testCreateGenreInputModel);
+                await this.genresService.CreateGenre<CreateGenreResourceModel>("House");
 
             await this.dbContext.SaveChangesAsync();
 
@@ -52,13 +49,13 @@
         public async Task CreateGenreShouldCreateGenreWithCorrectData()
         {
             var createdGenreModel =
-                await this.genresService.CreateGenre<CreateGenreResourceModel>(this.testCreateGenreInputModel);
+                await this.genresService.CreateGenre<CreateGenreResourceModel>("Trance");
 
             await this.dbContext.SaveChangesAsync();
 
             var createdGenre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == createdGenreModel.Id);
 
-            Assert.Equal(this.testCreateGenreInputModel.Name, createdGenre.Name);
+            Assert.Equal("Trance", createdGenre.Name);
         }
 
         [Fact]

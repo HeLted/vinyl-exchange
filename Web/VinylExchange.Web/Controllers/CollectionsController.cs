@@ -35,12 +35,14 @@
         {
             try
             {
-                return await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                           inputModel.VinylGrade,
-                           inputModel.SleeveGrade,
-                           inputModel.Description,
-                           inputModel.ReleaseId,
-                           this.GetUserId(this.User));
+                var resourceModel = await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
+                                        inputModel.VinylGrade,
+                                        inputModel.SleeveGrade,
+                                        inputModel.Description,
+                                        inputModel.ReleaseId,
+                                        this.GetUserId(this.User));
+
+                return this.Created(resourceModel);
             }
             catch (Exception ex)
             {

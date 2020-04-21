@@ -11,7 +11,7 @@
 
     public interface IGenresService
     {
-        Task<TModel> CreateGenre<TModel>(CreateGenreInputModel inputModel);
+        Task<TModel> CreateGenre<TModel>(string name);
 
         Task<List<TModel>> GetAllGenres<TModel>();
 

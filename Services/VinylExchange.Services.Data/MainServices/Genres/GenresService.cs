@@ -25,9 +25,12 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<TModel> CreateGenre<TModel>(CreateGenreInputModel inputModel)
+        public async Task<TModel> CreateGenre<TModel>(string name)
         {
-            var genre = inputModel.To<Genre>();
+            var genre = new Genre
+                {
+                  Name = name  
+                };
 
             var trackedGenre = await this.dbContext.Genres.AddAsync(genre);
 

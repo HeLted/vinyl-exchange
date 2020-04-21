@@ -35,7 +35,7 @@
         {
             try
             {
-                return this.Created(await this.genresService.CreateGenre<CreateGenreResourceModel>(inputModel));
+                return this.Created(await this.genresService.CreateGenre<CreateGenreResourceModel>(inputModel.Name));
             }
             catch (Exception ex)
             {
