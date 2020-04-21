@@ -16,7 +16,7 @@
 
     #endregion
 
-    public class GenresService : IGenresService
+    public class GenresService : IGenresService, IGenresEntityRetriever
     {
         private readonly VinylExchangeDbContext dbContext;
 
@@ -43,7 +43,7 @@
         {
             return await this.dbContext.Genres.To<TModel>().ToListAsync();
         }
-
+        
         public async Task<TModel> RemoveGenre<TModel>(int genreId)
         {
             var genre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
@@ -57,6 +57,11 @@
             await this.dbContext.SaveChangesAsync();
 
             return removedGenre.To<TModel>();
+        }
+
+        public async Task<Genre> GetGenre(int? genreId)
+        {
+            return await this.dbContext.Genres.FirstOrDefaultAsync(g=> g.Id == genreId);
         }
     }
 }

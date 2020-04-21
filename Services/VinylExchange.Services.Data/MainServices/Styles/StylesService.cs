@@ -12,8 +12,9 @@
     using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Genres;
     using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.InputModels.Styles;
+    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
     #endregion
 
@@ -21,14 +22,28 @@
     {
         private readonly VinylExchangeDbContext dbContext;
 
-        public StylesService(VinylExchangeDbContext dbContext)
+        private readonly IGenresEntityRetriever genresEntityRetriever;
+
+        public StylesService(VinylExchangeDbContext dbContext,IGenresEntityRetriever genresEntityRetriever)
         {
             this.dbContext = dbContext;
+            this.genresEntityRetriever = genresEntityRetriever;
         }
 
-        public async Task<TModel> CreateStyle<TModel>(CreateStyleInputModel inputModel)
+        public async Task<TModel> CreateStyle<TModel>(string name, int genreId)
         {
-            var style = inputModel.To<Style>();
+            var genre = this.genresEntityRetriever.GetGenre(genreId);
+
+            if(genre == null)
+            {
+                throw new NullReferenceException(GenreNotFound);
+            }
+
+            var style = new Style
+            {
+                Name = name,
+                GenreId = genreId
+            };
 
             var trackedStyle = await this.dbContext.Styles.AddAsync(style);
 

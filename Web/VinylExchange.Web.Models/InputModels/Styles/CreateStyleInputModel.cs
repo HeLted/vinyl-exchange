@@ -14,12 +14,12 @@
     public class CreateStyleInputModel : IMapTo<Style>
     {
         [Required]
-        public int? GenreId { get; set; }
-
-        [Required]
         [MinLength(3, ErrorMessage = InvalidMinLength)]
         [MaxLength(50, ErrorMessage = InvalidMaxLength)]
         [Display(Name = "Style Name")]
         public string Name { get; set; }
+
+        [Required]
+        public int? GenreId { get; set; }
     }
 }

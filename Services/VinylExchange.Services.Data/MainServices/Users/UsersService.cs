@@ -167,14 +167,7 @@
 
         public async Task<VinylExchangeUser> GetUser(Guid? userId)
         {
-            var user = await this.userManager.FindByIdAsync(userId.ToString());
-
-            if (user == null)
-            {
-                throw new NullReferenceException(UserNotFound);
-            }
-
-            return user;
+            return await this.userManager.FindByIdAsync(userId.ToString());
         }
 
         private async Task<string> ConstructConfirmationEmailContent(VinylExchangeUser user)

@@ -11,7 +11,7 @@
 
     public interface IStylesService
     {
-        Task<TModel> CreateStyle<TModel>(CreateStyleInputModel inputModel);
+        Task<TModel> CreateStyle<TModel>(string name, int genreId);
 
         Task<List<TModel>> GetAllStylesForGenre<TModel>(int? genreId);
 
