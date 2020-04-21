@@ -12,7 +12,7 @@
 
     public interface IReleasesService
     {
-        Task<TModel> CreateRelease<TModel>(CreateReleaseInputModel inputModel, Guid formSessionId);
+        Task<TModel> CreateRelease<TModel>(string artist, string title, string format, int year, string label, ICollection<int> styleIds, Guid formSessionI);
 
         Task<TModel> GetRelease<TModel>(Guid? releaseId);
 

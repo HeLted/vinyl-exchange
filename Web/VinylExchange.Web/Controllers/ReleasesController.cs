@@ -34,7 +34,16 @@
         {
             try
             {
-                return await this.releasesService.CreateRelease<CreateReleaseResourceModel>(inputModel, formSessionId);
+                var resourceModel = await this.releasesService.CreateRelease<CreateReleaseResourceModel>(
+                                        inputModel.Artist,
+                                        inputModel.Title,
+                                        inputModel.Format,
+                                        inputModel.Year,
+                                        inputModel.Label,
+                                        inputModel.StyleIds,
+                                        formSessionId);
+
+                return resourceModel;
             }
             catch (Exception ex)
             {

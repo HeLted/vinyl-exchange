@@ -34,16 +34,6 @@
 
         private readonly Mock<IReleaseFilesService> releaseFilesServiceMock;
 
-        private readonly CreateReleaseInputModel testCreateReleaseInputModel = new CreateReleaseInputModel
-            {
-                Artist = "TestArtist",
-                Title = "Test Title",
-                Year = 1993,
-                Format = "Lp",
-                Label = "TestLabel",
-                StyleIds = new HashSet<int> { 1, 2, 3 }
-            };
-
         public ReleasesServiceTests()
         {
             this.dbContext = DbFactory.CreateDbContext();
@@ -57,7 +47,12 @@
         public async Task CreateReleaseShouldCreateRelease()
         {
             var createdReleaseModel = await this.releasesService.CreateRelease<CreateReleaseResourceModel>(
-                                          this.testCreateReleaseInputModel,
+                                          "Test",
+                                          "TEst",
+                                          "Test",
+                                          1993,
+                                          "Trerer",
+                                          new List<int>(){1,4,5,6},
                                           Guid.NewGuid());
 
             await this.dbContext.SaveChangesAsync();
@@ -70,21 +65,33 @@
         [Fact]
         public async Task CreateReleaseShouldCreateReleaseWithCorrectData()
         {
+            var artist = "Test Artist";
+            var title = "Test Title";
+            var format = "Test Format";
+            var year = 1993;
+            var label = "label";
+            var styles = new List<int>{1,2,3};
+
             var createdReleaseModel = await this.releasesService.CreateRelease<CreateReleaseResourceModel>(
-                                          this.testCreateReleaseInputModel,
+                                          artist,
+                                          title,
+                                          format, 
+                                          year,
+                                          label,
+                                          styles,
                                           Guid.NewGuid());
 
             await this.dbContext.SaveChangesAsync();
 
             var createdRelease = await this.dbContext.Releases.FirstOrDefaultAsync(r => r.Id == createdReleaseModel.Id);
 
-            Assert.Equal(this.testCreateReleaseInputModel.Artist, createdRelease.Artist);
-            Assert.Equal(this.testCreateReleaseInputModel.Title, createdRelease.Title);
-            Assert.Equal(this.testCreateReleaseInputModel.Year, createdRelease.Year);
-            Assert.Equal(this.testCreateReleaseInputModel.Format, createdRelease.Format);
-            Assert.Equal(this.testCreateReleaseInputModel.Label, createdRelease.Label);
+            Assert.Equal(artist, createdRelease.Artist);
+            Assert.Equal(title, createdRelease.Title);
+            Assert.Equal(year, createdRelease.Year);
+            Assert.Equal(format, createdRelease.Format);
+            Assert.Equal(label, createdRelease.Label);
             Assert.Equal(
-                string.Join(string.Empty, this.testCreateReleaseInputModel.StyleIds),
+                string.Join(string.Empty, styles),
                 string.Join(string.Empty, createdRelease.Styles.Select(sr => sr.StyleId)));
         }
 

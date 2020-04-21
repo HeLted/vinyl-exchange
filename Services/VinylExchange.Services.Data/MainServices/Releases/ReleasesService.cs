@@ -13,7 +13,6 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.HelperServices.Releases;
     using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.InputModels.Releases;
 
     #endregion
 
@@ -31,15 +30,29 @@
             this.releaseFilesService = releaseFilesService;
         }
 
-        public async Task<TModel> CreateRelease<TModel>(CreateReleaseInputModel inputModel, Guid formSessionId)
+        public async Task<TModel> CreateRelease<TModel>(
+            string artist,
+            string title,
+            string format,
+            int year,
+            string label,
+            ICollection<int> styleIds,
+            Guid formSessionId)
         {
-            var release = inputModel.To<Release>();
+            var release = new Release
+            {
+                Artist = artist,
+                Title = title,
+                Format = format,
+                Year = year,
+                Label = label
+            };
 
             var trackedRelease = await this.dbContext.Releases.AddAsync(release);
 
             await this.releaseFilesService.AddFilesForRelease(release.Id, formSessionId);
 
-            await this.AddStylesForRelease(release.Id, inputModel.StyleIds);
+            await this.AddStylesForRelease(release.Id, styleIds);
 
             await this.dbContext.SaveChangesAsync();
 
