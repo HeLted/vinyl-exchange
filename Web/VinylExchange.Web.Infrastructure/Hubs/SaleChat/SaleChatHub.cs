@@ -10,6 +10,7 @@
 
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
     using VinylExchange.Web.Models.ResourceModels.SaleMessages;
     using VinylExchange.Web.Models.Utility.Sales;
 

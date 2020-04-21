@@ -13,7 +13,9 @@
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Releases;
+    using VinylExchange.Services.Data.MainServices.Releases.Contracts;
     using VinylExchange.Services.Data.MainServices.Users;
+    using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Collections;
 

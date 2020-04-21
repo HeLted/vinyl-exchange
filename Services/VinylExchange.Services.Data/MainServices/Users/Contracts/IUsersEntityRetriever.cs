@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Services.Data.MainServices.Users
+﻿namespace VinylExchange.Services.Data.MainServices.Users.Contracts
 {
     #region
 

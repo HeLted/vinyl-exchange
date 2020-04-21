@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using VinylExchange.Services.Data.MainServices.Addresses;
+    using VinylExchange.Services.Data.MainServices.Addresses.Contracts;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.InputModels.Addresses;
     using VinylExchange.Web.Models.ResourceModels.Addresses;

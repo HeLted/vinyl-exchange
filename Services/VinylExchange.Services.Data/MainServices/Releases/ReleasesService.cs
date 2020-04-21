@@ -12,6 +12,7 @@
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.HelperServices.Releases;
+    using VinylExchange.Services.Data.MainServices.Releases.Contracts;
     using VinylExchange.Services.Mapping;
 
     #endregion

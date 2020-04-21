@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VinylExchange.Data.Models;
 
-namespace VinylExchange.Services.Data.MainServices.Genres
+namespace VinylExchange.Services.Data.MainServices.Genres.Contracts
 {
     public interface IGenresEntityRetriever
     {

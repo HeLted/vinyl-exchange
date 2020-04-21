@@ -13,6 +13,7 @@
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Genres;
+    using VinylExchange.Services.Data.MainServices.Genres.Contracts;
     using VinylExchange.Services.Mapping;
     using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 

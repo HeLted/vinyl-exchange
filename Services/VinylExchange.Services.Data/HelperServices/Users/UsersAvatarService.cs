@@ -12,6 +12,7 @@
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Users;
+    using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
 

@@ -12,6 +12,7 @@
     using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Addresses.Contracts;
     using VinylExchange.Services.Mapping;
 
     #endregion

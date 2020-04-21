@@ -14,6 +14,7 @@
     using VinylExchange.Common.Constants;
     using VinylExchange.Data.Models;
     using VinylExchange.Models.InputModels.Users;
+    using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.EmailSender;
     using VinylExchange.Services.Mapping;
 

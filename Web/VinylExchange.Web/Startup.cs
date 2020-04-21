@@ -32,12 +32,17 @@ namespace VinylExchange.Web
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.HelperServices.Users;
     using VinylExchange.Services.Data.MainServices.Addresses;
+    using VinylExchange.Services.Data.MainServices.Addresses.Contracts;
     using VinylExchange.Services.Data.MainServices.Collections;
     using VinylExchange.Services.Data.MainServices.Genres;
+    using VinylExchange.Services.Data.MainServices.Genres.Contracts;
     using VinylExchange.Services.Data.MainServices.Releases;
+    using VinylExchange.Services.Data.MainServices.Releases.Contracts;
     using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
     using VinylExchange.Services.Data.MainServices.Styles;
     using VinylExchange.Services.Data.MainServices.Users;
+    using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.EmailSender;
     using VinylExchange.Services.Files;
     using VinylExchange.Services.Logging;

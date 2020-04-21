@@ -15,6 +15,7 @@
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
     using VinylExchange.Services.Data.MainServices.Sales;
+    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Infrastructure.Hubs.SaleLog;
     using VinylExchange.Web.Models.InputModels.Sales;

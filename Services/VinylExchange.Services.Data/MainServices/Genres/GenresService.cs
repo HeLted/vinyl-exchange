@@ -11,6 +11,7 @@
     using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
+    using VinylExchange.Services.Data.MainServices.Genres.Contracts;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Genres;
 
