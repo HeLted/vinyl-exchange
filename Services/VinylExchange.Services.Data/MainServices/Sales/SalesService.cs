@@ -45,11 +45,11 @@
             this.releasesEntityRetriever = releasesEntityRetriever;
         }
 
-        public async Task<TModel> CreateSale<TModel>(CreateSaleInputModel inputModel, Guid sellerId)
+        public async Task<TModel> CreateSale<TModel>(Condition vinylGrade, Condition sleeveGrade, string description, decimal price, Guid? shipsFromAddressId,Guid? releaseId , Guid sellerId)
         {
-            var release = await this.releasesEntityRetriever.GetRelease(inputModel.ReleaseId);
+            var release = await this.releasesEntityRetriever.GetRelease(releaseId);
 
-            var address = await this.addressesEntityRetriever.GetAddress(inputModel.ShipsFromAddressId);
+            var address = await this.addressesEntityRetriever.GetAddress(shipsFromAddressId);
 
             var user = await this.usersEntityRetriever.GetUser(sellerId);
 
@@ -68,14 +68,18 @@
                 throw new NullReferenceException(UserNotFound);
             }
 
-            var sale = inputModel.To<Sale>();
-
-            sale.ShipsFrom = $"{address.Country} - {address.Town}";
-
-            sale.SellerId = sellerId;
-
-            sale.Status = Status.Open;
-
+            var sale = new Sale
+            {
+                VinylGrade = vinylGrade,
+                SleeveGrade = sleeveGrade,
+                Description = description,
+                ShipsFrom = $"{address.Country} - {address.Town}",
+                Price = price,
+                Status = Status.Open,
+                SellerId = sellerId,
+                ReleaseId = releaseId
+            };
+            
             var trackedSale = await this.dbContext.Sales.AddAsync(sale);
 
             await this.dbContext.SaveChangesAsync();

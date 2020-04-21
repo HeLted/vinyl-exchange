@@ -41,13 +41,13 @@
 
         private readonly Mock<IReleasesEntityRetriever> releasesEntityRetrieverMock;
 
-        private readonly CreateSaleInputModel testCreateSaleInputModel = new CreateSaleInputModel
-            {
-                VinylGrade = Condition.Mint,
-                SleeveGrade = Condition.Fair,
-                Price = 30,
-                Description = "test description"
-            };
+        private const Condition vinylGrade = Condition.Mint;
+
+        private const Condition sleeveGrade  = Condition.NearMint;
+
+        private const string description = "Test description";
+
+        private const decimal price = 100;
 
         private readonly Address testAddress = new Address
             {
@@ -86,12 +86,8 @@
 
             this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
-            this.testCreateSaleInputModel.ReleaseId = release.Id;
-
-            this.testCreateSaleInputModel.ShipsFromAddressId = address.Id;
-
             var createdSaleModel =
-                await this.salesService.CreateSale<CreateSaleResourceModel>(this.testCreateSaleInputModel, seller.Id);
+                await this.salesService.CreateSale<CreateSaleResourceModel>(Condition.Fair, Condition.Mint,"ewewe",30,address.Id,release.Id, seller.Id);
 
             await this.dbContext.SaveChangesAsync();
 
@@ -117,21 +113,17 @@
 
             var addressProperties = new List<string> { address.Country, address.Town };
 
-            this.testCreateSaleInputModel.ReleaseId = release.Id;
-
-            this.testCreateSaleInputModel.ShipsFromAddressId = address.Id;
-
             var createdSaleModel =
-                await this.salesService.CreateSale<CreateSaleResourceModel>(this.testCreateSaleInputModel, seller.Id);
+                await this.salesService.CreateSale<CreateSaleResourceModel>(vinylGrade,sleeveGrade,description,price,address.Id,release.Id, seller.Id);
 
             await this.dbContext.SaveChangesAsync();
 
             var createdSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == createdSaleModel.Id);
 
-            Assert.Equal(this.testCreateSaleInputModel.VinylGrade, createdSale.VinylGrade);
-            Assert.Equal(this.testCreateSaleInputModel.SleeveGrade, createdSale.SleeveGrade);
-            Assert.Equal(this.testCreateSaleInputModel.ReleaseId, createdSale.ReleaseId);
-            Assert.Equal(this.testCreateSaleInputModel.Price, createdSale.Price);
+            Assert.Equal(vinylGrade, createdSale.VinylGrade);
+            Assert.Equal(sleeveGrade, createdSale.SleeveGrade);
+            Assert.Equal(release.Id, createdSale.ReleaseId);
+            Assert.Equal(price, createdSale.Price);
             Assert.True(addressProperties.Select(ap => createdSale.ShipsFrom.Contains(ap)).All(x => x));
         }
 
@@ -147,10 +139,10 @@
             this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
 
             this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
-
+            
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                                this.testCreateSaleInputModel,
+                                                vinylGrade,sleeveGrade,description,price,address.Id,seller.Id,
                                                 seller.Id));
 
             Assert.Equal(ReleaseNotFound, exception.Message);
@@ -171,7 +163,8 @@
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                                this.testCreateSaleInputModel,
+                                                vinylGrade,sleeveGrade,description,price,Guid.NewGuid(),
+                                                release.Id,
                                                 seller.Id));
 
             Assert.Equal(AddressNotFound, exception.Message);
@@ -193,7 +186,8 @@
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                                this.testCreateSaleInputModel,
+                                                vinylGrade,sleeveGrade,description,price,address.Id,
+                                                release.Id,
                                                 Guid.NewGuid()));
 
             Assert.Equal(UserNotFound, exception.Message);

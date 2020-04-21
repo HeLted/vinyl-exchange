@@ -56,8 +56,10 @@
         {
             try
             {
-                return this.Created(
-                    await this.salesService.CreateSale<CreateSaleResourceModel>(inputModel, this.GetUserId(this.User)));
+                var resourceModel = 
+                    await this.salesService.CreateSale<CreateSaleResourceModel>(inputModel.VinylGrade,inputModel.SleeveGrade,inputModel.Description,inputModel.Price,inputModel.ShipsFromAddressId,inputModel.ReleaseId, this.GetUserId(this.User));
+
+                return this.Created(resourceModel);
             }
             catch (Exception ex)
             {

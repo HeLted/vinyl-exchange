@@ -5,14 +5,14 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Web.Models.InputModels.Sales;
 
     #endregion
 
     public interface ISalesService
     {
-        Task<TModel> CreateSale<TModel>(CreateSaleInputModel inputModel, Guid sellerId);
+        Task<TModel> CreateSale<TModel>(Condition vinylGrade, Condition sleeveGrade, string description, decimal price, Guid? shipsFromAddressId,Guid? releaseId , Guid sellerId);
 
         Task<TModel> EditSale<TModel>(EditSaleInputModel inputModel);
 
