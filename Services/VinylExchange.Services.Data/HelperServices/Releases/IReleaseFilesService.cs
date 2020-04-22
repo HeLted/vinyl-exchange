@@ -15,10 +15,10 @@
     {
         Task<List<ReleaseFile>> AddFilesForRelease(Guid? releaseId, Guid formSessionId);
 
-        Task<TModel> GetReleaseCoverArt<TModel>(Guid releaseId);
+        Task<TModel> GetReleaseCoverArt<TModel>(Guid? releaseId);
 
-        Task<List<TModel>> GetReleaseImages<TModel>(Guid releaseId);
+        Task<List<TModel>> GetReleaseImages<TModel>(Guid? releaseId);
 
-        Task<List<TModel>> GetReleaseTracks<TModel>(Guid releaseId);
+        Task<List<TModel>> GetReleaseTracks<TModel>(Guid? releaseId);
     }
 }

@@ -66,21 +66,21 @@
             return releaseFilesModels;
         }
 
-        public async Task<TModel> GetReleaseCoverArt<TModel>(Guid releaseId)
+        public async Task<TModel> GetReleaseCoverArt<TModel>(Guid? releaseId)
         {
             return await this.dbContext.ReleaseFiles
                        .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
                        .OrderBy(rf => rf.CreatedOn).To<TModel>().FirstOrDefaultAsync();
         }
 
-        public async Task<List<TModel>> GetReleaseImages<TModel>(Guid releaseId)
+        public async Task<List<TModel>> GetReleaseImages<TModel>(Guid? releaseId)
         {
             return await this.dbContext.ReleaseFiles
                        .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
                        .OrderBy(rf => rf.CreatedOn).To<TModel>().ToListAsync();
         }
 
-        public async Task<List<TModel>> GetReleaseTracks<TModel>(Guid releaseId)
+        public async Task<List<TModel>> GetReleaseTracks<TModel>(Guid? releaseId)
         {
             return await this.dbContext.ReleaseFiles
                        .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Audio)
