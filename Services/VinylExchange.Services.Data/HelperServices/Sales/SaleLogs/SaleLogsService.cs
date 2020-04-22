@@ -8,7 +8,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-
+    using VinylExchange.Common.Constants;
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
@@ -80,29 +80,7 @@
 
         private string GenerateLogMessage(SaleLogs logType)
         {
-            string logMessage = null;
-
-            switch (logType)
-            {
-                case SaleLogs.PlacedOrder:
-                    logMessage = PlacedOrder;
-                    break;
-                case SaleLogs.SettedShippingPrice:
-                    logMessage = SettedShippingPrice;
-                    break;
-                case SaleLogs.Paid:
-                    logMessage = Paid;
-                    break;
-                case SaleLogs.ItemSent:
-                    logMessage = ItemSent;
-                    break;
-                case SaleLogs.ItemRecieved:
-                    logMessage = ItemRecieved;
-                    break;
-                case SaleLogs.SaleEdited:
-                    logMessage = SaleEdited;
-                    break;
-            }
+            string logMessage = (string)typeof (SaleLogsMessages).GetField(logType.ToString()).GetValue(null);
 
             return logMessage;
         }
