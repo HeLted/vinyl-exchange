@@ -32,7 +32,7 @@
         {
             try
             {
-                return await this.releaseFilesService.GetReleaseTracks(id);
+                return await this.releaseFilesService.GetReleaseTracks<ReleaseFileResourceModel>(id);
             }
             catch (Exception ex)
             {

@@ -32,7 +32,7 @@
         {
             try
             {
-                return await this.releaseFilesService.GetReleaseImages(releaseId);
+                return await this.releaseFilesService.GetReleaseImages<ReleaseFileResourceModel>(releaseId);
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@
         {
             try
             {
-                return await this.releaseFilesService.GetReleaseCoverArt(releaseId);
+                return await this.releaseFilesService.GetReleaseCoverArt<ReleaseFileResourceModel>(releaseId);
             }
             catch (Exception ex)
             {
