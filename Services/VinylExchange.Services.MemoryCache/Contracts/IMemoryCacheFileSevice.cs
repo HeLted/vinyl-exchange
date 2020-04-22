@@ -1,4 +1,4 @@
-﻿namespace VinylExchange.Services.MemoryCache
+﻿namespace VinylExchange.Services.MemoryCache.Contracts
 {
     #region
 

@@ -48,6 +48,7 @@ namespace VinylExchange.Web
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Services.MemoryCache;
+    using VinylExchange.Services.MemoryCache.Contracts;
     using VinylExchange.Web.Infrastructure.Hubs.SaleChat;
     using VinylExchange.Web.Infrastructure.Hubs.SaleLog;
     using VinylExchange.Web.Infrastructure.IdentityServer.Profile;
@@ -245,10 +246,10 @@ namespace VinylExchange.Web
 
             // Tool Services
             services.AddTransient<IMemoryCache, MemoryCache>();
-            services.AddSingleton<MemoryCacheManager>();
             services.AddTransient<IMemoryCacheFileSevice, MemoryCacheFileService>();
             services.AddTransient<IFileManager, FileManager>();
 
+            services.AddSingleton<IMemoryCacheManager,MemoryCacheManager>();
             services.AddSingleton<ILoggerService, LoggerService>();
             services.AddSingleton<IEmailSender>(new EmailSender(this.Configuration["SendGridKey"]));
         }

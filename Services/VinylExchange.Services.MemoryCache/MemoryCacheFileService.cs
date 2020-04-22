@@ -12,6 +12,7 @@
 
     using VinylExchange.Common.Constants;
     using VinylExchange.Services.Mapping;
+    using VinylExchange.Services.MemoryCache.Contracts;
     using VinylExchange.Web.Models.InputModels.Files;
     using VinylExchange.Web.Models.Utility.Files;
 
@@ -21,9 +22,9 @@
 
     public class MemoryCacheFileService : IMemoryCacheFileSevice
     {
-        private readonly MemoryCacheManager cacheManager;
+        private readonly IMemoryCacheManager cacheManager;
 
-        public MemoryCacheFileService(MemoryCacheManager cacheManager)
+        public MemoryCacheFileService(IMemoryCacheManager cacheManager)
         {
             this.cacheManager = cacheManager;
         }

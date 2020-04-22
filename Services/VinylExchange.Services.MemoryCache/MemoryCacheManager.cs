@@ -10,10 +10,11 @@
 
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Primitives;
+    using VinylExchange.Services.MemoryCache.Contracts;
 
     #endregion
 
-    public class MemoryCacheManager
+    public class MemoryCacheManager : IMemoryCacheManager
     {
         /// <summary>
         ///     All keys of cache
