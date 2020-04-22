@@ -101,12 +101,12 @@ namespace VinylExchange.Web
             app.UseStaticFiles();
             app.UseFileServer(
                 new FileServerOptions
-                    {
-                        FileProvider = new PhysicalFileProvider(
+                {
+                    FileProvider = new PhysicalFileProvider(
                             Path.Combine(Directory.GetCurrentDirectory(), "MediaStorage")),
-                        RequestPath = "/File/Media",
-                        EnableDirectoryBrowsing = true
-                    });
+                    RequestPath = "/File/Media",
+                    EnableDirectoryBrowsing = true
+                });
 
             app.UseSpaStaticFiles();
 
@@ -197,10 +197,10 @@ namespace VinylExchange.Web
                         options.SecurityTokenValidators.Clear();
                         options.SecurityTokenValidators.Add(
                             new JwtSecurityTokenHandler
-                                {
-                                    // Disable the built-in JWT claims mapping feature.
-                                    InboundClaimTypeMap = new Dictionary<string, string>()
-                                });
+                            {
+                                // Disable the built-in JWT claims mapping feature.
+                                InboundClaimTypeMap = new Dictionary<string, string>()
+                            });
                     }).AddIdentityServerJwt();
 
             services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>()
@@ -241,6 +241,7 @@ namespace VinylExchange.Web
             services.AddTransient<IAddressesEntityRetriever, AddressesService>();
             services.AddTransient<IReleasesEntityRetriever, ReleasesService>();
             services.AddTransient<ISalesEntityRetriever, SalesService>();
+            services.AddTransient<IGenresEntityRetriever, GenresService>();
 
             // Tool Services
             services.AddTransient<IMemoryCache, MemoryCache>();

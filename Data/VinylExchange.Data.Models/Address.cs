@@ -6,7 +6,6 @@
     using System.ComponentModel.DataAnnotations;
 
     using VinylExchange.Data.Common.Models;
-
     using static VinylExchange.Common.Constants.RegexPatterns;
 
     #endregion

@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\VinylExchange.Common\VinylExchange.Common.csproj" />
-    <ProjectReference Include="..\..\Services\VinylExchange.Services.Mapping\VinylExchange.Services.Mapping.csproj" />
     <ProjectReference Include="..\VinylExchange.Data.Common\VinylExchange.Data.Common.csproj" />
   </ItemGroup>
 
