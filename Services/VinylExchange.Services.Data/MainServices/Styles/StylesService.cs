@@ -9,12 +9,11 @@
 
     using Microsoft.EntityFrameworkCore;
 
-    using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Genres;
     using VinylExchange.Services.Data.MainServices.Genres.Contracts;
     using VinylExchange.Services.Mapping;
+
     using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
     #endregion
@@ -25,7 +24,7 @@
 
         private readonly IGenresEntityRetriever genresEntityRetriever;
 
-        public StylesService(VinylExchangeDbContext dbContext,IGenresEntityRetriever genresEntityRetriever)
+        public StylesService(VinylExchangeDbContext dbContext, IGenresEntityRetriever genresEntityRetriever)
         {
             this.dbContext = dbContext;
             this.genresEntityRetriever = genresEntityRetriever;
@@ -35,16 +34,12 @@
         {
             var genre = await this.genresEntityRetriever.GetGenre(genreId);
 
-            if(genre == null)
+            if (genre == null)
             {
                 throw new NullReferenceException(GenreNotFound);
             }
 
-            var style = new Style
-            {
-                Name = name,
-                GenreId = genreId
-            };
+            var style = new Style { Name = name, GenreId = genreId };
 
             var trackedStyle = await this.dbContext.Styles.AddAsync(style);
 
@@ -71,7 +66,7 @@
 
             if (style == null)
             {
-                throw new NullReferenceException(NullReferenceExceptionsConstants.StyleNotFound);
+                throw new NullReferenceException(StyleNotFound);
             }
 
             var removedStyle = this.dbContext.Styles.Remove(style).Entity;

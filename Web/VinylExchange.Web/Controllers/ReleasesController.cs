@@ -8,7 +8,6 @@
 
     using Microsoft.AspNetCore.Mvc;
 
-    using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.MainServices.Releases.Contracts;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.InputModels.Releases;

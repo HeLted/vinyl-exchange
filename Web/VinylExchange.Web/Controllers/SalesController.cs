@@ -14,7 +14,6 @@
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
-    using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Data.MainServices.Sales.Contracts;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Infrastructure.Hubs.SaleLog;
@@ -57,8 +56,14 @@
         {
             try
             {
-                var resourceModel = 
-                    await this.salesService.CreateSale<CreateSaleResourceModel>(inputModel.VinylGrade,inputModel.SleeveGrade,inputModel.Description,inputModel.Price,inputModel.ShipsFromAddressId,inputModel.ReleaseId, this.GetUserId(this.User));
+                var resourceModel = await this.salesService.CreateSale<CreateSaleResourceModel>(
+                                        inputModel.VinylGrade,
+                                        inputModel.SleeveGrade,
+                                        inputModel.Description,
+                                        inputModel.Price,
+                                        inputModel.ShipsFromAddressId,
+                                        inputModel.ReleaseId,
+                                        this.GetUserId(this.User));
 
                 return this.Created(resourceModel);
             }

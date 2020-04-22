@@ -41,13 +41,13 @@
             Guid formSessionId)
         {
             var release = new Release
-            {
-                Artist = artist,
-                Title = title,
-                Format = format,
-                Year = year,
-                Label = label
-            };
+                {
+                    Artist = artist,
+                    Title = title,
+                    Format = format,
+                    Year = year,
+                    Label = label
+                };
 
             var trackedRelease = await this.dbContext.Releases.AddAsync(release);
 

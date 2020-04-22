@@ -7,8 +7,6 @@
 
     using Microsoft.AspNetCore.Identity;
 
-    using VinylExchange.Models.InputModels.Users;
-
     #endregion
 
     public interface IUsersService

@@ -13,7 +13,6 @@
     using VinylExchange.Services.Data.MainServices.Genres;
     using VinylExchange.Services.Data.MainServices.Genres.Contracts;
     using VinylExchange.Services.Data.Tests.TestFactories;
-    using VinylExchange.Web.Models.InputModels.Genres;
     using VinylExchange.Web.Models.ResourceModels.Genres;
 
     using Xunit;
@@ -36,8 +35,7 @@
         [Fact]
         public async Task CreateGenreShouldCreateGenre()
         {
-            var createdGenreModel =
-                await this.genresService.CreateGenre<CreateGenreResourceModel>("House");
+            var createdGenreModel = await this.genresService.CreateGenre<CreateGenreResourceModel>("House");
 
             await this.dbContext.SaveChangesAsync();
 
@@ -49,8 +47,7 @@
         [Fact]
         public async Task CreateGenreShouldCreateGenreWithCorrectData()
         {
-            var createdGenreModel =
-                await this.genresService.CreateGenre<CreateGenreResourceModel>("Trance");
+            var createdGenreModel = await this.genresService.CreateGenre<CreateGenreResourceModel>("Trance");
 
             await this.dbContext.SaveChangesAsync();
 

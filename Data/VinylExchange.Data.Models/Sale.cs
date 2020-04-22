@@ -9,10 +9,11 @@
 
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Common.Models;
+    using VinylExchange.Services.Mapping;
 
     #endregion
 
-    public class Sale : BaseDeletableModel
+    public class Sale : BaseDeletableModel 
     {
         [Required]
         [Range((int)Condition.Poor, (int)Condition.Mint)]

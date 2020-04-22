@@ -13,10 +13,8 @@
 
     using VinylExchange.Common.Constants;
     using VinylExchange.Data.Models;
-    using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.EmailSender;
-    using VinylExchange.Services.Mapping;
 
     using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
@@ -48,11 +46,7 @@
 
         public async Task<IdentityResult> RegisterUser(string username, string email, string password)
         {
-            var user = new VinylExchangeUser
-            {
-                UserName = username,
-                Email = email
-            };
+            var user = new VinylExchangeUser { UserName = username, Email = email };
 
             user.PasswordHash = this.userManager.PasswordHasher.HashPassword(user, password);
 

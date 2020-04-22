@@ -30,7 +30,7 @@
             (int)Condition.Mint,
             ErrorMessage = "Please select correct option for field")]
         public Condition SleeveGrade { get; set; }
-        
+
         public string Description { get; set; }
 
         [Required]

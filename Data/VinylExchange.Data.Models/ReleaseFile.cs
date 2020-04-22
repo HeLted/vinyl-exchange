@@ -10,7 +10,7 @@
 
     #endregion
 
-    public class ReleaseFile : BaseDeletableModel
+    public class ReleaseFile : BaseDeletableModel 
     {
         [Required]
         public string FileName { get; set; }

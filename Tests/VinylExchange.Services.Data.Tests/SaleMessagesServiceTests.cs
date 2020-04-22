@@ -1,10 +1,4 @@
-﻿#region
-
-using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
-
-#endregion
-
-namespace VinylExchange.Services.Data.Tests
+﻿namespace VinylExchange.Services.Data.Tests
 {
     #region
 
@@ -20,14 +14,14 @@ namespace VinylExchange.Services.Data.Tests
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
-    using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Data.MainServices.Sales.Contracts;
-    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Web.Models.ResourceModels.SaleMessages;
 
     using Xunit;
+
+    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
     #endregion
 

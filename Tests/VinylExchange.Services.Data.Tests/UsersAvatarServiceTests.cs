@@ -8,11 +8,12 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+
     using Moq;
+
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.HelperServices.Users;
-    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Data.Tests.TestFactories;
 
@@ -52,7 +53,7 @@
             await this.dbContext.Users.AddAsync(user);
 
             await this.dbContext.SaveChangesAsync();
-          
+
             this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
             var newAvatar = new byte[]

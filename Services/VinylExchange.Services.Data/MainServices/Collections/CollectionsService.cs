@@ -12,12 +12,9 @@
     using VinylExchange.Data;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.MainServices.Releases.Contracts;
-    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.InputModels.Collections;
 
     using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
 
@@ -41,7 +38,12 @@
             this.usersEntityRetriever = usersEntityRetriever;
         }
 
-        public async Task<TModel> AddToCollection<TModel>(Condition vinylGrade, Condition sleeveGrade, string description, Guid? releaseId, Guid userId)
+        public async Task<TModel> AddToCollection<TModel>(
+            Condition vinylGrade,
+            Condition sleeveGrade,
+            string description,
+            Guid? releaseId,
+            Guid userId)
         {
             var release = await this.releasesEntityRetriever.GetRelease(releaseId);
 
@@ -58,13 +60,13 @@
             }
 
             var collectionItem = new CollectionItem
-            {
-                VinylGrade = vinylGrade,
-                SleeveGrade = sleeveGrade,
-                Description = description,
-                ReleaseId = releaseId,
-                UserId = userId
-            };
+                {
+                    VinylGrade = vinylGrade,
+                    SleeveGrade = sleeveGrade,
+                    Description = description,
+                    ReleaseId = releaseId,
+                    UserId = userId
+                };
 
             collectionItem.ReleaseId = release.Id;
             collectionItem.UserId = user.Id;

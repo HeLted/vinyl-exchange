@@ -12,7 +12,6 @@
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Data.MainServices.Sales.Contracts;
     using VinylExchange.Services.Mapping;
 

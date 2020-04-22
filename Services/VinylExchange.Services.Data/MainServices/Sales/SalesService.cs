@@ -12,13 +12,10 @@
     using VinylExchange.Data;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Addresses;
     using VinylExchange.Services.Data.MainServices.Addresses.Contracts;
-    using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.MainServices.Releases.Contracts;
     using VinylExchange.Services.Data.MainServices.Sales.Contracts;
     using VinylExchange.Services.Data.MainServices.Sales.Exceptions;
-    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.InputModels.Sales;
@@ -49,7 +46,14 @@
             this.releasesEntityRetriever = releasesEntityRetriever;
         }
 
-        public async Task<TModel> CreateSale<TModel>(Condition vinylGrade, Condition sleeveGrade, string description, decimal price, Guid? shipsFromAddressId,Guid? releaseId , Guid sellerId)
+        public async Task<TModel> CreateSale<TModel>(
+            Condition vinylGrade,
+            Condition sleeveGrade,
+            string description,
+            decimal price,
+            Guid? shipsFromAddressId,
+            Guid? releaseId,
+            Guid sellerId)
         {
             var release = await this.releasesEntityRetriever.GetRelease(releaseId);
 
@@ -73,17 +77,17 @@
             }
 
             var sale = new Sale
-            {
-                VinylGrade = vinylGrade,
-                SleeveGrade = sleeveGrade,
-                Description = description,
-                ShipsFrom = $"{address.Country} - {address.Town}",
-                Price = price,
-                Status = Status.Open,
-                SellerId = sellerId,
-                ReleaseId = releaseId
-            };
-            
+                {
+                    VinylGrade = vinylGrade,
+                    SleeveGrade = sleeveGrade,
+                    Description = description,
+                    ShipsFrom = $"{address.Country} - {address.Town}",
+                    Price = price,
+                    Status = Status.Open,
+                    SellerId = sellerId,
+                    ReleaseId = releaseId
+                };
+
             var trackedSale = await this.dbContext.Sales.AddAsync(sale);
 
             await this.dbContext.SaveChangesAsync();

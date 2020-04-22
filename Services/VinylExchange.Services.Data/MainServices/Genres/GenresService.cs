@@ -13,7 +13,6 @@
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Genres.Contracts;
     using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.InputModels.Genres;
 
     #endregion
 
@@ -28,10 +27,7 @@
 
         public async Task<TModel> CreateGenre<TModel>(string name)
         {
-            var genre = new Genre
-                {
-                  Name = name  
-                };
+            var genre = new Genre { Name = name };
 
             var trackedGenre = await this.dbContext.Genres.AddAsync(genre);
 
@@ -44,7 +40,7 @@
         {
             return await this.dbContext.Genres.To<TModel>().ToListAsync();
         }
-        
+
         public async Task<TModel> RemoveGenre<TModel>(int genreId)
         {
             var genre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
@@ -62,7 +58,7 @@
 
         public async Task<Genre> GetGenre(int? genreId)
         {
-            return await this.dbContext.Genres.FirstOrDefaultAsync(g=> g.Id == genreId);
+            return await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
         }
     }
 }

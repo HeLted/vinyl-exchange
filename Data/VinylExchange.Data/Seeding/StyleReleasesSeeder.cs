@@ -35,9 +35,9 @@
             }
         }
 
-        private static async Task SeedStyleRelease(VinylExchangeDbContext dbContext, Guid ReleaseId, int styleId)
+        private static async Task SeedStyleRelease(VinylExchangeDbContext dbContext, Guid releaseId, int styleId)
         {
-            var styleRelease = new StyleRelease { ReleaseId = ReleaseId, StyleId = styleId };
+            var styleRelease = new StyleRelease { ReleaseId = releaseId, StyleId = styleId };
 
             await dbContext.StyleReleases.AddAsync(styleRelease);
         }

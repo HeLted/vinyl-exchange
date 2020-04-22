@@ -11,7 +11,6 @@
     using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Mapping;
     using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
@@ -21,10 +20,10 @@
     public class UsersAvatarService : IUsersAvatarService
     {
         private readonly VinylExchangeDbContext dbContext;
-        
+
         private readonly IUsersEntityRetriever usersEntityRetriever;
 
-        public UsersAvatarService(VinylExchangeDbContext dbContext,IUsersEntityRetriever usersEntityRetriever)
+        public UsersAvatarService(VinylExchangeDbContext dbContext, IUsersEntityRetriever usersEntityRetriever)
         {
             this.dbContext = dbContext;
             this.usersEntityRetriever = usersEntityRetriever;
@@ -48,8 +47,7 @@
 
         public async Task<GetUserAvatarResourceModel> GetUserAvatar(Guid? userId)
         {
-            return await QueryableMappingExtensions
-                       .To<GetUserAvatarResourceModel>(this.dbContext.Users.Where(u => u.Id == userId))
+            return await this.dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
                        .FirstOrDefaultAsync();
         }
     }

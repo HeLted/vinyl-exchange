@@ -6,13 +6,18 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using VinylExchange.Web.Models.InputModels.Releases;
-
     #endregion
 
     public interface IReleasesService
     {
-        Task<TModel> CreateRelease<TModel>(string artist, string title, string format, int year, string label, ICollection<int> styleIds, Guid formSessionI);
+        Task<TModel> CreateRelease<TModel>(
+            string artist,
+            string title,
+            string format,
+            int year,
+            string label,
+            ICollection<int> styleIds,
+            Guid formSessionI);
 
         Task<TModel> GetRelease<TModel>(Guid? releaseId);
 

@@ -14,12 +14,9 @@
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
     using VinylExchange.Services.Data.MainServices.Collections;
-    using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.MainServices.Releases.Contracts;
-    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Data.Tests.TestFactories;
-    using VinylExchange.Web.Models.InputModels.Collections;
     using VinylExchange.Web.Models.ResourceModels.Collections;
 
     using Xunit;
@@ -65,7 +62,10 @@
 
             var createdCollectionItemModel =
                 await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                    Condition.Poor,Condition.Mint,"Description",release.Id,
+                    Condition.Poor,
+                    Condition.Mint,
+                    "Description",
+                    release.Id,
                     Guid.NewGuid());
 
             var createdCollectionItem =
@@ -87,7 +87,10 @@
 
             var createdCollectionItemModel =
                 await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                    Condition.Poor,Condition.Mint,"Description",release.Id,
+                    Condition.Poor,
+                    Condition.Mint,
+                    "Description",
+                    release.Id,
                     user.Id);
 
             var createdCollectionItem =
@@ -111,7 +114,10 @@
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                                                Condition.Poor,Condition.Mint,"Description",Guid.NewGuid(),
+                                                Condition.Poor,
+                                                Condition.Mint,
+                                                "Description",
+                                                Guid.NewGuid(),
                                                 user.Id));
 
             Assert.Equal(ReleaseNotFound, exception.Message);
@@ -129,7 +135,10 @@
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                                                Condition.Poor,Condition.Mint,"Test Description",release.Id,
+                                                Condition.Poor,
+                                                Condition.Mint,
+                                                "Test Description",
+                                                release.Id,
                                                 Guid.NewGuid()));
 
             Assert.Equal(UserNotFound, exception.Message);

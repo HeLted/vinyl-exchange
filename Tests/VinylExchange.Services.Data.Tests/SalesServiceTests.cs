@@ -14,14 +14,11 @@
     using VinylExchange.Data;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Addresses;
     using VinylExchange.Services.Data.MainServices.Addresses.Contracts;
-    using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.MainServices.Releases.Contracts;
     using VinylExchange.Services.Data.MainServices.Sales;
     using VinylExchange.Services.Data.MainServices.Sales.Contracts;
     using VinylExchange.Services.Data.MainServices.Sales.Exceptions;
-    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Web.Models.InputModels.Sales;
@@ -35,6 +32,14 @@
 
     public class SalesServiceTests
     {
+        private const Condition VinylGrade = Condition.Mint;
+
+        private const Condition SleeveGrade = Condition.NearMint;
+
+        private const string Description = "Test description";
+
+        private const decimal Price = 100;
+
         private readonly VinylExchangeDbContext dbContext;
 
         private readonly ISalesService salesService;
@@ -44,14 +49,6 @@
         private readonly Mock<IUsersEntityRetriever> usersEntityRetrieverMock;
 
         private readonly Mock<IReleasesEntityRetriever> releasesEntityRetrieverMock;
-
-        private const Condition vinylGrade = Condition.Mint;
-
-        private const Condition sleeveGrade  = Condition.NearMint;
-
-        private const string description = "Test description";
-
-        private const decimal price = 100;
 
         private readonly Address testAddress = new Address
             {
@@ -90,8 +87,14 @@
 
             this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
-            var createdSaleModel =
-                await this.salesService.CreateSale<CreateSaleResourceModel>(Condition.Fair, Condition.Mint,"ewewe",30,address.Id,release.Id, seller.Id);
+            var createdSaleModel = await this.salesService.CreateSale<CreateSaleResourceModel>(
+                                       Condition.Fair,
+                                       Condition.Mint,
+                                       "ewewe",
+                                       30,
+                                       address.Id,
+                                       release.Id,
+                                       seller.Id);
 
             await this.dbContext.SaveChangesAsync();
 
@@ -117,17 +120,23 @@
 
             var addressProperties = new List<string> { address.Country, address.Town };
 
-            var createdSaleModel =
-                await this.salesService.CreateSale<CreateSaleResourceModel>(vinylGrade,sleeveGrade,description,price,address.Id,release.Id, seller.Id);
+            var createdSaleModel = await this.salesService.CreateSale<CreateSaleResourceModel>(
+                                       VinylGrade,
+                                       SleeveGrade,
+                                       Description,
+                                       Price,
+                                       address.Id,
+                                       release.Id,
+                                       seller.Id);
 
             await this.dbContext.SaveChangesAsync();
 
             var createdSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == createdSaleModel.Id);
 
-            Assert.Equal(vinylGrade, createdSale.VinylGrade);
-            Assert.Equal(sleeveGrade, createdSale.SleeveGrade);
+            Assert.Equal(VinylGrade, createdSale.VinylGrade);
+            Assert.Equal(SleeveGrade, createdSale.SleeveGrade);
             Assert.Equal(release.Id, createdSale.ReleaseId);
-            Assert.Equal(price, createdSale.Price);
+            Assert.Equal(Price, createdSale.Price);
             Assert.True(addressProperties.Select(ap => createdSale.ShipsFrom.Contains(ap)).All(x => x));
         }
 
@@ -143,10 +152,15 @@
             this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
 
             this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
-            
+
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                                vinylGrade,sleeveGrade,description,price,address.Id,seller.Id,
+                                                VinylGrade,
+                                                SleeveGrade,
+                                                Description,
+                                                Price,
+                                                address.Id,
+                                                seller.Id,
                                                 seller.Id));
 
             Assert.Equal(ReleaseNotFound, exception.Message);
@@ -167,7 +181,11 @@
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                                vinylGrade,sleeveGrade,description,price,Guid.NewGuid(),
+                                                VinylGrade,
+                                                SleeveGrade,
+                                                Description,
+                                                Price,
+                                                Guid.NewGuid(),
                                                 release.Id,
                                                 seller.Id));
 
@@ -190,7 +208,11 @@
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
                                 async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                                vinylGrade,sleeveGrade,description,price,address.Id,
+                                                VinylGrade,
+                                                SleeveGrade,
+                                                Description,
+                                                Price,
+                                                address.Id,
                                                 release.Id,
                                                 Guid.NewGuid()));
 

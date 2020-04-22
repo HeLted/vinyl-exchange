@@ -5,8 +5,6 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using VinylExchange.Web.Models.InputModels.Genres;
-
     #endregion
 
     public interface IGenresService

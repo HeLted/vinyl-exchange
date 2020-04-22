@@ -17,7 +17,6 @@
     using VinylExchange.Services.Data.MainServices.Releases;
     using VinylExchange.Services.Data.Tests.TestFactories;
     using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.InputModels.Releases;
     using VinylExchange.Web.Models.ResourceModels.Releases;
 
     using Xunit;
@@ -52,7 +51,7 @@
                                           "Test",
                                           1993,
                                           "Trerer",
-                                          new List<int>(){1,4,5,6},
+                                          new List<int> { 1, 4, 5, 6 },
                                           Guid.NewGuid());
 
             await this.dbContext.SaveChangesAsync();
@@ -70,12 +69,12 @@
             var format = "Test Format";
             var year = 1993;
             var label = "label";
-            var styles = new List<int>{1,2,3};
+            var styles = new List<int> { 1, 2, 3 };
 
             var createdReleaseModel = await this.releasesService.CreateRelease<CreateReleaseResourceModel>(
                                           artist,
                                           title,
-                                          format, 
+                                          format,
                                           year,
                                           label,
                                           styles,

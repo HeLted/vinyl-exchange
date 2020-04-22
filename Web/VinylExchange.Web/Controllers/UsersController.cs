@@ -13,7 +13,6 @@
 
     using VinylExchange.Models.InputModels.Users;
     using VinylExchange.Services.Data.HelperServices.Users;
-    using VinylExchange.Services.Data.MainServices.Users;
     using VinylExchange.Services.Data.MainServices.Users.Contracts;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.InputModels.Users;
@@ -203,7 +202,10 @@
         {
             try
             {
-                var registerUserIdentityResult = await this.userService.RegisterUser(inputModel.Username, inputModel.Email,inputModel.Password);
+                var registerUserIdentityResult = await this.userService.RegisterUser(
+                                                     inputModel.Username,
+                                                     inputModel.Email,
+                                                     inputModel.Password);
 
                 if (registerUserIdentityResult.Succeeded)
                 {

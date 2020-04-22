@@ -10,7 +10,6 @@
     using Microsoft.AspNetCore.Mvc;
 
     using VinylExchange.Common.Constants;
-    using VinylExchange.Services.Data.MainServices.Genres;
     using VinylExchange.Services.Data.MainServices.Genres.Contracts;
     using VinylExchange.Services.Logging;
     using VinylExchange.Web.Models.InputModels.Genres;
