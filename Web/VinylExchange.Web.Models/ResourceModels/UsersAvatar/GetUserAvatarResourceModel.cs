@@ -1,15 +1,9 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.UsersAvatar
 {
-    #region
-
     using System;
-
     using AutoMapper;
-
-    using VinylExchange.Data.Models;
-    using VinylExchange.Services.Mapping;
-
-    #endregion
+    using Data.Models;
+    using Services.Mapping;
 
     public class GetUserAvatarResourceModel : IHaveCustomMappings
     {

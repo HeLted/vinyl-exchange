@@ -1,16 +1,11 @@
 ﻿namespace VinylExchange.Data.Seeding
 {
-    #region
-
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Contracts;
+    using Models;
     using VinylExchange.Common.Enumerations;
-    using VinylExchange.Data.Models;
-    using VinylExchange.Data.Seeding.Contracts;
-
-    #endregion
 
     public class ReleaseFilesSeeder : ISeeder
     {
@@ -154,13 +149,13 @@
             bool isPrewiew)
         {
             var releaseFile = new ReleaseFile
-                {
-                    ReleaseId = releaseId,
-                    Path = @"\Releases\" + fileType + "\\",
-                    FileName = fileName,
-                    IsPreview = isPrewiew,
-                    FileType = fileType
-                };
+            {
+                ReleaseId = releaseId,
+                Path = @"\Releases\" + fileType + "\\",
+                FileName = fileName,
+                IsPreview = isPrewiew,
+                FileType = fileType
+            };
 
             await dbContext.ReleaseFiles.AddAsync(releaseFile);
 

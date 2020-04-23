@@ -1,15 +1,10 @@
 ﻿namespace VinylExchange.Data.Seeding
 {
-    #region
-
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using VinylExchange.Data.Models;
-    using VinylExchange.Data.Seeding.Contracts;
-
-    #endregion
+    using Contracts;
+    using Models;
 
     internal class GenresSeeder : ISeeder
     {
@@ -31,7 +26,7 @@
 
         private static async Task SeedGenreAsync(VinylExchangeDbContext dbContext, string name)
         {
-            var genre = new Genre { Name = name };
+            var genre = new Genre {Name = name};
 
             await dbContext.Genres.AddAsync(genre);
         }

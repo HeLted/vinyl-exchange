@@ -1,15 +1,10 @@
 ﻿namespace VinylExchange.Data.Models
 {
-    #region
-
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
-    using VinylExchange.Data.Common.Models;
-
+    using Common.Models;
     using static VinylExchange.Common.Constants.RegexPatterns;
 
-    #endregion
 
     public class Release : BaseDeletableModel
     {
@@ -31,8 +26,7 @@
         [RegularExpression(AplhaNumericBracesDashAndSpace)]
         public string Format { get; set; }
 
-        [Required]
-        public int Year { get; set; }
+        [Required] public int Year { get; set; }
 
         [Required]
         [MinLength(3)]

@@ -1,13 +1,16 @@
 namespace VinylExchange.Web
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
     using System.IO;
     using System.Reflection;
-
+    using Data;
+    using Data.Models;
+    using Data.Seeding;
+    using Infrastructure.Hubs.SaleChat;
+    using Infrastructure.Hubs.SaleLog;
+    using Infrastructure.IdentityServer.Profile;
     using Microsoft.AspNetCore.Antiforgery;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,45 +26,36 @@ namespace VinylExchange.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
-
-    using VinylExchange.Data;
-    using VinylExchange.Data.Models;
-    using VinylExchange.Data.Seeding;
-    using VinylExchange.Services.Data.HelperServices.Releases;
-    using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
-    using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
-    using VinylExchange.Services.Data.HelperServices.Users;
-    using VinylExchange.Services.Data.MainServices.Addresses;
-    using VinylExchange.Services.Data.MainServices.Addresses.Contracts;
-    using VinylExchange.Services.Data.MainServices.Collections;
-    using VinylExchange.Services.Data.MainServices.Genres;
-    using VinylExchange.Services.Data.MainServices.Genres.Contracts;
-    using VinylExchange.Services.Data.MainServices.Releases;
-    using VinylExchange.Services.Data.MainServices.Releases.Contracts;
-    using VinylExchange.Services.Data.MainServices.Sales;
-    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
-    using VinylExchange.Services.Data.MainServices.Styles;
-    using VinylExchange.Services.Data.MainServices.Users;
-    using VinylExchange.Services.Data.MainServices.Users.Contracts;
-    using VinylExchange.Services.EmailSender;
-    using VinylExchange.Services.Files;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Services.Mapping;
-    using VinylExchange.Services.MemoryCache;
-    using VinylExchange.Services.MemoryCache.Contracts;
-    using VinylExchange.Web.Infrastructure.Hubs.SaleChat;
-    using VinylExchange.Web.Infrastructure.Hubs.SaleLog;
-    using VinylExchange.Web.Infrastructure.IdentityServer.Profile;
-    using VinylExchange.Web.Models;
-
-    #endregion
+    using Models;
+    using Services.Data.HelperServices.Releases;
+    using Services.Data.HelperServices.Sales.SaleLogs;
+    using Services.Data.HelperServices.Sales.SaleMessages;
+    using Services.Data.HelperServices.Users;
+    using Services.Data.MainServices.Addresses;
+    using Services.Data.MainServices.Addresses.Contracts;
+    using Services.Data.MainServices.Collections;
+    using Services.Data.MainServices.Genres;
+    using Services.Data.MainServices.Genres.Contracts;
+    using Services.Data.MainServices.Releases;
+    using Services.Data.MainServices.Releases.Contracts;
+    using Services.Data.MainServices.Sales;
+    using Services.Data.MainServices.Sales.Contracts;
+    using Services.Data.MainServices.Styles;
+    using Services.Data.MainServices.Users;
+    using Services.Data.MainServices.Users.Contracts;
+    using Services.EmailSender;
+    using Services.Files;
+    using Services.Logging;
+    using Services.Mapping;
+    using Services.MemoryCache;
+    using Services.MemoryCache.Contracts;
 
     public class Startup
     {
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
-            this.Configuration = configuration;
-            this.Environment = environment;
+            Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
@@ -104,7 +98,7 @@ namespace VinylExchange.Web
                 new FileServerOptions
                 {
                     FileProvider = new PhysicalFileProvider(
-                            Path.Combine(Directory.GetCurrentDirectory(), "MediaStorage")),
+                        Path.Combine(Directory.GetCurrentDirectory(), "MediaStorage")),
                     RequestPath = "/File/Media",
                     EnableDirectoryBrowsing = true
                 });
@@ -118,91 +112,91 @@ namespace VinylExchange.Web
             app.UseAuthorization();
             app.UseEndpoints(
                 endpoints =>
-                    {
-                        endpoints.MapControllerRoute("Default", "api/{controller}/{id}");
-                        endpoints.MapHub<SaleChatHub>("/Sale/Chathub");
-                        endpoints.MapHub<SaleLogsHub>("/Sale/LogHub");
-                    });
+                {
+                    endpoints.MapControllerRoute("Default", "api/{controller}/{id}");
+                    endpoints.MapHub<SaleChatHub>("/Sale/Chathub");
+                    endpoints.MapHub<SaleLogsHub>("/Sale/LogHub");
+                });
 
             app.Use(
                 next => context =>
+                {
+                    var path = context.Request.Path.Value;
+
+                    if (string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(
+                            path,
+                            "/Authentication/Logout-Callback",
+                            StringComparison.OrdinalIgnoreCase))
                     {
-                        var path = context.Request.Path.Value;
+                        var tokens = antiforgery.GetAndStoreTokens(context);
+                        context.Response.Cookies.Append(
+                            "XSRF-TOKEN",
+                            tokens.RequestToken,
+                            new CookieOptions {HttpOnly = false});
+                    }
 
-                        if (string.Equals(path, "/", StringComparison.OrdinalIgnoreCase)
-                            || string.Equals(
-                                path,
-                                "/Authentication/Logout-Callback",
-                                StringComparison.OrdinalIgnoreCase))
-                        {
-                            var tokens = antiforgery.GetAndStoreTokens(context);
-                            context.Response.Cookies.Append(
-                                "XSRF-TOKEN",
-                                tokens.RequestToken,
-                                new CookieOptions { HttpOnly = false });
-                        }
-
-                        return next(context);
-                    });
+                    return next(context);
+                });
 
             app.UseSpa(
                 spa =>
-                    {
-                        spa.Options.SourcePath = "ClientApp";
+                {
+                    spa.Options.SourcePath = "ClientApp";
 
-                        if (env.IsDevelopment())
-                        {
-                            spa.UseReactDevelopmentServer("start");
-                        }
-                    });
+                    if (env.IsDevelopment())
+                    {
+                        spa.UseReactDevelopmentServer("start");
+                    }
+                });
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<VinylExchangeDbContext>(
-                options => { options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")); });
+                options => { options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")); });
 
             services.AddSignalR(
                 options =>
+                {
+                    if (Environment.IsDevelopment())
                     {
-                        if (this.Environment.IsDevelopment())
-                        {
-                            options.EnableDetailedErrors = true;
-                        }
-                    });
+                        options.EnableDetailedErrors = true;
+                    }
+                });
 
             services.AddDefaultIdentity<VinylExchangeUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<VinylExchangeRole>().AddEntityFrameworkStores<VinylExchangeDbContext>();
 
             services.Configure<IdentityOptions>(
                 options =>
-                    {
-                        options.Password.RequireUppercase = false;
-                        options.Password.RequireNonAlphanumeric = false;
-                        options.SignIn.RequireConfirmedAccount = false;
-                        options.SignIn.RequireConfirmedEmail = false;
-                        options.User.RequireUniqueEmail = true;
-                    });
+                {
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.SignIn.RequireConfirmedEmail = false;
+                    options.User.RequireUniqueEmail = true;
+                });
 
             services.AddAuthentication(
                 options =>
-                    {
-                        // ...
-                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                        options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
-                    }).AddJwtBearer(
+                {
+                    // ...
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
+                }).AddJwtBearer(
                 options =>
-                    {
-                        // ...
-                        options.SecurityTokenValidators.Clear();
-                        options.SecurityTokenValidators.Add(
-                            new JwtSecurityTokenHandler
-                            {
-                                // Disable the built-in JWT claims mapping feature.
-                                InboundClaimTypeMap = new Dictionary<string, string>()
-                            });
-                    }).AddIdentityServerJwt();
+                {
+                    // ...
+                    options.SecurityTokenValidators.Clear();
+                    options.SecurityTokenValidators.Add(
+                        new JwtSecurityTokenHandler
+                        {
+                            // Disable the built-in JWT claims mapping feature.
+                            InboundClaimTypeMap = new Dictionary<string, string>()
+                        });
+                }).AddIdentityServerJwt();
 
             services.AddIdentityServer().AddApiAuthorization<VinylExchangeUser, VinylExchangeDbContext>()
                 .AddProfileService<ProfileService>();
@@ -212,10 +206,10 @@ namespace VinylExchange.Web
 
             services.AddAntiforgery(
                 options =>
-                    {
-                        options.HeaderName = "RequestVerificationToken";
-                        options.SuppressXFrameOptionsHeader = false;
-                    });
+                {
+                    options.HeaderName = "RequestVerificationToken";
+                    options.SuppressXFrameOptionsHeader = false;
+                });
 
             services.AddDistributedMemoryCache();
 
@@ -249,9 +243,9 @@ namespace VinylExchange.Web
             services.AddTransient<IMemoryCacheFilesSevice, MemoryCacheFilesService>();
             services.AddTransient<IFileManager, FileManager>();
 
-            services.AddSingleton<IMemoryCacheManager,MemoryCacheManager>();
+            services.AddSingleton<IMemoryCacheManager, MemoryCacheManager>();
             services.AddSingleton<ILoggerService, LoggerService>();
-            services.AddSingleton<IEmailSender>(new EmailSender(this.Configuration["SendGridKey"]));
+            services.AddSingleton<IEmailSender>(new EmailSender(Configuration["SendGridKey"]));
         }
     }
 }

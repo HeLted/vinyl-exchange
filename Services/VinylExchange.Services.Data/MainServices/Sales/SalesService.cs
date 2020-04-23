@@ -1,28 +1,22 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Sales
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Addresses.Contracts;
+    using Contracts;
+    using Exceptions;
+    using Mapping;
     using Microsoft.EntityFrameworkCore;
-
+    using Releases.Contracts;
+    using Users.Contracts;
     using VinylExchange.Data;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Addresses.Contracts;
-    using VinylExchange.Services.Data.MainServices.Releases.Contracts;
-    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
-    using VinylExchange.Services.Data.MainServices.Sales.Exceptions;
-    using VinylExchange.Services.Data.MainServices.Users.Contracts;
-    using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.InputModels.Sales;
+    using Web.Models.InputModels.Sales;
+    using static Common.Constants.NullReferenceExceptionsConstants;
 
-    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
-
-    #endregion
 
     public class SalesService : ISalesService, ISalesEntityRetriever
     {
@@ -55,11 +49,11 @@
             Guid? releaseId,
             Guid sellerId)
         {
-            var release = await this.releasesEntityRetriever.GetRelease(releaseId);
+            var release = await releasesEntityRetriever.GetRelease(releaseId);
 
-            var address = await this.addressesEntityRetriever.GetAddress(shipsFromAddressId);
+            var address = await addressesEntityRetriever.GetAddress(shipsFromAddressId);
 
-            var user = await this.usersEntityRetriever.GetUser(sellerId);
+            var user = await usersEntityRetriever.GetUser(sellerId);
 
             if (release == null)
             {
@@ -77,29 +71,29 @@
             }
 
             var sale = new Sale
-                {
-                    VinylGrade = vinylGrade,
-                    SleeveGrade = sleeveGrade,
-                    Description = description,
-                    ShipsFrom = $"{address.Country} - {address.Town}",
-                    Price = price,
-                    Status = Status.Open,
-                    SellerId = sellerId,
-                    ReleaseId = releaseId
-                };
+            {
+                VinylGrade = vinylGrade,
+                SleeveGrade = sleeveGrade,
+                Description = description,
+                ShipsFrom = $"{address.Country} - {address.Town}",
+                Price = price,
+                Status = Status.Open,
+                SellerId = sellerId,
+                ReleaseId = releaseId
+            };
 
-            var trackedSale = await this.dbContext.Sales.AddAsync(sale);
+            var trackedSale = await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return trackedSale.Entity.To<TModel>();
         }
 
         public async Task<TModel> EditSale<TModel>(EditSaleInputModel inputModel)
         {
-            var sale = await this.GetSale(inputModel.SaleId);
+            var sale = await GetSale(inputModel.SaleId);
 
-            var address = await this.addressesEntityRetriever.GetAddress(inputModel.ShipsFromAddressId);
+            var address = await addressesEntityRetriever.GetAddress(inputModel.ShipsFromAddressId);
 
             if (sale == null)
             {
@@ -125,54 +119,54 @@
 
             sale.ModifiedOn = DateTime.UtcNow;
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return sale.To<TModel>();
         }
 
         public async Task<TModel> RemoveSale<TModel>(Guid? saleId)
         {
-            var sale = await this.GetSale(saleId);
+            var sale = await GetSale(saleId);
 
             if (sale == null)
             {
                 throw new NullReferenceException(SaleNotFound);
             }
 
-            var removedAddress = this.dbContext.Sales.Remove(sale).Entity;
-            await this.dbContext.SaveChangesAsync();
+            var removedAddress = dbContext.Sales.Remove(sale).Entity;
+            await dbContext.SaveChangesAsync();
 
             return removedAddress.To<TModel>();
         }
 
         public async Task<TModel> GetSale<TModel>(Guid? saleId)
         {
-            return await this.dbContext.Sales.Where(s => s.Id == saleId).To<TModel>().FirstOrDefaultAsync();
+            return await dbContext.Sales.Where(s => s.Id == saleId).To<TModel>().FirstOrDefaultAsync();
         }
 
         public async Task<List<TModel>> GetAllSalesForRelease<TModel>(Guid? releaseId)
         {
-            return await this.dbContext.Sales.Where(s => s.ReleaseId == releaseId).Where(s => s.Status == Status.Open)
-                       .To<TModel>().ToListAsync();
+            return await dbContext.Sales.Where(s => s.ReleaseId == releaseId).Where(s => s.Status == Status.Open)
+                .To<TModel>().ToListAsync();
         }
 
         public async Task<List<TModel>> GetUserPurchases<TModel>(Guid buyerId)
         {
-            return await this.dbContext.Sales.Where(s => s.BuyerId == buyerId).To<TModel>().ToListAsync();
+            return await dbContext.Sales.Where(s => s.BuyerId == buyerId).To<TModel>().ToListAsync();
         }
 
         public async Task<List<TModel>> GetUserSales<TModel>(Guid sellerId)
         {
-            return await this.dbContext.Sales.Where(s => s.SellerId == sellerId).To<TModel>().ToListAsync();
+            return await dbContext.Sales.Where(s => s.SellerId == sellerId).To<TModel>().ToListAsync();
         }
 
         public async Task<TModel> PlaceOrder<TModel>(Guid? saleId, Guid? addressId, Guid? buyerId)
         {
-            var sale = await this.GetSale(saleId);
+            var sale = await GetSale(saleId);
 
-            var address = await this.addressesEntityRetriever.GetAddress(addressId);
+            var address = await addressesEntityRetriever.GetAddress(addressId);
 
-            var user = await this.usersEntityRetriever.GetUser(buyerId);
+            var user = await usersEntityRetriever.GetUser(buyerId);
 
             if (sale == null)
             {
@@ -198,16 +192,16 @@
             sale.Status = Status.ShippingNegotiation;
             sale.ShipsTo = $"{address.Country} - {address.Town} - {address.PostalCode} - {address.FullAddress}";
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return sale.To<TModel>();
         }
 
         public async Task<TModel> CancelOrder<TModel>(Guid? saleId, Guid? buyerId)
         {
-            var sale = await this.GetSale(saleId);
+            var sale = await GetSale(saleId);
 
-            var user = await this.usersEntityRetriever.GetUser(buyerId);
+            var user = await usersEntityRetriever.GetUser(buyerId);
 
             if (sale == null)
             {
@@ -228,14 +222,14 @@
 
             sale.Status = Status.Open;
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return sale.To<TModel>();
         }
 
         public async Task<TModel> SetShippingPrice<TModel>(Guid? saleId, decimal shippingPrice)
         {
-            var sale = await this.GetSale(saleId);
+            var sale = await GetSale(saleId);
 
             if (sale == null)
             {
@@ -250,14 +244,14 @@
             sale.ShippingPrice = shippingPrice;
             sale.Status = Status.PaymentPending;
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return sale.To<TModel>();
         }
 
         public async Task<TModel> CompletePayment<TModel>(Guid? saleId, string orderId)
         {
-            var sale = await this.GetSale(saleId);
+            var sale = await GetSale(saleId);
 
             if (sale == null)
             {
@@ -272,14 +266,14 @@
             sale.Status = Status.Paid;
             sale.OrderId = orderId;
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return sale.To<TModel>();
         }
 
         public async Task<TModel> ConfirmItemSent<TModel>(Guid? saleId)
         {
-            var sale = await this.GetSale(saleId);
+            var sale = await GetSale(saleId);
 
             if (sale == null)
             {
@@ -293,14 +287,14 @@
 
             sale.Status = Status.Sent;
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return sale.To<TModel>();
         }
 
         public async Task<TModel> ConfirmItemRecieved<TModel>(Guid? saleId)
         {
-            var sale = await this.GetSale(saleId);
+            var sale = await GetSale(saleId);
 
             if (sale == null)
             {
@@ -314,14 +308,14 @@
 
             sale.Status = Status.Finished;
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return sale.To<TModel>();
         }
 
         public async Task<Sale> GetSale(Guid? saleId)
         {
-            return await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == saleId);
+            return await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == saleId);
         }
     }
 }

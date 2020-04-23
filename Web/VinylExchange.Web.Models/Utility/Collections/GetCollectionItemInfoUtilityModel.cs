@@ -1,13 +1,8 @@
 ﻿namespace VinylExchange.Web.Models.Utility.Collections
 {
-    #region
-
     using System;
-
-    using VinylExchange.Data.Models;
-    using VinylExchange.Services.Mapping;
-
-    #endregion
+    using Data.Models;
+    using Services.Mapping;
 
     public class GetCollectionItemInfoUtilityModel : IMapFrom<CollectionItem>
     {

@@ -1,13 +1,8 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.ReleaseFiles
 {
-    #region
-
     using System;
-
-    using VinylExchange.Data.Models;
-    using VinylExchange.Services.Mapping;
-
-    #endregion
+    using Data.Models;
+    using Services.Mapping;
 
     public class ReleaseFileResourceModel : IMapFrom<ReleaseFile>
     {

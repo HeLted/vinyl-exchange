@@ -1,12 +1,7 @@
 ﻿namespace VinylExchange.Data.Migrations
 {
-    #region
-
     using System;
-
     using Microsoft.EntityFrameworkCore.Migrations;
-
-    #endregion
 
     public partial class ChangedGuidTypeToNullableGuid : Migration
     {

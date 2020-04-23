@@ -1,11 +1,7 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.Styles
 {
-    #region
-
-    using VinylExchange.Data.Models;
-    using VinylExchange.Services.Mapping;
-
-    #endregion
+    using Data.Models;
+    using Services.Mapping;
 
     public class GetAllStylesForGenreResourceModel : IMapFrom<Style>
     {

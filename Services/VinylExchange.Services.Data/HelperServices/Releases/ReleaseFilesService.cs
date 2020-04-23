@@ -1,22 +1,15 @@
 ﻿namespace VinylExchange.Services.Data.HelperServices.Releases
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Common.Enumerations;
+    using Files;
+    using Mapping;
     using Microsoft.EntityFrameworkCore;
-
-    using VinylExchange.Common.Enumerations;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Files;
-    using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.ResourceModels.ReleaseFiles;
-
-    #endregion
 
     public class ReleaseFilesService : IReleaseFilesService
     {
@@ -36,55 +29,55 @@
 
         public async Task<List<ReleaseFile>> AddFilesForRelease(Guid? releaseId, Guid formSessionId)
         {
-            var uploadFileUtilityModels = this.fileManager.RetrieveFilesFromCache(formSessionId);
+            var uploadFileUtilityModels = fileManager.RetrieveFilesFromCache(formSessionId);
 
-            var filesContent = this.fileManager.GetFilesByteContent(uploadFileUtilityModels);
+            var filesContent = fileManager.GetFilesByteContent(uploadFileUtilityModels);
 
-            var releaseFilesModels = this.fileManager.MapFilesToDbObjects<ReleaseFile>(
+            var releaseFilesModels = fileManager.MapFilesToDbObjects<ReleaseFile>(
                 uploadFileUtilityModels,
                 releaseId,
                 ForeignKeyForFile,
                 EntityTableName).ToList();
 
-            releaseFilesModels = this.fileManager.SaveFilesToServer(releaseFilesModels, filesContent).ToList();
+            releaseFilesModels = fileManager.SaveFilesToServer(releaseFilesModels, filesContent).ToList();
 
             if (releaseFilesModels.Where(rf => rf.FileType == FileType.Image).FirstOrDefault() == null)
             {
                 releaseFilesModels.Add(
                     new ReleaseFile
-                        {
-                            FileName = "defaultCoverArt.jpg",
-                            FileType = FileType.Image,
-                            IsPreview = true,
-                            Path = @"\Releases\Default\",
-                            ReleaseId = releaseId
-                        });
+                    {
+                        FileName = "defaultCoverArt.jpg",
+                        FileType = FileType.Image,
+                        IsPreview = true,
+                        Path = @"\Releases\Default\",
+                        ReleaseId = releaseId
+                    });
             }
 
-            await this.dbContext.ReleaseFiles.AddRangeAsync(releaseFilesModels);
+            await dbContext.ReleaseFiles.AddRangeAsync(releaseFilesModels);
 
             return releaseFilesModels;
         }
 
         public async Task<TModel> GetReleaseCoverArt<TModel>(Guid? releaseId)
         {
-            return await this.dbContext.ReleaseFiles
-                       .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
-                       .OrderBy(rf => rf.CreatedOn).To<TModel>().FirstOrDefaultAsync();
+            return await dbContext.ReleaseFiles
+                .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
+                .OrderBy(rf => rf.CreatedOn).To<TModel>().FirstOrDefaultAsync();
         }
 
         public async Task<List<TModel>> GetReleaseImages<TModel>(Guid? releaseId)
         {
-            return await this.dbContext.ReleaseFiles
-                       .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
-                       .OrderBy(rf => rf.CreatedOn).To<TModel>().ToListAsync();
+            return await dbContext.ReleaseFiles
+                .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Image)
+                .OrderBy(rf => rf.CreatedOn).To<TModel>().ToListAsync();
         }
 
         public async Task<List<TModel>> GetReleaseTracks<TModel>(Guid? releaseId)
         {
-            return await this.dbContext.ReleaseFiles
-                       .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Audio)
-                       .OrderBy(rf => rf.CreatedOn).To<TModel>().ToListAsync();
+            return await dbContext.ReleaseFiles
+                .Where(rf => rf.ReleaseId == releaseId && rf.FileType == FileType.Audio)
+                .OrderBy(rf => rf.CreatedOn).To<TModel>().ToListAsync();
         }
     }
 }

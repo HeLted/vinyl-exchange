@@ -1,15 +1,10 @@
 ﻿namespace VinylExchange.Models.InputModels.Users
 {
-    #region
-
     using System.ComponentModel.DataAnnotations;
-
-    #endregion
 
     public class LoginUserInputModel
     {
-        [Required]
-        public string Username { get; set; }
+        [Required] public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

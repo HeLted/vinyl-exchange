@@ -1,17 +1,12 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Users
 {
-    #region
-
     using System.ComponentModel.DataAnnotations;
+    using static Common.Constants.ValidationConstants;
 
-    using static VinylExchange.Common.Constants.ValidationConstants;
-
-    #endregion
 
     public class ResetPasswordInputModel
     {
-        [Required]
-        public string ResetPasswordToken { get; set; }
+        [Required] public string ResetPasswordToken { get; set; }
 
         [Required]
         [EmailAddress]

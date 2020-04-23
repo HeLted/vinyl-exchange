@@ -1,12 +1,8 @@
 ﻿namespace VinylExchange.Services.Data.HelperServices.Sales.SaleMessages
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    #endregion
 
     public interface ISaleMessagesService
     {

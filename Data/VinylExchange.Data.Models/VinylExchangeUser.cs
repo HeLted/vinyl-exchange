@@ -1,32 +1,24 @@
 ﻿namespace VinylExchange.Data.Models
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    using Common.Models;
     using Microsoft.AspNetCore.Identity;
-
     using VinylExchange.Common.Constants;
-    using VinylExchange.Data.Common.Models;
-
-    #endregion
 
     public class VinylExchangeUser : IdentityUser<Guid>, IAuditInfo, IDeletableEntity
     {
         public VinylExchangeUser()
         {
-            this.Id = Guid.NewGuid();
-            this.CreatedOn = DateTime.UtcNow;
-            this.Avatar = ImageConstants.DefaultUserAvatarImage;
+            Id = Guid.NewGuid();
+            CreatedOn = DateTime.UtcNow;
+            Avatar = ImageConstants.DefaultUserAvatarImage;
         }
 
         public ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
 
-        [Required]
-        [MaxLength(10000000)]
-        public byte[] Avatar { get; set; }
+        [Required] [MaxLength(10000000)] public byte[] Avatar { get; set; }
 
         public ICollection<CollectionItem> Collection { get; set; } = new HashSet<CollectionItem>();
 

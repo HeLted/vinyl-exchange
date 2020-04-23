@@ -1,13 +1,8 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.Sales
 {
-    #region
-
     using System;
-
-    using VinylExchange.Data.Models;
-    using VinylExchange.Services.Mapping;
-
-    #endregion
+    using Data.Models;
+    using Services.Mapping;
 
     public class RemoveSaleResourceModel : IMapFrom<Sale>
     {

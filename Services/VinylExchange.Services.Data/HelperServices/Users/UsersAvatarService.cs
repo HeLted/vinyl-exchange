@@ -1,21 +1,15 @@
 ﻿namespace VinylExchange.Services.Data.HelperServices.Users
 {
-    #region
-
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Common.Constants;
+    using MainServices.Users.Contracts;
+    using Mapping;
     using Microsoft.EntityFrameworkCore;
-
-    using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Users.Contracts;
-    using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
-
-    #endregion
+    using Web.Models.ResourceModels.UsersAvatar;
 
     public class UsersAvatarService : IUsersAvatarService
     {
@@ -31,7 +25,7 @@
 
         public async Task<VinylExchangeUser> ChangeAvatar(byte[] avatar, Guid? userId)
         {
-            var user = await this.usersEntityRetriever.GetUser(userId);
+            var user = await usersEntityRetriever.GetUser(userId);
 
             if (user == null)
             {
@@ -40,15 +34,15 @@
 
             user.Avatar = avatar;
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return user;
         }
 
         public async Task<GetUserAvatarResourceModel> GetUserAvatar(Guid? userId)
         {
-            return await this.dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
-                       .FirstOrDefaultAsync();
+            return await dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
+                .FirstOrDefaultAsync();
         }
     }
 }

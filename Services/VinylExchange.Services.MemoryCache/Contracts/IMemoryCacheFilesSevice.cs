@@ -1,20 +1,10 @@
 ﻿namespace VinylExchange.Services.MemoryCache.Contracts
 {
-    #region
-
-    #region
-
     using System;
     using System.Collections.Generic;
-
     using Microsoft.AspNetCore.Http;
-
-    using VinylExchange.Web.Models.InputModels.Files;
-    using VinylExchange.Web.Models.Utility.Files;
-
-    #endregion
-
-    #endregion
+    using Web.Models.InputModels.Files;
+    using Web.Models.Utility.Files;
 
     public interface IMemoryCacheFilesSevice
     {

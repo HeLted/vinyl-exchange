@@ -1,11 +1,7 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Styles
 {
-    #region
-
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    #endregion
 
     public interface IStylesService
     {

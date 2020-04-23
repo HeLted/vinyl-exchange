@@ -1,14 +1,9 @@
 ﻿namespace VinylExchange.Services.Mapping
 {
-    #region
-
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-
     using AutoMapper.QueryableExtensions;
-
-    #endregion
 
     public static class QueryableMappingExtensions
     {
@@ -23,6 +18,5 @@
 
             return source.ProjectTo(AutoMapperConfig.MapperInstance.ConfigurationProvider, null, membersToExpand);
         }
-
     }
 }

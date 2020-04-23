@@ -1,16 +1,10 @@
 ﻿namespace VinylExchange.Services.Data.Tests.TestFactories
 {
-    #region
-
     using System;
     using System.Reflection;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-
     using VinylExchange.Data;
-
-    #endregion
 
     internal static class DbFactory
     {
@@ -27,7 +21,7 @@
                 "OnModelCreating",
                 BindingFlags.Instance | BindingFlags.NonPublic);
 
-            onModelCreatingMethod.Invoke(dbContext, new object[] { modelBuilder });
+            onModelCreatingMethod.Invoke(dbContext, new object[] {modelBuilder});
 
             return dbContext;
         }

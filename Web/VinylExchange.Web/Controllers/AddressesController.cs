@@ -1,21 +1,15 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
-    using VinylExchange.Services.Data.MainServices.Addresses.Contracts;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Web.Models.InputModels.Addresses;
-    using VinylExchange.Web.Models.ResourceModels.Addresses;
-    using VinylExchange.Web.Models.Utility.Addresses;
-
-    #endregion
+    using Models.InputModels.Addresses;
+    using Models.ResourceModels.Addresses;
+    using Models.Utility.Addresses;
+    using Services.Data.MainServices.Addresses.Contracts;
+    using Services.Logging;
 
     [Authorize]
     public class AddressesController : ApiController
@@ -35,19 +29,19 @@
         {
             try
             {
-                var resourceModel = await this.addressesService.CreateAddress<CreateAddressResourceModel>(
-                                        inputModel.Country,
-                                        inputModel.Town,
-                                        inputModel.PostalCode,
-                                        inputModel.FullAddress,
-                                        this.GetUserId(this.User));
+                var resourceModel = await addressesService.CreateAddress<CreateAddressResourceModel>(
+                    inputModel.Country,
+                    inputModel.Town,
+                    inputModel.PostalCode,
+                    inputModel.FullAddress,
+                    GetUserId(User));
 
-                return this.Created(resourceModel);
+                return Created(resourceModel);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -57,13 +51,13 @@
         {
             try
             {
-                return await this.addressesService.GetUserAddresses<GetUserAddressesResourceModel>(
-                           this.GetUserId(this.User));
+                return await addressesService.GetUserAddresses<GetUserAddressesResourceModel>(
+                    GetUserId(User));
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -73,24 +67,24 @@
         {
             try
             {
-                var addressInfoModel = await this.addressesService.GetAddress<GetAddressInfoUtilityModel>(id);
+                var addressInfoModel = await addressesService.GetAddress<GetAddressInfoUtilityModel>(id);
 
                 if (addressInfoModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                if (addressInfoModel.UserId != this.GetUserId(this.User))
+                if (addressInfoModel.UserId != GetUserId(User))
                 {
-                    return this.Forbid();
+                    return Forbid();
                 }
 
-                return await this.addressesService.RemoveAddress<RemoveAddressResourceModel>(addressInfoModel.Id);
+                return await addressesService.RemoveAddress<RemoveAddressResourceModel>(addressInfoModel.Id);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
     }

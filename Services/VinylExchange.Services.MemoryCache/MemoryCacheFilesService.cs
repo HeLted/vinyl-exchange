@@ -1,24 +1,14 @@
 ﻿namespace VinylExchange.Services.MemoryCache
 {
-    #region
-
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using Common.Constants;
+    using Contracts;
+    using Mapping;
     using Microsoft.AspNetCore.Http;
-
-    using VinylExchange.Common.Constants;
-    using VinylExchange.Services.Mapping;
-    using VinylExchange.Services.MemoryCache.Contracts;
-    using VinylExchange.Web.Models.InputModels.Files;
-    using VinylExchange.Web.Models.Utility.Files;
-
-    #endregion
-
-    #endregion
+    using Web.Models.InputModels.Files;
+    using Web.Models.Utility.Files;
 
     public class MemoryCacheFilesService : IMemoryCacheFilesSevice
     {
@@ -33,12 +23,12 @@
         {
             var formSessionIdAsString = formSessionId.ToString();
 
-            if (!this.cacheManager.IsSet(formSessionIdAsString))
+            if (!cacheManager.IsSet(formSessionIdAsString))
             {
-                this.cacheManager.Set(formSessionIdAsString, new List<UploadFileUtilityModel>(), 1800);
+                cacheManager.Set(formSessionIdAsString, new List<UploadFileUtilityModel>(), 1800);
             }
 
-            var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionIdAsString, null);
+            var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(formSessionIdAsString, null);
 
             var fileUtilityModel = new UploadFileUtilityModel(file);
 
@@ -51,7 +41,7 @@
         {
             try
             {
-                return this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId.ToString(), null);
+                return cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId.ToString(), null);
             }
             catch
             {
@@ -63,19 +53,19 @@
         {
             var formSessionIdAsString = inputModel.FormSessionId.ToString();
 
-            var key = this.cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
+            var key = cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
 
             var deletedFormSessionCacheCopy = new List<TModel>();
 
-            if (this.cacheManager.IsSet(formSessionIdAsString))
+            if (cacheManager.IsSet(formSessionIdAsString))
             {
-                var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
+                var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
                 deletedFormSessionCacheCopy.AddRange(formSessionStorage.Select(uf => uf.To<TModel>()));
 
                 formSessionStorage.Clear();
 
-                this.cacheManager.Remove(formSessionIdAsString);
+                cacheManager.Remove(formSessionIdAsString);
 
                 return deletedFormSessionCacheCopy;
             }
@@ -87,11 +77,11 @@
         {
             var formSessionIdAsString = inputModel.FormSessionId.ToString();
 
-            var key = this.cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
+            var key = cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
 
-            if (this.cacheManager.IsSet(formSessionIdAsString))
+            if (cacheManager.IsSet(formSessionIdAsString))
             {
-                var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
+                var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
                 var file = formSessionStorage.SingleOrDefault(x => x.FileGuid == inputModel.Id);
 

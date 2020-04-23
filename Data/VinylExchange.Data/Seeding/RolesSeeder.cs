@@ -1,19 +1,13 @@
 ﻿namespace VinylExchange.Data.Seeding
 {
-    #region
-
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Contracts;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
-
+    using Models;
     using VinylExchange.Common.Constants;
-    using VinylExchange.Data.Models;
-    using VinylExchange.Data.Seeding.Contracts;
-
-    #endregion
 
     internal class RolesSeeder : ISeeder
     {

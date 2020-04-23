@@ -1,29 +1,21 @@
 ﻿namespace VinylExchange.Services.Data.Tests
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using HelperServices.Sales.SaleMessages;
+    using MainServices.Sales.Contracts;
+    using MainServices.Users.Contracts;
     using Microsoft.EntityFrameworkCore;
-
     using Moq;
-
+    using TestFactories;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
-    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
-    using VinylExchange.Services.Data.MainServices.Users.Contracts;
-    using VinylExchange.Services.Data.Tests.TestFactories;
-    using VinylExchange.Web.Models.ResourceModels.SaleMessages;
-
+    using Web.Models.ResourceModels.SaleMessages;
     using Xunit;
+    using static Common.Constants.NullReferenceExceptionsConstants;
 
-    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
-
-    #endregion
 
     public class SaleMessagesServiceTests
     {
@@ -37,16 +29,16 @@
 
         public SaleMessagesServiceTests()
         {
-            this.dbContext = DbFactory.CreateDbContext();
+            dbContext = DbFactory.CreateDbContext();
 
-            this.salesEntityRetrieverMock = new Mock<ISalesEntityRetriever>();
+            salesEntityRetrieverMock = new Mock<ISalesEntityRetriever>();
 
-            this.usersEntityRetrieverMock = new Mock<IUsersEntityRetriever>();
+            usersEntityRetrieverMock = new Mock<IUsersEntityRetriever>();
 
-            this.saleMessagesService = new SaleMessagesService(
-                this.dbContext,
-                this.salesEntityRetrieverMock.Object,
-                this.usersEntityRetrieverMock.Object);
+            saleMessagesService = new SaleMessagesService(
+                dbContext,
+                salesEntityRetrieverMock.Object,
+                usersEntityRetrieverMock.Object);
         }
 
         [Fact]
@@ -56,16 +48,16 @@
 
             var user = new VinylExchangeUser();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
+            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
 
-            await this.saleMessagesService.AddMessageToSale<AddMessageToSaleResourceModel>(
+            await saleMessagesService.AddMessageToSale<AddMessageToSaleResourceModel>(
                 sale.Id,
                 user.Id,
                 "Test Message");
 
-            var message = await this.dbContext.SaleMessages.FirstOrDefaultAsync(sl => sl.SaleId == sale.Id);
+            var message = await dbContext.SaleMessages.FirstOrDefaultAsync(sl => sl.SaleId == sale.Id);
 
             Assert.NotNull(message);
         }
@@ -75,16 +67,16 @@
         {
             var user = new VinylExchangeUser();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync((Sale)null);
+            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync((Sale) null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.saleMessagesService
-                                                .AddMessageToSale<AddMessageToSaleResourceModel>(
-                                                    Guid.NewGuid(),
-                                                    user.Id,
-                                                    "Test Message"));
+                async () => await saleMessagesService
+                    .AddMessageToSale<AddMessageToSaleResourceModel>(
+                        Guid.NewGuid(),
+                        user.Id,
+                        "Test Message"));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -94,17 +86,17 @@
         {
             var sale = new Sale();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>()))
-                .ReturnsAsync((VinylExchangeUser)null);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>()))
+                .ReturnsAsync((VinylExchangeUser) null);
 
-            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
+            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.saleMessagesService
-                                                .AddMessageToSale<AddMessageToSaleResourceModel>(
-                                                    sale.Id,
-                                                    Guid.NewGuid(),
-                                                    "Test Message"));
+                async () => await saleMessagesService
+                    .AddMessageToSale<AddMessageToSaleResourceModel>(
+                        sale.Id,
+                        Guid.NewGuid(),
+                        "Test Message"));
 
             Assert.Equal(UserNotFound, exception.Message);
         }
@@ -114,18 +106,18 @@
         {
             var sale = new Sale();
 
-            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
+            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
 
             for (var i = 0; i < 10; i++)
             {
-                await this.dbContext.SaleMessages.AddAsync(new SaleMessage { SaleId = sale.Id });
+                await dbContext.SaleMessages.AddAsync(new SaleMessage {SaleId = sale.Id});
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            await this.saleMessagesService.ClearSaleMessages(sale.Id);
+            await saleMessagesService.ClearSaleMessages(sale.Id);
 
-            var logs = await this.dbContext.SaleMessages.Where(sl => sl.SaleId == sale.Id).ToListAsync();
+            var logs = await dbContext.SaleMessages.Where(sl => sl.SaleId == sale.Id).ToListAsync();
 
             Assert.True(logs.Count == 0);
         }
@@ -133,10 +125,10 @@
         [Fact]
         public async Task ClearSaleLogsShouldThrowNullReferenceExceptionIfSaleIsIdIsNotPresentInDb()
         {
-            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync((Sale)null);
+            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync((Sale) null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.saleMessagesService.ClearSaleMessages(Guid.NewGuid()));
+                async () => await saleMessagesService.ClearSaleMessages(Guid.NewGuid()));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -146,23 +138,23 @@
         {
             var sale = new Sale();
 
-            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
+            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
 
             var addedSaleMessagesIds = new List<Guid?>();
 
             for (var i = 0; i < 10; i++)
             {
-                var saleMessage = new SaleMessage { SaleId = sale.Id };
+                var saleMessage = new SaleMessage {SaleId = sale.Id};
 
-                await this.dbContext.SaleMessages.AddAsync(saleMessage);
+                await dbContext.SaleMessages.AddAsync(saleMessage);
 
                 addedSaleMessagesIds.Add(saleMessage.Id);
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var saleMessages =
-                await this.saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(sale.Id);
+                await saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(sale.Id);
 
             Assert.True(saleMessages.Select(sl => addedSaleMessagesIds.Contains(sl.Id)).All(x => x));
         }
@@ -172,9 +164,9 @@
         {
             var sale = new Sale();
 
-            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
+            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
 
-            var saleLogs = await this.saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(sale.Id);
+            var saleLogs = await saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(sale.Id);
 
             Assert.True(saleLogs.Count() == 0);
         }

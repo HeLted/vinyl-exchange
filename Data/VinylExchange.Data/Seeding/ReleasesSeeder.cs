@@ -1,15 +1,10 @@
 ﻿namespace VinylExchange.Data.Seeding
 {
-    #region
-
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using VinylExchange.Data.Models;
-    using VinylExchange.Data.Seeding.Contracts;
-
-    #endregion
+    using Contracts;
+    using Models;
 
     public class ReleasesSeeder : ISeeder
     {
@@ -78,14 +73,14 @@
             string label)
         {
             var release = new Release
-                {
-                    Id = id,
-                    Artist = artist,
-                    Title = title,
-                    Format = format,
-                    Year = year,
-                    Label = label
-                };
+            {
+                Id = id,
+                Artist = artist,
+                Title = title,
+                Format = format,
+                Year = year,
+                Label = label
+            };
 
             await dbContext.Releases.AddAsync(release);
 

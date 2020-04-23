@@ -1,19 +1,13 @@
 ﻿namespace VinylExchange.Web.Infrastructure.Hubs.SaleLog
 {
-    #region
-
     using System;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
-
-    using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
-    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
-    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
-    using VinylExchange.Web.Models.Utility.Sales;
-
-    #endregion
+    using Models.ResourceModels.SaleLogs;
+    using Models.Utility.Sales;
+    using Services.Data.HelperServices.Sales.SaleLogs;
+    using Services.Data.MainServices.Sales.Contracts;
 
     [Authorize]
     public class SaleLogsHub : Hub<ISaleLogsClient>
@@ -30,18 +24,18 @@
 
         public async Task LoadLogHistory(Guid saleId)
         {
-            var sale = await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
+            var sale = await salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
 
-            var userId = Guid.Parse(this.GetUserId());
+            var userId = Guid.Parse(GetUserId());
 
             if (sale != null)
             {
-                if (sale.SellerId == userId
-                    || sale.BuyerId == userId)
+                if (sale.SellerId == userId ||
+                    sale.BuyerId == userId)
                 {
-                    var logs = await this.saleLogsService.GetLogsForSale<GetLogsForSaleResourceModel>(saleId);
+                    var logs = await saleLogsService.GetLogsForSale<GetLogsForSaleResourceModel>(saleId);
 
-                    await this.Clients.Caller.LoadLogHistory(logs);
+                    await Clients.Caller.LoadLogHistory(logs);
                 }
             }
         }
@@ -50,23 +44,23 @@
         {
             var subscriberGroupName = saleId.ToString();
 
-            var sale = await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
+            var sale = await salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
 
-            var userId = Guid.Parse(this.GetUserId());
+            var userId = Guid.Parse(GetUserId());
 
             if (sale != null)
             {
-                if (sale.SellerId == userId
-                    || sale.BuyerId == userId)
+                if (sale.SellerId == userId ||
+                    sale.BuyerId == userId)
                 {
-                    await this.Groups.AddToGroupAsync(this.Context.ConnectionId, subscriberGroupName);
+                    await Groups.AddToGroupAsync(Context.ConnectionId, subscriberGroupName);
                 }
             }
         }
 
         private string GetUserId()
         {
-            return this.Context.User.FindFirst("sub").Value;
+            return Context.User.FindFirst("sub").Value;
         }
     }
 }

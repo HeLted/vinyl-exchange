@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using VinylExchange.Data.Models;
-
-namespace VinylExchange.Services.Data.Tests.Helpers
+﻿namespace VinylExchange.Services.Data.Tests.Helpers
 {
+    using System;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
+    using Moq;
+    using VinylExchange.Data.Models;
+
     public class FakeUserManager : UserManager<VinylExchangeUser>
     {
         public FakeUserManager(Mock<IPasswordHasher<VinylExchangeUser>> passwordHasherMock)
@@ -22,7 +20,8 @@ namespace VinylExchange.Services.Data.Tests.Helpers
                 new Mock<IdentityErrorDescriber>().Object,
                 new Mock<IServiceProvider>().Object,
                 new Mock<ILogger<UserManager<VinylExchangeUser>>>().Object)
-        { }
+        {
+        }
 
         public override Task<IdentityResult> CreateAsync(VinylExchangeUser user, string password)
         {
@@ -38,6 +37,5 @@ namespace VinylExchange.Services.Data.Tests.Helpers
         {
             return Task.FromResult(Guid.NewGuid().ToString());
         }
-
     }
 }

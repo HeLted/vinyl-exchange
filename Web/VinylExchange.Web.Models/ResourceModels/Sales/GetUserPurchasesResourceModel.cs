@@ -1,19 +1,13 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.Sales
 {
-    #region
-
     using System;
     using System.Linq;
-
     using AutoMapper;
-
-    using VinylExchange.Common.Enumerations;
-    using VinylExchange.Data.Common.Enumerations;
-    using VinylExchange.Data.Models;
-    using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.ResourceModels.ReleaseFiles;
-
-    #endregion
+    using Common.Enumerations;
+    using Data.Common.Enumerations;
+    using Data.Models;
+    using ReleaseFiles;
+    using Services.Mapping;
 
     public class GetUserPurchasesResourceModel : IMapFrom<Sale>, IHaveCustomMappings
     {

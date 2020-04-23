@@ -1,15 +1,10 @@
 ﻿namespace VinylExchange.Data.Seeding
 {
-    #region
-
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using VinylExchange.Data.Models;
-    using VinylExchange.Data.Seeding.Contracts;
-
-    #endregion
+    using Contracts;
+    using Models;
 
     internal class StylesSeeder : ISeeder
     {
@@ -44,7 +39,7 @@
 
         private static async Task SeedStyleAsync(VinylExchangeDbContext dbContext, string name, int genreId)
         {
-            var style = new Style { Name = name, GenreId = genreId };
+            var style = new Style {Name = name, GenreId = genreId};
 
             await dbContext.Styles.AddAsync(style);
 

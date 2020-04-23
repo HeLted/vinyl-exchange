@@ -1,25 +1,14 @@
-﻿#region
-
-using Xunit;
-
-#endregion
-
+﻿using Xunit;
 [assembly:
     TestFramework("VinylExchange.Services.Data.Tests.TestFactories.Configuration", "VinylExchange.Services.Data.Tests")]
 
 namespace VinylExchange.Services.Data.Tests.TestFactories
 {
-    #region
-
     using System.Reflection;
-
-    using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models;
-
+    using Mapping;
+    using Web.Models;
     using Xunit.Abstractions;
     using Xunit.DependencyInjection;
-
-    #endregion
 
     internal class Configuration : DependencyInjectionTestFramework
     {

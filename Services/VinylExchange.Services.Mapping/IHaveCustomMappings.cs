@@ -1,10 +1,6 @@
 ﻿namespace VinylExchange.Services.Mapping
 {
-    #region
-
     using AutoMapper;
-
-    #endregion
 
     public interface IHaveCustomMappings
     {

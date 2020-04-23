@@ -1,14 +1,9 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    #region
-
     using System;
     using System.Net;
     using System.Security.Claims;
-
     using Microsoft.AspNetCore.Mvc;
-
-    #endregion
 
     [Route("api/[controller]")]
     [ApiController]
@@ -16,7 +11,7 @@
     {
         protected ActionResult<T> Created<T>(T value)
         {
-            return this.StatusCode((int)HttpStatusCode.Created, value);
+            return StatusCode((int) HttpStatusCode.Created, value);
         }
 
         protected Guid GetUserId(ClaimsPrincipal user)

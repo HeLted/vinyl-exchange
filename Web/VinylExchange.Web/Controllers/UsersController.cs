@@ -1,24 +1,18 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    #region
-
     using System;
     using System.IO;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-
+    using Models.InputModels.Users;
+    using Models.ResourceModels.UsersAvatar;
+    using Services.Data.HelperServices.Users;
+    using Services.Data.MainServices.Users.Contracts;
+    using Services.Logging;
     using VinylExchange.Models.InputModels.Users;
-    using VinylExchange.Services.Data.HelperServices.Users;
-    using VinylExchange.Services.Data.MainServices.Users.Contracts;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Web.Models.InputModels.Users;
-    using VinylExchange.Web.Models.ResourceModels.UsersAvatar;
-
-    #endregion
 
     public class UsersController : ApiController
     {
@@ -53,14 +47,14 @@
                     imageByteArray = ms.ToArray();
                 }
 
-                await this.usersAvatarService.ChangeAvatar(imageByteArray, this.GetUserId(this.User));
+                await usersAvatarService.ChangeAvatar(imageByteArray, GetUserId(User));
 
-                return this.NoContent();
+                return NoContent();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -71,21 +65,21 @@
         {
             try
             {
-                var confirmEmailIdentityResult = await this.userService.ConfirmEmail(
-                                                     inputModel.EmailConfirmToken,
-                                                     this.GetUserId(this.User));
+                var confirmEmailIdentityResult = await userService.ConfirmEmail(
+                    inputModel.EmailConfirmToken,
+                    GetUserId(User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
-                    return this.Ok();
+                    return Ok();
                 }
 
-                return this.BadRequest(confirmEmailIdentityResult.Errors);
+                return BadRequest(confirmEmailIdentityResult.Errors);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -96,22 +90,22 @@
         {
             try
             {
-                var confirmEmailIdentityResult = await this.userService.ChangeEmail(
-                                                     inputModel.ChangeEmailToken,
-                                                     inputModel.NewEmail,
-                                                     this.GetUserId(this.User));
+                var confirmEmailIdentityResult = await userService.ChangeEmail(
+                    inputModel.ChangeEmailToken,
+                    inputModel.NewEmail,
+                    GetUserId(User));
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
-                    return this.Ok();
+                    return Ok();
                 }
 
-                return this.BadRequest(confirmEmailIdentityResult.Errors);
+                return BadRequest(confirmEmailIdentityResult.Errors);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -121,22 +115,22 @@
         {
             try
             {
-                var confirmEmailIdentityResult = await this.userService.ResetPassword(
-                                                     inputModel.ResetPasswordToken,
-                                                     inputModel.Email,
-                                                     inputModel.NewPassword);
+                var confirmEmailIdentityResult = await userService.ResetPassword(
+                    inputModel.ResetPasswordToken,
+                    inputModel.Email,
+                    inputModel.NewPassword);
 
                 if (confirmEmailIdentityResult.Succeeded)
                 {
-                    return this.Ok();
+                    return Ok();
                 }
 
-                return this.BadRequest(confirmEmailIdentityResult.Errors);
+                return BadRequest(confirmEmailIdentityResult.Errors);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -144,11 +138,11 @@
         [Route("GetUserAvatar/{id}")]
         public async Task<ActionResult<GetUserAvatarResourceModel>> GetUserAvatar(Guid id)
         {
-            var userAvatarModel = await this.usersAvatarService.GetUserAvatar(id);
+            var userAvatarModel = await usersAvatarService.GetUserAvatar(id);
 
             if (userAvatarModel == null)
             {
-                return this.NotFound();
+                return NotFound();
             }
 
             return userAvatarModel;
@@ -159,11 +153,11 @@
         [Route("GetCurrentUserAvatar")]
         public async Task<ActionResult<GetUserAvatarResourceModel>> GetUserAvatar()
         {
-            var userAvatarModel = await this.usersAvatarService.GetUserAvatar(this.GetUserId(this.User));
+            var userAvatarModel = await usersAvatarService.GetUserAvatar(GetUserId(User));
 
             if (userAvatarModel == null)
             {
-                return this.NotFound();
+                return NotFound();
             }
 
             return userAvatarModel;
@@ -173,26 +167,26 @@
         [Route("Login")]
         public async Task<ActionResult> Login(LoginUserInputModel inputModel)
         {
-            await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             try
             {
-                var registerUserIdentityResult = await this.userService.LoginUser(
-                                                     inputModel.Username,
-                                                     inputModel.Password,
-                                                     inputModel.RememberMe);
+                var registerUserIdentityResult = await userService.LoginUser(
+                    inputModel.Username,
+                    inputModel.Password,
+                    inputModel.RememberMe);
 
                 if (registerUserIdentityResult.Succeeded)
                 {
-                    return this.Ok();
+                    return Ok();
                 }
 
-                return this.Unauthorized();
+                return Unauthorized();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -202,22 +196,22 @@
         {
             try
             {
-                var registerUserIdentityResult = await this.userService.RegisterUser(
-                                                     inputModel.Username,
-                                                     inputModel.Email,
-                                                     inputModel.Password);
+                var registerUserIdentityResult = await userService.RegisterUser(
+                    inputModel.Username,
+                    inputModel.Email,
+                    inputModel.Password);
 
                 if (registerUserIdentityResult.Succeeded)
                 {
-                    return this.Ok();
+                    return Ok();
                 }
 
-                return this.BadRequest(registerUserIdentityResult.Errors);
+                return BadRequest(registerUserIdentityResult.Errors);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -228,14 +222,14 @@
         {
             try
             {
-                await this.userService.SendConfirmEmail(this.GetUserId(this.User));
+                await userService.SendConfirmEmail(GetUserId(User));
 
-                return this.Ok();
+                return Ok();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -246,14 +240,14 @@
         {
             try
             {
-                await this.userService.SendChangeEmailEmail(inputModel.NewEmail, this.GetUserId(this.User));
+                await userService.SendChangeEmailEmail(inputModel.NewEmail, GetUserId(User));
 
-                return this.Ok();
+                return Ok();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -264,14 +258,14 @@
         {
             try
             {
-                await this.userService.SendChangePasswordEmail(this.GetUserId(this.User));
+                await userService.SendChangePasswordEmail(GetUserId(User));
 
-                return this.Ok();
+                return Ok();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -281,19 +275,19 @@
         {
             try
             {
-                await this.userService.SendResetPasswordEmail(inputModel.Email);
+                await userService.SendResetPasswordEmail(inputModel.Email);
 
-                return this.Ok();
+                return Ok();
             }
             catch (NullReferenceException ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest(ex.Message);
+                loggerService.LogException(ex);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
     }

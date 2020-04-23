@@ -1,12 +1,8 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Releases.Contracts
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    #endregion
 
     public interface IReleasesService
     {

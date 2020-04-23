@@ -1,12 +1,7 @@
 ﻿namespace VinylExchange.Data.Migrations
 {
-    #region
-
     using System;
-
     using Microsoft.EntityFrameworkCore.Migrations;
-
-    #endregion
 
     public partial class AddedSaleMessages : Migration
     {
@@ -20,30 +15,30 @@
             migrationBuilder.CreateTable(
                 "SaleMessages",
                 table => new
-                    {
-                        Id = table.Column<Guid>(),
-                        Content = table.Column<string>(maxLength: 150),
-                        SaleId = table.Column<Guid>(),
-                        UserId = table.Column<Guid>(),
-                        CreatedOn = table.Column<DateTime>(),
-                        ModifiedOn = table.Column<DateTime>(nullable: true)
-                    },
+                {
+                    Id = table.Column<Guid>(),
+                    Content = table.Column<string>(maxLength: 150),
+                    SaleId = table.Column<Guid>(),
+                    UserId = table.Column<Guid>(),
+                    CreatedOn = table.Column<DateTime>(),
+                    ModifiedOn = table.Column<DateTime>(nullable: true)
+                },
                 constraints: table =>
-                    {
-                        table.PrimaryKey("PK_SaleMessages", x => x.Id);
-                        table.ForeignKey(
-                            "FK_SaleMessages_Sales_SaleId",
-                            x => x.SaleId,
-                            "Sales",
-                            "Id",
-                            onDelete: ReferentialAction.Cascade);
-                        table.ForeignKey(
-                            "FK_SaleMessages_AspNetUsers_UserId",
-                            x => x.UserId,
-                            "AspNetUsers",
-                            "Id",
-                            onDelete: ReferentialAction.Cascade);
-                    });
+                {
+                    table.PrimaryKey("PK_SaleMessages", x => x.Id);
+                    table.ForeignKey(
+                        "FK_SaleMessages_Sales_SaleId",
+                        x => x.SaleId,
+                        "Sales",
+                        "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        "FK_SaleMessages_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex("IX_SaleMessages_SaleId", "SaleMessages", "SaleId");
 

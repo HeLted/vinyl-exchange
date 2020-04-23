@@ -1,15 +1,10 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Genres
 {
-    #region
-
     using System.ComponentModel.DataAnnotations;
+    using Data.Models;
+    using Services.Mapping;
+    using static Common.Constants.ValidationConstants;
 
-    using VinylExchange.Data.Models;
-    using VinylExchange.Services.Mapping;
-
-    using static VinylExchange.Common.Constants.ValidationConstants;
-
-    #endregion
 
     public class CreateGenreInputModel : IMapTo<Genre>
     {

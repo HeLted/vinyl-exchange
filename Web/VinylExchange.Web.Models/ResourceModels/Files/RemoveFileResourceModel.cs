@@ -1,13 +1,8 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.File
 {
-    #region
-
     using System;
-
-    using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.Utility.Files;
-
-    #endregion
+    using Services.Mapping;
+    using Utility.Files;
 
     public class RemoveFileResourceModel : IMapFrom<UploadFileUtilityModel>
     {

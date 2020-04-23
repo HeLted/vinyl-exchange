@@ -1,13 +1,8 @@
 ﻿namespace VinylExchange.Services.EmailSender
 {
-    #region
-
     using System.Threading.Tasks;
-
     using SendGrid;
     using SendGrid.Helpers.Mail;
-
-    #endregion
 
     public class EmailSender : IEmailSender
     {
@@ -17,7 +12,7 @@
 
         public EmailSender(string sendGridId)
         {
-            this.SendGridKey = sendGridId;
+            SendGridKey = sendGridId;
         }
 
         public string SendGridKey { get; set; }
@@ -26,7 +21,7 @@
 
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            return this.Execute(this.SendGridKey, subject, message, email);
+            return Execute(SendGridKey, subject, message, email);
         }
 
         private async Task Execute(string apiKey, string subject, string message, string email)

@@ -1,18 +1,12 @@
 ﻿namespace VinylExchange.Services.Data.HelperServices.Sales.SaleLogs
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using VinylExchange.Common.Enumerations;
-
-    #endregion
-
     public interface ISaleLogsService
     {
-        Task<TModel> AddLogToSale<TModel>(Guid? saleId, SaleLogs logType);
+        Task<TModel> AddLogToSale<TModel>(Guid? saleId, Common.Enumerations.SaleLogs logType);
 
         Task<int> ClearSaleLogs(Guid? saleId);
 

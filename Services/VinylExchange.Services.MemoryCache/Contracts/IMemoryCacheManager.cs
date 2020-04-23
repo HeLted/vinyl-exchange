@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-
-namespace VinylExchange.Services.MemoryCache.Contracts
+﻿namespace VinylExchange.Services.MemoryCache.Contracts
 {
-    public interface  IMemoryCacheManager
-    {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
 
-        bool IsDisposed {get;}
+    public interface IMemoryCacheManager
+    {
+        bool IsDisposed { get; }
 
         CancellationTokenSource Clear();
 

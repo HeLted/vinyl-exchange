@@ -1,21 +1,15 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Addresses
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Common.Constants;
+    using Contracts;
+    using Mapping;
     using Microsoft.EntityFrameworkCore;
-
-    using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Addresses.Contracts;
-    using VinylExchange.Services.Mapping;
-
-    #endregion
 
     public class AddressesService : IAddressesService, IAddressesEntityRetriever
     {
@@ -34,49 +28,49 @@
             Guid userId)
         {
             var address = new Address
-                {
-                    Country = country,
-                    Town = town,
-                    PostalCode = postalCode,
-                    FullAddress = fullAddress,
-                    UserId = userId
-                };
+            {
+                Country = country,
+                Town = town,
+                PostalCode = postalCode,
+                FullAddress = fullAddress,
+                UserId = userId
+            };
 
-            var trackedAddress = await this.dbContext.Addresses.AddAsync(address);
+            var trackedAddress = await dbContext.Addresses.AddAsync(address);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return trackedAddress.Entity.To<TModel>();
         }
 
         public async Task<TModel> GetAddress<TModel>(Guid addressId)
         {
-            return await this.dbContext.Addresses.Where(a => a.Id == addressId).To<TModel>().FirstOrDefaultAsync();
+            return await dbContext.Addresses.Where(a => a.Id == addressId).To<TModel>().FirstOrDefaultAsync();
         }
 
         public async Task<List<TModel>> GetUserAddresses<TModel>(Guid userId)
         {
-            return await this.dbContext.Addresses.Where(a => a.UserId == userId).To<TModel>().ToListAsync();
+            return await dbContext.Addresses.Where(a => a.UserId == userId).To<TModel>().ToListAsync();
         }
 
         public async Task<TModel> RemoveAddress<TModel>(Guid addressId)
         {
-            var address = await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
+            var address = await dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
 
             if (address == null)
             {
                 throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
             }
 
-            var removedAddress = this.dbContext.Addresses.Remove(address).Entity;
-            await this.dbContext.SaveChangesAsync();
+            var removedAddress = dbContext.Addresses.Remove(address).Entity;
+            await dbContext.SaveChangesAsync();
 
             return removedAddress.To<TModel>();
         }
 
         public async Task<Address> GetAddress(Guid? addressId)
         {
-            return await this.dbContext.Addresses.Where(a => a.Id == addressId).FirstOrDefaultAsync();
+            return await dbContext.Addresses.Where(a => a.Id == addressId).FirstOrDefaultAsync();
         }
     }
 }

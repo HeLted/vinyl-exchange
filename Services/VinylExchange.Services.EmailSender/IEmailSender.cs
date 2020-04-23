@@ -1,10 +1,6 @@
 ﻿namespace VinylExchange.Services.EmailSender
 {
-    #region
-
     using System.Threading.Tasks;
-
-    #endregion
 
     public interface IEmailSender
     {

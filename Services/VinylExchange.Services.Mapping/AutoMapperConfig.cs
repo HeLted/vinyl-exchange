@@ -1,16 +1,11 @@
 ﻿namespace VinylExchange.Services.Mapping
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-
     using AutoMapper;
     using AutoMapper.Configuration;
-
-    #endregion
 
     public static class AutoMapperConfig
     {
@@ -33,25 +28,25 @@
             config.CreateProfile(
                 "ReflectionProfile",
                 configuration =>
+                {
+                    // IMapFrom<>
+                    foreach (var map in GetFromMaps(types))
                     {
-                        // IMapFrom<>
-                        foreach (var map in GetFromMaps(types))
-                        {
-                            configuration.CreateMap(map.Source, map.Destination);
-                        }
+                        configuration.CreateMap(map.Source, map.Destination);
+                    }
 
-                        // IMapTo<>
-                        foreach (var map in GetToMaps(types))
-                        {
-                            configuration.CreateMap(map.Source, map.Destination);
-                        }
+                    // IMapTo<>
+                    foreach (var map in GetToMaps(types))
+                    {
+                        configuration.CreateMap(map.Source, map.Destination);
+                    }
 
-                        // IHaveCustomMappings
-                        foreach (var map in GetCustomMappings(types))
-                        {
-                            map.CreateMappings(configuration);
-                        }
-                    });
+                    // IHaveCustomMappings
+                    foreach (var map in GetCustomMappings(types))
+                    {
+                        map.CreateMappings(configuration);
+                    }
+                });
 
             MapperInstance = new Mapper(new MapperConfiguration(config));
         }
@@ -63,7 +58,7 @@
                 from i in t.GetTypeInfo().GetInterfaces()
                 where typeof(IHaveCustomMappings).GetTypeInfo().IsAssignableFrom(t) && !t.GetTypeInfo().IsAbstract
                                                                                     && !t.GetTypeInfo().IsInterface
-                select (IHaveCustomMappings)Activator.CreateInstance(t);
+                select (IHaveCustomMappings) Activator.CreateInstance(t);
 
             return customMaps;
         }
@@ -75,7 +70,7 @@
                 from i in t.GetTypeInfo().GetInterfaces()
                 where i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapFrom<>)
                                                     && !t.GetTypeInfo().IsAbstract && !t.GetTypeInfo().IsInterface
-                select new TypesMap { Source = i.GetTypeInfo().GetGenericArguments()[0], Destination = t };
+                select new TypesMap {Source = i.GetTypeInfo().GetGenericArguments()[0], Destination = t};
 
             return fromMaps;
         }
@@ -87,7 +82,7 @@
                 from i in t.GetTypeInfo().GetInterfaces()
                 where i.GetTypeInfo().IsGenericType && i.GetTypeInfo().GetGenericTypeDefinition() == typeof(IMapTo<>)
                                                     && !t.GetTypeInfo().IsAbstract && !t.GetTypeInfo().IsInterface
-                select new TypesMap { Source = t, Destination = i.GetTypeInfo().GetGenericArguments()[0] };
+                select new TypesMap {Source = t, Destination = i.GetTypeInfo().GetGenericArguments()[0]};
 
             return toMaps;
         }

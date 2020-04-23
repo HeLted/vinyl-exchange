@@ -1,28 +1,22 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using Common.Enumerations;
+    using Data.Common.Enumerations;
+    using Infrastructure.Hubs.SaleLog;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
-
-    using VinylExchange.Common.Enumerations;
-    using VinylExchange.Data.Common.Enumerations;
-    using VinylExchange.Services.Data.HelperServices.Sales.SaleLogs;
-    using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
-    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Web.Infrastructure.Hubs.SaleLog;
-    using VinylExchange.Web.Models.InputModels.Sales;
-    using VinylExchange.Web.Models.ResourceModels.SaleLogs;
-    using VinylExchange.Web.Models.ResourceModels.Sales;
-    using VinylExchange.Web.Models.Utility.Sales;
-
-    #endregion
+    using Models.InputModels.Sales;
+    using Models.ResourceModels.SaleLogs;
+    using Models.ResourceModels.Sales;
+    using Models.Utility.Sales;
+    using Services.Data.HelperServices.Sales.SaleLogs;
+    using Services.Data.HelperServices.Sales.SaleMessages;
+    using Services.Data.MainServices.Sales.Contracts;
+    using Services.Logging;
 
     [Authorize]
     public class SalesController : ApiController
@@ -56,21 +50,21 @@
         {
             try
             {
-                var resourceModel = await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                        inputModel.VinylGrade,
-                                        inputModel.SleeveGrade,
-                                        inputModel.Description,
-                                        inputModel.Price,
-                                        inputModel.ShipsFromAddressId,
-                                        inputModel.ReleaseId,
-                                        this.GetUserId(this.User));
+                var resourceModel = await salesService.CreateSale<CreateSaleResourceModel>(
+                    inputModel.VinylGrade,
+                    inputModel.SleeveGrade,
+                    inputModel.Description,
+                    inputModel.Price,
+                    inputModel.ShipsFromAddressId,
+                    inputModel.ReleaseId,
+                    GetUserId(User));
 
-                return this.Created(resourceModel);
+                return Created(resourceModel);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -79,34 +73,34 @@
         {
             try
             {
-                var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleInfoModel = await GetSaleInfo(inputModel.SaleId);
 
                 if (saleInfoModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                var currentUserId = this.GetUserId(this.User);
+                var currentUserId = GetUserId(User);
 
-                if (saleInfoModel.SellerId == currentUserId
-                    && saleInfoModel.Status == Status.Open)
+                if (saleInfoModel.SellerId == currentUserId &&
+                    saleInfoModel.Status == Status.Open)
                 {
-                    var saleModel = await this.salesService.EditSale<EditSaleResourceModel>(inputModel);
+                    var saleModel = await salesService.EditSale<EditSaleResourceModel>(inputModel);
 
-                    await this.saleLogsService.ClearSaleLogs(saleInfoModel.Id);
+                    await saleLogsService.ClearSaleLogs(saleInfoModel.Id);
 
-                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                    await saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification("Sale was edited by seller!");
 
                     return saleModel;
                 }
 
-                return this.Forbid();
+                return Forbid();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -116,24 +110,24 @@
         {
             try
             {
-                var saleInfoModel = await this.salesService.GetSale<GetSaleInfoUtilityModel>(id);
+                var saleInfoModel = await salesService.GetSale<GetSaleInfoUtilityModel>(id);
 
                 if (saleInfoModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                if (saleInfoModel.SellerId == this.GetUserId(this.User))
+                if (saleInfoModel.SellerId == GetUserId(User))
                 {
-                    return await this.salesService.RemoveSale<RemoveSaleResourceModel>(saleInfoModel.Id);
+                    return await salesService.RemoveSale<RemoveSaleResourceModel>(saleInfoModel.Id);
                 }
 
-                return this.Forbid();
+                return Forbid();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -142,28 +136,28 @@
         {
             try
             {
-                var saleInfoModel = await this.salesService.GetSale<GetSaleResourceModel>(id);
+                var saleInfoModel = await salesService.GetSale<GetSaleResourceModel>(id);
 
                 if (saleInfoModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                var currentUserId = this.GetUserId(this.User);
+                var currentUserId = GetUserId(User);
 
-                if (saleInfoModel.BuyerId != currentUserId
-                    && saleInfoModel.SellerId != currentUserId
-                    && saleInfoModel.Status != Status.Open)
+                if (saleInfoModel.BuyerId != currentUserId &&
+                    saleInfoModel.SellerId != currentUserId &&
+                    saleInfoModel.Status != Status.Open)
                 {
-                    return this.Forbid();
+                    return Forbid();
                 }
 
                 return saleInfoModel;
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -174,12 +168,12 @@
         {
             try
             {
-                return await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(id);
+                return await salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(id);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -189,13 +183,13 @@
         {
             try
             {
-                return await this.salesService.GetUserPurchases<GetUserPurchasesResourceModel>(
-                           this.GetUserId(this.User));
+                return await salesService.GetUserPurchases<GetUserPurchasesResourceModel>(
+                    GetUserId(User));
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -205,12 +199,12 @@
         {
             try
             {
-                return await this.salesService.GetUserSales<GetUserSalesResourceModel>(this.GetUserId(this.User));
+                return await salesService.GetUserSales<GetUserSalesResourceModel>(GetUserId(User));
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -220,40 +214,40 @@
         {
             try
             {
-                var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleInfoModel = await GetSaleInfo(inputModel.SaleId);
 
                 if (saleInfoModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                var currentUserId = this.GetUserId(this.User);
+                var currentUserId = GetUserId(User);
 
-                if (saleInfoModel.SellerId == currentUserId
-                    || saleInfoModel.BuyerId == currentUserId)
+                if (saleInfoModel.SellerId == currentUserId ||
+                    saleInfoModel.BuyerId == currentUserId)
                 {
-                    return this.Forbid();
+                    return Forbid();
                 }
 
-                await this.salesService.PlaceOrder<SaleStatusResourceModel>(
+                await salesService.PlaceOrder<SaleStatusResourceModel>(
                     inputModel.SaleId,
                     inputModel.AddressId,
                     currentUserId);
 
                 var addedLogModel =
-                    await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
+                    await saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
                         saleInfoModel.Id,
                         SaleLogs.PlacedOrder);
 
-                await this.saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
+                await saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
                     .RecieveLogNotification(addedLogModel.Content);
 
                 return saleInfoModel;
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -263,35 +257,35 @@
         {
             try
             {
-                var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleInfoModel = await GetSaleInfo(inputModel.SaleId);
 
                 if (saleInfoModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                var currentUserId = this.GetUserId(this.User);
+                var currentUserId = GetUserId(User);
 
                 if (saleInfoModel.BuyerId != currentUserId)
                 {
-                    return this.Forbid();
+                    return Forbid();
                 }
 
-                await this.salesService.CancelOrder<SaleStatusResourceModel>(inputModel.SaleId, currentUserId);
+                await salesService.CancelOrder<SaleStatusResourceModel>(inputModel.SaleId, currentUserId);
 
-                await this.saleLogsService.ClearSaleLogs(saleInfoModel.Id);
+                await saleLogsService.ClearSaleLogs(saleInfoModel.Id);
 
-                await this.saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
+                await saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
                     .RecieveLogNotification("Order was canceled by buyer!");
 
-                await this.saleChatService.ClearSaleMessages(saleInfoModel.Id);
+                await saleChatService.ClearSaleMessages(saleInfoModel.Id);
 
                 return saleInfoModel;
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -301,37 +295,37 @@
         {
             try
             {
-                var saleInfoModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleInfoModel = await GetSaleInfo(inputModel.SaleId);
 
                 if (saleInfoModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                var currentUserId = this.GetUserId(this.User);
+                var currentUserId = GetUserId(User);
 
                 if (saleInfoModel.SellerId == currentUserId)
                 {
-                    var saleStatusModel = await this.salesService.SetShippingPrice<SaleStatusResourceModel>(
-                                              inputModel.SaleId,
-                                              inputModel.ShippingPrice);
+                    var saleStatusModel = await salesService.SetShippingPrice<SaleStatusResourceModel>(
+                        inputModel.SaleId,
+                        inputModel.ShippingPrice);
 
-                    var addedLogModel = await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
-                                            saleInfoModel.Id,
-                                            SaleLogs.SettedShippingPrice);
+                    var addedLogModel = await saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
+                        saleInfoModel.Id,
+                        SaleLogs.SettedShippingPrice);
 
-                    await this.saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
+                    await saleLogHubContext.Clients.Group(saleInfoModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
 
                     return saleStatusModel;
                 }
 
-                return this.Forbid();
+                return Forbid();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -341,37 +335,37 @@
         {
             try
             {
-                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleModel = await GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                var currentUserId = this.GetUserId(this.User);
+                var currentUserId = GetUserId(User);
 
                 if (saleModel.BuyerId == currentUserId)
                 {
                     var saleStatusModel =
-                        await this.salesService.CompletePayment<SaleStatusResourceModel>(
+                        await salesService.CompletePayment<SaleStatusResourceModel>(
                             inputModel.SaleId,
                             inputModel.OrderId);
 
                     var addedLogModel =
-                        await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleModel.Id, SaleLogs.Paid);
+                        await saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(saleModel.Id, SaleLogs.Paid);
 
-                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                    await saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
 
                     return saleStatusModel;
                 }
 
-                return this.Forbid();
+                return Forbid();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -381,37 +375,37 @@
         {
             try
             {
-                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleModel = await GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                var currentUserId = this.GetUserId(this.User);
+                var currentUserId = GetUserId(User);
 
                 if (saleModel.SellerId == currentUserId)
                 {
                     var saleStatusModel =
-                        await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(inputModel.SaleId);
+                        await salesService.ConfirmItemSent<SaleStatusResourceModel>(inputModel.SaleId);
 
                     var addedLogModel =
-                        await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
+                        await saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
                             saleModel.Id,
                             SaleLogs.ItemSent);
 
-                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                    await saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
 
                     return saleStatusModel;
                 }
 
-                return this.Forbid();
+                return Forbid();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -422,43 +416,43 @@
         {
             try
             {
-                var saleModel = await this.GetSaleInfo(inputModel.SaleId);
+                var saleModel = await GetSaleInfo(inputModel.SaleId);
 
                 if (saleModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                var currentUserId = this.GetUserId(this.User);
+                var currentUserId = GetUserId(User);
 
                 if (saleModel.BuyerId == currentUserId)
                 {
                     var saleStatusModel =
-                        await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(inputModel.SaleId);
+                        await salesService.ConfirmItemRecieved<SaleStatusResourceModel>(inputModel.SaleId);
 
                     var addedLogModel =
-                        await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
+                        await saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(
                             saleModel.Id,
                             SaleLogs.ItemRecieved);
 
-                    await this.saleLogHubContext.Clients.Group(saleModel.Id.ToString())
+                    await saleLogHubContext.Clients.Group(saleModel.Id.ToString())
                         .RecieveLogNotification(addedLogModel.Content);
 
                     return saleStatusModel;
                 }
 
-                return this.Forbid();
+                return Forbid();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
         private async Task<GetSaleInfoUtilityModel> GetSaleInfo(Guid? saleId)
         {
-            return await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
+            return await salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
         }
     }
 }

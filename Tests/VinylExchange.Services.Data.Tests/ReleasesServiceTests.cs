@@ -1,27 +1,19 @@
 ﻿namespace VinylExchange.Services.Data.Tests
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using HelperServices.Releases;
+    using MainServices.Releases;
+    using Mapping;
     using Microsoft.EntityFrameworkCore;
-
     using Moq;
-
+    using TestFactories;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.HelperServices.Releases;
-    using VinylExchange.Services.Data.MainServices.Releases;
-    using VinylExchange.Services.Data.Tests.TestFactories;
-    using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.Models.ResourceModels.Releases;
-
+    using Web.Models.ResourceModels.Releases;
     using Xunit;
-
-    #endregion
 
     public class ReleasesServiceTests
     {
@@ -35,28 +27,28 @@
 
         public ReleasesServiceTests()
         {
-            this.dbContext = DbFactory.CreateDbContext();
+            dbContext = DbFactory.CreateDbContext();
 
-            this.releaseFilesServiceMock = new Mock<IReleaseFilesService>();
+            releaseFilesServiceMock = new Mock<IReleaseFilesService>();
 
-            this.releasesService = new ReleasesService(this.dbContext, this.releaseFilesServiceMock.Object);
+            releasesService = new ReleasesService(dbContext, releaseFilesServiceMock.Object);
         }
 
         [Fact]
         public async Task CreateReleaseShouldCreateRelease()
         {
-            var createdReleaseModel = await this.releasesService.CreateRelease<CreateReleaseResourceModel>(
-                                          "Test",
-                                          "TEst",
-                                          "Test",
-                                          1993,
-                                          "Trerer",
-                                          new List<int> { 1, 4, 5, 6 },
-                                          Guid.NewGuid());
+            var createdReleaseModel = await releasesService.CreateRelease<CreateReleaseResourceModel>(
+                "Test",
+                "TEst",
+                "Test",
+                1993,
+                "Trerer",
+                new List<int> {1, 4, 5, 6},
+                Guid.NewGuid());
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var createdRelease = await this.dbContext.Releases.FirstOrDefaultAsync(r => r.Id == createdReleaseModel.Id);
+            var createdRelease = await dbContext.Releases.FirstOrDefaultAsync(r => r.Id == createdReleaseModel.Id);
 
             Assert.True(createdRelease != null);
         }
@@ -69,20 +61,20 @@
             var format = "Test Format";
             var year = 1993;
             var label = "label";
-            var styles = new List<int> { 1, 2, 3 };
+            var styles = new List<int> {1, 2, 3};
 
-            var createdReleaseModel = await this.releasesService.CreateRelease<CreateReleaseResourceModel>(
-                                          artist,
-                                          title,
-                                          format,
-                                          year,
-                                          label,
-                                          styles,
-                                          Guid.NewGuid());
+            var createdReleaseModel = await releasesService.CreateRelease<CreateReleaseResourceModel>(
+                artist,
+                title,
+                format,
+                year,
+                label,
+                styles,
+                Guid.NewGuid());
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var createdRelease = await this.dbContext.Releases.FirstOrDefaultAsync(r => r.Id == createdReleaseModel.Id);
+            var createdRelease = await dbContext.Releases.FirstOrDefaultAsync(r => r.Id == createdReleaseModel.Id);
 
             Assert.Equal(artist, createdRelease.Artist);
             Assert.Equal(title, createdRelease.Title);
@@ -97,11 +89,11 @@
         [Fact]
         public async Task GetReleaseoShouldReturnNullIfProvidedReleaseIdIsNotExistingInDb()
         {
-            await this.dbContext.Releases.AddAsync(new Release());
+            await dbContext.Releases.AddAsync(new Release());
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var returnedReleaseModel = await this.releasesService.GetRelease<GetReleaseResourceModel>(Guid.NewGuid());
+            var returnedReleaseModel = await releasesService.GetRelease<GetReleaseResourceModel>(Guid.NewGuid());
 
             Assert.Null(returnedReleaseModel);
         }
@@ -109,52 +101,52 @@
         [Fact]
         public async Task GetReleaseShouldGetRelease()
         {
-            var createdRelease = (await this.dbContext.Releases.AddAsync(new Release())).Entity;
+            var createdRelease = (await dbContext.Releases.AddAsync(new Release())).Entity;
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var returnedReleaseModel =
-                await this.releasesService.GetRelease<GetReleaseResourceModel>(createdRelease.Id);
+                await releasesService.GetRelease<GetReleaseResourceModel>(createdRelease.Id);
 
             Assert.Equal(createdRelease.Id, returnedReleaseModel.Id);
         }
 
         [Theory]
-        [InlineData("Aphex", 1, new[] { 5 }, 4)]
-        [InlineData("Aph", 1, new[] { 5, 6 }, 6)]
-        [InlineData("", 1, new[] { 7 }, 2)]
-        [InlineData("Tiesto", 1, new[] { 10 }, 0)]
-        [InlineData("bt", 1, new[] { 2 }, 1)]
-        [InlineData("bt", 1, new[] { 2, 4 }, 2)]
-        [InlineData("a", 1, new[] { 4 }, 2)]
+        [InlineData("Aphex", 1, new[] {5}, 4)]
+        [InlineData("Aph", 1, new[] {5, 6}, 6)]
+        [InlineData("", 1, new[] {7}, 2)]
+        [InlineData("Tiesto", 1, new[] {10}, 0)]
+        [InlineData("bt", 1, new[] {2}, 1)]
+        [InlineData("bt", 1, new[] {2, 4}, 2)]
+        [InlineData("a", 1, new[] {4}, 2)]
         public async Task GetReleasesShouldGetFirstEightReleasesMatchingSearchTermAndGenreFilterAndStyleFilter(
             string searchTerm,
             int filterGenreId,
             IEnumerable<int> filterStyleIds,
             int expectedMatchingReleasesCount)
         {
-            await this.AddReleasesTestData();
+            await AddReleasesTestData();
 
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
-                                              .Where(
-                                                  r => r.Artist.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase)
-                                                       || r.Title.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase))
-                                              .Where(
-                                                  r => r.Styles.Any(
-                                                      sr => filterStyleIds.Contains(sr.StyleId)
-                                                            && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)))
-                                              .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
+            var releasesModelsToCompare = await dbContext.Releases
+                .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
+                .Where(
+                    r => r.Artist.Contains(
+                             searchTerm,
+                             StringComparison.InvariantCultureIgnoreCase)
+                         || r.Title.Contains(
+                             searchTerm,
+                             StringComparison.InvariantCultureIgnoreCase))
+                .Where(
+                    r => r.Styles.Any(
+                        sr => filterStyleIds.Contains(sr.StyleId)
+                              && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)))
+                .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
 
-            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
-                                    searchTerm,
-                                    filterGenreId,
-                                    filterStyleIds,
-                                    0);
+            var releaseModels = await releasesService.GetReleases<GetReleaseResourceModel>(
+                searchTerm,
+                filterGenreId,
+                filterStyleIds,
+                0);
 
             Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
             Assert.Equal(
@@ -182,20 +174,20 @@
             string searchTerm,
             int expectedMatchingReleasesCount)
         {
-            await this.AddReleasesTestData();
+            await AddReleasesTestData();
 
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Where(
-                                                  r => r.Artist.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase)
-                                                       || r.Title.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase))
-                                              .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
+            var releasesModelsToCompare = await dbContext.Releases
+                .Where(
+                    r => r.Artist.Contains(
+                             searchTerm,
+                             StringComparison.InvariantCultureIgnoreCase)
+                         || r.Title.Contains(
+                             searchTerm,
+                             StringComparison.InvariantCultureIgnoreCase))
+                .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
 
             var releaseModels =
-                await this.releasesService.GetReleases<GetReleaseResourceModel>(searchTerm, null, new List<int>(), 0);
+                await releasesService.GetReleases<GetReleaseResourceModel>(searchTerm, null, new List<int>(), 0);
 
             Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
             Assert.Equal(
@@ -213,16 +205,16 @@
             int releasesToSkip,
             int expectedMatchingReleasesCount)
         {
-            await this.AddReleasesTestData();
+            await AddReleasesTestData();
 
-            var releasesModelsToCompare = await this.dbContext.Releases.Skip(releasesToSkip).Take(ReleasesToTake)
-                                              .To<GetReleaseResourceModel>().ToListAsync();
+            var releasesModelsToCompare = await dbContext.Releases.Skip(releasesToSkip).Take(ReleasesToTake)
+                .To<GetReleaseResourceModel>().ToListAsync();
 
-            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
-                                    null,
-                                    null,
-                                    new List<int>(),
-                                    releasesToSkip);
+            var releaseModels = await releasesService.GetReleases<GetReleaseResourceModel>(
+                null,
+                null,
+                new List<int>(),
+                releasesToSkip);
 
             Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
             Assert.Equal(
@@ -231,12 +223,12 @@
         }
 
         [Theory]
-        [InlineData(1, new[] { 2, 5 }, 0, 8)]
-        [InlineData(1, new[] { 2, 5 }, 5, 6)]
-        [InlineData(1, new[] { 2, 5 }, 10, 1)]
-        [InlineData(2, new[] { 8, 9, 10 }, 0, 3)]
-        [InlineData(2, new[] { 8, 10 }, 0, 2)]
-        [InlineData(2, new[] { 8 }, 0, 1)]
+        [InlineData(1, new[] {2, 5}, 0, 8)]
+        [InlineData(1, new[] {2, 5}, 5, 6)]
+        [InlineData(1, new[] {2, 5}, 10, 1)]
+        [InlineData(2, new[] {8, 9, 10}, 0, 3)]
+        [InlineData(2, new[] {8, 10}, 0, 2)]
+        [InlineData(2, new[] {8}, 0, 1)]
         public async Task
             GetReleasesShouldSkipSkipCountAndGetNextEightReleasesMatchingGenreFilterAndStyleFilterWithNoSearchTerm(
                 int filterGenreId,
@@ -244,21 +236,21 @@
                 int releasesToSkip,
                 int expectedMatchingReleasesCount)
         {
-            await this.AddReleasesTestData();
+            await AddReleasesTestData();
 
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
-                                              .Where(
-                                                  r => r.Styles.Any(
-                                                      sr => filterStyleIds.Contains(sr.StyleId)
-                                                            && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)))
-                                              .Skip(releasesToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
-                                              .ToListAsync();
-            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
-                                    null,
-                                    filterGenreId,
-                                    filterStyleIds,
-                                    releasesToSkip);
+            var releasesModelsToCompare = await dbContext.Releases
+                .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
+                .Where(
+                    r => r.Styles.Any(
+                        sr => filterStyleIds.Contains(sr.StyleId)
+                              && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)))
+                .Skip(releasesToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
+                .ToListAsync();
+            var releaseModels = await releasesService.GetReleases<GetReleaseResourceModel>(
+                null,
+                filterGenreId,
+                filterStyleIds,
+                releasesToSkip);
 
             Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
             Assert.Equal(
@@ -283,18 +275,18 @@
                 int releaseToSkip,
                 int expectedMatchingReleasesCount)
         {
-            await this.AddReleasesTestData();
+            await AddReleasesTestData();
 
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
-                                              .Skip(releaseToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
-                                              .ToListAsync();
+            var releasesModelsToCompare = await dbContext.Releases
+                .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
+                .Skip(releaseToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
+                .ToListAsync();
 
-            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
-                                    null,
-                                    filterGenreId,
-                                    new List<int>(),
-                                    releaseToSkip);
+            var releaseModels = await releasesService.GetReleases<GetReleaseResourceModel>(
+                null,
+                filterGenreId,
+                new List<int>(),
+                releaseToSkip);
 
             Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
             Assert.Equal(
@@ -317,26 +309,26 @@
                 int releaseToSkip,
                 int expectedMatchingReleasesCount)
         {
-            await this.AddReleasesTestData();
+            await AddReleasesTestData();
 
-            var releasesModelsToCompare = await this.dbContext.Releases
-                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
-                                              .Where(
-                                                  r => r.Artist.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase)
-                                                       || r.Title.Contains(
-                                                           searchTerm,
-                                                           StringComparison.InvariantCultureIgnoreCase))
-                                              .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
-                                              .Skip(releaseToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
-                                              .ToListAsync();
+            var releasesModelsToCompare = await dbContext.Releases
+                .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
+                .Where(
+                    r => r.Artist.Contains(
+                             searchTerm,
+                             StringComparison.InvariantCultureIgnoreCase)
+                         || r.Title.Contains(
+                             searchTerm,
+                             StringComparison.InvariantCultureIgnoreCase))
+                .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
+                .Skip(releaseToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
+                .ToListAsync();
 
-            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
-                                    searchTerm,
-                                    filterGenreId,
-                                    new List<int>(),
-                                    releaseToSkip);
+            var releaseModels = await releasesService.GetReleases<GetReleaseResourceModel>(
+                searchTerm,
+                filterGenreId,
+                new List<int>(),
+                releaseToSkip);
 
             Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
             Assert.Equal(
@@ -348,13 +340,13 @@
         public async Task
             GetReleasesShouldGetFirstEightReleasesWithNoSearchTermAndNoGenreFilterAndNoStyleFilterProvided()
         {
-            await this.AddReleasesTestData();
+            await AddReleasesTestData();
 
-            var releasesModelsToCompare = await this.dbContext.Releases.Take(ReleasesToTake)
-                                              .To<GetReleaseResourceModel>().ToListAsync();
+            var releasesModelsToCompare = await dbContext.Releases.Take(ReleasesToTake)
+                .To<GetReleaseResourceModel>().ToListAsync();
 
             var releaseModels =
-                await this.releasesService.GetReleases<GetReleaseResourceModel>(null, null, new List<int>(), 0);
+                await releasesService.GetReleases<GetReleaseResourceModel>(null, null, new List<int>(), 0);
 
             Assert.True(releaseModels.Count == ReleasesToTake);
             Assert.Equal(
@@ -367,11 +359,11 @@
         {
             var release = new Release();
 
-            await this.dbContext.Releases.AddAsync(release);
+            await dbContext.Releases.AddAsync(release);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var returnedRelease = await this.releasesService.GetRelease(release.Id);
+            var returnedRelease = await releasesService.GetRelease(release.Id);
 
             Assert.NotNull(returnedRelease);
         }
@@ -379,104 +371,104 @@
         private async Task AddReleasesTestData()
         {
             var releases = new List<Release>
+            {
+                new Release {Artist = "Aphex Twin", Title = "Drukqs"}, // 0 Drum And Bass, IDM
+                new Release {Artist = "Tiesto", Title = "Traffic"}, // 1 Trance
+                new Release {Artist = "Aphex Twin", Title = "I Care Because You Do"}, // 2 Downtempo, IDM 
+                new Release {Artist = "Squarepusher", Title = "Feed Me Weird Things"}, // 3 Drum And Bass, IDM
+                new Release {Artist = "Eminem", Title = "Marshal Matters 2"}, // 4 Rap
+                new Release {Artist = "Eminem", Title = "8 Mile"}, // 5 Rap
+                new Release {Artist = "Metalica", Title = "Nothing Else Matters"}, // 6 Metal
+                new Release {Artist = "Aphex Twin", Title = "Selected Ambient Works"}, // 7 Ambient
+                new Release {Artist = "Tiesto", Title = "Just be"}, // 8 Trance
+                new Release {Artist = "Tiesto", Title = "Traffic"}, // 9 Trance
+                new Release {Artist = "Gorillaz", Title = "Demon Days"}, // 10 Alternative Rock
+                new Release {Artist = "Amelie Lens", Title = "Lenske"}, // 11 Techno
+                new Release {Artist = "Dustin Zahn", Title = "Stranger To Stability"}, // 12 Techno
+                new Release {Artist = "Linkin Park", Title = "Meteora"}, // 13 Nu Rock
+                new Release {Artist = "Armin Van Buuren", Title = "76"}, // 14 Trance
+                new Release {Artist = "Aphex Twin", Title = "Come To Daddy"}, // 15 IDM, Drill And Bass
+                new Release {Artist = "The Chemical Brothers", Title = "Push The Button"}, // 16 Big Beat
+                new Release {Artist = "The Chemical Brothers", Title = "Surrender"}, // 17 Big Beat
+                new Release {Artist = "Fatboy Slim", Title = "You've Come a Long Way, Baby"}, // 18 Big Beat
+                new Release {Artist = "BT", Title = "This Binary Universe"}, // 19 Downtempo, Ambient
+                new Release {Artist = "BT", Title = "ESCM"}, // 20 Trance 
+                new Release {Artist = "Paul Van Dyk", Title = "Reflections"}, // 21 Trance
+                new Release
                 {
-                    new Release { Artist = "Aphex Twin", Title = "Drukqs" }, // 0 Drum And Bass, IDM
-                    new Release { Artist = "Tiesto", Title = "Traffic" }, // 1 Trance
-                    new Release { Artist = "Aphex Twin", Title = "I Care Because You Do" }, // 2 Downtempo, IDM 
-                    new Release { Artist = "Squarepusher", Title = "Feed Me Weird Things" }, // 3 Drum And Bass, IDM
-                    new Release { Artist = "Eminem", Title = "Marshal Matters 2" }, // 4 Rap
-                    new Release { Artist = "Eminem", Title = "8 Mile" }, // 5 Rap
-                    new Release { Artist = "Metalica", Title = "Nothing Else Matters" }, // 6 Metal
-                    new Release { Artist = "Aphex Twin", Title = "Selected Ambient Works" }, // 7 Ambient
-                    new Release { Artist = "Tiesto", Title = "Just be" }, // 8 Trance
-                    new Release { Artist = "Tiesto", Title = "Traffic" }, // 9 Trance
-                    new Release { Artist = "Gorillaz", Title = "Demon Days" }, // 10 Alternative Rock
-                    new Release { Artist = "Amelie Lens", Title = "Lenske" }, // 11 Techno
-                    new Release { Artist = "Dustin Zahn", Title = "Stranger To Stability" }, // 12 Techno
-                    new Release { Artist = "Linkin Park", Title = "Meteora" }, // 13 Nu Rock
-                    new Release { Artist = "Armin Van Buuren", Title = "76" }, // 14 Trance
-                    new Release { Artist = "Aphex Twin", Title = "Come To Daddy" }, // 15 IDM, Drill And Bass
-                    new Release { Artist = "The Chemical Brothers", Title = "Push The Button" }, // 16 Big Beat
-                    new Release { Artist = "The Chemical Brothers", Title = "Surrender" }, // 17 Big Beat
-                    new Release { Artist = "Fatboy Slim", Title = "You've Come a Long Way, Baby" }, // 18 Big Beat
-                    new Release { Artist = "BT", Title = "This Binary Universe" }, // 19 Downtempo, Ambient
-                    new Release { Artist = "BT", Title = "ESCM" }, // 20 Trance 
-                    new Release { Artist = "Paul Van Dyk", Title = "Reflections" }, // 21 Trance
-                    new Release
-                        {
-                            Artist = "Squarepusher", Title = "Feed Me Weird Things"
-                        }, // 22 Drum And Bass , Drill And Bass
-                    new Release { Artist = "Squarepusher", Title = "Ultravisitor" }, // 23 Drum And Bass
-                    new Release { Artist = "Aphex Twin", Title = "Selected Ambient Works ||" }, // 24 Ambient
-                    new Release { Artist = "Aphex Twin", Title = "Classics" } // 25 IDM
-                };
+                    Artist = "Squarepusher", Title = "Feed Me Weird Things"
+                }, // 22 Drum And Bass , Drill And Bass
+                new Release {Artist = "Squarepusher", Title = "Ultravisitor"}, // 23 Drum And Bass
+                new Release {Artist = "Aphex Twin", Title = "Selected Ambient Works ||"}, // 24 Ambient
+                new Release {Artist = "Aphex Twin", Title = "Classics"} // 25 IDM
+            };
 
             var genres = new List<Genre>
-                {
-                    new Genre { Id = 1, Name = "Electronic" },
-                    new Genre { Id = 2, Name = "Rock" },
-                    new Genre { Id = 3, Name = "Hip Hop" }
-                };
+            {
+                new Genre {Id = 1, Name = "Electronic"},
+                new Genre {Id = 2, Name = "Rock"},
+                new Genre {Id = 3, Name = "Hip Hop"}
+            };
 
             var styles = new List<Style>
-                {
-                    new Style { Id = 1, Name = "House", GenreId = 1 },
-                    new Style { Id = 2, Name = "Trance", GenreId = 1 },
-                    new Style { Id = 3, Name = "Drum And Bass", GenreId = 1 },
-                    new Style { Id = 4, Name = "Downtempo", GenreId = 1 },
-                    new Style { Id = 5, Name = "IDM", GenreId = 1 },
-                    new Style { Id = 6, Name = "Ambient", GenreId = 1 },
-                    new Style { Id = 7, Name = "Techno", GenreId = 1 },
-                    new Style { Id = 8, Name = "Nu Rock", GenreId = 2 },
-                    new Style { Id = 9, Name = "Metal", GenreId = 2 },
-                    new Style { Id = 10, Name = "Alternative Rock", GenreId = 2 },
-                    new Style { Id = 11, Name = "Rap", GenreId = 3 },
-                    new Style { Id = 12, Name = "Big Beat", GenreId = 1 },
-                    new Style { Id = 13, Name = "Drill and Bass", GenreId = 1 }
-                };
+            {
+                new Style {Id = 1, Name = "House", GenreId = 1},
+                new Style {Id = 2, Name = "Trance", GenreId = 1},
+                new Style {Id = 3, Name = "Drum And Bass", GenreId = 1},
+                new Style {Id = 4, Name = "Downtempo", GenreId = 1},
+                new Style {Id = 5, Name = "IDM", GenreId = 1},
+                new Style {Id = 6, Name = "Ambient", GenreId = 1},
+                new Style {Id = 7, Name = "Techno", GenreId = 1},
+                new Style {Id = 8, Name = "Nu Rock", GenreId = 2},
+                new Style {Id = 9, Name = "Metal", GenreId = 2},
+                new Style {Id = 10, Name = "Alternative Rock", GenreId = 2},
+                new Style {Id = 11, Name = "Rap", GenreId = 3},
+                new Style {Id = 12, Name = "Big Beat", GenreId = 1},
+                new Style {Id = 13, Name = "Drill and Bass", GenreId = 1}
+            };
 
             var styleReleases = new List<StyleRelease>
-                {
-                    new StyleRelease { ReleaseId = releases[0].Id, StyleId = 3 },
-                    new StyleRelease { ReleaseId = releases[0].Id, StyleId = 5 },
-                    new StyleRelease { ReleaseId = releases[1].Id, StyleId = 2 },
-                    new StyleRelease { ReleaseId = releases[2].Id, StyleId = 4 },
-                    new StyleRelease { ReleaseId = releases[2].Id, StyleId = 5 },
-                    new StyleRelease { ReleaseId = releases[3].Id, StyleId = 3 },
-                    new StyleRelease { ReleaseId = releases[3].Id, StyleId = 5 },
-                    new StyleRelease { ReleaseId = releases[4].Id, StyleId = 11 },
-                    new StyleRelease { ReleaseId = releases[5].Id, StyleId = 11 },
-                    new StyleRelease { ReleaseId = releases[6].Id, StyleId = 9 },
-                    new StyleRelease { ReleaseId = releases[7].Id, StyleId = 6 },
-                    new StyleRelease { ReleaseId = releases[8].Id, StyleId = 2 },
-                    new StyleRelease { ReleaseId = releases[9].Id, StyleId = 2 },
-                    new StyleRelease { ReleaseId = releases[10].Id, StyleId = 10 },
-                    new StyleRelease { ReleaseId = releases[11].Id, StyleId = 7 },
-                    new StyleRelease { ReleaseId = releases[12].Id, StyleId = 7 },
-                    new StyleRelease { ReleaseId = releases[13].Id, StyleId = 8 },
-                    new StyleRelease { ReleaseId = releases[14].Id, StyleId = 2 },
-                    new StyleRelease { ReleaseId = releases[15].Id, StyleId = 5 },
-                    new StyleRelease { ReleaseId = releases[15].Id, StyleId = 13 },
-                    new StyleRelease { ReleaseId = releases[16].Id, StyleId = 12 },
-                    new StyleRelease { ReleaseId = releases[17].Id, StyleId = 12 },
-                    new StyleRelease { ReleaseId = releases[18].Id, StyleId = 12 },
-                    new StyleRelease { ReleaseId = releases[19].Id, StyleId = 4 },
-                    new StyleRelease { ReleaseId = releases[19].Id, StyleId = 6 },
-                    new StyleRelease { ReleaseId = releases[20].Id, StyleId = 2 },
-                    new StyleRelease { ReleaseId = releases[21].Id, StyleId = 2 },
-                    new StyleRelease { ReleaseId = releases[22].Id, StyleId = 3 },
-                    new StyleRelease { ReleaseId = releases[22].Id, StyleId = 13 },
-                    new StyleRelease { ReleaseId = releases[23].Id, StyleId = 3 },
-                    new StyleRelease { ReleaseId = releases[24].Id, StyleId = 6 },
-                    new StyleRelease { ReleaseId = releases[25].Id, StyleId = 5 }
-                };
+            {
+                new StyleRelease {ReleaseId = releases[0].Id, StyleId = 3},
+                new StyleRelease {ReleaseId = releases[0].Id, StyleId = 5},
+                new StyleRelease {ReleaseId = releases[1].Id, StyleId = 2},
+                new StyleRelease {ReleaseId = releases[2].Id, StyleId = 4},
+                new StyleRelease {ReleaseId = releases[2].Id, StyleId = 5},
+                new StyleRelease {ReleaseId = releases[3].Id, StyleId = 3},
+                new StyleRelease {ReleaseId = releases[3].Id, StyleId = 5},
+                new StyleRelease {ReleaseId = releases[4].Id, StyleId = 11},
+                new StyleRelease {ReleaseId = releases[5].Id, StyleId = 11},
+                new StyleRelease {ReleaseId = releases[6].Id, StyleId = 9},
+                new StyleRelease {ReleaseId = releases[7].Id, StyleId = 6},
+                new StyleRelease {ReleaseId = releases[8].Id, StyleId = 2},
+                new StyleRelease {ReleaseId = releases[9].Id, StyleId = 2},
+                new StyleRelease {ReleaseId = releases[10].Id, StyleId = 10},
+                new StyleRelease {ReleaseId = releases[11].Id, StyleId = 7},
+                new StyleRelease {ReleaseId = releases[12].Id, StyleId = 7},
+                new StyleRelease {ReleaseId = releases[13].Id, StyleId = 8},
+                new StyleRelease {ReleaseId = releases[14].Id, StyleId = 2},
+                new StyleRelease {ReleaseId = releases[15].Id, StyleId = 5},
+                new StyleRelease {ReleaseId = releases[15].Id, StyleId = 13},
+                new StyleRelease {ReleaseId = releases[16].Id, StyleId = 12},
+                new StyleRelease {ReleaseId = releases[17].Id, StyleId = 12},
+                new StyleRelease {ReleaseId = releases[18].Id, StyleId = 12},
+                new StyleRelease {ReleaseId = releases[19].Id, StyleId = 4},
+                new StyleRelease {ReleaseId = releases[19].Id, StyleId = 6},
+                new StyleRelease {ReleaseId = releases[20].Id, StyleId = 2},
+                new StyleRelease {ReleaseId = releases[21].Id, StyleId = 2},
+                new StyleRelease {ReleaseId = releases[22].Id, StyleId = 3},
+                new StyleRelease {ReleaseId = releases[22].Id, StyleId = 13},
+                new StyleRelease {ReleaseId = releases[23].Id, StyleId = 3},
+                new StyleRelease {ReleaseId = releases[24].Id, StyleId = 6},
+                new StyleRelease {ReleaseId = releases[25].Id, StyleId = 5}
+            };
 
-            await this.dbContext.Genres.AddRangeAsync(genres);
-            await this.dbContext.Styles.AddRangeAsync(styles);
-            await this.dbContext.Releases.AddRangeAsync(releases);
-            await this.dbContext.StyleReleases.AddRangeAsync(styleReleases);
+            await dbContext.Genres.AddRangeAsync(genres);
+            await dbContext.Styles.AddRangeAsync(styles);
+            await dbContext.Releases.AddRangeAsync(releases);
+            await dbContext.StyleReleases.AddRangeAsync(styleReleases);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
         }
     }
 }

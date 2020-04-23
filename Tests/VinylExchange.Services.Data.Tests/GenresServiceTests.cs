@@ -1,23 +1,15 @@
 ﻿namespace VinylExchange.Services.Data.Tests
 {
-    #region
-
     using System;
     using System.Threading.Tasks;
-
+    using Common.Constants;
+    using MainServices.Genres;
     using Microsoft.EntityFrameworkCore;
-
-    using VinylExchange.Common.Constants;
+    using TestFactories;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Genres;
-    using VinylExchange.Services.Data.MainServices.Genres.Contracts;
-    using VinylExchange.Services.Data.Tests.TestFactories;
-    using VinylExchange.Web.Models.ResourceModels.Genres;
-
+    using Web.Models.ResourceModels.Genres;
     using Xunit;
-
-    #endregion
 
     public class GenresServiceTests
     {
@@ -27,19 +19,19 @@
 
         public GenresServiceTests()
         {
-            this.dbContext = DbFactory.CreateDbContext();
+            dbContext = DbFactory.CreateDbContext();
 
-            this.genresService = new GenresService(this.dbContext);
+            genresService = new GenresService(dbContext);
         }
 
         [Fact]
         public async Task CreateGenreShouldCreateGenre()
         {
-            var createdGenreModel = await this.genresService.CreateGenre<CreateGenreResourceModel>("House");
+            var createdGenreModel = await genresService.CreateGenre<CreateGenreResourceModel>("House");
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var createdGenre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == createdGenreModel.Id);
+            var createdGenre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == createdGenreModel.Id);
 
             Assert.NotNull(createdGenre);
         }
@@ -47,11 +39,11 @@
         [Fact]
         public async Task CreateGenreShouldCreateGenreWithCorrectData()
         {
-            var createdGenreModel = await this.genresService.CreateGenre<CreateGenreResourceModel>("Trance");
+            var createdGenreModel = await genresService.CreateGenre<CreateGenreResourceModel>("Trance");
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var createdGenre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == createdGenreModel.Id);
+            var createdGenre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == createdGenreModel.Id);
 
             Assert.Equal("Trance", createdGenre.Name);
         }
@@ -61,12 +53,12 @@
         {
             for (var i = 0; i < 3; i++)
             {
-                await this.dbContext.Genres.AddAsync(new Genre());
+                await dbContext.Genres.AddAsync(new Genre());
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var genreModels = await this.genresService.GetAllGenres<GetAllGenresResourceModel>();
+            var genreModels = await genresService.GetAllGenres<GetAllGenresResourceModel>();
 
             Assert.True(genreModels.Count == 3);
         }
@@ -74,7 +66,7 @@
         [Fact]
         public async Task GetAllGenresShouldReturnEmptyListIfThereAreNoGenresInDb()
         {
-            var genreModels = await this.genresService.GetAllGenres<GetAllGenresResourceModel>();
+            var genreModels = await genresService.GetAllGenres<GetAllGenresResourceModel>();
 
             Assert.True(genreModels.Count == 0);
         }
@@ -82,13 +74,13 @@
         [Fact]
         public async Task RemoveGenreShouldRemoveGenre()
         {
-            var genre = (await this.dbContext.Genres.AddAsync(new Genre { Id = 1 })).Entity;
+            var genre = (await dbContext.Genres.AddAsync(new Genre {Id = 1})).Entity;
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            await this.genresService.RemoveGenre<RemoveGenreResourceModel>(genre.Id);
+            await genresService.RemoveGenre<RemoveGenreResourceModel>(genre.Id);
 
-            var removeGenre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genre.Id);
+            var removeGenre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genre.Id);
 
             Assert.Null(removeGenre);
         }
@@ -98,13 +90,13 @@
         {
             var rnd = new Random();
 
-            await this.dbContext.Genres.AddAsync(new Genre { Id = 1 });
+            await dbContext.Genres.AddAsync(new Genre {Id = 1});
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.genresService.RemoveGenre<RemoveGenreResourceModel>(
-                                                rnd.Next(2, int.MaxValue)));
+                async () => await genresService.RemoveGenre<RemoveGenreResourceModel>(
+                    rnd.Next(2, int.MaxValue)));
 
             Assert.Equal(NullReferenceExceptionsConstants.GenreNotFound, exception.Message);
         }
@@ -114,11 +106,11 @@
         {
             var genre = new Genre();
 
-            await this.dbContext.Genres.AddAsync(genre);
+            await dbContext.Genres.AddAsync(genre);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var returnedGenre = await this.genresService.GetGenre(genre.Id);
+            var returnedGenre = await genresService.GetGenre(genre.Id);
 
             Assert.NotNull(returnedGenre);
         }

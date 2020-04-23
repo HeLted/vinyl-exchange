@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VinylExchange.Services.MemoryCache.Constants
+﻿namespace VinylExchange.Services.MemoryCache.Constants
 {
     public static class NopCachingDefaults
     {

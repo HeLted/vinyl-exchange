@@ -1,14 +1,9 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Collections
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
     using VinylExchange.Data.Common.Enumerations;
-
-    #endregion
 
     public interface ICollectionsService
     {

@@ -1,17 +1,11 @@
 ﻿namespace VinylExchange.Models.InputModels.Users
 {
-    #region
-
+    using Common.Enumerations;
     using Microsoft.AspNetCore.Http;
-
-    using VinylExchange.Common.Enumerations;
-    using VinylExchange.Web.ModelBinding.ValidationAttributes;
-
-    #endregion
+    using Web.ModelBinding.ValidationAttributes;
 
     public class ChangeAvatarInputModel
     {
-        [ValidateFile(FileType.Image)]
-        public IFormFile Avatar { get; set; }
+        [ValidateFile(FileType.Image)] public IFormFile Avatar { get; set; }
     }
 }

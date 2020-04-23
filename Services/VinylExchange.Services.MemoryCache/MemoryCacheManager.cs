@@ -1,19 +1,14 @@
 ﻿namespace VinylExchange.Services.MemoryCache
 {
-    #region
-
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-
+    using Constants;
+    using Contracts;
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Primitives;
-    using VinylExchange.Services.MemoryCache.Constants;
-    using VinylExchange.Services.MemoryCache.Contracts;
-
-    #endregion
 
     public class MemoryCacheManager : IMemoryCacheManager
     {
@@ -39,8 +34,8 @@
 
         public MemoryCacheManager(IMemoryCache cache)
         {
-            this._cache = cache;
-            this._cancellationTokenSource = new CancellationTokenSource();
+            _cache = cache;
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         /// <summary>
@@ -48,19 +43,18 @@
         /// </summary>
         public virtual CancellationTokenSource Clear()
         {
-            var cancelationTokenSource = this._cancellationTokenSource;
+            var cancelationTokenSource = _cancellationTokenSource;
 
             // send cancellation request
-            this._cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Cancel();
 
             // releases all resources used by this cancellation token
-            this._cancellationTokenSource.Dispose();
+            _cancellationTokenSource.Dispose();
 
             // recreate cancellation token
-            this._cancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = new CancellationTokenSource();
 
             return cancelationTokenSource;
-            
         }
 
         /// <summary>
@@ -68,7 +62,7 @@
         /// </summary>
         public virtual void Dispose()
         {
-           IsDisposed = true;
+            IsDisposed = true;
         }
 
         /// <summary>
@@ -84,7 +78,7 @@
             // item already is in cache, so return 
 
 
-            if (this._cache.TryGetValue(key, out T value))
+            if (_cache.TryGetValue(key, out T value))
             {
                 return value;
             }
@@ -95,7 +89,7 @@
             // and set in cache (if cache time is defined)
             if ((cacheTime ?? NopCachingDefaults.CacheTime) > 0)
             {
-                this.Set(key, result, cacheTime ?? NopCachingDefaults.CacheTime);
+                Set(key, result, cacheTime ?? NopCachingDefaults.CacheTime);
             }
 
             return result;
@@ -113,7 +107,7 @@
         /// <returns>True if item already is in cache; otherwise false</returns>
         public virtual bool IsSet(string key)
         {
-            return this._cache.TryGetValue(key, out _);
+            return _cache.TryGetValue(key, out _);
         }
 
         /// <summary>
@@ -133,7 +127,7 @@
 
             try
             {
-                this._cache.Set(key, key, this.GetMemoryCacheEntryOptions(expirationTime));
+                _cache.Set(key, key, GetMemoryCacheEntryOptions(expirationTime));
 
                 // perform action
                 action();
@@ -143,7 +137,7 @@
             finally
             {
                 // release lock even if action fails
-                this.Remove(key);
+                Remove(key);
             }
         }
 
@@ -153,7 +147,7 @@
         /// <param name="key">Key of cached item</param>
         public virtual void Remove(string key)
         {
-            this._cache.Remove(this.RemoveKey(key));
+            _cache.Remove(RemoveKey(key));
         }
 
         /// <summary>
@@ -166,10 +160,10 @@
         {
             if (data != null)
             {
-                this._cache.Set(
-                    this.AddKey(key),
+                _cache.Set(
+                    AddKey(key),
                     data,
-                    this.GetMemoryCacheEntryOptions(TimeSpan.FromMinutes(cacheTime)));
+                    GetMemoryCacheEntryOptions(TimeSpan.FromMinutes(cacheTime)));
             }
         }
 
@@ -193,10 +187,10 @@
             var options = new MemoryCacheEntryOptions()
 
                 // add cancellation token for clear cache
-                .AddExpirationToken(new CancellationChangeToken(this._cancellationTokenSource.Token))
+                .AddExpirationToken(new CancellationChangeToken(_cancellationTokenSource.Token))
 
                 // add post eviction callback
-                .RegisterPostEvictionCallback(this.PostEviction);
+                .RegisterPostEvictionCallback(PostEviction);
 
             // set cache time
             options.AbsoluteExpirationRelativeToNow = cacheTime;
@@ -211,7 +205,7 @@
         /// <returns>Itself key</returns>
         protected string RemoveKey(string key)
         {
-            this.TryRemoveKey(key);
+            TryRemoveKey(key);
             return key;
         }
 
@@ -236,7 +230,7 @@
         {
             foreach (var key in _allKeys.Where(p => !p.Value).Select(p => p.Key).ToList())
             {
-                this.RemoveKey(key);
+                RemoveKey(key);
             }
         }
 
@@ -256,10 +250,10 @@
             }
 
             // try to remove all keys marked as not existing
-            this.ClearKeys();
+            ClearKeys();
 
             // try to remove this key from dictionary
-            this.TryRemoveKey(key.ToString());
+            TryRemoveKey(key.ToString());
         }
     }
 }

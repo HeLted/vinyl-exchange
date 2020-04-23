@@ -1,14 +1,8 @@
 ﻿namespace VinylExchange.Data.Models
 {
-    #region
-
     using System;
-
+    using Common.Models;
     using Microsoft.AspNetCore.Identity;
-
-    using VinylExchange.Data.Common.Models;
-
-    #endregion
 
     public class VinylExchangeRole : IdentityRole<Guid>, IAuditInfo, IDeletableEntity
     {
@@ -20,7 +14,7 @@
         public VinylExchangeRole(string name)
             : base(name)
         {
-            this.Id = Guid.NewGuid();
+            Id = Guid.NewGuid();
         }
 
         public DateTime CreatedOn { get; set; }

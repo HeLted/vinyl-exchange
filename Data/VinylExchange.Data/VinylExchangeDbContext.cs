@@ -1,17 +1,10 @@
 ﻿namespace VinylExchange.Data
 {
-    #region
-
     using System;
-
     using IdentityServer4.EntityFramework.Options;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
-
-    using VinylExchange.Data.Models;
-
-    #endregion
+    using Models;
 
     public class VinylExchangeDbContext : KeyApiAuthorizationDbContext<VinylExchangeUser, VinylExchangeRole, Guid>
     {
@@ -50,39 +43,39 @@
 
             modelBuilder.Entity<StyleRelease>(
                 styleRelease =>
-                    {
-                        styleRelease.HasKey(sr => new { sr.StyleId, sr.ReleaseId });
+                {
+                    styleRelease.HasKey(sr => new {sr.StyleId, sr.ReleaseId});
 
-                        styleRelease.HasOne(sr => sr.Style).WithMany(s => s.Releases).HasForeignKey(sr => sr.StyleId);
+                    styleRelease.HasOne(sr => sr.Style).WithMany(s => s.Releases).HasForeignKey(sr => sr.StyleId);
 
-                        styleRelease.HasOne(sr => sr.Release).WithMany(r => r.Styles).HasForeignKey(sr => sr.ReleaseId);
-                    });
+                    styleRelease.HasOne(sr => sr.Release).WithMany(r => r.Styles).HasForeignKey(sr => sr.ReleaseId);
+                });
 
             modelBuilder.Entity<ReleaseFile>().HasOne(r => r.Release).WithMany(rf => rf.ReleaseFiles)
                 .HasForeignKey(r => r.ReleaseId);
 
             modelBuilder.Entity<CollectionItem>(
                 collectionItem =>
-                    {
-                        collectionItem.HasOne(ci => ci.User).WithMany(u => u.Collection).HasForeignKey(ci => ci.UserId);
+                {
+                    collectionItem.HasOne(ci => ci.User).WithMany(u => u.Collection).HasForeignKey(ci => ci.UserId);
 
-                        collectionItem.HasOne(ci => ci.Release).WithMany(r => r.ReleaseCollections)
-                            .HasForeignKey(ci => ci.ReleaseId);
-                    });
+                    collectionItem.HasOne(ci => ci.Release).WithMany(r => r.ReleaseCollections)
+                        .HasForeignKey(ci => ci.ReleaseId);
+                });
 
             modelBuilder.Entity<Sale>(
                 sale =>
-                    {
-                        sale.HasOne(s => s.Buyer).WithMany(b => b.Purchases).HasForeignKey(s => s.BuyerId)
-                            .OnDelete(DeleteBehavior.Restrict);
+                {
+                    sale.HasOne(s => s.Buyer).WithMany(b => b.Purchases).HasForeignKey(s => s.BuyerId)
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                        sale.HasOne(s => s.Seller).WithMany(s => s.Sales).HasForeignKey(s => s.SellerId)
-                            .OnDelete(DeleteBehavior.Restrict);
+                    sale.HasOne(s => s.Seller).WithMany(s => s.Sales).HasForeignKey(s => s.SellerId)
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                        sale.HasOne(s => s.Release).WithMany(r => r.Sales).HasForeignKey(s => s.ReleaseId);
+                    sale.HasOne(s => s.Release).WithMany(r => r.Sales).HasForeignKey(s => s.ReleaseId);
 
-                        sale.HasMany(s => s.Messages).WithOne(m => m.Sale).HasForeignKey(m => m.SaleId);
-                    });
+                    sale.HasMany(s => s.Messages).WithOne(m => m.Sale).HasForeignKey(m => m.SaleId);
+                });
 
             modelBuilder.Entity<Address>().HasOne(a => a.User).WithMany(u => u.Addresses).HasForeignKey(a => a.UserId);
 

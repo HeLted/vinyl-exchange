@@ -1,27 +1,21 @@
 ﻿namespace VinylExchange.Web.Models.Utility.Files
 {
-    #region
-
     using System;
     using System.IO;
-
+    using Common.Constants;
+    using Common.Enumerations;
     using Microsoft.AspNetCore.Http;
-
-    using VinylExchange.Common.Constants;
-    using VinylExchange.Common.Enumerations;
-
-    #endregion
 
     public class UploadFileUtilityModel
     {
         public UploadFileUtilityModel(IFormFile file)
         {
-            this.FileExtension = file.FileName.Substring(file.FileName.LastIndexOf("."));
-            this.FileName = file.FileName.Replace(this.FileExtension, string.Empty);
-            this.FileType = this.FileExtension == FileExtensionConstants.Mp3 ? FileType.Audio : FileType.Image;
-            this.FileByteContent = this.ConvertIFormFileToByteArray(file);
-            this.CreatedOn = DateTime.UtcNow;
-            this.FileGuid = Guid.NewGuid();
+            FileExtension = file.FileName.Substring(file.FileName.LastIndexOf("."));
+            FileName = file.FileName.Replace(FileExtension, string.Empty);
+            FileType = FileExtension == FileExtensionConstants.Mp3 ? FileType.Audio : FileType.Image;
+            FileByteContent = ConvertIFormFileToByteArray(file);
+            CreatedOn = DateTime.UtcNow;
+            FileGuid = Guid.NewGuid();
         }
 
         public DateTime CreatedOn { get; set; }

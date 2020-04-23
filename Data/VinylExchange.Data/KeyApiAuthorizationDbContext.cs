@@ -1,21 +1,15 @@
 ﻿namespace VinylExchange.Data
 {
-    #region
-
     using System;
     using System.Threading.Tasks;
-
     using IdentityServer4.EntityFramework.Entities;
     using IdentityServer4.EntityFramework.Extensions;
     using IdentityServer4.EntityFramework.Interfaces;
     using IdentityServer4.EntityFramework.Options;
-
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
-
-    #endregion
 
     /// <summary>
     ///     Database abstraction for a combined <see cref="DbContext" /> using ASP.NET Identity and Identity Server.
@@ -24,7 +18,7 @@
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TKey">Key of the IdentityUser entity</typeparam>
     public class KeyApiAuthorizationDbContext<TUser, TRole, TKey> : IdentityDbContext<TUser, TRole, TKey>,
-                                                                    IPersistedGrantDbContext
+        IPersistedGrantDbContext
         where TUser : IdentityUser<TKey> where TRole : IdentityRole<TKey> where TKey : IEquatable<TKey>
     {
         private readonly IOptions<OperationalStoreOptions> _operationalStoreOptions;
@@ -39,7 +33,7 @@
             IOptions<OperationalStoreOptions> operationalStoreOptions)
             : base(options)
         {
-            this._operationalStoreOptions = operationalStoreOptions;
+            _operationalStoreOptions = operationalStoreOptions;
         }
 
         /// <summary>
@@ -62,9 +56,9 @@
         {
             base.OnModelCreating(builder);
 
-            if (this._operationalStoreOptions != null)
+            if (_operationalStoreOptions != null)
             {
-                builder.ConfigurePersistedGrantContext(this._operationalStoreOptions.Value);
+                builder.ConfigurePersistedGrantContext(_operationalStoreOptions.Value);
             }
             else
             {

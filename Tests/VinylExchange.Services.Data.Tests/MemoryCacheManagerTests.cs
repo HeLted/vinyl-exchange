@@ -1,30 +1,21 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VinylExchange.Services.MemoryCache;
-using VinylExchange.Services.MemoryCache.Contracts;
-using Xunit;
-
-
-namespace VinylExchange.Services.Data.Tests
+﻿namespace VinylExchange.Services.Data.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using MemoryCache;
+    using MemoryCache.Contracts;
+    using Microsoft.Extensions.Caching.Memory;
+    using Microsoft.Extensions.DependencyInjection;
+    using Xunit;
 
-   
     [CollectionDefinition("Non-Parallel Collection", DisableParallelization = true)]
     public class MemoryCacheManagerTests
     {
-        private IMemoryCacheManager cacheManager;
+        private readonly IMemoryCacheManager cacheManager;
 
-        
+
         public MemoryCacheManagerTests()
         {
-
             var services = new ServiceCollection();
 
             services.AddMemoryCache();
@@ -33,13 +24,13 @@ namespace VinylExchange.Services.Data.Tests
 
             var memoryCache = serviceProvider.GetService<IMemoryCache>();
 
-            this.cacheManager = new MemoryCacheManager(memoryCache);
+            cacheManager = new MemoryCacheManager(memoryCache);
         }
 
         [Fact]
         public void ClearShouldDisposeCancelationToken()
         {
-            var cancelationToken = this.cacheManager.Clear();
+            var cancelationToken = cacheManager.Clear();
 
             Assert.True(cancelationToken.IsCancellationRequested);
         }
@@ -47,24 +38,23 @@ namespace VinylExchange.Services.Data.Tests
         [Fact]
         public void DisposeShouldDispose()
         {
-            this.cacheManager.Dispose();
+            cacheManager.Dispose();
 
-            Assert.True(this.cacheManager.IsDisposed);
+            Assert.True(cacheManager.IsDisposed);
         }
 
         [Fact]
         public void GetShouldGetSettedDataInMemoryCache()
         {
             var key = "0032323141";
-            var obj = new List<int>(){1,2,3};
+            var obj = new List<int> {1, 2, 3};
 
-            this.cacheManager.Set(key, obj, 1800);
+            cacheManager.Set(key, obj, 1800);
 
-            var returnedFromCacheObj = this.cacheManager.Get<List<int>>(key, null);
+            var returnedFromCacheObj = cacheManager.Get<List<int>>(key, null);
 
             Assert.True(obj.Count == returnedFromCacheObj.Count);
-            Assert.Equal(string.Join(",",obj),string.Join(",",returnedFromCacheObj));
-
+            Assert.Equal(string.Join(",", obj), string.Join(",", returnedFromCacheObj));
         }
 
         [Fact]
@@ -72,7 +62,7 @@ namespace VinylExchange.Services.Data.Tests
         {
             var key = "0032323141";
 
-            var locked = this.cacheManager.PerformActionWithLock(key,TimeSpan.FromSeconds(200),()=>{});
+            var locked = cacheManager.PerformActionWithLock(key, TimeSpan.FromSeconds(200), () => { });
 
             Assert.True(locked);
         }
@@ -80,13 +70,13 @@ namespace VinylExchange.Services.Data.Tests
         [Fact]
         public void IsSetShouldReturnFalseIfKeyIsNotSet()
         {
-            Assert.False(this.cacheManager.IsSet("testKey"));
+            Assert.False(cacheManager.IsSet("testKey"));
         }
 
         [Fact]
         public void GetKeysShouldGetReturnEmptyListIfNoKeysArePresent()
         {
-            Assert.True(this.cacheManager.GetKeys().Count == 0);
+            Assert.True(cacheManager.GetKeys().Count == 0);
         }
     }
 }

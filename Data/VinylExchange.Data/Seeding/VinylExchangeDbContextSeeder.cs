@@ -1,17 +1,11 @@
 ﻿namespace VinylExchange.Data.Seeding
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using Contracts;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-
-    using VinylExchange.Data.Seeding.Contracts;
-
-    #endregion
 
     public class VinylExchangeDbContextSeeder : ISeeder
     {
@@ -31,15 +25,15 @@
                 .CreateLogger(typeof(VinylExchangeDbContextSeeder));
 
             var seeders = new List<ISeeder>
-                {
-                    new RolesSeeder(),
-                    new UsersSeeder(),
-                    new GenresSeeder(),
-                    new StylesSeeder(),
-                    new ReleasesSeeder(),
-                    new ReleaseFilesSeeder(),
-                    new StyleReleasesSeeder()
-                };
+            {
+                new RolesSeeder(),
+                new UsersSeeder(),
+                new GenresSeeder(),
+                new StylesSeeder(),
+                new ReleasesSeeder(),
+                new ReleaseFilesSeeder(),
+                new StyleReleasesSeeder()
+            };
 
             foreach (var seeder in seeders)
             {

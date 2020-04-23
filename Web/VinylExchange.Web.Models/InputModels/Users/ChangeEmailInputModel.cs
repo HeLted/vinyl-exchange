@@ -1,17 +1,12 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Users
 {
-    #region
-
     using System.ComponentModel.DataAnnotations;
+    using static Common.Constants.ValidationConstants;
 
-    using static VinylExchange.Common.Constants.ValidationConstants;
-
-    #endregion
 
     public class ChangeEmailInputModel
     {
-        [Required]
-        public string ChangeEmailToken { get; set; }
+        [Required] public string ChangeEmailToken { get; set; }
 
         [Required]
         [EmailAddress]

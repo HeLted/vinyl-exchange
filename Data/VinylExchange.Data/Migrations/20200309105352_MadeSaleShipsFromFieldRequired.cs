@@ -1,10 +1,6 @@
 ﻿namespace VinylExchange.Data.Migrations
 {
-    #region
-
     using Microsoft.EntityFrameworkCore.Migrations;
-
-    #endregion
 
     public partial class MadeSaleShipsFromFieldRequired : Migration
     {

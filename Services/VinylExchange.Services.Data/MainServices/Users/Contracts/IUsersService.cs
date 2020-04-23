@@ -1,13 +1,8 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Users.Contracts
 {
-    #region
-
     using System;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Identity;
-
-    #endregion
 
     public interface IUsersService
     {

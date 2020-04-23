@@ -1,21 +1,15 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
-    using VinylExchange.Services.Data.MainServices.Collections;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Web.Models.InputModels.Collections;
-    using VinylExchange.Web.Models.ResourceModels.Collections;
-    using VinylExchange.Web.Models.Utility.Collections;
-
-    #endregion
+    using Models.InputModels.Collections;
+    using Models.ResourceModels.Collections;
+    using Models.Utility.Collections;
+    using Services.Data.MainServices.Collections;
+    using Services.Logging;
 
     [Authorize]
     public class CollectionsController : ApiController
@@ -35,19 +29,19 @@
         {
             try
             {
-                var resourceModel = await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
-                                        inputModel.VinylGrade,
-                                        inputModel.SleeveGrade,
-                                        inputModel.Description,
-                                        inputModel.ReleaseId,
-                                        this.GetUserId(this.User));
+                var resourceModel = await collectionsService.AddToCollection<AddToCollectionResourceModel>(
+                    inputModel.VinylGrade,
+                    inputModel.SleeveGrade,
+                    inputModel.Description,
+                    inputModel.ReleaseId,
+                    GetUserId(User));
 
-                return this.Created(resourceModel);
+                return Created(resourceModel);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -57,14 +51,14 @@
         {
             try
             {
-                return await this.collectionsService.DoesUserCollectionContainRelease(
-                           releaseId,
-                           this.GetUserId(this.User));
+                return await collectionsService.DoesUserCollectionContainRelease(
+                    releaseId,
+                    GetUserId(User));
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -74,19 +68,19 @@
             try
             {
                 var collectionItemModel =
-                    await this.collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(id);
+                    await collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(id);
 
                 if (collectionItemModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
                 return collectionItemModel;
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -96,13 +90,13 @@
         {
             try
             {
-                return await this.collectionsService.GetUserCollection<GetUserCollectionResourceModel>(
-                           this.GetUserId(this.User));
+                return await collectionsService.GetUserCollection<GetUserCollectionResourceModel>(
+                    GetUserId(User));
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -113,28 +107,28 @@
             try
             {
                 var collectionItemInfoModel =
-                    await this.collectionsService.GetCollectionItem<GetCollectionItemInfoUtilityModel>(id);
+                    await collectionsService.GetCollectionItem<GetCollectionItemInfoUtilityModel>(id);
 
                 if (collectionItemInfoModel == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
-                if (collectionItemInfoModel.UserId != this.GetUserId(this.User))
+                if (collectionItemInfoModel.UserId != GetUserId(User))
                 {
-                    return this.Unauthorized();
+                    return Unauthorized();
                 }
 
                 var collectionItemRemovedModel =
-                    await this.collectionsService.RemoveCollectionItem<RemoveCollectionItemResourceModel>(
+                    await collectionsService.RemoveCollectionItem<RemoveCollectionItemResourceModel>(
                         collectionItemInfoModel.Id);
 
-                return this.Ok(collectionItemRemovedModel);
+                return Ok(collectionItemRemovedModel);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
     }

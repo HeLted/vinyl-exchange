@@ -1,11 +1,7 @@
 ﻿namespace VinylExchange.Web.Models.ResourceModels.Genres
 {
-    #region
-
-    using VinylExchange.Data.Models;
-    using VinylExchange.Services.Mapping;
-
-    #endregion
+    using Data.Models;
+    using Services.Mapping;
 
     public class CreateGenreResourceModel : IMapFrom<Genre>
     {

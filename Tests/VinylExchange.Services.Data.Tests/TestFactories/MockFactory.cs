@@ -1,12 +1,7 @@
 ﻿namespace VinylExchange.Services.Data.Tests.TestFactories
 {
-    #region
-
     using Microsoft.AspNetCore.Identity;
-
     using Moq;
-
-    #endregion
 
     internal static class MockFactory
     {

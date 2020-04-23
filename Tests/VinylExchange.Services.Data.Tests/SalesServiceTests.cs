@@ -1,34 +1,26 @@
 ﻿namespace VinylExchange.Services.Data.Tests
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using MainServices.Addresses.Contracts;
+    using MainServices.Releases.Contracts;
+    using MainServices.Sales;
+    using MainServices.Sales.Contracts;
+    using MainServices.Sales.Exceptions;
+    using MainServices.Users.Contracts;
     using Microsoft.EntityFrameworkCore;
-
     using Moq;
-
+    using TestFactories;
     using VinylExchange.Data;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Addresses.Contracts;
-    using VinylExchange.Services.Data.MainServices.Releases.Contracts;
-    using VinylExchange.Services.Data.MainServices.Sales;
-    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
-    using VinylExchange.Services.Data.MainServices.Sales.Exceptions;
-    using VinylExchange.Services.Data.MainServices.Users.Contracts;
-    using VinylExchange.Services.Data.Tests.TestFactories;
-    using VinylExchange.Web.Models.InputModels.Sales;
-    using VinylExchange.Web.Models.ResourceModels.Sales;
-
+    using Web.Models.InputModels.Sales;
+    using Web.Models.ResourceModels.Sales;
     using Xunit;
+    using static Common.Constants.NullReferenceExceptionsConstants;
 
-    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
-
-    #endregion
 
     public class SalesServiceTests
     {
@@ -51,25 +43,25 @@
         private readonly Mock<IReleasesEntityRetriever> releasesEntityRetrieverMock;
 
         private readonly Address testAddress = new Address
-            {
-                Country = "Bulgaria", Town = "Sofia", PostalCode = "1612", FullAddress = "j.k Lagera blok 123"
-            };
+        {
+            Country = "Bulgaria", Town = "Sofia", PostalCode = "1612", FullAddress = "j.k Lagera blok 123"
+        };
 
         public SalesServiceTests()
         {
-            this.dbContext = DbFactory.CreateDbContext();
+            dbContext = DbFactory.CreateDbContext();
 
-            this.addressesEntityRetrieverMock = new Mock<IAddressesEntityRetriever>();
+            addressesEntityRetrieverMock = new Mock<IAddressesEntityRetriever>();
 
-            this.usersEntityRetrieverMock = new Mock<IUsersEntityRetriever>();
+            usersEntityRetrieverMock = new Mock<IUsersEntityRetriever>();
 
-            this.releasesEntityRetrieverMock = new Mock<IReleasesEntityRetriever>();
+            releasesEntityRetrieverMock = new Mock<IReleasesEntityRetriever>();
 
-            this.salesService = new SalesService(
-                this.dbContext,
-                this.addressesEntityRetrieverMock.Object,
-                this.usersEntityRetrieverMock.Object,
-                this.releasesEntityRetrieverMock.Object);
+            salesService = new SalesService(
+                dbContext,
+                addressesEntityRetrieverMock.Object,
+                usersEntityRetrieverMock.Object,
+                releasesEntityRetrieverMock.Object);
         }
 
         [Fact]
@@ -81,24 +73,24 @@
 
             var address = new Address();
 
-            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
+            releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
-            var createdSaleModel = await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                       Condition.Fair,
-                                       Condition.Mint,
-                                       "ewewe",
-                                       30,
-                                       address.Id,
-                                       release.Id,
-                                       seller.Id);
+            var createdSaleModel = await salesService.CreateSale<CreateSaleResourceModel>(
+                Condition.Fair,
+                Condition.Mint,
+                "ewewe",
+                30,
+                address.Id,
+                release.Id,
+                seller.Id);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var createdSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == createdSaleModel.Id);
+            var createdSale = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == createdSaleModel.Id);
 
             Assert.NotNull(createdSale);
         }
@@ -110,28 +102,28 @@
 
             var seller = new VinylExchangeUser();
 
-            var address = this.testAddress;
+            var address = testAddress;
 
-            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
+            releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
-            var addressProperties = new List<string> { address.Country, address.Town };
+            var addressProperties = new List<string> {address.Country, address.Town};
 
-            var createdSaleModel = await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                       VinylGrade,
-                                       SleeveGrade,
-                                       Description,
-                                       Price,
-                                       address.Id,
-                                       release.Id,
-                                       seller.Id);
+            var createdSaleModel = await salesService.CreateSale<CreateSaleResourceModel>(
+                VinylGrade,
+                SleeveGrade,
+                Description,
+                Price,
+                address.Id,
+                release.Id,
+                seller.Id);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var createdSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == createdSaleModel.Id);
+            var createdSale = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == createdSaleModel.Id);
 
             Assert.Equal(VinylGrade, createdSale.VinylGrade);
             Assert.Equal(SleeveGrade, createdSale.SleeveGrade);
@@ -147,21 +139,21 @@
 
             var seller = new VinylExchangeUser();
 
-            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync((Release)null);
+            releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync((Release) null);
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                                VinylGrade,
-                                                SleeveGrade,
-                                                Description,
-                                                Price,
-                                                address.Id,
-                                                seller.Id,
-                                                seller.Id));
+                async () => await salesService.CreateSale<CreateSaleResourceModel>(
+                    VinylGrade,
+                    SleeveGrade,
+                    Description,
+                    Price,
+                    address.Id,
+                    seller.Id,
+                    seller.Id));
 
             Assert.Equal(ReleaseNotFound, exception.Message);
         }
@@ -173,21 +165,21 @@
 
             var seller = new VinylExchangeUser();
 
-            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
+            releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(seller);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync((Address)null);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync((Address) null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                                VinylGrade,
-                                                SleeveGrade,
-                                                Description,
-                                                Price,
-                                                Guid.NewGuid(),
-                                                release.Id,
-                                                seller.Id));
+                async () => await salesService.CreateSale<CreateSaleResourceModel>(
+                    VinylGrade,
+                    SleeveGrade,
+                    Description,
+                    Price,
+                    Guid.NewGuid(),
+                    release.Id,
+                    seller.Id));
 
             Assert.Equal(AddressNotFound, exception.Message);
         }
@@ -199,22 +191,22 @@
 
             var address = new Address();
 
-            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
+            releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>()))
-                .ReturnsAsync((VinylExchangeUser)null);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>()))
+                .ReturnsAsync((VinylExchangeUser) null);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.CreateSale<CreateSaleResourceModel>(
-                                                VinylGrade,
-                                                SleeveGrade,
-                                                Description,
-                                                Price,
-                                                address.Id,
-                                                release.Id,
-                                                Guid.NewGuid()));
+                async () => await salesService.CreateSale<CreateSaleResourceModel>(
+                    VinylGrade,
+                    SleeveGrade,
+                    Description,
+                    Price,
+                    address.Id,
+                    release.Id,
+                    Guid.NewGuid()));
 
             Assert.Equal(UserNotFound, exception.Message);
         }
@@ -226,41 +218,41 @@
 
             var user = new VinylExchangeUser();
 
-            var updatedAddress = this.testAddress;
+            var updatedAddress = testAddress;
 
-            this.releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
+            releasesEntityRetrieverMock.Setup(x => x.GetRelease(It.IsAny<Guid?>())).ReturnsAsync(release);
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(updatedAddress);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(updatedAddress);
 
-            var addressProperties = new List<string> { updatedAddress.Country, updatedAddress.Town };
+            var addressProperties = new List<string> {updatedAddress.Country, updatedAddress.Town};
 
             var sale = new Sale
-                {
-                    VinylGrade = Condition.Poor,
-                    SleeveGrade = Condition.NearMint,
-                    Description = "blbbebe",
-                    Price = 50,
-                    ShipsFrom = "Paris France"
-                };
+            {
+                VinylGrade = Condition.Poor,
+                SleeveGrade = Condition.NearMint,
+                Description = "blbbebe",
+                Price = 50,
+                ShipsFrom = "Paris France"
+            };
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var editSaleInputModel = new EditSaleInputModel
-                {
-                    VinylGrade = Condition.Mint,
-                    SleeveGrade = Condition.Mint,
-                    Description = "updated description",
-                    Price = 100,
-                    SaleId = sale.Id
-                };
+            {
+                VinylGrade = Condition.Mint,
+                SleeveGrade = Condition.Mint,
+                Description = "updated description",
+                Price = 100,
+                SaleId = sale.Id
+            };
 
-            await this.salesService.EditSale<EditSaleResourceModel>(editSaleInputModel);
+            await salesService.EditSale<EditSaleResourceModel>(editSaleInputModel);
 
-            var updatedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var updatedSale = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.Equal(editSaleInputModel.SaleId, updatedSale.Id);
             Assert.Equal(editSaleInputModel.VinylGrade, updatedSale.VinylGrade);
@@ -275,17 +267,17 @@
         {
             var sale = new Sale();
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync((Address)null);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync((Address) null);
 
-            var editSaleInputModel = new EditSaleInputModel { SaleId = sale.Id, ShipsFromAddressId = Guid.NewGuid() };
+            var editSaleInputModel = new EditSaleInputModel {SaleId = sale.Id, ShipsFromAddressId = Guid.NewGuid()};
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.EditSale<EditSaleResourceModel>(
-                                                editSaleInputModel));
+                async () => await salesService.EditSale<EditSaleResourceModel>(
+                    editSaleInputModel));
 
             Assert.Equal(AddressNotFound, exception.Message);
         }
@@ -293,13 +285,13 @@
         [Fact]
         public async Task EditSaleShouldThrowNullRefferenceExceptionIfProvidedSaleIdIsNotInDb()
         {
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(new Address());
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(new Address());
 
             var editSaleInputModel = new EditSaleInputModel();
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.EditSale<EditSaleResourceModel>(
-                                                editSaleInputModel));
+                async () => await salesService.EditSale<EditSaleResourceModel>(
+                    editSaleInputModel));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -309,13 +301,13 @@
         {
             var sale = new Sale();
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            await this.salesService.RemoveSale<RemoveSaleResourceModel>(sale.Id);
+            await salesService.RemoveSale<RemoveSaleResourceModel>(sale.Id);
 
-            var removedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var removedSale = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.Null(removedSale);
         }
@@ -324,8 +316,8 @@
         public async Task RemoveSaleShouldThrowNullReferenceExceptionIfProvidedGenreIdIsNotInDb()
         {
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.RemoveSale<RemoveSaleResourceModel>(
-                                                Guid.NewGuid()));
+                async () => await salesService.RemoveSale<RemoveSaleResourceModel>(
+                    Guid.NewGuid()));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -341,26 +333,26 @@
 
             for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale { Status = Status.Open, ReleaseId = release.Id };
+                var sale = new Sale {Status = Status.Open, ReleaseId = release.Id};
 
-                await this.dbContext.Sales.AddAsync(sale);
+                await dbContext.Sales.AddAsync(sale);
 
                 saleIds.Add(sale.Id);
             }
 
             for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale { Status = Status.Open, ReleaseId = secondRelease.Id };
+                var sale = new Sale {Status = Status.Open, ReleaseId = secondRelease.Id};
 
-                await this.dbContext.Sales.AddAsync(sale);
+                await dbContext.Sales.AddAsync(sale);
 
                 saleIds.Add(sale.Id);
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var saleModels =
-                await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(release.Id);
+                await salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(release.Id);
 
             Assert.True(saleModels.Count == release.Sales.Count);
             Assert.True(saleModels.Select(sm => saleIds.Contains(sm.Id)).All(x => x));
@@ -373,15 +365,15 @@
 
             for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale { Status = Status.Finished, ReleaseId = release.Id };
+                var sale = new Sale {Status = Status.Finished, ReleaseId = release.Id};
 
-                await this.dbContext.Sales.AddAsync(sale);
+                await dbContext.Sales.AddAsync(sale);
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var saleModels =
-                await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(release.Id);
+                await salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(release.Id);
 
             Assert.True(saleModels.Count == 0);
         }
@@ -393,15 +385,15 @@
 
             for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale { Status = Status.Finished, ReleaseId = release.Id };
+                var sale = new Sale {Status = Status.Finished, ReleaseId = release.Id};
 
-                await this.dbContext.Sales.AddAsync(sale);
+                await dbContext.Sales.AddAsync(sale);
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var saleModels =
-                await this.salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(Guid.NewGuid());
+                await salesService.GetAllSalesForRelease<GetAllSalesForReleaseResouceModel>(Guid.NewGuid());
 
             Assert.True(saleModels.Count == 0);
         }
@@ -411,11 +403,11 @@
         {
             var sale = new Sale();
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var saleModel = this.salesService.GetSale<GetSaleResourceModel>(sale.Id);
+            var saleModel = salesService.GetSale<GetSaleResourceModel>(sale.Id);
 
             Assert.NotNull(saleModel);
         }
@@ -425,11 +417,11 @@
         {
             var sale = new Sale();
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var saleModel = await this.salesService.GetSale<GetSaleResourceModel>(Guid.NewGuid());
+            var saleModel = await salesService.GetSale<GetSaleResourceModel>(Guid.NewGuid());
 
             Assert.Null(saleModel);
         }
@@ -441,21 +433,21 @@
 
             for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale { BuyerId = user.Id };
+                var sale = new Sale {BuyerId = user.Id};
 
-                await this.dbContext.Sales.AddAsync(sale);
+                await dbContext.Sales.AddAsync(sale);
             }
 
             for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale { BuyerId = Guid.NewGuid() };
+                var sale = new Sale {BuyerId = Guid.NewGuid()};
 
-                await this.dbContext.Sales.AddAsync(sale);
+                await dbContext.Sales.AddAsync(sale);
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var purchasesModels = await this.salesService.GetUserPurchases<GetSaleResourceModel>(user.Id);
+            var purchasesModels = await salesService.GetUserPurchases<GetSaleResourceModel>(user.Id);
 
             Assert.True(purchasesModels.All(pm => pm.BuyerId == user.Id));
         }
@@ -467,14 +459,14 @@
 
             for (var i = 0; i < 10; i++)
             {
-                var sale = new Sale { BuyerId = Guid.NewGuid() };
+                var sale = new Sale {BuyerId = Guid.NewGuid()};
 
-                await this.dbContext.Sales.AddAsync(sale);
+                await dbContext.Sales.AddAsync(sale);
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var purchasesModels = await this.salesService.GetUserPurchases<GetSaleResourceModel>(user.Id);
+            var purchasesModels = await salesService.GetUserPurchases<GetSaleResourceModel>(user.Id);
 
             Assert.True(purchasesModels.Count == 0);
         }
@@ -486,21 +478,21 @@
 
             for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale { SellerId = user.Id };
+                var sale = new Sale {SellerId = user.Id};
 
-                await this.dbContext.Sales.AddAsync(sale);
+                await dbContext.Sales.AddAsync(sale);
             }
 
             for (var i = 0; i < 5; i++)
             {
-                var sale = new Sale { SellerId = Guid.NewGuid() };
+                var sale = new Sale {SellerId = Guid.NewGuid()};
 
-                await this.dbContext.Sales.AddAsync(sale);
+                await dbContext.Sales.AddAsync(sale);
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var saleModels = await this.salesService.GetUserSales<GetSaleResourceModel>(user.Id);
+            var saleModels = await salesService.GetUserSales<GetSaleResourceModel>(user.Id);
 
             Assert.True(saleModels.All(sm => sm.SellerId == user.Id));
         }
@@ -512,14 +504,14 @@
 
             for (var i = 0; i < 10; i++)
             {
-                var sale = new Sale { SellerId = Guid.NewGuid() };
+                var sale = new Sale {SellerId = Guid.NewGuid()};
 
-                await this.dbContext.Sales.AddAsync(sale);
+                await dbContext.Sales.AddAsync(sale);
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            var salesModels = await this.salesService.GetUserPurchases<GetSaleResourceModel>(user.Id);
+            var salesModels = await salesService.GetUserPurchases<GetSaleResourceModel>(user.Id);
 
             Assert.True(salesModels.Count == 0);
         }
@@ -527,23 +519,23 @@
         [Fact]
         public async Task PlaceOrderShouldChangeSaleStatusToShippingNegotiation()
         {
-            var sale = new Sale { Status = Status.Open };
+            var sale = new Sale {Status = Status.Open};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var address = new Address();
 
             var user = new VinylExchangeUser();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
-            await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id);
+            await salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id);
 
-            var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var changedSale = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.True(Status.ShippingNegotiation == changedSale.Status);
         }
@@ -551,23 +543,23 @@
         [Fact]
         public async Task PlaceOrderShouldSetBuyerId()
         {
-            var sale = new Sale { Status = Status.Open };
+            var sale = new Sale {Status = Status.Open};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var address = new Address();
 
             var user = new VinylExchangeUser();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
-            await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id);
+            await salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id);
 
-            var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var changedSale = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.True(user.Id == changedSale.BuyerId);
         }
@@ -575,23 +567,23 @@
         [Fact]
         public async Task PlaceOrderShouldSetShipsToAddress()
         {
-            var sale = new Sale { Status = Status.Open };
+            var sale = new Sale {Status = Status.Open};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var address = new Address();
 
             var user = new VinylExchangeUser();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
-            await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id);
+            await salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id);
 
-            var changedSale = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var changedSale = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.True(
                 changedSale.ShipsTo
@@ -601,26 +593,26 @@
         [Fact]
         public async Task PlaceOrderShouldThrowNullReferenceExceptionIfUserIsNull()
         {
-            var sale = new Sale { Status = Status.Open };
+            var sale = new Sale {Status = Status.Open};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var address = new Address();
 
             var user = new VinylExchangeUser();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>()))
-                .ReturnsAsync((VinylExchangeUser)null);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>()))
+                .ReturnsAsync((VinylExchangeUser) null);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(
-                                                sale.Id,
-                                                address.Id,
-                                                Guid.NewGuid()));
+                async () => await salesService.PlaceOrder<SaleStatusResourceModel>(
+                    sale.Id,
+                    address.Id,
+                    Guid.NewGuid()));
 
             Assert.Equal(UserNotFound, exception.Message);
         }
@@ -632,15 +624,15 @@
 
             var address = new Address();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(
-                                                Guid.NewGuid(),
-                                                address.Id,
-                                                user.Id));
+                async () => await salesService.PlaceOrder<SaleStatusResourceModel>(
+                    Guid.NewGuid(),
+                    address.Id,
+                    user.Id));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -648,23 +640,23 @@
         [Fact]
         public async Task PlaceOrderShouldThrowNullReferenceExceptionIfAddressIsNull()
         {
-            var sale = new Sale { Status = Status.Open };
+            var sale = new Sale {Status = Status.Open};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var user = new VinylExchangeUser();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync((Address)null);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync((Address) null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(
-                                                sale.Id,
-                                                Guid.NewGuid(),
-                                                user.Id));
+                async () => await salesService.PlaceOrder<SaleStatusResourceModel>(
+                    sale.Id,
+                    Guid.NewGuid(),
+                    user.Id));
 
             Assert.Equal(AddressNotFound, exception.Message);
         }
@@ -677,22 +669,22 @@
         [InlineData(Status.ShippingNegotiation)]
         public async Task PlaceOrderShouldThrowInvalidSaleStatusExceptionIfStatusIsNotOpen(Status status)
         {
-            var sale = new Sale { Status = status };
+            var sale = new Sale {Status = status};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var address = new Address();
 
             var user = new VinylExchangeUser();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            this.addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
+            addressesEntityRetrieverMock.Setup(x => x.GetAddress(It.IsAny<Guid?>())).ReturnsAsync(address);
 
             await Assert.ThrowsAsync<InvalidSaleActionException>(
-                async () => await this.salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id));
+                async () => await salesService.PlaceOrder<SaleStatusResourceModel>(sale.Id, address.Id, user.Id));
         }
 
         [Theory]
@@ -701,36 +693,36 @@
         [InlineData(Status.Sent)]
         public async Task CancelShouldThrowInvalidSaleStatusExceptionIfStatusIsAfterPaymentPendingOrOpen(Status status)
         {
-            var sale = new Sale { Status = status };
+            var sale = new Sale {Status = status};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var user = new VinylExchangeUser();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
             await Assert.ThrowsAsync<InvalidSaleActionException>(
-                async () => await this.salesService.CancelOrder<SaleStatusResourceModel>(sale.Id, user.Id));
+                async () => await salesService.CancelOrder<SaleStatusResourceModel>(sale.Id, user.Id));
         }
 
         [Fact]
         public async Task CancelOrderShouldThrowNullReferenceExceptionIfUserIsNull()
         {
-            var sale = new Sale { Status = Status.Open };
+            var sale = new Sale {Status = Status.Open};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>()))
-                .ReturnsAsync((VinylExchangeUser)null);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>()))
+                .ReturnsAsync((VinylExchangeUser) null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.CancelOrder<SaleStatusResourceModel>(
-                                                sale.Id,
-                                                Guid.NewGuid()));
+                async () => await salesService.CancelOrder<SaleStatusResourceModel>(
+                    sale.Id,
+                    Guid.NewGuid()));
 
             Assert.Equal(UserNotFound, exception.Message);
         }
@@ -740,12 +732,12 @@
         {
             var user = new VinylExchangeUser();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.CancelOrder<SaleStatusResourceModel>(
-                                                Guid.NewGuid(),
-                                                user.Id));
+                async () => await salesService.CancelOrder<SaleStatusResourceModel>(
+                    Guid.NewGuid(),
+                    user.Id));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -755,17 +747,17 @@
         {
             var user = new VinylExchangeUser();
 
-            var sale = new Sale { Status = Status.PaymentPending, BuyerId = user.Id };
+            var sale = new Sale {Status = Status.PaymentPending, BuyerId = user.Id};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            await this.salesService.CancelOrder<SaleStatusResourceModel>(sale.Id, Guid.NewGuid());
+            await salesService.CancelOrder<SaleStatusResourceModel>(sale.Id, Guid.NewGuid());
 
-            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var saleFromDb = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.Null(saleFromDb.BuyerId);
         }
@@ -775,17 +767,17 @@
         {
             var user = new VinylExchangeUser();
 
-            var sale = new Sale { Status = Status.PaymentPending, BuyerId = user.Id };
+            var sale = new Sale {Status = Status.PaymentPending, BuyerId = user.Id};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            this.usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
+            usersEntityRetrieverMock.Setup(x => x.GetUser(It.IsAny<Guid?>())).ReturnsAsync(user);
 
-            await this.salesService.CancelOrder<SaleStatusResourceModel>(sale.Id, Guid.NewGuid());
+            await salesService.CancelOrder<SaleStatusResourceModel>(sale.Id, Guid.NewGuid());
 
-            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var saleFromDb = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.Equal(Status.Open, saleFromDb.Status);
         }
@@ -799,23 +791,23 @@
         public async Task SetShippingPriceShouldThrowInvalidSaleStatusExceptionIfStatusIsNotShippingNegotiation(
             Status status)
         {
-            var sale = new Sale { Status = status };
+            var sale = new Sale {Status = status};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             await Assert.ThrowsAsync<InvalidSaleActionException>(
-                async () => await this.salesService.SetShippingPrice<SaleStatusResourceModel>(sale.Id, 300));
+                async () => await salesService.SetShippingPrice<SaleStatusResourceModel>(sale.Id, 300));
         }
 
         [Fact]
         public async Task SetShippingPriceShouldThrowNullReferenceExceptionIfSSaleIsNull()
         {
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.SetShippingPrice<SaleStatusResourceModel>(
-                                                Guid.NewGuid(),
-                                                500));
+                async () => await salesService.SetShippingPrice<SaleStatusResourceModel>(
+                    Guid.NewGuid(),
+                    500));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -823,15 +815,15 @@
         [Fact]
         public async Task SetShippingPriceShouldSetSaleShippingPrice()
         {
-            var sale = new Sale { Status = Status.ShippingNegotiation };
+            var sale = new Sale {Status = Status.ShippingNegotiation};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            await this.salesService.SetShippingPrice<SaleStatusResourceModel>(sale.Id, 500);
+            await salesService.SetShippingPrice<SaleStatusResourceModel>(sale.Id, 500);
 
-            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var saleFromDb = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.Equal(500, saleFromDb.ShippingPrice);
         }
@@ -839,15 +831,15 @@
         [Fact]
         public async Task SetShippingPriceShouldSetStatusToPaymentPending()
         {
-            var sale = new Sale { Status = Status.ShippingNegotiation };
+            var sale = new Sale {Status = Status.ShippingNegotiation};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            await this.salesService.SetShippingPrice<SaleStatusResourceModel>(sale.Id, 500);
+            await salesService.SetShippingPrice<SaleStatusResourceModel>(sale.Id, 500);
 
-            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var saleFromDb = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.Equal(Status.PaymentPending, saleFromDb.Status);
         }
@@ -856,8 +848,8 @@
         public async Task ConfirmItemSentShouldThrowNullReferenceExceptionIfSSaleIsNull()
         {
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () =>
-                                    await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(Guid.NewGuid()));
+                async () =>
+                    await salesService.ConfirmItemSent<SaleStatusResourceModel>(Guid.NewGuid()));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -870,28 +862,28 @@
         [InlineData(Status.PaymentPending)]
         public async Task ConfirmItemSentThrowInvalidSaleStatusExceptionIfStatusIsNotPaid(Status status)
         {
-            var sale = new Sale { Status = status };
+            var sale = new Sale {Status = status};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             await Assert.ThrowsAsync<InvalidSaleActionException>(
-                async () => await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(sale.Id));
+                async () => await salesService.ConfirmItemSent<SaleStatusResourceModel>(sale.Id));
         }
 
         [Fact]
         public async Task ConfirmItemSentShouldSetStatusToSent()
         {
-            var sale = new Sale { Status = Status.Paid};
+            var sale = new Sale {Status = Status.Paid};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(sale.Id);
+            await salesService.ConfirmItemSent<SaleStatusResourceModel>(sale.Id);
 
-            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var saleFromDb = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.Equal(Status.Sent, saleFromDb.Status);
         }
@@ -904,23 +896,23 @@
         [InlineData(Status.Paid)]
         public async Task CompletePaymentShouldThrowInvalidSaleStatusExceptionIfStatusIsNotPaymentPending(Status status)
         {
-            var sale = new Sale { Status = status };
+            var sale = new Sale {Status = status};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             await Assert.ThrowsAsync<InvalidSaleActionException>(
-                async () => await this.salesService.CompletePayment<SaleStatusResourceModel>(sale.Id, "test order Id"));
+                async () => await salesService.CompletePayment<SaleStatusResourceModel>(sale.Id, "test order Id"));
         }
 
         [Fact]
         public async Task CompletePaymentShouldThrowNullReferenceExceptionIfSSaleIsNull()
         {
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () => await this.salesService.CompletePayment<SaleStatusResourceModel>(
-                                                Guid.NewGuid(),
-                                                "test order Id"));
+                async () => await salesService.CompletePayment<SaleStatusResourceModel>(
+                    Guid.NewGuid(),
+                    "test order Id"));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -928,15 +920,15 @@
         [Fact]
         public async Task CompletePaymentShouldSetStatusToPaid()
         {
-            var sale = new Sale { Status = Status.PaymentPending };
+            var sale = new Sale {Status = Status.PaymentPending};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            await this.salesService.CompletePayment<SaleStatusResourceModel>(sale.Id, "test");
+            await salesService.CompletePayment<SaleStatusResourceModel>(sale.Id, "test");
 
-            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var saleFromDb = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.Equal(Status.Paid, saleFromDb.Status);
         }
@@ -944,17 +936,17 @@
         [Fact]
         public async Task CompletePaymentShouldSetSaleOrderId()
         {
-            var sale = new Sale { Status = Status.PaymentPending };
+            var sale = new Sale {Status = Status.PaymentPending};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var saleOrderId = "332-442-133";
 
-            await this.salesService.CompletePayment<SaleStatusResourceModel>(sale.Id, saleOrderId);
+            await salesService.CompletePayment<SaleStatusResourceModel>(sale.Id, saleOrderId);
 
-            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var saleFromDb = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.Equal(saleFromDb.OrderId, saleFromDb.OrderId);
         }
@@ -967,23 +959,23 @@
         [InlineData(Status.PaymentPending)]
         public async Task ConfirmItemRecievedShouldThrowInvalidSaleStatusExceptionIfStatusIsNotSent(Status status)
         {
-            var sale = new Sale { Status = status };
+            var sale = new Sale {Status = status};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             await Assert.ThrowsAsync<InvalidSaleActionException>(
-                async () => await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(sale.Id));
+                async () => await salesService.ConfirmItemRecieved<SaleStatusResourceModel>(sale.Id));
         }
 
         [Fact]
         public async Task ConfirmItemRecievedShouldThrowNullReferenceExceptionIfSSaleIsNull()
         {
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                                async () =>
-                                    await this.salesService
-                                        .ConfirmItemRecieved<SaleStatusResourceModel>(Guid.NewGuid()));
+                async () =>
+                    await salesService
+                        .ConfirmItemRecieved<SaleStatusResourceModel>(Guid.NewGuid()));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -991,15 +983,15 @@
         [Fact]
         public async Task ConfirmItemRecievedShouldSetStatusToFinished()
         {
-            var sale = new Sale { Status = Status.Sent };
+            var sale = new Sale {Status = Status.Sent};
 
-            await this.dbContext.Sales.AddAsync(sale);
+            await dbContext.Sales.AddAsync(sale);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            await this.salesService.ConfirmItemRecieved<SaleStatusResourceModel>(sale.Id);
+            await salesService.ConfirmItemRecieved<SaleStatusResourceModel>(sale.Id);
 
-            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+            var saleFromDb = await dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
 
             Assert.Equal(Status.Finished, saleFromDb.Status);
         }

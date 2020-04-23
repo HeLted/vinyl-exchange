@@ -1,21 +1,15 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Releases
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Contracts;
+    using HelperServices.Releases;
+    using Mapping;
     using Microsoft.EntityFrameworkCore;
-
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.HelperServices.Releases;
-    using VinylExchange.Services.Data.MainServices.Releases.Contracts;
-    using VinylExchange.Services.Mapping;
-
-    #endregion
 
     public class ReleasesService : IReleasesService, IReleasesEntityRetriever
     {
@@ -41,28 +35,28 @@
             Guid formSessionId)
         {
             var release = new Release
-                {
-                    Artist = artist,
-                    Title = title,
-                    Format = format,
-                    Year = year,
-                    Label = label
-                };
+            {
+                Artist = artist,
+                Title = title,
+                Format = format,
+                Year = year,
+                Label = label
+            };
 
-            var trackedRelease = await this.dbContext.Releases.AddAsync(release);
+            var trackedRelease = await dbContext.Releases.AddAsync(release);
 
-            await this.releaseFilesService.AddFilesForRelease(release.Id, formSessionId);
+            await releaseFilesService.AddFilesForRelease(release.Id, formSessionId);
 
-            await this.AddStylesForRelease(release.Id, styleIds);
+            await AddStylesForRelease(release.Id, styleIds);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return trackedRelease.Entity.To<TModel>();
         }
 
         public async Task<TModel> GetRelease<TModel>(Guid? releaseId)
         {
-            return await this.dbContext.Releases.Where(x => x.Id == releaseId).To<TModel>().FirstOrDefaultAsync();
+            return await dbContext.Releases.Where(x => x.Id == releaseId).To<TModel>().FirstOrDefaultAsync();
         }
 
         public async Task<List<TModel>> GetReleases<TModel>(
@@ -73,7 +67,7 @@
         {
             List<TModel> releases = null;
 
-            var releasesQuariable = this.dbContext.Releases.AsQueryable();
+            var releasesQuariable = dbContext.Releases.AsQueryable();
 
             if (searchTerm != null)
             {
@@ -105,16 +99,16 @@
 
         public async Task<Release> GetRelease(Guid? releaseId)
         {
-            return await this.dbContext.Releases.Where(x => x.Id == releaseId).FirstOrDefaultAsync();
+            return await dbContext.Releases.Where(x => x.Id == releaseId).FirstOrDefaultAsync();
         }
 
         private async Task AddStylesForRelease(Guid? releaseId, ICollection<int> styleIds)
         {
             foreach (var styleId in styleIds)
             {
-                var styleRelease = new StyleRelease { ReleaseId = releaseId, StyleId = styleId };
+                var styleRelease = new StyleRelease {ReleaseId = releaseId, StyleId = styleId};
 
-                await this.dbContext.StyleReleases.AddAsync(styleRelease);
+                await dbContext.StyleReleases.AddAsync(styleRelease);
             }
         }
     }

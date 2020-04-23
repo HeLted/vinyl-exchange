@@ -1,13 +1,8 @@
 ﻿namespace VinylExchange.Services.Files
 {
-    #region
-
     using System;
     using System.Collections.Generic;
-
-    using VinylExchange.Web.Models.Utility.Files;
-
-    #endregion
+    using Web.Models.Utility.Files;
 
     public interface IFileManager
     {

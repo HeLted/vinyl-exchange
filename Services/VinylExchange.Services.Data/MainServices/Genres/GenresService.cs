@@ -1,20 +1,14 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Genres
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using Common.Constants;
+    using Contracts;
+    using Mapping;
     using Microsoft.EntityFrameworkCore;
-
-    using VinylExchange.Common.Constants;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Genres.Contracts;
-    using VinylExchange.Services.Mapping;
-
-    #endregion
 
     public class GenresService : IGenresService, IGenresEntityRetriever
     {
@@ -27,39 +21,38 @@
 
         public async Task<TModel> CreateGenre<TModel>(string name)
         {
-            var genre = new Genre { Name = name };
+            var genre = new Genre {Name = name};
 
-            var trackedGenre = await this.dbContext.Genres.AddAsync(genre);
+            var trackedGenre = await dbContext.Genres.AddAsync(genre);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return trackedGenre.Entity.To<TModel>();
         }
 
         public async Task<List<TModel>> GetAllGenres<TModel>()
         {
-            return await this.dbContext.Genres.To<TModel>().ToListAsync();
+            return await dbContext.Genres.To<TModel>().ToListAsync();
         }
 
         public async Task<TModel> RemoveGenre<TModel>(int genreId)
         {
-            var genre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+            var genre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
 
             if (genre == null)
             {
                 throw new NullReferenceException(NullReferenceExceptionsConstants.GenreNotFound);
             }
 
-            var removedGenre = this.dbContext.Genres.Remove(genre).Entity;
-            await this.dbContext.SaveChangesAsync();
+            var removedGenre = dbContext.Genres.Remove(genre).Entity;
+            await dbContext.SaveChangesAsync();
 
             return removedGenre.To<TModel>();
         }
 
         public async Task<Genre> GetGenre(int? genreId)
         {
-            return await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+            return await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
         }
-      
     }
 }

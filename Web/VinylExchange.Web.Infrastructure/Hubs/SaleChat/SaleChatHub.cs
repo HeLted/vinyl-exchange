@@ -1,19 +1,13 @@
 ﻿namespace VinylExchange.Web.Infrastructure.Hubs.SaleChat
 {
-    #region
-
     using System;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
-
-    using VinylExchange.Services.Data.HelperServices.Sales.SaleMessages;
-    using VinylExchange.Services.Data.MainServices.Sales.Contracts;
-    using VinylExchange.Web.Models.ResourceModels.SaleMessages;
-    using VinylExchange.Web.Models.Utility.Sales;
-
-    #endregion
+    using Models.ResourceModels.SaleMessages;
+    using Models.Utility.Sales;
+    using Services.Data.HelperServices.Sales.SaleMessages;
+    using Services.Data.MainServices.Sales.Contracts;
 
     [Authorize]
     public class SaleChatHub : Hub<ISaleChatClient>
@@ -32,40 +26,40 @@
         {
             var roomName = saleId.ToString();
 
-            var sale = await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
+            var sale = await salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
 
-            var userId = Guid.Parse(this.GetUserId());
+            var userId = Guid.Parse(GetUserId());
 
             if (sale != null)
             {
-                if (sale.SellerId == userId
-                    || sale.BuyerId == userId)
+                if (sale.SellerId == userId ||
+                    sale.BuyerId == userId)
                 {
-                    await this.Groups.AddToGroupAsync(this.Context.ConnectionId, roomName);
+                    await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
                 }
             }
         }
 
         public async Task LeaveRoom(string roomName)
         {
-            await this.Groups.RemoveFromGroupAsync(this.Context.ConnectionId, roomName);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
         }
 
         public async Task LoadMessageHistory(Guid saleId)
         {
-            var sale = await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
+            var sale = await salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
 
-            var userId = Guid.Parse(this.GetUserId());
+            var userId = Guid.Parse(GetUserId());
 
             if (sale != null)
             {
-                if (sale.SellerId == userId
-                    || sale.BuyerId == userId)
+                if (sale.SellerId == userId ||
+                    sale.BuyerId == userId)
                 {
                     var messages =
-                        await this.saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(saleId);
+                        await saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(saleId);
 
-                    await this.Clients.Caller.LoadMessageHistory(messages);
+                    await Clients.Caller.LoadMessageHistory(messages);
                 }
             }
         }
@@ -74,20 +68,20 @@
         {
             var roomName = saleId.ToString();
 
-            var userId = Guid.Parse(this.GetUserId());
+            var userId = Guid.Parse(GetUserId());
 
             var message =
-                await this.saleMessagesService.AddMessageToSale<AddMessageToSaleResourceModel>(
+                await saleMessagesService.AddMessageToSale<AddMessageToSaleResourceModel>(
                     saleId,
                     userId,
                     messageContent);
 
-            await this.Clients.Group(roomName).NewMessage(message);
+            await Clients.Group(roomName).NewMessage(message);
         }
 
         private string GetUserId()
         {
-            return this.Context.User.FindFirst("sub").Value;
+            return Context.User.FindFirst("sub").Value;
         }
     }
 }

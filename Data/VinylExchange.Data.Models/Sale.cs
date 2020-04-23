@@ -1,26 +1,20 @@
 ﻿namespace VinylExchange.Data.Models
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Common.Enumerations;
+    using Common.Models;
 
-    using VinylExchange.Data.Common.Enumerations;
-    using VinylExchange.Data.Common.Models;
-   
-
-    #endregion
-
-    public class Sale : BaseDeletableModel 
+    public class Sale : BaseDeletableModel
     {
         [Required]
-        [Range((int)Condition.Poor, (int)Condition.Mint)]
+        [Range((int) Condition.Poor, (int) Condition.Mint)]
         public Condition VinylGrade { get; set; }
 
         [Required]
-        [Range((int)Condition.Poor, (int)Condition.Mint)]
+        [Range((int) Condition.Poor, (int) Condition.Mint)]
         public Condition SleeveGrade { get; set; }
 
         [Required]
@@ -37,7 +31,7 @@
         public decimal Price { get; set; }
 
         [Required]
-        [Range((int)Status.Open, (int)Status.Finished)]
+        [Range((int) Status.Open, (int) Status.Finished)]
         public Status Status { get; set; }
 
         public Release Release { get; set; }
@@ -46,14 +40,11 @@
 
         public VinylExchangeUser Seller { get; set; }
 
-        [Required]
-        public Guid? SellerId { get; set; }
+        [Required] public Guid? SellerId { get; set; }
 
-        [Column(TypeName = "decimal(18,4)")]
-        public decimal ShippingPrice { get; set; }
+        [Column(TypeName = "decimal(18,4)")] public decimal ShippingPrice { get; set; }
 
-        [Required]
-        public string ShipsFrom { get; set; }
+        [Required] public string ShipsFrom { get; set; }
 
         public string ShipsTo { get; set; }
 

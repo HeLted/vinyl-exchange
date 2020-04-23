@@ -1,19 +1,13 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Mvc;
-
-    using VinylExchange.Services.Data.MainServices.Releases.Contracts;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Web.Models.InputModels.Releases;
-    using VinylExchange.Web.Models.ResourceModels.Releases;
-
-    #endregion
+    using Models.InputModels.Releases;
+    using Models.ResourceModels.Releases;
+    using Services.Data.MainServices.Releases.Contracts;
+    using Services.Logging;
 
     public class ReleasesController : ApiController
     {
@@ -34,21 +28,21 @@
         {
             try
             {
-                var resourceModel = await this.releasesService.CreateRelease<CreateReleaseResourceModel>(
-                                        inputModel.Artist,
-                                        inputModel.Title,
-                                        inputModel.Format,
-                                        inputModel.Year,
-                                        inputModel.Label,
-                                        inputModel.StyleIds,
-                                        formSessionId);
+                var resourceModel = await releasesService.CreateRelease<CreateReleaseResourceModel>(
+                    inputModel.Artist,
+                    inputModel.Title,
+                    inputModel.Format,
+                    inputModel.Year,
+                    inputModel.Label,
+                    inputModel.StyleIds,
+                    formSessionId);
 
                 return resourceModel;
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -57,19 +51,19 @@
         {
             try
             {
-                var release = await this.releasesService.GetRelease<GetReleaseResourceModel>(id);
+                var release = await releasesService.GetRelease<GetReleaseResourceModel>(id);
 
                 if (release == null)
                 {
-                    return this.NotFound();
+                    return NotFound();
                 }
 
                 return release;
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -83,16 +77,16 @@
         {
             try
             {
-                return await this.releasesService.GetReleases<GetReleasesResourceModel>(
-                           searchTerm,
-                           filterGenreId,
-                           styleIds,
-                           releasesToSkip);
+                return await releasesService.GetReleases<GetReleasesResourceModel>(
+                    searchTerm,
+                    filterGenreId,
+                    styleIds,
+                    releasesToSkip);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
     }

@@ -1,15 +1,10 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Sales.Contracts
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
     using VinylExchange.Data.Common.Enumerations;
-    using VinylExchange.Web.Models.InputModels.Sales;
-
-    #endregion
+    using Web.Models.InputModels.Sales;
 
     public interface ISalesService
     {

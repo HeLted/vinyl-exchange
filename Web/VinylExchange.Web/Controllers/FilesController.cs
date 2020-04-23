@@ -1,20 +1,13 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    #region
-
     using System;
     using System.Collections.Generic;
-
     using Microsoft.AspNetCore.Mvc;
-
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Services.MemoryCache;
-    using VinylExchange.Services.MemoryCache.Contracts;
-    using VinylExchange.Web.Models.InputModels.Files;
-    using VinylExchange.Web.Models.ResourceModels.File;
-    using VinylExchange.Web.Models.ResourceModels.Files;
-
-    #endregion
+    using Models.InputModels.Files;
+    using Models.ResourceModels.File;
+    using Models.ResourceModels.Files;
+    using Services.Logging;
+    using Services.MemoryCache.Contracts;
 
     public class FilesController : ApiController
     {
@@ -35,14 +28,14 @@
         {
             try
             {
-                return this.memoryCacheFileSevice.RemoveAllFilesForSession<RemoveAllFilesForSessionResourceModel>(
+                return memoryCacheFileSevice.RemoveAllFilesForSession<RemoveAllFilesForSessionResourceModel>(
                     inputModel);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
+                loggerService.LogException(ex);
 
-                return this.BadRequest();
+                return BadRequest();
             }
         }
 
@@ -52,13 +45,13 @@
         {
             try
             {
-                return this.memoryCacheFileSevice.RemoveFile<RemoveFileResourceModel>(inputModel);
+                return memoryCacheFileSevice.RemoveFile<RemoveFileResourceModel>(inputModel);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
+                loggerService.LogException(ex);
 
-                return this.BadRequest();
+                return BadRequest();
             }
         }
 
@@ -68,15 +61,15 @@
         {
             try
             {
-                return this.memoryCacheFileSevice.UploadFile<UploadFileResourceModel>(
+                return memoryCacheFileSevice.UploadFile<UploadFileResourceModel>(
                     inputModel.File,
                     inputModel.FormSessionId);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
+                loggerService.LogException(ex);
 
-                return this.BadRequest();
+                return BadRequest();
             }
         }
     }

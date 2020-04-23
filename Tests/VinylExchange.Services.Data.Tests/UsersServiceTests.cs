@@ -1,26 +1,21 @@
 ﻿namespace VinylExchange.Services.Data.Tests
 {
-    using Microsoft.AspNetCore.Authentication;
-
-    #region
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
-    using Moq;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using EmailSender;
+    using Helpers;
+    using MainServices.Users;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
+    using Moq;
+    using TestFactories;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Users;
-    using VinylExchange.Services.Data.MainServices.Users.Contracts;
-    using VinylExchange.Services.Data.Tests.Helpers;
-    using VinylExchange.Services.Data.Tests.TestFactories;
-    using VinylExchange.Services.EmailSender;
     using Xunit;
+    using static Common.Constants.NullReferenceExceptionsConstants;
 
-    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
-
-    #endregion
 
     public class UsersServiceTests
     {
@@ -40,27 +35,28 @@
 
         public UsersServiceTests()
         {
-            this.dbContext = DbFactory.CreateDbContext();
+            dbContext = DbFactory.CreateDbContext();
 
-            this.passwordHasherMock = new Mock<IPasswordHasher<VinylExchangeUser>>();
+            passwordHasherMock = new Mock<IPasswordHasher<VinylExchangeUser>>();
 
-            this.emailSenderMock = new Mock<IEmailSender>();
+            emailSenderMock = new Mock<IEmailSender>();
 
-            this.userManagerMock = new Mock<FakeUserManager>(this.passwordHasherMock);
+            userManagerMock = new Mock<FakeUserManager>(passwordHasherMock);
 
-            this.signInManagerMock = new Mock<FakeSignInManager>(this.passwordHasherMock);
+            signInManagerMock = new Mock<FakeSignInManager>(passwordHasherMock);
 
-            this.contextAccessorMock = new Mock<IHttpContextAccessor>();
+            contextAccessorMock = new Mock<IHttpContextAccessor>();
 
-            this.passwordHasherMock.Setup(x=> x.HashPassword(It.IsAny<VinylExchangeUser>(),It.IsAny<string>())).Returns("look at me I am a hashed password");
+            passwordHasherMock.Setup(x => x.HashPassword(It.IsAny<VinylExchangeUser>(), It.IsAny<string>()))
+                .Returns("look at me I am a hashed password");
 
-            this.contextAccessorMock.SetupGet(x => x.HttpContext.Request).Returns(new Mock<HttpRequest>().Object);
+            contextAccessorMock.SetupGet(x => x.HttpContext.Request).Returns(new Mock<HttpRequest>().Object);
 
-            this.usersService = new UsersService(
-                this.userManagerMock.Object,
-                this.signInManagerMock.Object,
-                this.emailSenderMock.Object,
-                this.contextAccessorMock.Object);
+            usersService = new UsersService(
+                userManagerMock.Object,
+                signInManagerMock.Object,
+                emailSenderMock.Object,
+                contextAccessorMock.Object);
         }
 
         [Fact]
@@ -68,22 +64,23 @@
         {
             var user = new VinylExchangeUser();
 
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
 
-            this.emailSenderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Verifiable();
+            emailSenderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Verifiable();
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.SendConfirmEmail(user.Id));
+            var exception = await Record.ExceptionAsync(async () => await usersService.SendConfirmEmail(user.Id));
 
             Assert.Null(exception);
-
         }
 
         [Fact]
         public async Task SendConfirmEmailShoulThrowNullReferenceExceptionIfUserIsNotFound()
         {
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser)null);
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser) null);
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.SendConfirmEmail(Guid.NewGuid()));
+            var exception =
+                await Record.ExceptionAsync(async () => await usersService.SendConfirmEmail(Guid.NewGuid()));
 
             Assert.Equal(UserCannotBeNull, exception.Message);
         }
@@ -93,11 +90,13 @@
         {
             var user = new VinylExchangeUser();
 
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
 
-            this.emailSenderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Verifiable();
+            emailSenderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Verifiable();
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.SendChangeEmailEmail("testEmail@abv.bg", user.Id));
+            var exception = await Record.ExceptionAsync(async () =>
+                await usersService.SendChangeEmailEmail("testEmail@abv.bg", user.Id));
 
             Assert.Null(exception);
         }
@@ -105,9 +104,10 @@
         [Fact]
         public async Task SendChangeEmailEmailShouldThrowNullReferenceExceptionIfUserIsNotFound()
         {
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser)null);
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser) null);
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.SendChangeEmailEmail("323123@arwrw.bg",Guid.NewGuid()));
+            var exception = await Record.ExceptionAsync(async () =>
+                await usersService.SendChangeEmailEmail("323123@arwrw.bg", Guid.NewGuid()));
 
             Assert.Equal(UserCannotBeNull, exception.Message);
         }
@@ -117,20 +117,24 @@
         {
             var user = new VinylExchangeUser();
 
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
 
-            this.emailSenderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Verifiable();
+            emailSenderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Verifiable();
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.SendChangePasswordEmail(user.Id));
+            var exception =
+                await Record.ExceptionAsync(async () => await usersService.SendChangePasswordEmail(user.Id));
 
             Assert.Null(exception);
         }
-        [Fact]
-        public async Task  SendChangePasswordEmailShouldThrowNullReferenceExceptionIfUserIsNotFound()
-        {
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser)null);
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.SendChangePasswordEmail(Guid.NewGuid()));
+        [Fact]
+        public async Task SendChangePasswordEmailShouldThrowNullReferenceExceptionIfUserIsNotFound()
+        {
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser) null);
+
+            var exception =
+                await Record.ExceptionAsync(async () => await usersService.SendChangePasswordEmail(Guid.NewGuid()));
 
             Assert.Equal(UserCannotBeNull, exception.Message);
         }
@@ -141,11 +145,13 @@
         {
             var user = new VinylExchangeUser();
 
-            this.userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(user);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(user);
 
-            this.emailSenderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Verifiable();
+            emailSenderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Verifiable();
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.SendResetPasswordEmail("test@abv.bg"));
+            var exception =
+                await Record.ExceptionAsync(async () => await usersService.SendResetPasswordEmail("test@abv.bg"));
 
             Assert.Null(exception);
         }
@@ -153,83 +159,92 @@
         [Fact]
         public async Task SendResetPasswordEmailShouldThrowNullReferenceExceptionIfUserIsNotFound()
         {
-            this.userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser)null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser) null);
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.SendResetPasswordEmail(Guid.NewGuid().ToString()));
+            var exception = await Record.ExceptionAsync(async () =>
+                await usersService.SendResetPasswordEmail(Guid.NewGuid().ToString()));
 
             Assert.Equal(UserWithEmailCannotBeFound, exception.Message);
         }
 
         [Fact]
-        public async Task  ChangeEmailShouldThrowNullReferenceExceptionIfUserIsNotFound()
+        public async Task ChangeEmailShouldThrowNullReferenceExceptionIfUserIsNotFound()
         {
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser)null);
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser) null);
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.ChangeEmail("ewew","3232",Guid.NewGuid()));
+            var exception = await Record.ExceptionAsync(async () =>
+                await usersService.ChangeEmail("ewew", "3232", Guid.NewGuid()));
 
             Assert.Equal(UserCannotBeNull, exception.Message);
         }
 
 
         [Fact]
-        public async Task  ConfirmEmailShouldThrowNullReferenceExceptionIfUserIsNotFound()
+        public async Task ConfirmEmailShouldThrowNullReferenceExceptionIfUserIsNotFound()
         {
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser)null);
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser) null);
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.ConfirmEmail("ewew", Guid.NewGuid()));
+            var exception =
+                await Record.ExceptionAsync(async () => await usersService.ConfirmEmail("ewew", Guid.NewGuid()));
 
             Assert.Equal(UserCannotBeNull, exception.Message);
         }
 
         [Fact]
-        public async Task  ConfirmEmailShouldReturnIdentityResultSuccess()
+        public async Task ConfirmEmailShouldReturnIdentityResultSuccess()
         {
             var user = new VinylExchangeUser();
 
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
 
-            this.userManagerMock.Setup(x=> x.ConfirmEmailAsync(It.IsAny<VinylExchangeUser>(),It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            userManagerMock.Setup(x => x.ConfirmEmailAsync(It.IsAny<VinylExchangeUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
 
-            var result = await this.usersService.ConfirmEmail("ewew",Guid.NewGuid());
+            var result = await usersService.ConfirmEmail("ewew", Guid.NewGuid());
 
             Assert.True(result.Succeeded);
         }
 
         [Fact]
-        public async Task  ResetPasswordShouldThrowNullReferenceExceptionIfUserIsNotFound()
+        public async Task ResetPasswordShouldThrowNullReferenceExceptionIfUserIsNotFound()
         {
-            this.userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser)null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((VinylExchangeUser) null);
 
-            var exception = await Record.ExceptionAsync(async () => await this.usersService.ResetPassword("ewew","eweww","ewewe"));
+            var exception =
+                await Record.ExceptionAsync(async () => await usersService.ResetPassword("ewew", "eweww", "ewewe"));
 
             Assert.Equal(UserCannotBeNull, exception.Message);
         }
 
         [Fact]
-        public async Task   ResetPasswordShouldReturnIdentityResultSuccess()
+        public async Task ResetPasswordShouldReturnIdentityResultSuccess()
         {
             var user = new VinylExchangeUser();
 
-            this.userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(user);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(user);
 
-            this.userManagerMock.Setup(x=> x.ResetPasswordAsync(It.IsAny<VinylExchangeUser>(),It.IsAny<string>(),It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            userManagerMock
+                .Setup(x => x.ResetPasswordAsync(It.IsAny<VinylExchangeUser>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
 
-            var result = await this.usersService.ResetPassword("ewew",Guid.NewGuid().ToString(),"ewew");
+            var result = await usersService.ResetPassword("ewew", Guid.NewGuid().ToString(), "ewew");
 
             Assert.True(result.Succeeded);
         }
 
-        
+
         [Fact]
-        public async Task  ChangeEmailShouldReturnIdentityResultSuccess()
+        public async Task ChangeEmailShouldReturnIdentityResultSuccess()
         {
             var user = new VinylExchangeUser();
 
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
 
-            this.userManagerMock.Setup(x=> x.ChangeEmailAsync(It.IsAny<VinylExchangeUser>(),It.IsAny<string>(),It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            userManagerMock
+                .Setup(x => x.ChangeEmailAsync(It.IsAny<VinylExchangeUser>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
 
-            var result = await this.usersService.ChangeEmail("ewew","3232",Guid.NewGuid());
+            var result = await usersService.ChangeEmail("ewew", "3232", Guid.NewGuid());
 
             Assert.True(result.Succeeded);
         }
@@ -240,11 +255,14 @@
         {
             var user = new VinylExchangeUser();
 
-            this.signInManagerMock.Setup(x => x.GetExternalAuthenticationSchemesAsync()).ReturnsAsync(new List<AuthenticationScheme>());
+            signInManagerMock.Setup(x => x.GetExternalAuthenticationSchemesAsync())
+                .ReturnsAsync(new List<AuthenticationScheme>());
 
-            this.signInManagerMock.Setup(x => x.PasswordSignInAsync(It.IsAny<string>(),It.IsAny<string>(),It.IsAny<bool>(),It.IsAny<bool>())).ReturnsAsync(SignInResult.Success);
+            signInManagerMock
+                .Setup(x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(),
+                    It.IsAny<bool>())).ReturnsAsync(SignInResult.Success);
 
-            var result = await this.usersService.LoginUser("ewew","3232",false);
+            var result = await usersService.LoginUser("ewew", "3232", false);
 
             Assert.True(result.Succeeded);
         }
@@ -254,11 +272,13 @@
         {
             var user = new VinylExchangeUser();
 
-            this.userManagerMock.Setup(x=> x.CreateAsync(It.IsAny<VinylExchangeUser>())).ReturnsAsync(IdentityResult.Success);
-            
-            this.userManagerMock.Setup(x=> x.AddToRoleAsync(It.IsAny<VinylExchangeUser>(),It.IsAny<string>())).Verifiable();
+            userManagerMock.Setup(x => x.CreateAsync(It.IsAny<VinylExchangeUser>()))
+                .ReturnsAsync(IdentityResult.Success);
 
-            var result = await this.usersService.RegisterUser("ewew","3232","eweqw");
+            userManagerMock.Setup(x => x.AddToRoleAsync(It.IsAny<VinylExchangeUser>(), It.IsAny<string>()))
+                .Verifiable();
+
+            var result = await usersService.RegisterUser("ewew", "3232", "eweqw");
 
             Assert.True(result.Succeeded);
         }
@@ -268,19 +288,19 @@
         {
             var user = new VinylExchangeUser();
 
-            this.userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
+            userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
 
-            var returnedUser = await this.usersService.GetUser(user.Id);
+            var returnedUser = await usersService.GetUser(user.Id);
 
             Assert.NotNull(returnedUser);
         }
 
         [Fact]
-        public async Task ExternalLoginsShouldGetExternalLoginsProperty()
+        public void ExternalLoginsShouldGetExternalLoginsProperty()
         {
-            this.usersService.ExternalLogins = new List<AuthenticationScheme>();
+            usersService.ExternalLogins = new List<AuthenticationScheme>();
 
-            Assert.NotNull(this.usersService.ExternalLogins);
+            Assert.NotNull(usersService.ExternalLogins);
         }
     }
 }

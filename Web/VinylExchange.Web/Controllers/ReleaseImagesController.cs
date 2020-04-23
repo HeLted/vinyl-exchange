@@ -1,18 +1,12 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Mvc;
-
-    using VinylExchange.Services.Data.HelperServices.Releases;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Web.Models.ResourceModels.ReleaseFiles;
-
-    #endregion
+    using Models.ResourceModels.ReleaseFiles;
+    using Services.Data.HelperServices.Releases;
+    using Services.Logging;
 
     public class ReleaseImagesController : ApiController
     {
@@ -32,13 +26,13 @@
         {
             try
             {
-                return await this.releaseFilesService.GetReleaseImages<ReleaseFileResourceModel>(releaseId);
+                return await releaseFilesService.GetReleaseImages<ReleaseFileResourceModel>(releaseId);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
+                loggerService.LogException(ex);
 
-                return this.BadRequest();
+                return BadRequest();
             }
         }
 
@@ -48,13 +42,13 @@
         {
             try
             {
-                return await this.releaseFilesService.GetReleaseCoverArt<ReleaseFileResourceModel>(releaseId);
+                return await releaseFilesService.GetReleaseCoverArt<ReleaseFileResourceModel>(releaseId);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
+                loggerService.LogException(ex);
 
-                return this.BadRequest();
+                return BadRequest();
             }
         }
     }

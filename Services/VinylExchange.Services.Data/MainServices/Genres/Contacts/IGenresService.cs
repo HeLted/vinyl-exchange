@@ -1,11 +1,7 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Genres.Contracts
 {
-    #region
-
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    #endregion
 
     public interface IGenresService
     {

@@ -1,24 +1,18 @@
 ﻿namespace VinylExchange.Services.Data.MainServices.Collections
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Mapping;
     using Microsoft.EntityFrameworkCore;
-
+    using Releases.Contracts;
+    using Users.Contracts;
     using VinylExchange.Data;
     using VinylExchange.Data.Common.Enumerations;
     using VinylExchange.Data.Models;
-    using VinylExchange.Services.Data.MainServices.Releases.Contracts;
-    using VinylExchange.Services.Data.MainServices.Users.Contracts;
-    using VinylExchange.Services.Mapping;
+    using static Common.Constants.NullReferenceExceptionsConstants;
 
-    using static VinylExchange.Common.Constants.NullReferenceExceptionsConstants;
-
-    #endregion
 
     public class CollectionsService : ICollectionsService
     {
@@ -45,14 +39,14 @@
             Guid? releaseId,
             Guid userId)
         {
-            var release = await this.releasesEntityRetriever.GetRelease(releaseId);
+            var release = await releasesEntityRetriever.GetRelease(releaseId);
 
             if (release == null)
             {
                 throw new NullReferenceException(ReleaseNotFound);
             }
 
-            var user = await this.usersEntityRetriever.GetUser(userId);
+            var user = await usersEntityRetriever.GetUser(userId);
 
             if (user == null)
             {
@@ -60,54 +54,54 @@
             }
 
             var collectionItem = new CollectionItem
-                {
-                    VinylGrade = vinylGrade,
-                    SleeveGrade = sleeveGrade,
-                    Description = description,
-                    ReleaseId = releaseId,
-                    UserId = userId
-                };
+            {
+                VinylGrade = vinylGrade,
+                SleeveGrade = sleeveGrade,
+                Description = description,
+                ReleaseId = releaseId,
+                UserId = userId
+            };
 
             collectionItem.ReleaseId = release.Id;
             collectionItem.UserId = user.Id;
 
-            var trackedCollectionItem = await this.dbContext.Collections.AddAsync(collectionItem);
+            var trackedCollectionItem = await dbContext.Collections.AddAsync(collectionItem);
 
-            await this.dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return trackedCollectionItem.Entity.To<TModel>();
         }
 
         public async Task<TModel> RemoveCollectionItem<TModel>(Guid? collectionItemId)
         {
-            var collectionItem = await this.dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItemId);
+            var collectionItem = await dbContext.Collections.FirstOrDefaultAsync(ci => ci.Id == collectionItemId);
 
             if (collectionItem == null)
             {
                 throw new NullReferenceException(CollectionItemNotFound);
             }
 
-            this.dbContext.Collections.Remove(collectionItem);
-            await this.dbContext.SaveChangesAsync();
+            dbContext.Collections.Remove(collectionItem);
+            await dbContext.SaveChangesAsync();
 
             return collectionItem.To<TModel>();
         }
 
         public async Task<List<TModel>> GetUserCollection<TModel>(Guid userId)
         {
-            return await this.dbContext.Collections.Where(ci => ci.UserId == userId).To<TModel>().ToListAsync();
+            return await dbContext.Collections.Where(ci => ci.UserId == userId).To<TModel>().ToListAsync();
         }
 
         public async Task<TModel> GetCollectionItem<TModel>(Guid? collectionItemId)
         {
-            return await this.dbContext.Collections.Where(ci => ci.Id == collectionItemId).To<TModel>()
-                       .FirstOrDefaultAsync();
+            return await dbContext.Collections.Where(ci => ci.Id == collectionItemId).To<TModel>()
+                .FirstOrDefaultAsync();
         }
 
         public async Task<bool> DoesUserCollectionContainRelease(Guid? releaseId, Guid userId)
         {
-            return await this.dbContext.Collections.Where(ci => ci.ReleaseId == releaseId && ci.UserId == userId)
-                       .CountAsync() > 0;
+            return await dbContext.Collections.Where(ci => ci.ReleaseId == releaseId && ci.UserId == userId)
+                .CountAsync() > 0;
         }
     }
 }

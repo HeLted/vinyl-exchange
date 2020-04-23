@@ -1,19 +1,13 @@
 ﻿namespace VinylExchange.Services.Files
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
-
-    using VinylExchange.Common.Enumerations;
-    using VinylExchange.Services.MemoryCache;
-    using VinylExchange.Services.MemoryCache.Contracts;
-    using VinylExchange.Web.Models.Utility.Files;
-
-    #endregion
+    using Common.Enumerations;
+    using MemoryCache.Contracts;
+    using Web.Models.Utility.Files;
 
     public class FileManager : IFileManager
     {
@@ -56,7 +50,7 @@
             foreach (var fileUtilityModel in uploadFileUtilityModels)
             {
                 var fileGuid = fileUtilityModel.FileGuid.ToString();
-                var encodedFileName = this.ConvertFileNameToBase64(fileUtilityModel.FileName);
+                var encodedFileName = ConvertFileNameToBase64(fileUtilityModel.FileName);
                 var fileExtension = fileUtilityModel.FileExtension;
                 var fileType = fileUtilityModel.FileType;
                 var createdOn = fileUtilityModel.CreatedOn;
@@ -64,7 +58,7 @@
                 var contentFolderName = fileType == FileType.Audio ? AudioPath : ImagePath;
                 var path = "\\" + subFolderName + contentFolderName + "\\";
 
-                var modelInstance = (TModel)Activator.CreateInstance(typeof(TModel));
+                var modelInstance = (TModel) Activator.CreateInstance(typeof(TModel));
 
                 var modelType = typeof(TModel);
 
@@ -96,7 +90,7 @@
 
         public IEnumerable<UploadFileUtilityModel> RetrieveFilesFromCache(Guid formSessionId)
         {
-            return this.memoryCacheFileSevice.GetAllFilesForFormSession(formSessionId);
+            return memoryCacheFileSevice.GetAllFilesForFormSession(formSessionId);
         }
 
         public IEnumerable<TModel> SaveFilesToServer<TModel>(

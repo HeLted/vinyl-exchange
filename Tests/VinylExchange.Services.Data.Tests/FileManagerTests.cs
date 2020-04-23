@@ -1,18 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using VinylExchange.Services.Files;
-using VinylExchange.Services.MemoryCache.Contracts;
-using VinylExchange.Web.Models.Utility.Files;
-using Xunit;
-
-namespace VinylExchange.Services.Data.Tests
+﻿namespace VinylExchange.Services.Data.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using Files;
+    using MemoryCache.Contracts;
+    using Microsoft.AspNetCore.Http;
+    using Moq;
+    using Web.Models.Utility.Files;
+    using Xunit;
+
     public class FileManagerTests
     {
         private readonly FileManager fileManager;
@@ -21,9 +19,9 @@ namespace VinylExchange.Services.Data.Tests
 
         public FileManagerTests()
         {
-            this.memoryCacheFilesServiceMock = new Mock<IMemoryCacheFilesSevice>();
+            memoryCacheFilesServiceMock = new Mock<IMemoryCacheFilesSevice>();
 
-            this.fileManager = new FileManager(this.memoryCacheFilesServiceMock.Object);
+            fileManager = new FileManager(memoryCacheFilesServiceMock.Object);
         }
 
         [Fact]
@@ -33,26 +31,24 @@ namespace VinylExchange.Services.Data.Tests
 
             var filesForUploadModels = new List<UploadFileUtilityModel>();
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                var uploadFileUtilityModel= new UploadFileUtilityModel(new FormFile(new MemoryStream(),100L,100L,"test","test.jpg"));
+                var uploadFileUtilityModel =
+                    new UploadFileUtilityModel(new FormFile(new MemoryStream(), 100L, 100L, "test", "test.jpg"));
 
                 var byteArr = new byte[30];
 
                 random.NextBytes(byteArr);
 
-               uploadFileUtilityModel.FileByteContent = byteArr;
+                uploadFileUtilityModel.FileByteContent = byteArr;
 
                 filesForUploadModels.Add(uploadFileUtilityModel);
             }
 
-            var byteContent = this.fileManager.GetFilesByteContent(filesForUploadModels);
+            var byteContent = fileManager.GetFilesByteContent(filesForUploadModels);
 
-            Assert.Equal(string.Join(",", filesForUploadModels.Select(x => x.FileByteContent)), string.Join(",", byteContent));
+            Assert.Equal(string.Join(",", filesForUploadModels.Select(x => x.FileByteContent)),
+                string.Join(",", byteContent));
         }
-
     }
-
-
-
 }

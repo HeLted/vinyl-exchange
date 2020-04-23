@@ -1,20 +1,14 @@
 ﻿namespace VinylExchange.Data.Seeding
 {
-    #region
-
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Contracts;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-
+    using Models;
     using VinylExchange.Common.Constants;
-    using VinylExchange.Data.Models;
-    using VinylExchange.Data.Seeding.Contracts;
-
-    #endregion
 
     internal class UsersSeeder : ISeeder
     {
@@ -24,7 +18,8 @@
 
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
 
-            await SeedAdminAsync(dbContext, userManager, configuration["SysAdminUserName"],  configuration["SysAdminPassword"], "sysadmin@vinylexchange.com");
+            await SeedAdminAsync(dbContext, userManager, configuration["SysAdminUserName"],
+                configuration["SysAdminPassword"], "sysadmin@vinylexchange.com");
             await SeedUserAsync(dbContext, userManager, "testUserOne", "testUserOnePassword", "testUserOne@gmail.com");
             await SeedUserAsync(dbContext, userManager, "testUserTwo", "testUserTwoPassword", "testUserTwo@gmail.com");
         }
@@ -77,7 +72,7 @@
             string password,
             string email)
         {
-            var user = new VinylExchangeUser { UserName = username, Email = email };
+            var user = new VinylExchangeUser {UserName = username, Email = email};
 
             user.PasswordHash = userManager.PasswordHasher.HashPassword(user, password);
 

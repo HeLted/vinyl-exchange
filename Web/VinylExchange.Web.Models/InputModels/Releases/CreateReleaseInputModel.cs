@@ -1,18 +1,13 @@
 ﻿namespace VinylExchange.Web.Models.InputModels.Releases
 {
-    #region
-
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Data.Models;
+    using ModelBinding.ValidationAttributes;
+    using Services.Mapping;
+    using static Common.Constants.RegexPatterns;
+    using static Common.Constants.ValidationConstants;
 
-    using VinylExchange.Data.Models;
-    using VinylExchange.Services.Mapping;
-    using VinylExchange.Web.ModelBinding.ValidationAttributes;
-
-    using static VinylExchange.Common.Constants.RegexPatterns;
-    using static VinylExchange.Common.Constants.ValidationConstants;
-
-    #endregion
 
     public class CreateReleaseInputModel : IMapTo<Release>
     {
@@ -34,9 +29,7 @@
         [RegularExpression(AplhaNumericBracesDashAndSpace, ErrorMessage = AllowedAplhaNumericBracesDashAndSpace)]
         public string Format { get; set; }
 
-        [Required]
-        [ValidateYear]
-        public int Year { get; set; }
+        [Required] [ValidateYear] public int Year { get; set; }
 
         [Required]
         [MinLength(3, ErrorMessage = InvalidMinLength)]

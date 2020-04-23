@@ -1,21 +1,15 @@
 ﻿namespace VinylExchange.Web.Controllers
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using Common.Constants;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
-    using VinylExchange.Common.Constants;
-    using VinylExchange.Services.Data.MainServices.Genres.Contracts;
-    using VinylExchange.Services.Logging;
-    using VinylExchange.Web.Models.InputModels.Genres;
-    using VinylExchange.Web.Models.ResourceModels.Genres;
-
-    #endregion
+    using Models.InputModels.Genres;
+    using Models.ResourceModels.Genres;
+    using Services.Data.MainServices.Genres.Contracts;
+    using Services.Logging;
 
     public class GenresController : ApiController
     {
@@ -35,12 +29,12 @@
         {
             try
             {
-                return this.Created(await this.genresService.CreateGenre<CreateGenreResourceModel>(inputModel.Name));
+                return Created(await genresService.CreateGenre<CreateGenreResourceModel>(inputModel.Name));
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -49,12 +43,12 @@
         {
             try
             {
-                return await this.genresService.GetAllGenres<GetAllGenresResourceModel>();
+                return await genresService.GetAllGenres<GetAllGenresResourceModel>();
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
 
@@ -65,12 +59,12 @@
         {
             try
             {
-                return await this.genresService.RemoveGenre<RemoveGenreResourceModel>(id);
+                return await genresService.RemoveGenre<RemoveGenreResourceModel>(id);
             }
             catch (Exception ex)
             {
-                this.loggerService.LogException(ex);
-                return this.BadRequest();
+                loggerService.LogException(ex);
+                return BadRequest();
             }
         }
     }

@@ -1,13 +1,8 @@
 ﻿namespace VinylExchange.Web.Models.Utility.Addresses
 {
-    #region
-
     using System;
-
-    using VinylExchange.Data.Models;
-    using VinylExchange.Services.Mapping;
-
-    #endregion
+    using Data.Models;
+    using Services.Mapping;
 
     public class GetAddressInfoUtilityModel : IMapFrom<Address>
     {
