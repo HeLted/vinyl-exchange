@@ -25,9 +25,9 @@
 
         private const string StorageFolderName = @"MediaStorage\";
 
-        private readonly IMemoryCacheFileSevice memoryCacheFileSevice;
+        private readonly IMemoryCacheFilesSevice memoryCacheFileSevice;
 
-        public FileManager(IMemoryCacheFileSevice memoryCacheFileSevice)
+        public FileManager(IMemoryCacheFilesSevice memoryCacheFileSevice)
         {
             this.memoryCacheFileSevice = memoryCacheFileSevice;
         }

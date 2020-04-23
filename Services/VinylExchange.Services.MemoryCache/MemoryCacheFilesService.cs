@@ -20,11 +20,11 @@
 
     #endregion
 
-    public class MemoryCacheFileService : IMemoryCacheFileSevice
+    public class MemoryCacheFilesService : IMemoryCacheFilesSevice
     {
         private readonly IMemoryCacheManager cacheManager;
 
-        public MemoryCacheFileService(IMemoryCacheManager cacheManager)
+        public MemoryCacheFilesService(IMemoryCacheManager cacheManager)
         {
             this.cacheManager = cacheManager;
         }

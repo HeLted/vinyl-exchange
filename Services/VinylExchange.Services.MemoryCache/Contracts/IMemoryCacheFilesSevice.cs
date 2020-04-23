@@ -16,7 +16,7 @@
 
     #endregion
 
-    public interface IMemoryCacheFileSevice
+    public interface IMemoryCacheFilesSevice
     {
         TModel UploadFile<TModel>(IFormFile file, Guid? formSessionId);
 

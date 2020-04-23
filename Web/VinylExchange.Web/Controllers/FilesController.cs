@@ -20,9 +20,9 @@
     {
         private readonly ILoggerService loggerService;
 
-        private readonly IMemoryCacheFileSevice memoryCacheFileSevice;
+        private readonly IMemoryCacheFilesSevice memoryCacheFileSevice;
 
-        public FilesController(IMemoryCacheFileSevice memoryCacheFileSevice, ILoggerService loggerService)
+        public FilesController(IMemoryCacheFilesSevice memoryCacheFileSevice, ILoggerService loggerService)
         {
             this.memoryCacheFileSevice = memoryCacheFileSevice;
             this.loggerService = loggerService;
