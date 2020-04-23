@@ -77,5 +77,16 @@ namespace VinylExchange.Services.Data.Tests
             Assert.True(locked);
         }
 
+        [Fact]
+        public void IsSetShouldReturnFalseIfKeyIsNotSet()
+        {
+            Assert.False(this.cacheManager.IsSet("testKey"));
+        }
+
+        [Fact]
+        public void GetKeysShouldGetReturnEmptyListIfNoKeysArePresent()
+        {
+            Assert.True(this.cacheManager.GetKeys().Count == 0);
+        }
     }
 }
