@@ -5,8 +5,11 @@
 
     public class SetShippingPriceInputModel
     {
-        [Required] public Guid? SaleId { get; set; }
+        [Required]
+        public Guid? SaleId { get; set; }
 
-        [Required] [Range(0, 1000)] public decimal ShippingPrice { get; set; }
+        [Required]
+        [Range(0, 1000)]
+        public decimal ShippingPrice { get; set; }
     }
 }

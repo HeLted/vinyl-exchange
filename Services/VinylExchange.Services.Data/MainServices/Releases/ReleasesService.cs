@@ -25,6 +25,11 @@
             this.releaseFilesService = releaseFilesService;
         }
 
+        public async Task<Release> GetRelease(Guid? releaseId)
+        {
+            return await this.dbContext.Releases.Where(x => x.Id == releaseId).FirstOrDefaultAsync();
+        }
+
         public async Task<TModel> CreateRelease<TModel>(
             string artist,
             string title,
@@ -43,20 +48,20 @@
                 Label = label
             };
 
-            var trackedRelease = await dbContext.Releases.AddAsync(release);
+            var trackedRelease = await this.dbContext.Releases.AddAsync(release);
 
-            await releaseFilesService.AddFilesForRelease(release.Id, formSessionId);
+            await this.releaseFilesService.AddFilesForRelease(release.Id, formSessionId);
 
-            await AddStylesForRelease(release.Id, styleIds);
+            await this.AddStylesForRelease(release.Id, styleIds);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return trackedRelease.Entity.To<TModel>();
         }
 
         public async Task<TModel> GetRelease<TModel>(Guid? releaseId)
         {
-            return await dbContext.Releases.Where(x => x.Id == releaseId).To<TModel>().FirstOrDefaultAsync();
+            return await this.dbContext.Releases.Where(x => x.Id == releaseId).To<TModel>().FirstOrDefaultAsync();
         }
 
         public async Task<List<TModel>> GetReleases<TModel>(
@@ -67,7 +72,7 @@
         {
             List<TModel> releases = null;
 
-            var releasesQuariable = dbContext.Releases.AsQueryable();
+            var releasesQuariable = this.dbContext.Releases.AsQueryable();
 
             if (searchTerm != null)
             {
@@ -97,18 +102,13 @@
             return releases;
         }
 
-        public async Task<Release> GetRelease(Guid? releaseId)
-        {
-            return await dbContext.Releases.Where(x => x.Id == releaseId).FirstOrDefaultAsync();
-        }
-
         private async Task AddStylesForRelease(Guid? releaseId, ICollection<int> styleIds)
         {
             foreach (var styleId in styleIds)
             {
                 var styleRelease = new StyleRelease {ReleaseId = releaseId, StyleId = styleId};
 
-                await dbContext.StyleReleases.AddAsync(styleRelease);
+                await this.dbContext.StyleReleases.AddAsync(styleRelease);
             }
         }
     }

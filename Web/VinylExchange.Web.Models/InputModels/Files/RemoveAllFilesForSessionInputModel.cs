@@ -5,6 +5,7 @@
 
     public class RemoveAllFilesForSessionInputModel
     {
-        [Required] public Guid? FormSessionId { get; set; }
+        [Required]
+        public Guid? FormSessionId { get; set; }
     }
 }

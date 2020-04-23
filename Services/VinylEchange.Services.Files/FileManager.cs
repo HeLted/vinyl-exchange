@@ -50,7 +50,7 @@
             foreach (var fileUtilityModel in uploadFileUtilityModels)
             {
                 var fileGuid = fileUtilityModel.FileGuid.ToString();
-                var encodedFileName = ConvertFileNameToBase64(fileUtilityModel.FileName);
+                var encodedFileName = this.ConvertFileNameToBase64(fileUtilityModel.FileName);
                 var fileExtension = fileUtilityModel.FileExtension;
                 var fileType = fileUtilityModel.FileType;
                 var createdOn = fileUtilityModel.CreatedOn;
@@ -90,7 +90,7 @@
 
         public IEnumerable<UploadFileUtilityModel> RetrieveFilesFromCache(Guid formSessionId)
         {
-            return memoryCacheFileSevice.GetAllFilesForFormSession(formSessionId);
+            return this.memoryCacheFileSevice.GetAllFilesForFormSession(formSessionId);
         }
 
         public IEnumerable<TModel> SaveFilesToServer<TModel>(

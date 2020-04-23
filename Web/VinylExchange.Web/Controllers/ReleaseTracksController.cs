@@ -26,12 +26,12 @@
         {
             try
             {
-                return await releaseFilesService.GetReleaseTracks<ReleaseFileResourceModel>(id);
+                return await this.releaseFilesService.GetReleaseTracks<ReleaseFileResourceModel>(id);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
     }

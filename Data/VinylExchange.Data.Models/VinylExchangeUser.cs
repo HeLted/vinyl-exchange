@@ -11,14 +11,16 @@
     {
         public VinylExchangeUser()
         {
-            Id = Guid.NewGuid();
-            CreatedOn = DateTime.UtcNow;
-            Avatar = ImageConstants.DefaultUserAvatarImage;
+            this.Id = Guid.NewGuid();
+            this.CreatedOn = DateTime.UtcNow;
+            this.Avatar = ImageConstants.DefaultUserAvatarImage;
         }
 
         public ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
 
-        [Required] [MaxLength(10000000)] public byte[] Avatar { get; set; }
+        [Required]
+        [MaxLength(10000000)]
+        public byte[] Avatar { get; set; }
 
         public ICollection<CollectionItem> Collection { get; set; } = new HashSet<CollectionItem>();
 

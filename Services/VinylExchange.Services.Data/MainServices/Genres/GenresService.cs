@@ -19,40 +19,40 @@
             this.dbContext = dbContext;
         }
 
+        public async Task<Genre> GetGenre(int? genreId)
+        {
+            return await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+        }
+
         public async Task<TModel> CreateGenre<TModel>(string name)
         {
             var genre = new Genre {Name = name};
 
-            var trackedGenre = await dbContext.Genres.AddAsync(genre);
+            var trackedGenre = await this.dbContext.Genres.AddAsync(genre);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return trackedGenre.Entity.To<TModel>();
         }
 
         public async Task<List<TModel>> GetAllGenres<TModel>()
         {
-            return await dbContext.Genres.To<TModel>().ToListAsync();
+            return await this.dbContext.Genres.To<TModel>().ToListAsync();
         }
 
         public async Task<TModel> RemoveGenre<TModel>(int genreId)
         {
-            var genre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+            var genre = await this.dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
 
             if (genre == null)
             {
                 throw new NullReferenceException(NullReferenceExceptionsConstants.GenreNotFound);
             }
 
-            var removedGenre = dbContext.Genres.Remove(genre).Entity;
-            await dbContext.SaveChangesAsync();
+            var removedGenre = this.dbContext.Genres.Remove(genre).Entity;
+            await this.dbContext.SaveChangesAsync();
 
             return removedGenre.To<TModel>();
-        }
-
-        public async Task<Genre> GetGenre(int? genreId)
-        {
-            return await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
         }
     }
 }

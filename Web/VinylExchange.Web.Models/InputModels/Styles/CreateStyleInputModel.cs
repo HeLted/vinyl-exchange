@@ -14,6 +14,7 @@
         [Display(Name = "Style Name")]
         public string Name { get; set; }
 
-        [Required] public int GenreId { get; set; }
+        [Required]
+        public int GenreId { get; set; }
     }
 }

@@ -21,45 +21,20 @@
 
     public class SaleLogsServiceTests
     {
+        public SaleLogsServiceTests()
+        {
+            this.dbContext = DbFactory.CreateDbContext();
+
+            this.salesEntityRetrieverMock = new Mock<ISalesEntityRetriever>();
+
+            this.saleLogsService = new SaleLogsService(this.dbContext, this.salesEntityRetrieverMock.Object);
+        }
+
         private readonly VinylExchangeDbContext dbContext;
 
         private readonly ISaleLogsService saleLogsService;
 
         private readonly Mock<ISalesEntityRetriever> salesEntityRetrieverMock;
-
-        public SaleLogsServiceTests()
-        {
-            dbContext = DbFactory.CreateDbContext();
-
-            salesEntityRetrieverMock = new Mock<ISalesEntityRetriever>();
-
-            saleLogsService = new SaleLogsService(dbContext, salesEntityRetrieverMock.Object);
-        }
-
-        [Fact]
-        public async Task AddTogToSaleShouldAddLogToSale()
-        {
-            var sale = new Sale();
-
-            await dbContext.Sales.AddAsync(sale);
-
-            await dbContext.SaveChangesAsync();
-
-            await saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(sale.Id, SaleLogs.ItemRecieved);
-
-            var log = await dbContext.SaleLogs.FirstOrDefaultAsync(sl => sl.SaleId == sale.Id);
-
-            Assert.NotNull(log);
-        }
-
-        [Fact]
-        public async Task AddTogToSaleShouldThrowNullReferenceExceptionIfSaleIsNotInDb()
-        {
-            var exception = await Assert.ThrowsAsync<NullReferenceException>(async () =>
-                await saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(Guid.NewGuid(), SaleLogs.ItemRecieved));
-
-            Assert.Equal(SaleNotFound, exception.Message);
-        }
 
         [Theory]
         [InlineData(SaleLogs.ItemRecieved)]
@@ -72,13 +47,13 @@
         {
             var sale = new Sale();
 
-            await dbContext.Sales.AddAsync(sale);
+            await this.dbContext.Sales.AddAsync(sale);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            await saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(sale.Id, logType);
+            await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(sale.Id, logType);
 
-            var log = await dbContext.SaleLogs.FirstOrDefaultAsync(sl => sl.SaleId == sale.Id);
+            var log = await this.dbContext.SaleLogs.FirstOrDefaultAsync(sl => sl.SaleId == sale.Id);
 
             var saleLogMessagesMessagesConstantField = typeof(SaleLogsMessages)
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
@@ -96,22 +71,48 @@
         }
 
         [Fact]
+        public async Task AddTogToSaleShouldAddLogToSale()
+        {
+            var sale = new Sale();
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(sale.Id, SaleLogs.ItemRecieved);
+
+            var log = await this.dbContext.SaleLogs.FirstOrDefaultAsync(sl => sl.SaleId == sale.Id);
+
+            Assert.NotNull(log);
+        }
+
+        [Fact]
+        public async Task AddTogToSaleShouldThrowNullReferenceExceptionIfSaleIsNotInDb()
+        {
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(async () =>
+                await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(Guid.NewGuid(),
+                    SaleLogs.ItemRecieved));
+
+            Assert.Equal(SaleNotFound, exception.Message);
+        }
+
+        [Fact]
         public async Task ClearSaleLogsShouldRemoveSaleLogsFromDb()
         {
             var sale = new Sale();
 
-            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
+            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
 
             for (var i = 0; i < 10; i++)
             {
-                await dbContext.SaleLogs.AddAsync(new SaleLog {SaleId = sale.Id});
+                await this.dbContext.SaleLogs.AddAsync(new SaleLog {SaleId = sale.Id});
             }
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            await saleLogsService.ClearSaleLogs(sale.Id);
+            await this.saleLogsService.ClearSaleLogs(sale.Id);
 
-            var logs = await dbContext.SaleLogs.Where(sl => sl.SaleId == sale.Id).ToListAsync();
+            var logs = await this.dbContext.SaleLogs.Where(sl => sl.SaleId == sale.Id).ToListAsync();
 
             Assert.True(logs.Count == 0);
         }
@@ -119,10 +120,10 @@
         [Fact]
         public async Task ClearSaleLogsShouldThrowNullReferenceExceptionIfSaleIsIdIsNotPresentInDb()
         {
-            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync((Sale) null);
+            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync((Sale) null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                async () => await saleLogsService.ClearSaleLogs(Guid.NewGuid()));
+                async () => await this.saleLogsService.ClearSaleLogs(Guid.NewGuid()));
 
             Assert.Equal(SaleNotFound, exception.Message);
         }
@@ -132,7 +133,7 @@
         {
             var sale = new Sale();
 
-            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
+            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
 
             var addedSaleLogsIds = new List<Guid?>();
 
@@ -140,14 +141,14 @@
             {
                 var saleLog = new SaleLog {SaleId = sale.Id};
 
-                await dbContext.SaleLogs.AddAsync(saleLog);
+                await this.dbContext.SaleLogs.AddAsync(saleLog);
 
                 addedSaleLogsIds.Add(saleLog.Id);
             }
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            var saleLogs = await saleLogsService.GetLogsForSale<GetLogsForSaleResourceModel>(sale.Id);
+            var saleLogs = await this.saleLogsService.GetLogsForSale<GetLogsForSaleResourceModel>(sale.Id);
 
             Assert.True(saleLogs.Select(sl => addedSaleLogsIds.Contains(sl.Id)).All(x => x));
         }
@@ -157,9 +158,9 @@
         {
             var sale = new Sale();
 
-            salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
+            this.salesEntityRetrieverMock.Setup(x => x.GetSale(It.IsAny<Guid?>())).ReturnsAsync(sale);
 
-            var saleLogs = await saleLogsService.GetLogsForSale<GetLogsForSaleResourceModel>(sale.Id);
+            var saleLogs = await this.saleLogsService.GetLogsForSale<GetLogsForSaleResourceModel>(sale.Id);
 
             Assert.True(saleLogs.Count() == 0);
         }

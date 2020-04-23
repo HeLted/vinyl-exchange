@@ -11,7 +11,7 @@
     {
         protected ActionResult<T> Created<T>(T value)
         {
-            return StatusCode((int) HttpStatusCode.Created, value);
+            return this.StatusCode((int) HttpStatusCode.Created, value);
         }
 
         protected Guid GetUserId(ClaimsPrincipal user)

@@ -14,20 +14,20 @@
 
     public class ReleaseFilesServiceTests
     {
+        public ReleaseFilesServiceTests()
+        {
+            this.dbContext = DbFactory.CreateDbContext();
+
+            this.fileManagerMock = new Mock<IFileManager>();
+
+            this.releaseFilesService = new ReleaseFilesService(this.dbContext, this.fileManagerMock.Object);
+        }
+
         private readonly VinylExchangeDbContext dbContext;
 
         private readonly IReleaseFilesService releaseFilesService;
 
         private readonly Mock<IFileManager> fileManagerMock;
-
-        public ReleaseFilesServiceTests()
-        {
-            dbContext = DbFactory.CreateDbContext();
-
-            fileManagerMock = new Mock<IFileManager>();
-
-            releaseFilesService = new ReleaseFilesService(dbContext, fileManagerMock.Object);
-        }
 
         [Fact]
         public async Task GetReleaseCoverArtShouldGetReleaseCoverArt()
@@ -41,11 +41,11 @@
                 IsPreview = true
             };
 
-            await dbContext.ReleaseFiles.AddAsync(releaseFile);
+            await this.dbContext.ReleaseFiles.AddAsync(releaseFile);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            var coverArt = await releaseFilesService.GetReleaseCoverArt<ReleaseFileResourceModel>(release.Id);
+            var coverArt = await this.releaseFilesService.GetReleaseCoverArt<ReleaseFileResourceModel>(release.Id);
 
 
             Assert.NotNull(coverArt);
@@ -54,7 +54,7 @@
         [Fact]
         public async Task GetReleaseCoverArtShouldReturnNullIfReleaseFileIsNotInDb()
         {
-            var coverArt = await releaseFilesService.GetReleaseCoverArt<ReleaseFileResourceModel>(Guid.NewGuid());
+            var coverArt = await this.releaseFilesService.GetReleaseCoverArt<ReleaseFileResourceModel>(Guid.NewGuid());
 
             Assert.Null(coverArt);
         }
@@ -72,12 +72,12 @@
                     FileType = FileType.Image
                 };
 
-                await dbContext.ReleaseFiles.AddAsync(releaseFile);
+                await this.dbContext.ReleaseFiles.AddAsync(releaseFile);
             }
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            var releaseImages = await releaseFilesService.GetReleaseImages<ReleaseFileResourceModel>(release.Id);
+            var releaseImages = await this.releaseFilesService.GetReleaseImages<ReleaseFileResourceModel>(release.Id);
 
             Assert.True(releaseImages.Count == 10);
         }
@@ -95,12 +95,12 @@
                     FileType = FileType.Audio
                 };
 
-                await dbContext.ReleaseFiles.AddAsync(releaseFile);
+                await this.dbContext.ReleaseFiles.AddAsync(releaseFile);
             }
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            var releaseTracks = await releaseFilesService.GetReleaseTracks<ReleaseFileResourceModel>(release.Id);
+            var releaseTracks = await this.releaseFilesService.GetReleaseTracks<ReleaseFileResourceModel>(release.Id);
 
             Assert.True(releaseTracks.Count == 10);
         }

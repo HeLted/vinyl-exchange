@@ -17,6 +17,15 @@
 
     public class ReleasesServiceTests
     {
+        public ReleasesServiceTests()
+        {
+            this.dbContext = DbFactory.CreateDbContext();
+
+            this.releaseFilesServiceMock = new Mock<IReleaseFilesService>();
+
+            this.releasesService = new ReleasesService(this.dbContext, this.releaseFilesServiceMock.Object);
+        }
+
         public const int ReleasesToTake = 8;
 
         private readonly VinylExchangeDbContext dbContext;
@@ -24,92 +33,6 @@
         private readonly ReleasesService releasesService;
 
         private readonly Mock<IReleaseFilesService> releaseFilesServiceMock;
-
-        public ReleasesServiceTests()
-        {
-            dbContext = DbFactory.CreateDbContext();
-
-            releaseFilesServiceMock = new Mock<IReleaseFilesService>();
-
-            releasesService = new ReleasesService(dbContext, releaseFilesServiceMock.Object);
-        }
-
-        [Fact]
-        public async Task CreateReleaseShouldCreateRelease()
-        {
-            var createdReleaseModel = await releasesService.CreateRelease<CreateReleaseResourceModel>(
-                "Test",
-                "TEst",
-                "Test",
-                1993,
-                "Trerer",
-                new List<int> {1, 4, 5, 6},
-                Guid.NewGuid());
-
-            await dbContext.SaveChangesAsync();
-
-            var createdRelease = await dbContext.Releases.FirstOrDefaultAsync(r => r.Id == createdReleaseModel.Id);
-
-            Assert.True(createdRelease != null);
-        }
-
-        [Fact]
-        public async Task CreateReleaseShouldCreateReleaseWithCorrectData()
-        {
-            var artist = "Test Artist";
-            var title = "Test Title";
-            var format = "Test Format";
-            var year = 1993;
-            var label = "label";
-            var styles = new List<int> {1, 2, 3};
-
-            var createdReleaseModel = await releasesService.CreateRelease<CreateReleaseResourceModel>(
-                artist,
-                title,
-                format,
-                year,
-                label,
-                styles,
-                Guid.NewGuid());
-
-            await dbContext.SaveChangesAsync();
-
-            var createdRelease = await dbContext.Releases.FirstOrDefaultAsync(r => r.Id == createdReleaseModel.Id);
-
-            Assert.Equal(artist, createdRelease.Artist);
-            Assert.Equal(title, createdRelease.Title);
-            Assert.Equal(year, createdRelease.Year);
-            Assert.Equal(format, createdRelease.Format);
-            Assert.Equal(label, createdRelease.Label);
-            Assert.Equal(
-                string.Join(string.Empty, styles),
-                string.Join(string.Empty, createdRelease.Styles.Select(sr => sr.StyleId)));
-        }
-
-        [Fact]
-        public async Task GetReleaseoShouldReturnNullIfProvidedReleaseIdIsNotExistingInDb()
-        {
-            await dbContext.Releases.AddAsync(new Release());
-
-            await dbContext.SaveChangesAsync();
-
-            var returnedReleaseModel = await releasesService.GetRelease<GetReleaseResourceModel>(Guid.NewGuid());
-
-            Assert.Null(returnedReleaseModel);
-        }
-
-        [Fact]
-        public async Task GetReleaseShouldGetRelease()
-        {
-            var createdRelease = (await dbContext.Releases.AddAsync(new Release())).Entity;
-
-            await dbContext.SaveChangesAsync();
-
-            var returnedReleaseModel =
-                await releasesService.GetRelease<GetReleaseResourceModel>(createdRelease.Id);
-
-            Assert.Equal(createdRelease.Id, returnedReleaseModel.Id);
-        }
 
         [Theory]
         [InlineData("Aphex", 1, new[] {5}, 4)]
@@ -125,9 +48,9 @@
             IEnumerable<int> filterStyleIds,
             int expectedMatchingReleasesCount)
         {
-            await AddReleasesTestData();
+            await this.AddReleasesTestData();
 
-            var releasesModelsToCompare = await dbContext.Releases
+            var releasesModelsToCompare = await this.dbContext.Releases
                 .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
                 .Where(
                     r => r.Artist.Contains(
@@ -142,7 +65,7 @@
                               && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)))
                 .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
 
-            var releaseModels = await releasesService.GetReleases<GetReleaseResourceModel>(
+            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
                 searchTerm,
                 filterGenreId,
                 filterStyleIds,
@@ -174,9 +97,9 @@
             string searchTerm,
             int expectedMatchingReleasesCount)
         {
-            await AddReleasesTestData();
+            await this.AddReleasesTestData();
 
-            var releasesModelsToCompare = await dbContext.Releases
+            var releasesModelsToCompare = await this.dbContext.Releases
                 .Where(
                     r => r.Artist.Contains(
                              searchTerm,
@@ -187,7 +110,7 @@
                 .Take(ReleasesToTake).To<GetReleaseResourceModel>().ToListAsync();
 
             var releaseModels =
-                await releasesService.GetReleases<GetReleaseResourceModel>(searchTerm, null, new List<int>(), 0);
+                await this.releasesService.GetReleases<GetReleaseResourceModel>(searchTerm, null, new List<int>(), 0);
 
             Assert.True(releaseModels.Count == expectedMatchingReleasesCount);
             Assert.Equal(
@@ -205,12 +128,12 @@
             int releasesToSkip,
             int expectedMatchingReleasesCount)
         {
-            await AddReleasesTestData();
+            await this.AddReleasesTestData();
 
-            var releasesModelsToCompare = await dbContext.Releases.Skip(releasesToSkip).Take(ReleasesToTake)
+            var releasesModelsToCompare = await this.dbContext.Releases.Skip(releasesToSkip).Take(ReleasesToTake)
                 .To<GetReleaseResourceModel>().ToListAsync();
 
-            var releaseModels = await releasesService.GetReleases<GetReleaseResourceModel>(
+            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
                 null,
                 null,
                 new List<int>(),
@@ -236,9 +159,9 @@
                 int releasesToSkip,
                 int expectedMatchingReleasesCount)
         {
-            await AddReleasesTestData();
+            await this.AddReleasesTestData();
 
-            var releasesModelsToCompare = await dbContext.Releases
+            var releasesModelsToCompare = await this.dbContext.Releases
                 .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
                 .Where(
                     r => r.Styles.Any(
@@ -246,7 +169,7 @@
                               && r.Styles.All(sr => sr.Style.GenreId == filterGenreId)))
                 .Skip(releasesToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
                 .ToListAsync();
-            var releaseModels = await releasesService.GetReleases<GetReleaseResourceModel>(
+            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
                 null,
                 filterGenreId,
                 filterStyleIds,
@@ -275,14 +198,14 @@
                 int releaseToSkip,
                 int expectedMatchingReleasesCount)
         {
-            await AddReleasesTestData();
+            await this.AddReleasesTestData();
 
-            var releasesModelsToCompare = await dbContext.Releases
+            var releasesModelsToCompare = await this.dbContext.Releases
                 .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
                 .Skip(releaseToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
                 .ToListAsync();
 
-            var releaseModels = await releasesService.GetReleases<GetReleaseResourceModel>(
+            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
                 null,
                 filterGenreId,
                 new List<int>(),
@@ -309,9 +232,9 @@
                 int releaseToSkip,
                 int expectedMatchingReleasesCount)
         {
-            await AddReleasesTestData();
+            await this.AddReleasesTestData();
 
-            var releasesModelsToCompare = await dbContext.Releases
+            var releasesModelsToCompare = await this.dbContext.Releases
                 .Where(r => r.Styles.Any(s => s.Style.GenreId == filterGenreId))
                 .Where(
                     r => r.Artist.Contains(
@@ -324,7 +247,7 @@
                 .Skip(releaseToSkip).Take(ReleasesToTake).To<GetReleaseResourceModel>()
                 .ToListAsync();
 
-            var releaseModels = await releasesService.GetReleases<GetReleaseResourceModel>(
+            var releaseModels = await this.releasesService.GetReleases<GetReleaseResourceModel>(
                 searchTerm,
                 filterGenreId,
                 new List<int>(),
@@ -334,38 +257,6 @@
             Assert.Equal(
                 string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
                 string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
-        }
-
-        [Fact]
-        public async Task
-            GetReleasesShouldGetFirstEightReleasesWithNoSearchTermAndNoGenreFilterAndNoStyleFilterProvided()
-        {
-            await AddReleasesTestData();
-
-            var releasesModelsToCompare = await dbContext.Releases.Take(ReleasesToTake)
-                .To<GetReleaseResourceModel>().ToListAsync();
-
-            var releaseModels =
-                await releasesService.GetReleases<GetReleaseResourceModel>(null, null, new List<int>(), 0);
-
-            Assert.True(releaseModels.Count == ReleasesToTake);
-            Assert.Equal(
-                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
-                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
-        }
-
-        [Fact]
-        public async Task GetReleaseShouldGetReleaseNonGeneric()
-        {
-            var release = new Release();
-
-            await dbContext.Releases.AddAsync(release);
-
-            await dbContext.SaveChangesAsync();
-
-            var returnedRelease = await releasesService.GetRelease(release.Id);
-
-            Assert.NotNull(returnedRelease);
         }
 
         private async Task AddReleasesTestData()
@@ -463,12 +354,121 @@
                 new StyleRelease {ReleaseId = releases[25].Id, StyleId = 5}
             };
 
-            await dbContext.Genres.AddRangeAsync(genres);
-            await dbContext.Styles.AddRangeAsync(styles);
-            await dbContext.Releases.AddRangeAsync(releases);
-            await dbContext.StyleReleases.AddRangeAsync(styleReleases);
+            await this.dbContext.Genres.AddRangeAsync(genres);
+            await this.dbContext.Styles.AddRangeAsync(styles);
+            await this.dbContext.Releases.AddRangeAsync(releases);
+            await this.dbContext.StyleReleases.AddRangeAsync(styleReleases);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        [Fact]
+        public async Task CreateReleaseShouldCreateRelease()
+        {
+            var createdReleaseModel = await this.releasesService.CreateRelease<CreateReleaseResourceModel>(
+                "Test",
+                "TEst",
+                "Test",
+                1993,
+                "Trerer",
+                new List<int> {1, 4, 5, 6},
+                Guid.NewGuid());
+
+            await this.dbContext.SaveChangesAsync();
+
+            var createdRelease = await this.dbContext.Releases.FirstOrDefaultAsync(r => r.Id == createdReleaseModel.Id);
+
+            Assert.True(createdRelease != null);
+        }
+
+        [Fact]
+        public async Task CreateReleaseShouldCreateReleaseWithCorrectData()
+        {
+            var artist = "Test Artist";
+            var title = "Test Title";
+            var format = "Test Format";
+            var year = 1993;
+            var label = "label";
+            var styles = new List<int> {1, 2, 3};
+
+            var createdReleaseModel = await this.releasesService.CreateRelease<CreateReleaseResourceModel>(
+                artist,
+                title,
+                format,
+                year,
+                label,
+                styles,
+                Guid.NewGuid());
+
+            await this.dbContext.SaveChangesAsync();
+
+            var createdRelease = await this.dbContext.Releases.FirstOrDefaultAsync(r => r.Id == createdReleaseModel.Id);
+
+            Assert.Equal(artist, createdRelease.Artist);
+            Assert.Equal(title, createdRelease.Title);
+            Assert.Equal(year, createdRelease.Year);
+            Assert.Equal(format, createdRelease.Format);
+            Assert.Equal(label, createdRelease.Label);
+            Assert.Equal(
+                string.Join(string.Empty, styles),
+                string.Join(string.Empty, createdRelease.Styles.Select(sr => sr.StyleId)));
+        }
+
+        [Fact]
+        public async Task GetReleaseoShouldReturnNullIfProvidedReleaseIdIsNotExistingInDb()
+        {
+            await this.dbContext.Releases.AddAsync(new Release());
+
+            await this.dbContext.SaveChangesAsync();
+
+            var returnedReleaseModel = await this.releasesService.GetRelease<GetReleaseResourceModel>(Guid.NewGuid());
+
+            Assert.Null(returnedReleaseModel);
+        }
+
+        [Fact]
+        public async Task GetReleaseShouldGetRelease()
+        {
+            var createdRelease = (await this.dbContext.Releases.AddAsync(new Release())).Entity;
+
+            await this.dbContext.SaveChangesAsync();
+
+            var returnedReleaseModel =
+                await this.releasesService.GetRelease<GetReleaseResourceModel>(createdRelease.Id);
+
+            Assert.Equal(createdRelease.Id, returnedReleaseModel.Id);
+        }
+
+        [Fact]
+        public async Task GetReleaseShouldGetReleaseNonGeneric()
+        {
+            var release = new Release();
+
+            await this.dbContext.Releases.AddAsync(release);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var returnedRelease = await this.releasesService.GetRelease(release.Id);
+
+            Assert.NotNull(returnedRelease);
+        }
+
+        [Fact]
+        public async Task
+            GetReleasesShouldGetFirstEightReleasesWithNoSearchTermAndNoGenreFilterAndNoStyleFilterProvided()
+        {
+            await this.AddReleasesTestData();
+
+            var releasesModelsToCompare = await this.dbContext.Releases.Take(ReleasesToTake)
+                .To<GetReleaseResourceModel>().ToListAsync();
+
+            var releaseModels =
+                await this.releasesService.GetReleases<GetReleaseResourceModel>(null, null, new List<int>(), 0);
+
+            Assert.True(releaseModels.Count == ReleasesToTake);
+            Assert.Equal(
+                string.Join(string.Empty, releasesModelsToCompare.Select(r => r.Id.ToString())),
+                string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
         }
     }
 }

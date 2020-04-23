@@ -7,9 +7,10 @@
     {
         public BaseModel()
         {
-            Id = Guid.NewGuid();
+            this.Id = Guid.NewGuid();
         }
 
-        [Key] public Guid Id { get; set; }
+        [Key]
+        public Guid Id { get; set; }
     }
 }

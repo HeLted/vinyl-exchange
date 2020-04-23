@@ -33,7 +33,7 @@
             IOptions<OperationalStoreOptions> operationalStoreOptions)
             : base(options)
         {
-            _operationalStoreOptions = operationalStoreOptions;
+            this._operationalStoreOptions = operationalStoreOptions;
         }
 
         /// <summary>
@@ -56,9 +56,9 @@
         {
             base.OnModelCreating(builder);
 
-            if (_operationalStoreOptions != null)
+            if (this._operationalStoreOptions != null)
             {
-                builder.ConfigurePersistedGrantContext(_operationalStoreOptions.Value);
+                builder.ConfigurePersistedGrantContext(this._operationalStoreOptions.Value);
             }
             else
             {

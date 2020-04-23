@@ -11,9 +11,6 @@
     [CollectionDefinition("Non-Parallel Collection", DisableParallelization = true)]
     public class MemoryCacheManagerTests
     {
-        private readonly IMemoryCacheManager cacheManager;
-
-
         public MemoryCacheManagerTests()
         {
             var services = new ServiceCollection();
@@ -24,13 +21,15 @@
 
             var memoryCache = serviceProvider.GetService<IMemoryCache>();
 
-            cacheManager = new MemoryCacheManager(memoryCache);
+            this.cacheManager = new MemoryCacheManager(memoryCache);
         }
+
+        private readonly IMemoryCacheManager cacheManager;
 
         [Fact]
         public void ClearShouldDisposeCancelationToken()
         {
-            var cancelationToken = cacheManager.Clear();
+            var cancelationToken = this.cacheManager.Clear();
 
             Assert.True(cancelationToken.IsCancellationRequested);
         }
@@ -38,9 +37,15 @@
         [Fact]
         public void DisposeShouldDispose()
         {
-            cacheManager.Dispose();
+            this.cacheManager.Dispose();
 
-            Assert.True(cacheManager.IsDisposed);
+            Assert.True(this.cacheManager.IsDisposed);
+        }
+
+        [Fact]
+        public void GetKeysShouldGetReturnEmptyListIfNoKeysArePresent()
+        {
+            Assert.True(this.cacheManager.GetKeys().Count == 0);
         }
 
         [Fact]
@@ -49,12 +54,18 @@
             var key = "0032323141";
             var obj = new List<int> {1, 2, 3};
 
-            cacheManager.Set(key, obj, 1800);
+            this.cacheManager.Set(key, obj, 1800);
 
-            var returnedFromCacheObj = cacheManager.Get<List<int>>(key, null);
+            var returnedFromCacheObj = this.cacheManager.Get<List<int>>(key, null);
 
             Assert.True(obj.Count == returnedFromCacheObj.Count);
             Assert.Equal(string.Join(",", obj), string.Join(",", returnedFromCacheObj));
+        }
+
+        [Fact]
+        public void IsSetShouldReturnFalseIfKeyIsNotSet()
+        {
+            Assert.False(this.cacheManager.IsSet("testKey"));
         }
 
         [Fact]
@@ -62,21 +73,9 @@
         {
             var key = "0032323141";
 
-            var locked = cacheManager.PerformActionWithLock(key, TimeSpan.FromSeconds(200), () => { });
+            var locked = this.cacheManager.PerformActionWithLock(key, TimeSpan.FromSeconds(200), () => { });
 
             Assert.True(locked);
-        }
-
-        [Fact]
-        public void IsSetShouldReturnFalseIfKeyIsNotSet()
-        {
-            Assert.False(cacheManager.IsSet("testKey"));
-        }
-
-        [Fact]
-        public void GetKeysShouldGetReturnEmptyListIfNoKeysArePresent()
-        {
-            Assert.True(cacheManager.GetKeys().Count == 0);
         }
     }
 }

@@ -40,11 +40,14 @@
 
         public VinylExchangeUser Seller { get; set; }
 
-        [Required] public Guid? SellerId { get; set; }
+        [Required]
+        public Guid? SellerId { get; set; }
 
-        [Column(TypeName = "decimal(18,4)")] public decimal ShippingPrice { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal ShippingPrice { get; set; }
 
-        [Required] public string ShipsFrom { get; set; }
+        [Required]
+        public string ShipsFrom { get; set; }
 
         public string ShipsTo { get; set; }
 

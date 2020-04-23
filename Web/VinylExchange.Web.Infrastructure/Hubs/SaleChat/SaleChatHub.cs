@@ -26,30 +26,30 @@
         {
             var roomName = saleId.ToString();
 
-            var sale = await salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
+            var sale = await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
 
-            var userId = Guid.Parse(GetUserId());
+            var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
             {
                 if (sale.SellerId == userId ||
                     sale.BuyerId == userId)
                 {
-                    await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+                    await this.Groups.AddToGroupAsync(this.Context.ConnectionId, roomName);
                 }
             }
         }
 
         public async Task LeaveRoom(string roomName)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
+            await this.Groups.RemoveFromGroupAsync(this.Context.ConnectionId, roomName);
         }
 
         public async Task LoadMessageHistory(Guid saleId)
         {
-            var sale = await salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
+            var sale = await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
 
-            var userId = Guid.Parse(GetUserId());
+            var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
             {
@@ -57,9 +57,9 @@
                     sale.BuyerId == userId)
                 {
                     var messages =
-                        await saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(saleId);
+                        await this.saleMessagesService.GetMessagesForSale<GetMessagesForSaleResourceModel>(saleId);
 
-                    await Clients.Caller.LoadMessageHistory(messages);
+                    await this.Clients.Caller.LoadMessageHistory(messages);
                 }
             }
         }
@@ -68,20 +68,20 @@
         {
             var roomName = saleId.ToString();
 
-            var userId = Guid.Parse(GetUserId());
+            var userId = Guid.Parse(this.GetUserId());
 
             var message =
-                await saleMessagesService.AddMessageToSale<AddMessageToSaleResourceModel>(
+                await this.saleMessagesService.AddMessageToSale<AddMessageToSaleResourceModel>(
                     saleId,
                     userId,
                     messageContent);
 
-            await Clients.Group(roomName).NewMessage(message);
+            await this.Clients.Group(roomName).NewMessage(message);
         }
 
         private string GetUserId()
         {
-            return Context.User.FindFirst("sub").Value;
+            return this.Context.User.FindFirst("sub").Value;
         }
     }
 }

@@ -34,12 +34,12 @@
             }
 
             if (allowedImageTypes.Contains(file.FileName.Substring(file.FileName.LastIndexOf('.'))) &&
-                (fileType == null || fileType == FileType.Image))
+                (this.fileType == null || this.fileType == FileType.Image))
             {
                 if (file.Length > imageMaxContentSize)
                 {
                     return new ValidationResult(
-                        "Your image is too large, maximum allowed size is : " + ((imageMaxContentSize / 1024f) / 1024f)
+                        "Your image is too large, maximum allowed size is : " + imageMaxContentSize / 1024f / 1024f
                                                                               + "MB");
                 }
 
@@ -47,13 +47,13 @@
             }
 
             if (allowedAudioTypes.Contains(file.FileName.Substring(file.FileName.LastIndexOf('.'))) &&
-                (fileType == null || fileType == FileType.Audio))
+                (this.fileType == null || this.fileType == FileType.Audio))
             {
                 if (file.Length > audioMaxContentSize)
                 {
                     return new ValidationResult(
                         "Your audio file is too large, maximum allowed size is : "
-                        + ((audioMaxContentSize / 1024f) / 1024f) + "MB");
+                        + audioMaxContentSize / 1024f / 1024f + "MB");
                 }
 
                 return ValidationResult.Success;

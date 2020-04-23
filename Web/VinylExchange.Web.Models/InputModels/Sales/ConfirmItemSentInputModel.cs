@@ -5,6 +5,7 @@
 
     public class ConfirmItemSentInputModel
     {
-        [Required] public Guid? SaleId { get; set; }
+        [Required]
+        public Guid? SaleId { get; set; }
     }
 }

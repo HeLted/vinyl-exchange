@@ -5,8 +5,10 @@
 
     public class PlaceOrderInputModel
     {
-        [Required] public Guid? SaleId { get; set; }
+        [Required]
+        public Guid? SaleId { get; set; }
 
-        [Required] public Guid? AddressId { get; set; }
+        [Required]
+        public Guid? AddressId { get; set; }
     }
 }

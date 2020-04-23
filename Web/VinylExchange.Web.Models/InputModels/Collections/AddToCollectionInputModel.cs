@@ -24,6 +24,7 @@
 
         public string Description { get; set; }
 
-        [Required] public Guid? ReleaseId { get; set; }
+        [Required]
+        public Guid? ReleaseId { get; set; }
     }
 }

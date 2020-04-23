@@ -16,20 +16,20 @@
 
     public class StylesServiceTests
     {
+        public StylesServiceTests()
+        {
+            this.dbContext = DbFactory.CreateDbContext();
+
+            this.genresEntityRetrieverMock = new Mock<IGenresEntityRetriever>();
+
+            this.stylesService = new StylesService(this.dbContext, this.genresEntityRetrieverMock.Object);
+        }
+
         private readonly VinylExchangeDbContext dbContext;
 
         private readonly IStylesService stylesService;
 
         private readonly Mock<IGenresEntityRetriever> genresEntityRetrieverMock;
-
-        public StylesServiceTests()
-        {
-            dbContext = DbFactory.CreateDbContext();
-
-            genresEntityRetrieverMock = new Mock<IGenresEntityRetriever>();
-
-            stylesService = new StylesService(dbContext, genresEntityRetrieverMock.Object);
-        }
 
         [Fact]
         public async Task CreateStyleShouldCreateStyle()
@@ -38,13 +38,13 @@
 
             var genre = new Genre();
 
-            genresEntityRetrieverMock.Setup(x => x.GetGenre(It.IsAny<int?>())).ReturnsAsync(genre);
+            this.genresEntityRetrieverMock.Setup(x => x.GetGenre(It.IsAny<int?>())).ReturnsAsync(genre);
 
-            var createdStyleModel = await stylesService.CreateStyle<CreateStyleResourceModel>(name, genre.Id);
+            var createdStyleModel = await this.stylesService.CreateStyle<CreateStyleResourceModel>(name, genre.Id);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            var createdStyle = await dbContext.Styles.FirstOrDefaultAsync(s => s.Id == createdStyleModel.Id);
+            var createdStyle = await this.dbContext.Styles.FirstOrDefaultAsync(s => s.Id == createdStyleModel.Id);
 
             Assert.NotNull(createdStyle);
         }
@@ -56,13 +56,13 @@
 
             var genre = new Genre();
 
-            genresEntityRetrieverMock.Setup(x => x.GetGenre(It.IsAny<int?>())).ReturnsAsync(genre);
+            this.genresEntityRetrieverMock.Setup(x => x.GetGenre(It.IsAny<int?>())).ReturnsAsync(genre);
 
-            var createdStyleModel = await stylesService.CreateStyle<CreateStyleResourceModel>(name, genre.Id);
+            var createdStyleModel = await this.stylesService.CreateStyle<CreateStyleResourceModel>(name, genre.Id);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            var createdStyle = await dbContext.Styles.FirstOrDefaultAsync(s => s.Id == createdStyleModel.Id);
+            var createdStyle = await this.dbContext.Styles.FirstOrDefaultAsync(s => s.Id == createdStyleModel.Id);
 
             Assert.Equal(name, createdStyle.Name);
             Assert.Equal(genre.Id, createdStyle.GenreId);
@@ -71,10 +71,10 @@
         [Fact]
         public async Task CreateStyleShouldThrowNullReferenceExceptionIfProvidedGenreIdIsNotInDb()
         {
-            genresEntityRetrieverMock.Setup(x => x.GetGenre(It.IsAny<int>())).ReturnsAsync((Genre) null);
+            this.genresEntityRetrieverMock.Setup(x => x.GetGenre(It.IsAny<int>())).ReturnsAsync((Genre) null);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                async () => await stylesService.CreateStyle<CreateStyleResourceModel>("test", 2));
+                async () => await this.stylesService.CreateStyle<CreateStyleResourceModel>("test", 2));
 
             Assert.Equal(GenreNotFound, exception.Message);
         }
@@ -87,14 +87,14 @@
 
             for (var i = 0; i < 5; i++)
             {
-                dbContext.Styles.Add(new Style {Name = "Electronic", GenreId = genreId});
+                this.dbContext.Styles.Add(new Style {Name = "Electronic", GenreId = genreId});
             }
 
-            dbContext.Styles.Add(new Style {Name = "Metal", GenreId = secondGenreId});
+            this.dbContext.Styles.Add(new Style {Name = "Metal", GenreId = secondGenreId});
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            var styleModels = await stylesService.GetAllStylesForGenre<GetAllStylesForGenreResourceModel>(genreId);
+            var styleModels = await this.stylesService.GetAllStylesForGenre<GetAllStylesForGenreResourceModel>(genreId);
 
             Assert.True(styleModels.Count == 5);
         }
@@ -107,14 +107,14 @@
 
             for (var i = 0; i < 5; i++)
             {
-                dbContext.Styles.Add(new Style {Name = "Electronic", GenreId = genreId});
+                this.dbContext.Styles.Add(new Style {Name = "Electronic", GenreId = genreId});
             }
 
-            dbContext.Styles.Add(new Style {Name = "Metal", GenreId = secondGenreId});
+            this.dbContext.Styles.Add(new Style {Name = "Metal", GenreId = secondGenreId});
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            var styleModels = await stylesService.GetAllStylesForGenre<GetAllStylesForGenreResourceModel>(null);
+            var styleModels = await this.stylesService.GetAllStylesForGenre<GetAllStylesForGenreResourceModel>(null);
 
             Assert.True(styleModels.Count == 6);
         }
@@ -127,13 +127,13 @@
 
             for (var i = 0; i < 5; i++)
             {
-                dbContext.Styles.Add(new Style {Name = "Electronic", GenreId = genreId});
+                this.dbContext.Styles.Add(new Style {Name = "Electronic", GenreId = genreId});
             }
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             var styleModels =
-                await stylesService.GetAllStylesForGenre<GetAllStylesForGenreResourceModel>(secondGenreId);
+                await this.stylesService.GetAllStylesForGenre<GetAllStylesForGenreResourceModel>(secondGenreId);
 
             Assert.True(styleModels.Count == 0);
         }
@@ -141,13 +141,13 @@
         [Fact]
         public async Task RemoveStyleShouldRemoveStyle()
         {
-            var style = (await dbContext.Styles.AddAsync(new Style {Id = 5})).Entity;
+            var style = (await this.dbContext.Styles.AddAsync(new Style {Id = 5})).Entity;
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            await stylesService.RemoveStyle<RemoveStyleResourceModel>(style.Id);
+            await this.stylesService.RemoveStyle<RemoveStyleResourceModel>(style.Id);
 
-            var removeStyle = await dbContext.Genres.FirstOrDefaultAsync(s => s.Id == style.Id);
+            var removeStyle = await this.dbContext.Genres.FirstOrDefaultAsync(s => s.Id == style.Id);
 
             Assert.Null(removeStyle);
         }
@@ -155,12 +155,12 @@
         [Fact]
         public async Task RemoveStyleShouldThrowNullReferenceExceptionIfProvidedStyleIdIsNotInDb()
         {
-            var style = (await dbContext.Styles.AddAsync(new Style {Id = 5})).Entity;
+            var style = (await this.dbContext.Styles.AddAsync(new Style {Id = 5})).Entity;
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(
-                async () => await stylesService.RemoveStyle<RemoveStyleResourceModel>(23));
+                async () => await this.stylesService.RemoveStyle<RemoveStyleResourceModel>(23));
 
             Assert.Equal(StyleNotFound, exception.Message);
         }

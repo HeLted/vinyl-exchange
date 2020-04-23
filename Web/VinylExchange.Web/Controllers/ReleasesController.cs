@@ -28,7 +28,7 @@
         {
             try
             {
-                var resourceModel = await releasesService.CreateRelease<CreateReleaseResourceModel>(
+                var resourceModel = await this.releasesService.CreateRelease<CreateReleaseResourceModel>(
                     inputModel.Artist,
                     inputModel.Title,
                     inputModel.Format,
@@ -41,8 +41,8 @@
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -51,19 +51,19 @@
         {
             try
             {
-                var release = await releasesService.GetRelease<GetReleaseResourceModel>(id);
+                var release = await this.releasesService.GetRelease<GetReleaseResourceModel>(id);
 
                 if (release == null)
                 {
-                    return NotFound();
+                    return this.NotFound();
                 }
 
                 return release;
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -77,7 +77,7 @@
         {
             try
             {
-                return await releasesService.GetReleases<GetReleasesResourceModel>(
+                return await this.releasesService.GetReleases<GetReleasesResourceModel>(
                     searchTerm,
                     filterGenreId,
                     styleIds,
@@ -85,8 +85,8 @@
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
     }

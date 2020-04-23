@@ -23,12 +23,12 @@
         {
             var formSessionIdAsString = formSessionId.ToString();
 
-            if (!cacheManager.IsSet(formSessionIdAsString))
+            if (!this.cacheManager.IsSet(formSessionIdAsString))
             {
-                cacheManager.Set(formSessionIdAsString, new List<UploadFileUtilityModel>(), 1800);
+                this.cacheManager.Set(formSessionIdAsString, new List<UploadFileUtilityModel>(), 1800);
             }
 
-            var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(formSessionIdAsString, null);
+            var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionIdAsString, null);
 
             var fileUtilityModel = new UploadFileUtilityModel(file);
 
@@ -41,7 +41,7 @@
         {
             try
             {
-                return cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId.ToString(), null);
+                return this.cacheManager.Get<List<UploadFileUtilityModel>>(formSessionId.ToString(), null);
             }
             catch
             {
@@ -53,19 +53,19 @@
         {
             var formSessionIdAsString = inputModel.FormSessionId.ToString();
 
-            var key = cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
+            var key = this.cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
 
             var deletedFormSessionCacheCopy = new List<TModel>();
 
-            if (cacheManager.IsSet(formSessionIdAsString))
+            if (this.cacheManager.IsSet(formSessionIdAsString))
             {
-                var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
+                var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
                 deletedFormSessionCacheCopy.AddRange(formSessionStorage.Select(uf => uf.To<TModel>()));
 
                 formSessionStorage.Clear();
 
-                cacheManager.Remove(formSessionIdAsString);
+                this.cacheManager.Remove(formSessionIdAsString);
 
                 return deletedFormSessionCacheCopy;
             }
@@ -77,11 +77,11 @@
         {
             var formSessionIdAsString = inputModel.FormSessionId.ToString();
 
-            var key = cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
+            var key = this.cacheManager.GetKeys().Where(x => x == formSessionIdAsString).SingleOrDefault();
 
-            if (cacheManager.IsSet(formSessionIdAsString))
+            if (this.cacheManager.IsSet(formSessionIdAsString))
             {
-                var formSessionStorage = cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
+                var formSessionStorage = this.cacheManager.Get<List<UploadFileUtilityModel>>(key, null);
 
                 var file = formSessionStorage.SingleOrDefault(x => x.FileGuid == inputModel.Id);
 

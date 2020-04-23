@@ -20,6 +20,11 @@
             this.dbContext = dbContext;
         }
 
+        public async Task<Address> GetAddress(Guid? addressId)
+        {
+            return await this.dbContext.Addresses.Where(a => a.Id == addressId).FirstOrDefaultAsync();
+        }
+
         public async Task<TModel> CreateAddress<TModel>(
             string country,
             string town,
@@ -36,41 +41,36 @@
                 UserId = userId
             };
 
-            var trackedAddress = await dbContext.Addresses.AddAsync(address);
+            var trackedAddress = await this.dbContext.Addresses.AddAsync(address);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return trackedAddress.Entity.To<TModel>();
         }
 
         public async Task<TModel> GetAddress<TModel>(Guid addressId)
         {
-            return await dbContext.Addresses.Where(a => a.Id == addressId).To<TModel>().FirstOrDefaultAsync();
+            return await this.dbContext.Addresses.Where(a => a.Id == addressId).To<TModel>().FirstOrDefaultAsync();
         }
 
         public async Task<List<TModel>> GetUserAddresses<TModel>(Guid userId)
         {
-            return await dbContext.Addresses.Where(a => a.UserId == userId).To<TModel>().ToListAsync();
+            return await this.dbContext.Addresses.Where(a => a.UserId == userId).To<TModel>().ToListAsync();
         }
 
         public async Task<TModel> RemoveAddress<TModel>(Guid addressId)
         {
-            var address = await dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
+            var address = await this.dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
 
             if (address == null)
             {
                 throw new NullReferenceException(NullReferenceExceptionsConstants.AddressNotFound);
             }
 
-            var removedAddress = dbContext.Addresses.Remove(address).Entity;
-            await dbContext.SaveChangesAsync();
+            var removedAddress = this.dbContext.Addresses.Remove(address).Entity;
+            await this.dbContext.SaveChangesAsync();
 
             return removedAddress.To<TModel>();
-        }
-
-        public async Task<Address> GetAddress(Guid? addressId)
-        {
-            return await dbContext.Addresses.Where(a => a.Id == addressId).FirstOrDefaultAsync();
         }
     }
 }

@@ -29,7 +29,9 @@
         [RegularExpression(AplhaNumericBracesDashAndSpace, ErrorMessage = AllowedAplhaNumericBracesDashAndSpace)]
         public string Format { get; set; }
 
-        [Required] [ValidateYear] public int Year { get; set; }
+        [Required]
+        [ValidateYear]
+        public int Year { get; set; }
 
         [Required]
         [MinLength(3, ErrorMessage = InvalidMinLength)]

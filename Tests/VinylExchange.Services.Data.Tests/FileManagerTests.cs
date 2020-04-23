@@ -13,16 +13,16 @@
 
     public class FileManagerTests
     {
+        public FileManagerTests()
+        {
+            this.memoryCacheFilesServiceMock = new Mock<IMemoryCacheFilesSevice>();
+
+            this.fileManager = new FileManager(this.memoryCacheFilesServiceMock.Object);
+        }
+
         private readonly FileManager fileManager;
 
         private readonly Mock<IMemoryCacheFilesSevice> memoryCacheFilesServiceMock;
-
-        public FileManagerTests()
-        {
-            memoryCacheFilesServiceMock = new Mock<IMemoryCacheFilesSevice>();
-
-            fileManager = new FileManager(memoryCacheFilesServiceMock.Object);
-        }
 
         [Fact]
         public void GetFilesByteContentShouldGetByteContentFromCollectionOfUploadFileUtilityModel()
@@ -45,7 +45,7 @@
                 filesForUploadModels.Add(uploadFileUtilityModel);
             }
 
-            var byteContent = fileManager.GetFilesByteContent(filesForUploadModels);
+            var byteContent = this.fileManager.GetFilesByteContent(filesForUploadModels);
 
             Assert.Equal(string.Join(",", filesForUploadModels.Select(x => x.FileByteContent)),
                 string.Join(",", byteContent));

@@ -6,7 +6,8 @@
 
     public class ChangeEmailInputModel
     {
-        [Required] public string ChangeEmailToken { get; set; }
+        [Required]
+        public string ChangeEmailToken { get; set; }
 
         [Required]
         [EmailAddress]

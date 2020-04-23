@@ -26,13 +26,13 @@
         {
             try
             {
-                return await releaseFilesService.GetReleaseImages<ReleaseFileResourceModel>(releaseId);
+                return await this.releaseFilesService.GetReleaseImages<ReleaseFileResourceModel>(releaseId);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
+                this.loggerService.LogException(ex);
 
-                return BadRequest();
+                return this.BadRequest();
             }
         }
 
@@ -42,13 +42,13 @@
         {
             try
             {
-                return await releaseFilesService.GetReleaseCoverArt<ReleaseFileResourceModel>(releaseId);
+                return await this.releaseFilesService.GetReleaseCoverArt<ReleaseFileResourceModel>(releaseId);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
+                this.loggerService.LogException(ex);
 
-                return BadRequest();
+                return this.BadRequest();
             }
         }
     }

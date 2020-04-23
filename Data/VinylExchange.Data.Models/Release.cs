@@ -26,7 +26,8 @@
         [RegularExpression(AplhaNumericBracesDashAndSpace)]
         public string Format { get; set; }
 
-        [Required] public int Year { get; set; }
+        [Required]
+        public int Year { get; set; }
 
         [Required]
         [MinLength(3)]

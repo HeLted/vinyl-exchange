@@ -29,19 +29,18 @@
         {
             try
             {
-                var resourceModel = await addressesService.CreateAddress<CreateAddressResourceModel>(
+                var resourceModel = await this.addressesService.CreateAddress<CreateAddressResourceModel>(
                     inputModel.Country,
                     inputModel.Town,
                     inputModel.PostalCode,
-                    inputModel.FullAddress,
-                    GetUserId(User));
+                    inputModel.FullAddress, this.GetUserId(this.User));
 
-                return Created(resourceModel);
+                return this.Created(resourceModel);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -51,13 +50,13 @@
         {
             try
             {
-                return await addressesService.GetUserAddresses<GetUserAddressesResourceModel>(
-                    GetUserId(User));
+                return await this.addressesService.GetUserAddresses<GetUserAddressesResourceModel>(
+                    this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -67,24 +66,24 @@
         {
             try
             {
-                var addressInfoModel = await addressesService.GetAddress<GetAddressInfoUtilityModel>(id);
+                var addressInfoModel = await this.addressesService.GetAddress<GetAddressInfoUtilityModel>(id);
 
                 if (addressInfoModel == null)
                 {
-                    return NotFound();
+                    return this.NotFound();
                 }
 
-                if (addressInfoModel.UserId != GetUserId(User))
+                if (addressInfoModel.UserId != this.GetUserId(this.User))
                 {
-                    return Forbid();
+                    return this.Forbid();
                 }
 
-                return await addressesService.RemoveAddress<RemoveAddressResourceModel>(addressInfoModel.Id);
+                return await this.addressesService.RemoveAddress<RemoveAddressResourceModel>(addressInfoModel.Id);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
     }

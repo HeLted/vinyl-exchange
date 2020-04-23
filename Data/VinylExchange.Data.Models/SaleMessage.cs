@@ -13,10 +13,12 @@
 
         public Sale Sale { get; set; }
 
-        [Required] public Guid? SaleId { get; set; }
+        [Required]
+        public Guid? SaleId { get; set; }
 
         public VinylExchangeUser User { get; set; }
 
-        [Required] public Guid? UserId { get; set; }
+        [Required]
+        public Guid? UserId { get; set; }
     }
 }

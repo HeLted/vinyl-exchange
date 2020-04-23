@@ -35,6 +35,7 @@
 
         public VinylExchangeUser User { get; set; }
 
-        [Required] public Guid? UserId { get; set; }
+        [Required]
+        public Guid? UserId { get; set; }
     }
 }

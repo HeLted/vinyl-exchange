@@ -6,10 +6,12 @@
 
     public class SaleLog : BaseAuditModel
     {
-        [Required] public string Content { get; set; }
+        [Required]
+        public string Content { get; set; }
 
         public Sale Sale { get; set; }
 
-        [Required] public Guid? SaleId { get; set; }
+        [Required]
+        public Guid? SaleId { get; set; }
     }
 }

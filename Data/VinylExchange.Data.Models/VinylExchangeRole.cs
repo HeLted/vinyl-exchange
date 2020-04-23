@@ -14,7 +14,7 @@
         public VinylExchangeRole(string name)
             : base(name)
         {
-            Id = Guid.NewGuid();
+            this.Id = Guid.NewGuid();
         }
 
         public DateTime CreatedOn { get; set; }

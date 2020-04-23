@@ -25,8 +25,6 @@
         /// </summary>
         protected CancellationTokenSource _cancellationTokenSource;
 
-        public bool IsDisposed { get; private set; }
-
         static MemoryCacheManager()
         {
             _allKeys = new ConcurrentDictionary<string, bool>();
@@ -34,25 +32,27 @@
 
         public MemoryCacheManager(IMemoryCache cache)
         {
-            _cache = cache;
-            _cancellationTokenSource = new CancellationTokenSource();
+            this._cache = cache;
+            this._cancellationTokenSource = new CancellationTokenSource();
         }
+
+        public bool IsDisposed { get; private set; }
 
         /// <summary>
         ///     Clear all cache data
         /// </summary>
         public virtual CancellationTokenSource Clear()
         {
-            var cancelationTokenSource = _cancellationTokenSource;
+            var cancelationTokenSource = this._cancellationTokenSource;
 
             // send cancellation request
-            _cancellationTokenSource.Cancel();
+            this._cancellationTokenSource.Cancel();
 
             // releases all resources used by this cancellation token
-            _cancellationTokenSource.Dispose();
+            this._cancellationTokenSource.Dispose();
 
             // recreate cancellation token
-            _cancellationTokenSource = new CancellationTokenSource();
+            this._cancellationTokenSource = new CancellationTokenSource();
 
             return cancelationTokenSource;
         }
@@ -62,7 +62,7 @@
         /// </summary>
         public virtual void Dispose()
         {
-            IsDisposed = true;
+            this.IsDisposed = true;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@
             // item already is in cache, so return 
 
 
-            if (_cache.TryGetValue(key, out T value))
+            if (this._cache.TryGetValue(key, out T value))
             {
                 return value;
             }
@@ -89,7 +89,7 @@
             // and set in cache (if cache time is defined)
             if ((cacheTime ?? NopCachingDefaults.CacheTime) > 0)
             {
-                Set(key, result, cacheTime ?? NopCachingDefaults.CacheTime);
+                this.Set(key, result, cacheTime ?? NopCachingDefaults.CacheTime);
             }
 
             return result;
@@ -107,7 +107,7 @@
         /// <returns>True if item already is in cache; otherwise false</returns>
         public virtual bool IsSet(string key)
         {
-            return _cache.TryGetValue(key, out _);
+            return this._cache.TryGetValue(key, out _);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@
 
             try
             {
-                _cache.Set(key, key, GetMemoryCacheEntryOptions(expirationTime));
+                this._cache.Set(key, key, this.GetMemoryCacheEntryOptions(expirationTime));
 
                 // perform action
                 action();
@@ -137,7 +137,7 @@
             finally
             {
                 // release lock even if action fails
-                Remove(key);
+                this.Remove(key);
             }
         }
 
@@ -147,7 +147,7 @@
         /// <param name="key">Key of cached item</param>
         public virtual void Remove(string key)
         {
-            _cache.Remove(RemoveKey(key));
+            this._cache.Remove(this.RemoveKey(key));
         }
 
         /// <summary>
@@ -160,10 +160,8 @@
         {
             if (data != null)
             {
-                _cache.Set(
-                    AddKey(key),
-                    data,
-                    GetMemoryCacheEntryOptions(TimeSpan.FromMinutes(cacheTime)));
+                this._cache.Set(this.AddKey(key),
+                    data, this.GetMemoryCacheEntryOptions(TimeSpan.FromMinutes(cacheTime)));
             }
         }
 
@@ -187,10 +185,10 @@
             var options = new MemoryCacheEntryOptions()
 
                 // add cancellation token for clear cache
-                .AddExpirationToken(new CancellationChangeToken(_cancellationTokenSource.Token))
+                .AddExpirationToken(new CancellationChangeToken(this._cancellationTokenSource.Token))
 
                 // add post eviction callback
-                .RegisterPostEvictionCallback(PostEviction);
+                .RegisterPostEvictionCallback(this.PostEviction);
 
             // set cache time
             options.AbsoluteExpirationRelativeToNow = cacheTime;
@@ -205,7 +203,7 @@
         /// <returns>Itself key</returns>
         protected string RemoveKey(string key)
         {
-            TryRemoveKey(key);
+            this.TryRemoveKey(key);
             return key;
         }
 
@@ -230,7 +228,7 @@
         {
             foreach (var key in _allKeys.Where(p => !p.Value).Select(p => p.Key).ToList())
             {
-                RemoveKey(key);
+                this.RemoveKey(key);
             }
         }
 
@@ -250,10 +248,10 @@
             }
 
             // try to remove all keys marked as not existing
-            ClearKeys();
+            this.ClearKeys();
 
             // try to remove this key from dictionary
-            TryRemoveKey(key.ToString());
+            this.TryRemoveKey(key.ToString());
         }
     }
 }

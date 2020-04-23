@@ -21,8 +21,8 @@
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var user = await userManager.GetUserAsync(context.Subject);
-            var roles = await userManager.GetRolesAsync(user);
+            var user = await this.userManager.GetUserAsync(context.Subject);
+            var roles = await this.userManager.GetRolesAsync(user);
             var claims = new List<Claim>
             {
                 new Claim(JwtClaimTypes.Name, user.UserName),
@@ -36,7 +36,7 @@
 
         public async Task IsActiveAsync(IsActiveContext context)
         {
-            var user = await userManager.GetUserAsync(context.Subject);
+            var user = await this.userManager.GetUserAsync(context.Subject);
             context.IsActive = user != null && user.LockoutEnabled;
         }
     }

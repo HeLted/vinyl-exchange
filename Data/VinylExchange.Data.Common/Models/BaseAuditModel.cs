@@ -7,11 +7,12 @@
     {
         public BaseAuditModel()
         {
-            Id = Guid.NewGuid();
-            CreatedOn = DateTime.UtcNow;
+            this.Id = Guid.NewGuid();
+            this.CreatedOn = DateTime.UtcNow;
         }
 
-        [Key] public Guid? Id { get; set; }
+        [Key]
+        public Guid? Id { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

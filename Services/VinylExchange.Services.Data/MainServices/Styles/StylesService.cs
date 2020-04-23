@@ -26,7 +26,7 @@
 
         public async Task<TModel> CreateStyle<TModel>(string name, int genreId)
         {
-            var genre = await genresEntityRetriever.GetGenre(genreId);
+            var genre = await this.genresEntityRetriever.GetGenre(genreId);
 
             if (genre == null)
             {
@@ -35,16 +35,16 @@
 
             var style = new Style {Name = name, GenreId = genreId};
 
-            var trackedStyle = await dbContext.Styles.AddAsync(style);
+            var trackedStyle = await this.dbContext.Styles.AddAsync(style);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return trackedStyle.Entity.To<TModel>();
         }
 
         public async Task<List<TModel>> GetAllStylesForGenre<TModel>(int? genreId)
         {
-            var stylesQueriable = dbContext.Styles.AsQueryable();
+            var stylesQueriable = this.dbContext.Styles.AsQueryable();
 
             if (genreId != null)
             {
@@ -56,16 +56,16 @@
 
         public async Task<TModel> RemoveStyle<TModel>(int styleId)
         {
-            var style = await dbContext.Styles.FirstOrDefaultAsync(s => s.Id == styleId);
+            var style = await this.dbContext.Styles.FirstOrDefaultAsync(s => s.Id == styleId);
 
             if (style == null)
             {
                 throw new NullReferenceException(StyleNotFound);
             }
 
-            var removedStyle = dbContext.Styles.Remove(style).Entity;
+            var removedStyle = this.dbContext.Styles.Remove(style).Entity;
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return removedStyle.To<TModel>();
         }

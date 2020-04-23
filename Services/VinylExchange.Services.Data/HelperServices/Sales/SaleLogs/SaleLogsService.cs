@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Common.Constants;
+    using Common.Enumerations;
     using MainServices.Sales.Contracts;
     using Mapping;
     using Microsoft.EntityFrameworkCore;
@@ -25,53 +26,53 @@
             this.salesEntityRetriever = salesEntityRetriever;
         }
 
-        public async Task<TModel> AddLogToSale<TModel>(Guid? saleId, Common.Enumerations.SaleLogs logType)
+        public async Task<TModel> AddLogToSale<TModel>(Guid? saleId, SaleLogs logType)
         {
-            var sale = dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
+            var sale = this.dbContext.Sales.Where(s => s.Id == saleId).FirstOrDefault();
 
             if (sale == null)
             {
                 throw new NullReferenceException(SaleNotFound);
             }
 
-            var logMessage = GenerateLogMessage(logType);
+            var logMessage = this.GenerateLogMessage(logType);
 
             var saleLog =
-                (await dbContext.SaleLogs.AddAsync(new SaleLog {Content = logMessage, SaleId = saleId})).Entity
+                (await this.dbContext.SaleLogs.AddAsync(new SaleLog {Content = logMessage, SaleId = saleId})).Entity
                 .To<TModel>();
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return saleLog;
         }
 
         public async Task<int> ClearSaleLogs(Guid? saleId)
         {
-            var sale = await salesEntityRetriever.GetSale(saleId);
+            var sale = await this.salesEntityRetriever.GetSale(saleId);
 
             if (sale == null)
             {
                 throw new NullReferenceException(SaleNotFound);
             }
 
-            var saleLogs = dbContext.SaleLogs.Where(sl => sl.SaleId == sale.Id).ToList();
+            var saleLogs = this.dbContext.SaleLogs.Where(sl => sl.SaleId == sale.Id).ToList();
 
             var logsToBeClearedNumber = saleLogs.Count;
 
-            dbContext.SaleLogs.RemoveRange(saleLogs);
+            this.dbContext.SaleLogs.RemoveRange(saleLogs);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return logsToBeClearedNumber;
         }
 
         public async Task<IEnumerable<TModel>> GetLogsForSale<TModel>(Guid? saleId)
         {
-            return await dbContext.SaleLogs.Where(sl => sl.SaleId == saleId).OrderBy(sl => sl.CreatedOn)
+            return await this.dbContext.SaleLogs.Where(sl => sl.SaleId == saleId).OrderBy(sl => sl.CreatedOn)
                 .To<TModel>().ToListAsync();
         }
 
-        private string GenerateLogMessage(Common.Enumerations.SaleLogs logType)
+        private string GenerateLogMessage(SaleLogs logType)
         {
             var logMessage = (string) typeof(SaleLogsMessages).GetField(logType.ToString()).GetValue(null);
 

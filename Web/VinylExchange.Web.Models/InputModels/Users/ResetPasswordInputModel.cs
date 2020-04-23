@@ -6,7 +6,8 @@
 
     public class ResetPasswordInputModel
     {
-        [Required] public string ResetPasswordToken { get; set; }
+        [Required]
+        public string ResetPasswordToken { get; set; }
 
         [Required]
         [EmailAddress]

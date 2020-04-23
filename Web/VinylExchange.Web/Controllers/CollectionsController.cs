@@ -29,19 +29,18 @@
         {
             try
             {
-                var resourceModel = await collectionsService.AddToCollection<AddToCollectionResourceModel>(
+                var resourceModel = await this.collectionsService.AddToCollection<AddToCollectionResourceModel>(
                     inputModel.VinylGrade,
                     inputModel.SleeveGrade,
                     inputModel.Description,
-                    inputModel.ReleaseId,
-                    GetUserId(User));
+                    inputModel.ReleaseId, this.GetUserId(this.User));
 
-                return Created(resourceModel);
+                return this.Created(resourceModel);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -51,14 +50,13 @@
         {
             try
             {
-                return await collectionsService.DoesUserCollectionContainRelease(
-                    releaseId,
-                    GetUserId(User));
+                return await this.collectionsService.DoesUserCollectionContainRelease(
+                    releaseId, this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -68,19 +66,19 @@
             try
             {
                 var collectionItemModel =
-                    await collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(id);
+                    await this.collectionsService.GetCollectionItem<GetCollectionItemResourceModel>(id);
 
                 if (collectionItemModel == null)
                 {
-                    return NotFound();
+                    return this.NotFound();
                 }
 
                 return collectionItemModel;
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -90,13 +88,13 @@
         {
             try
             {
-                return await collectionsService.GetUserCollection<GetUserCollectionResourceModel>(
-                    GetUserId(User));
+                return await this.collectionsService.GetUserCollection<GetUserCollectionResourceModel>(
+                    this.GetUserId(this.User));
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -107,28 +105,28 @@
             try
             {
                 var collectionItemInfoModel =
-                    await collectionsService.GetCollectionItem<GetCollectionItemInfoUtilityModel>(id);
+                    await this.collectionsService.GetCollectionItem<GetCollectionItemInfoUtilityModel>(id);
 
                 if (collectionItemInfoModel == null)
                 {
-                    return NotFound();
+                    return this.NotFound();
                 }
 
-                if (collectionItemInfoModel.UserId != GetUserId(User))
+                if (collectionItemInfoModel.UserId != this.GetUserId(this.User))
                 {
-                    return Unauthorized();
+                    return this.Unauthorized();
                 }
 
                 var collectionItemRemovedModel =
-                    await collectionsService.RemoveCollectionItem<RemoveCollectionItemResourceModel>(
+                    await this.collectionsService.RemoveCollectionItem<RemoveCollectionItemResourceModel>(
                         collectionItemInfoModel.Id);
 
-                return Ok(collectionItemRemovedModel);
+                return this.Ok(collectionItemRemovedModel);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
     }

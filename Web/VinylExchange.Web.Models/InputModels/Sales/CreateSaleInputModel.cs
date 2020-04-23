@@ -23,7 +23,9 @@
         [MaxLength(400, ErrorMessage = InvalidMaxLength)]
         public string Description { get; set; }
 
-        [Required] [Range(0, 100000)] public decimal Price { get; set; }
+        [Required]
+        [Range(0, 100000)]
+        public decimal Price { get; set; }
 
         [Required]
         [Display(Name = "Ships From")]

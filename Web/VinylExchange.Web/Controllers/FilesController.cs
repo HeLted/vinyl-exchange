@@ -28,14 +28,14 @@
         {
             try
             {
-                return memoryCacheFileSevice.RemoveAllFilesForSession<RemoveAllFilesForSessionResourceModel>(
+                return this.memoryCacheFileSevice.RemoveAllFilesForSession<RemoveAllFilesForSessionResourceModel>(
                     inputModel);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
+                this.loggerService.LogException(ex);
 
-                return BadRequest();
+                return this.BadRequest();
             }
         }
 
@@ -45,13 +45,13 @@
         {
             try
             {
-                return memoryCacheFileSevice.RemoveFile<RemoveFileResourceModel>(inputModel);
+                return this.memoryCacheFileSevice.RemoveFile<RemoveFileResourceModel>(inputModel);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
+                this.loggerService.LogException(ex);
 
-                return BadRequest();
+                return this.BadRequest();
             }
         }
 
@@ -61,15 +61,15 @@
         {
             try
             {
-                return memoryCacheFileSevice.UploadFile<UploadFileResourceModel>(
+                return this.memoryCacheFileSevice.UploadFile<UploadFileResourceModel>(
                     inputModel.File,
                     inputModel.FormSessionId);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
+                this.loggerService.LogException(ex);
 
-                return BadRequest();
+                return this.BadRequest();
             }
         }
     }

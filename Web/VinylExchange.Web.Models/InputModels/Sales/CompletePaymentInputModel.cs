@@ -5,8 +5,10 @@
 
     public class CompletePaymentInputModel
     {
-        [Required] public Guid? SaleId { get; set; }
+        [Required]
+        public Guid? SaleId { get; set; }
 
-        [Required] public string OrderId { get; set; }
+        [Required]
+        public string OrderId { get; set; }
     }
 }

@@ -34,9 +34,9 @@
 
         public async Task<TModel> AddMessageToSale<TModel>(Guid? saleId, Guid? userId, string message)
         {
-            var user = await usersEntityRetriever.GetUser(userId);
+            var user = await this.usersEntityRetriever.GetUser(userId);
 
-            var sale = await salesEntityRetriever.GetSale(saleId);
+            var sale = await this.salesEntityRetriever.GetSale(saleId);
 
             if (user == null)
             {
@@ -49,38 +49,38 @@
             }
 
             var saleMessage =
-                (await dbContext.SaleMessages.AddAsync(
+                (await this.dbContext.SaleMessages.AddAsync(
                     new SaleMessage {Content = message, SaleId = saleId, UserId = userId})).Entity
                 .To<AddMessageToSaleResourceModel>();
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return saleMessage.To<TModel>();
         }
 
         public async Task<int> ClearSaleMessages(Guid? saleId)
         {
-            var sale = await salesEntityRetriever.GetSale(saleId);
+            var sale = await this.salesEntityRetriever.GetSale(saleId);
 
             if (sale == null)
             {
                 throw new NullReferenceException(SaleNotFound);
             }
 
-            var saleMessages = dbContext.SaleMessages.Where(sm => sm.SaleId == sale.Id).ToList();
+            var saleMessages = this.dbContext.SaleMessages.Where(sm => sm.SaleId == sale.Id).ToList();
 
             var messagesToBeClearedNumber = saleMessages.Count;
 
-            dbContext.SaleMessages.RemoveRange(saleMessages);
+            this.dbContext.SaleMessages.RemoveRange(saleMessages);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return messagesToBeClearedNumber;
         }
 
         public async Task<IEnumerable<TModel>> GetMessagesForSale<TModel>(Guid? saleId)
         {
-            return await dbContext.SaleMessages.Where(sm => sm.SaleId == saleId).OrderBy(sm => sm.CreatedOn)
+            return await this.dbContext.SaleMessages.Where(sm => sm.SaleId == saleId).OrderBy(sm => sm.CreatedOn)
                 .To<TModel>().ToListAsync();
         }
     }

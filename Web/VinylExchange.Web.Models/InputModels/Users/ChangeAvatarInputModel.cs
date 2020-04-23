@@ -6,6 +6,7 @@
 
     public class ChangeAvatarInputModel
     {
-        [ValidateFile(FileType.Image)] public IFormFile Avatar { get; set; }
+        [ValidateFile(FileType.Image)]
+        public IFormFile Avatar { get; set; }
     }
 }

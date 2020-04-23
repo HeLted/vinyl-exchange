@@ -54,8 +54,8 @@ namespace VinylExchange.Web
     {
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
-            Configuration = configuration;
-            Environment = environment;
+            this.Configuration = configuration;
+            this.Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
@@ -155,12 +155,12 @@ namespace VinylExchange.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<VinylExchangeDbContext>(
-                options => { options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")); });
+                options => { options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")); });
 
             services.AddSignalR(
                 options =>
                 {
-                    if (Environment.IsDevelopment())
+                    if (this.Environment.IsDevelopment())
                     {
                         options.EnableDetailedErrors = true;
                     }
@@ -245,7 +245,7 @@ namespace VinylExchange.Web
 
             services.AddSingleton<IMemoryCacheManager, MemoryCacheManager>();
             services.AddSingleton<ILoggerService, LoggerService>();
-            services.AddSingleton<IEmailSender>(new EmailSender(Configuration["SendGridKey"]));
+            services.AddSingleton<IEmailSender>(new EmailSender(this.Configuration["SendGridKey"]));
         }
     }
 }

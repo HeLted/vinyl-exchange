@@ -30,14 +30,14 @@
             try
             {
                 var resourceModel =
-                    await stylesService.CreateStyle<CreateStyleResourceModel>(inputModel.Name, inputModel.GenreId);
+                    await this.stylesService.CreateStyle<CreateStyleResourceModel>(inputModel.Name, inputModel.GenreId);
 
-                return Created(resourceModel);
+                return this.Created(resourceModel);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -48,12 +48,12 @@
         {
             try
             {
-                return await stylesService.GetAllStylesForGenre<GetAllStylesForGenreResourceModel>(genreId);
+                return await this.stylesService.GetAllStylesForGenre<GetAllStylesForGenreResourceModel>(genreId);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -64,12 +64,12 @@
         {
             try
             {
-                return await stylesService.RemoveStyle<RemoveStyleResourceModel>(id);
+                return await this.stylesService.RemoveStyle<RemoveStyleResourceModel>(id);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
     }

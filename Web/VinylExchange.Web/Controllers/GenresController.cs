@@ -29,12 +29,12 @@
         {
             try
             {
-                return Created(await genresService.CreateGenre<CreateGenreResourceModel>(inputModel.Name));
+                return this.Created(await this.genresService.CreateGenre<CreateGenreResourceModel>(inputModel.Name));
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -43,12 +43,12 @@
         {
             try
             {
-                return await genresService.GetAllGenres<GetAllGenresResourceModel>();
+                return await this.genresService.GetAllGenres<GetAllGenresResourceModel>();
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
 
@@ -59,12 +59,12 @@
         {
             try
             {
-                return await genresService.RemoveGenre<RemoveGenreResourceModel>(id);
+                return await this.genresService.RemoveGenre<RemoveGenreResourceModel>(id);
             }
             catch (Exception ex)
             {
-                loggerService.LogException(ex);
-                return BadRequest();
+                this.loggerService.LogException(ex);
+                return this.BadRequest();
             }
         }
     }

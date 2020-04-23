@@ -4,6 +4,7 @@
 
     public class ConfirmEmailInputModel
     {
-        [Required] public string EmailConfirmToken { get; set; }
+        [Required]
+        public string EmailConfirmToken { get; set; }
     }
 }

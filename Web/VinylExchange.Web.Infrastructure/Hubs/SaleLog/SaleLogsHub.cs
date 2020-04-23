@@ -24,18 +24,18 @@
 
         public async Task LoadLogHistory(Guid saleId)
         {
-            var sale = await salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
+            var sale = await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
 
-            var userId = Guid.Parse(GetUserId());
+            var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
             {
                 if (sale.SellerId == userId ||
                     sale.BuyerId == userId)
                 {
-                    var logs = await saleLogsService.GetLogsForSale<GetLogsForSaleResourceModel>(saleId);
+                    var logs = await this.saleLogsService.GetLogsForSale<GetLogsForSaleResourceModel>(saleId);
 
-                    await Clients.Caller.LoadLogHistory(logs);
+                    await this.Clients.Caller.LoadLogHistory(logs);
                 }
             }
         }
@@ -44,23 +44,23 @@
         {
             var subscriberGroupName = saleId.ToString();
 
-            var sale = await salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
+            var sale = await this.salesService.GetSale<GetSaleInfoUtilityModel>(saleId);
 
-            var userId = Guid.Parse(GetUserId());
+            var userId = Guid.Parse(this.GetUserId());
 
             if (sale != null)
             {
                 if (sale.SellerId == userId ||
                     sale.BuyerId == userId)
                 {
-                    await Groups.AddToGroupAsync(Context.ConnectionId, subscriberGroupName);
+                    await this.Groups.AddToGroupAsync(this.Context.ConnectionId, subscriberGroupName);
                 }
             }
         }
 
         private string GetUserId()
         {
-            return Context.User.FindFirst("sub").Value;
+            return this.Context.User.FindFirst("sub").Value;
         }
     }
 }

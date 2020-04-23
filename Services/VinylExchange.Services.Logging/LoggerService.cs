@@ -18,7 +18,7 @@
             [CallerFilePath] string callerFilePath = null,
             [CallerMemberName] string callerMemberName = null)
         {
-            logger.LogError(
+            this.logger.LogError(
                 $"{DateTime.Now} -- Unhandled Exception at {callerFilePath}--{callerMemberName}  --> {ex}");
         }
     }

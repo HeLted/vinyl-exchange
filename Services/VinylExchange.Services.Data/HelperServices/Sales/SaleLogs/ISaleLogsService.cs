@@ -3,10 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Common.Enumerations;
 
     public interface ISaleLogsService
     {
-        Task<TModel> AddLogToSale<TModel>(Guid? saleId, Common.Enumerations.SaleLogs logType);
+        Task<TModel> AddLogToSale<TModel>(Guid? saleId, SaleLogs logType);
 
         Task<int> ClearSaleLogs(Guid? saleId);
 

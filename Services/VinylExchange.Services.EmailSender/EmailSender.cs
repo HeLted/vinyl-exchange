@@ -12,7 +12,7 @@
 
         public EmailSender(string sendGridId)
         {
-            SendGridKey = sendGridId;
+            this.SendGridKey = sendGridId;
         }
 
         public string SendGridKey { get; set; }
@@ -21,7 +21,7 @@
 
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            return Execute(SendGridKey, subject, message, email);
+            return this.Execute(this.SendGridKey, subject, message, email);
         }
 
         private async Task Execute(string apiKey, string subject, string message, string email)

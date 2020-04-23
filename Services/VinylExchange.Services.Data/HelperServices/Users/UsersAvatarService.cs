@@ -25,7 +25,7 @@
 
         public async Task<VinylExchangeUser> ChangeAvatar(byte[] avatar, Guid? userId)
         {
-            var user = await usersEntityRetriever.GetUser(userId);
+            var user = await this.usersEntityRetriever.GetUser(userId);
 
             if (user == null)
             {
@@ -34,14 +34,14 @@
 
             user.Avatar = avatar;
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return user;
         }
 
         public async Task<GetUserAvatarResourceModel> GetUserAvatar(Guid? userId)
         {
-            return await dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
+            return await this.dbContext.Users.Where(u => u.Id == userId).To<GetUserAvatarResourceModel>()
                 .FirstOrDefaultAsync();
         }
     }
