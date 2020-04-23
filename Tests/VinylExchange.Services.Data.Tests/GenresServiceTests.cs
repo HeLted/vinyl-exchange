@@ -23,7 +23,7 @@
     {
         private readonly VinylExchangeDbContext dbContext;
 
-        private readonly IGenresService genresService;
+        private readonly GenresService genresService;
 
         public GenresServiceTests()
         {
@@ -107,6 +107,20 @@
                                                 rnd.Next(2, int.MaxValue)));
 
             Assert.Equal(NullReferenceExceptionsConstants.GenreNotFound, exception.Message);
+        }
+
+        [Fact]
+        public async Task GetGenreShouldGetGenre()
+        {
+            var genre = new Genre();
+
+            await this.dbContext.Genres.AddAsync(genre);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var returnedGenre = await this.genresService.GetGenre(genre.Id);
+
+            Assert.NotNull(returnedGenre);
         }
     }
 }

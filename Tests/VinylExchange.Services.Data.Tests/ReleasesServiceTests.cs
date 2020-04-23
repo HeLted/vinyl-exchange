@@ -362,6 +362,20 @@
                 string.Join(string.Empty, releaseModels.Select(r => r.Id.ToString())));
         }
 
+        [Fact]
+        public async Task GetReleaseShouldGetReleaseNonGeneric()
+        {
+            var release = new Release();
+
+            await this.dbContext.Releases.AddAsync(release);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var returnedRelease = await this.releasesService.GetRelease(release.Id);
+
+            Assert.NotNull(returnedRelease);
+        }
+
         private async Task AddReleasesTestData()
         {
             var releases = new List<Release>

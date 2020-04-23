@@ -23,7 +23,7 @@
 
     public class AddressesServiceTests
     {
-        private readonly IAddressesService addressesService;
+        private readonly AddressesService addressesService;
 
         private readonly VinylExchangeDbContext dbContext;
 
@@ -160,6 +160,20 @@
                                         Guid.NewGuid()));
 
             Assert.Equal(NullReferenceExceptionsConstants.AddressNotFound, exception.Message);
+        }
+
+        [Fact]
+        public async Task GetAddressShouldGetAddress()
+        {
+            var address = new Address();
+
+            await this.dbContext.Addresses.AddAsync(address);
+
+            await this.dbContext.SaveChangesAsync();
+
+            var returnedAddress = await this.addressesService.GetAddress(address.Id);
+
+            Assert.NotNull(returnedAddress);
         }
     }
 }

@@ -880,6 +880,22 @@
                 async () => await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(sale.Id));
         }
 
+        [Fact]
+        public async Task ConfirmItemSentShouldSetStatusToSent()
+        {
+            var sale = new Sale { Status = Status.Paid};
+
+            await this.dbContext.Sales.AddAsync(sale);
+
+            await this.dbContext.SaveChangesAsync();
+
+            await this.salesService.ConfirmItemSent<SaleStatusResourceModel>(sale.Id);
+
+            var saleFromDb = await this.dbContext.Sales.FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            Assert.Equal(Status.Sent, saleFromDb.Status);
+        }
+
         [Theory]
         [InlineData(Status.Open)]
         [InlineData(Status.Finished)]

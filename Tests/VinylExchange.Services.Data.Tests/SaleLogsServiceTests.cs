@@ -60,6 +60,14 @@
             Assert.NotNull(log);
         }
 
+        [Fact]
+        public async Task AddTogToSaleShouldThrowNullReferenceExceptionIfSaleIsNotInDb()
+        {
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(async () => await this.saleLogsService.AddLogToSale<AddLogToSaleResourceModel>(Guid.NewGuid(), SaleLogs.ItemRecieved));
+
+            Assert.Equal(SaleNotFound,exception.Message);
+        }
+
         [Theory]
         [InlineData(SaleLogs.ItemRecieved)]
         [InlineData(SaleLogs.ItemSent)]

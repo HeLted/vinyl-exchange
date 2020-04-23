@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace VinylExchange.Services.MemoryCache.Contracts
 {
     public interface  IMemoryCacheManager
     {
-        void Clear();
+
+        bool IsDisposed {get;}
+
+        CancellationTokenSource Clear();
 
         void Dispose();
 

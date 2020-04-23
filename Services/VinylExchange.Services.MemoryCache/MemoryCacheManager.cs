@@ -29,6 +29,8 @@
         /// </summary>
         protected CancellationTokenSource _cancellationTokenSource;
 
+        public bool IsDisposed { get; private set; }
+
         static MemoryCacheManager()
         {
             _allKeys = new ConcurrentDictionary<string, bool>();
@@ -43,8 +45,10 @@
         /// <summary>
         ///     Clear all cache data
         /// </summary>
-        public virtual void Clear()
+        public virtual CancellationTokenSource Clear()
         {
+            var cancelationTokenSource = this._cancellationTokenSource;
+
             // send cancellation request
             this._cancellationTokenSource.Cancel();
 
@@ -53,6 +57,9 @@
 
             // recreate cancellation token
             this._cancellationTokenSource = new CancellationTokenSource();
+
+            return cancelationTokenSource;
+            
         }
 
         /// <summary>
@@ -60,7 +67,7 @@
         /// </summary>
         public virtual void Dispose()
         {
-            // nothing special
+           IsDisposed = true;
         }
 
         /// <summary>
@@ -73,7 +80,9 @@
         /// <returns>The cached value associated with the specified key</returns>
         public virtual T Get<T>(string key, Func<T> acquire, int? cacheTime = null)
         {
-            // item already is in cache, so return it
+            // item already is in cache, so return 
+
+
             if (this._cache.TryGetValue(key, out T value))
             {
                 return value;

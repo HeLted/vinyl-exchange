@@ -9,6 +9,7 @@
 
     using VinylExchange.Services.Logging;
     using VinylExchange.Services.MemoryCache;
+    using VinylExchange.Services.MemoryCache.Contracts;
     using VinylExchange.Web.Models.InputModels.Files;
     using VinylExchange.Web.Models.ResourceModels.File;
     using VinylExchange.Web.Models.ResourceModels.Files;

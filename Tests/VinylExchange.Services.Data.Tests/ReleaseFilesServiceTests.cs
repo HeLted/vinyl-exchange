@@ -84,5 +84,28 @@ namespace VinylExchange.Services.Data.Tests
 
             Assert.True(releaseImages.Count == 10);
         }
+
+        [Fact]
+        public async Task GetReleaseTracksShouldGetReleaseTracks()
+        {
+            var release = new Release();
+
+            for (int i = 0; i < 10; i++)
+            {
+                var releaseFile = new ReleaseFile
+                {
+                    ReleaseId = release.Id,          
+                    FileType = FileType.Audio
+                };
+
+                await this.dbContext.ReleaseFiles.AddAsync(releaseFile);
+            }
+
+            await this.dbContext.SaveChangesAsync();
+
+            var releaseTracks =  await this.releaseFilesService.GetReleaseTracks<ReleaseFileResourceModel>(release.Id);
+
+            Assert.True(releaseTracks.Count == 10);
+        }
     }
 }

@@ -10,6 +10,7 @@
 
     using VinylExchange.Common.Enumerations;
     using VinylExchange.Services.MemoryCache;
+    using VinylExchange.Services.MemoryCache.Contracts;
     using VinylExchange.Web.Models.Utility.Files;
 
     #endregion
