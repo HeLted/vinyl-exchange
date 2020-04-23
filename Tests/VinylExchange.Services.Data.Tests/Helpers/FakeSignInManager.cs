@@ -13,8 +13,8 @@ namespace VinylExchange.Services.Data.Tests.Helpers
 {
     public class FakeSignInManager : SignInManager<VinylExchangeUser>
     {
-        public FakeSignInManager()
-            : base(new FakeUserManager(),
+        public FakeSignInManager(Mock<IPasswordHasher<VinylExchangeUser>> passwordHasherMock)
+            : base(new FakeUserManager(passwordHasherMock),
                 new Mock<IHttpContextAccessor>().Object,
                 new Mock<IUserClaimsPrincipalFactory<VinylExchangeUser>>().Object,
                 new Mock<IOptions<IdentityOptions>>().Object,

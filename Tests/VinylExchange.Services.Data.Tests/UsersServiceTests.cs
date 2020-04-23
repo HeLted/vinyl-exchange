@@ -1,11 +1,13 @@
 ﻿namespace VinylExchange.Services.Data.Tests
 {
+    using Microsoft.AspNetCore.Authentication;
 
     #region
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Moq;
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using VinylExchange.Data;
     using VinylExchange.Data.Models;
@@ -28,27 +30,35 @@
 
         private readonly Mock<FakeUserManager> userManagerMock;
 
-        private readonly Mock<SignInManager<VinylExchangeUser>> signInManagerMock;
+        private readonly Mock<FakeSignInManager> signInManagerMock;
 
         private readonly Mock<IHttpContextAccessor> contextAccessorMock;
 
         private readonly Mock<IEmailSender> emailSenderMock;
 
+        private readonly Mock<IPasswordHasher<VinylExchangeUser>> passwordHasherMock;
+
         public UsersServiceTests()
         {
             this.dbContext = DbFactory.CreateDbContext();
 
+            this.passwordHasherMock = new Mock<IPasswordHasher<VinylExchangeUser>>();
+
             this.emailSenderMock = new Mock<IEmailSender>();
 
-            this.userManagerMock = new Mock<FakeUserManager>();
+            this.userManagerMock = new Mock<FakeUserManager>(this.passwordHasherMock);
+
+            this.signInManagerMock = new Mock<FakeSignInManager>(this.passwordHasherMock);
 
             this.contextAccessorMock = new Mock<IHttpContextAccessor>();
+
+            this.passwordHasherMock.Setup(x=> x.HashPassword(It.IsAny<VinylExchangeUser>(),It.IsAny<string>())).Returns("look at me I am a hashed password");
 
             this.contextAccessorMock.SetupGet(x => x.HttpContext.Request).Returns(new Mock<HttpRequest>().Object);
 
             this.usersService = new UsersService(
                 this.userManagerMock.Object,
-                new FakeSignInManager(),
+                this.signInManagerMock.Object,
                 this.emailSenderMock.Object,
                 this.contextAccessorMock.Object);
         }
@@ -224,6 +234,35 @@
             Assert.True(result.Succeeded);
         }
 
+
+        [Fact]
+        public async Task LoginUserShouldReturnSignInResultSuccess()
+        {
+            var user = new VinylExchangeUser();
+
+            this.signInManagerMock.Setup(x => x.GetExternalAuthenticationSchemesAsync()).ReturnsAsync(new List<AuthenticationScheme>());
+
+            this.signInManagerMock.Setup(x => x.PasswordSignInAsync(It.IsAny<string>(),It.IsAny<string>(),It.IsAny<bool>(),It.IsAny<bool>())).ReturnsAsync(SignInResult.Success);
+
+            var result = await this.usersService.LoginUser("ewew","3232",false);
+
+            Assert.True(result.Succeeded);
+        }
+
+        [Fact]
+        public async Task RegisterUserShouldReturnIdentityResultSuccess()
+        {
+            var user = new VinylExchangeUser();
+
+            this.userManagerMock.Setup(x=> x.CreateAsync(It.IsAny<VinylExchangeUser>())).ReturnsAsync(IdentityResult.Success);
+            
+            this.userManagerMock.Setup(x=> x.AddToRoleAsync(It.IsAny<VinylExchangeUser>(),It.IsAny<string>())).Verifiable();
+
+            var result = await this.usersService.RegisterUser("ewew","3232","eweqw");
+
+            Assert.True(result.Succeeded);
+        }
+
         [Fact]
         public async Task GetUserShouldGetUser()
         {
@@ -234,6 +273,14 @@
             var returnedUser = await this.usersService.GetUser(user.Id);
 
             Assert.NotNull(returnedUser);
+        }
+
+        [Fact]
+        public async Task ExternalLoginsShouldGetExternalLoginsProperty()
+        {
+            this.usersService.ExternalLogins = new List<AuthenticationScheme>();
+
+            Assert.NotNull(this.usersService.ExternalLogins);
         }
     }
 }

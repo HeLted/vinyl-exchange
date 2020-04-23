@@ -12,10 +12,10 @@ namespace VinylExchange.Services.Data.Tests.Helpers
 {
     public class FakeUserManager : UserManager<VinylExchangeUser>
     {
-        public FakeUserManager()
+        public FakeUserManager(Mock<IPasswordHasher<VinylExchangeUser>> passwordHasherMock)
             : base(new Mock<IUserStore<VinylExchangeUser>>().Object,
                 new Mock<IOptions<IdentityOptions>>().Object,
-                new Mock<IPasswordHasher<VinylExchangeUser>>().Object,
+                passwordHasherMock.Object,
                 new IUserValidator<VinylExchangeUser>[0],
                 new IPasswordValidator<VinylExchangeUser>[0],
                 new Mock<ILookupNormalizer>().Object,
