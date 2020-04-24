@@ -97,7 +97,7 @@
                     dbContext,
                     Guid.Parse("eb9101dc-d7d4-4558-8211-cdd9fd9d60f9"),
                     FileType.Audio,
-                    "89b0c1f5-c8b4-4929-b5a5-b065ff0883d8@---@QXBoZXggVHdpbiAtIE5hbm5vdQ==",
+                    "89b0c1f5-c8b4-4929-b5a5-b065ff0883d8@---@QXBoZXggVHdpbiAtIE5hbm5vdQ==.mp3",
                     false);
 
                 //// Squarepusher - Ultravisitor
