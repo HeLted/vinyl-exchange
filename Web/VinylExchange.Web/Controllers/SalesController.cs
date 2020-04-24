@@ -145,8 +145,7 @@
                 var currentUserId = this.GetUserId(this.User);
 
                 if (saleInfoModel.BuyerId != currentUserId &&
-                    saleInfoModel.SellerId != currentUserId &&
-                    saleInfoModel.Status != Status.Open)
+                    saleInfoModel.SellerId != currentUserId)
                 {
                     return this.Forbid();
                 }
