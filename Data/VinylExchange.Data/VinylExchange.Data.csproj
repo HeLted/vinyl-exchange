@@ -57,6 +57,8 @@
     <Compile Remove="Migrations\20200406212003_CollectionItemReleaseIdIsNowNullableGuid.Designer.cs" />
     <Compile Remove="Migrations\20200408200025_ChangedSomeDbFieldsFromGuidToNullableGuid.cs" />
     <Compile Remove="Migrations\20200408200025_ChangedSomeDbFieldsFromGuidToNullableGuid.Designer.cs" />
+    <Compile Remove="Migrations\20200424114539_TestMigration.cs" />
+    <Compile Remove="Migrations\20200424114539_TestMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
