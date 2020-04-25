@@ -12,10 +12,10 @@ Technologies used:
 -EF Core  
 -AutoMapper  
 -SingalR  
--XUnit
--Moq
--Font Awesome
--Multiple audio And image file upload(dropzone.js on frondEnd and own implementation on backEnd)
+-XUnit 
+-Moq  
+-Font Awesome  
+-Multiple audio And image file upload(dropzone.js on frondEnd and own implementation on backEnd)  
 
 # Starting App Instructions:
 1.Create appsettings.json in root/Web/VinylExchange.Web/appsettings.json by the following template :   https://gist.github.com/deyvidnenchev/28dc2e6a8fcc5850d30940981d1cd09f  
